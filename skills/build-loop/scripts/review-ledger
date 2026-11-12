@@ -1,0 +1,1267 @@
+#!/usr/bin/env python3
+"""Review ledger for build-loop §6: records rounds and findings, decides the
+next step, and prints the next reviewer brief.
+
+  review-ledger -l L init --repo R --base SHA --intent "..." [--category logic ..]
+                          (--threat-model FILE|TEXT | --project-kind KIND, or a model already stored)
+                          [--shape S | --direction-known yes|no --users-at-start yes|no
+                           --outside-consumers yes|no --formats reversible|costly
+                           --lifespan short|long --throwaway]
+                          [--stage prototype|beta|production] [--region NAME]
+                          [--bar N [--bar-reason ".."]] [--research DIR] [--out-of-scope ..]
+                          [--checks ..] [--paths a b]      # --usage-model is an alias of --threat-model
+  review-ledger -l L round --tier 1 --reviewer sol --sha SHA --reply reply.txt
+  review-ledger -l L outcome S3 fixed|disagree|declined|pre-existing|escaped [--evidence ".."]
+                                           # escaped = found after delivery; counts toward recurrence
+  review-ledger -l L checkpoint            # §6c answered
+  review-ledger -l L new-approach          # after a step-back changed the approach
+  review-ledger -l L next                  # one line: what to do now
+  review-ledger -l L brief                 # the brief for the next round
+  review-ledger -l L status                # rounds, open findings, next step
+  review-ledger -l L stash                 # nit stash (opens at the checkpoint); hardening stash (once opened)
+  review-ledger -l L hardening [--from L2 ..]  # open the hardening phase (new rounds, checkpoint, full brief)
+  review-ledger -l L threat-model [--confirm]  # show the threat model; --confirm = the owner confirmed it
+
+Reply format (the brief asks for it):
+  SCORE[legibility]: 7/10 (...)      # one line per concern the brief lists; a lone `SCORE: 7/10`
+  SCORE[error-paths]: 8/10           # (old replies) counts for every concern
+  VERDICT: CHANGES
+  S1 [should] [needed for bar: yes] [class: slug] [concern: name] lib/a.dart:12, lib/b.dart:9 claim. Fix: ...
+  S1 resolved
+  S2 still open: reason
+
+Classes: a reviewer names one slug from CLASSES. Free text is kept (class_canonical
+false, with a warning) and never rejected; old ledgers with free-text classes still load.
+A finding's concern is its [concern: ..] tag, else the class's concern (CLASS_CONCERN).
+
+Bar: every bar is an integer 6..10, per concern. `init` looks up each concern the --category
+values touch in the shape x stage table (references/bars.md); security comes from the threat
+model instead (security_bar). A class that recurs in changed files across the 3 newest ledgers
+under the research dir adds 1 to each touched concern (capped at 9; an `escaped` finding also
+makes a class hot), then owner floors from <research>/review/bars.json apply. Only architecture
+at its peak stage, or an owner floor, is 10. A round passes when every touched concern's score
+meets that concern's bar and nothing blocking is open; the highest bar is only the summary
+(`bar`). Residual evidence is printed, never applied. A --bar below the suggestion, or 10 when
+nothing asks for it, needs --bar-reason (exit 2); --bar sets every touched concern to N, except that 10 goes only
+to a concern at its peak or under an owner floor; the rest are capped at 9 with a warning (none: refused).
+
+Threat model (A1): reach / untrusted / holds lines in the text decide the security bar. It is
+stored in residual's project data (residual/threat-model.md) when residual is set up inline, else
+<research>/review/threat-model.md (created if missing), one model per --region (the default region keeps
+threat-model.md; a named region never inherits another's), and read back when the flag is absent. A model derived from
+--project-kind is `inferred` until `threat-model --confirm`.
+
+Shape and stage: --shape (or the facts it is derived from) and --stage default to
+explore-first and prototype, and init says so. A region's stage only rises on its own;
+lowering it, or changing its shape, needs an owner entry under "stages" in bars.json.
+`init` records region, shape and stage in bars.json "regions" and a record in "history".
+
+Stashes: while a blocker or should is open, reviewers list nits under NIT-STASH: and findings
+with no realistic reproduction under the threat model under HARDENING-STASH:. `brief` never
+shows them. `stash` prints the nit stash from the checkpoint on; `hardening` opens the
+hardening stash, with the bars of the stage after the one it was filed in; that is a new
+phase (phase counter, fresh round caps and checkpoint, full-diff brief). Earlier rounds stay.
+"""
+import argparse
+import csv
+import datetime
+import fnmatch
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+from urllib.parse import quote
+
+TIER1_CAP = 3          # rounds per approach before a step-back
+TIER1_TOTAL_CAP = 5    # tier-1 rounds over the whole change
+TIER2_CAP = 2          # one full pass + one diff-only re-review
+DISPUTE_CAP = 2        # replies on one disputed finding before the user decides
+BLOCKING_SEVERITIES = {"blocker", "should"}
+CLOSED = {"resolved", "declined", "pre-existing", "repeat", "escaped"}
+REJECTED = {"declined", "pre-existing", "repeat", "disagree"}
+
+CLASSES = {
+    "ordering-stale-write": "a write lands after a wipe/revoke/reset, or an older snapshot wins",
+    "fail-open-read": "a read/IO error treated as absence or success",
+    "prod-wiring": "production DI/graph does not supply what tests inject",
+    "lifecycle-leak": "work not cancelled or scoped with its owner",
+    "hidden-state": "UI hides or misreports real state",
+    "consent-bypass": "an action runs without the consent it needs",
+    "data-exposure": "PII or secrets in logs, sync, backup or prompts",
+    "migration-safety": "a schema or data migration can lose or corrupt data",
+    "main-thread-block": "blocking work on the main/UI thread",
+    "input-validation": "untrusted or malformed input accepted",
+    "test-weakness": "tautology; the test does not fail without the fix",
+    "misleading-docs": "docs or comments say something the code does not do",
+    "other": "none of the above",
+}
+
+STAGES = ("prototype", "beta", "production")
+RANK = {s: i for i, s in enumerate(STAGES)}
+SHAPES = ("explore-first", "port", "rewrite", "accretion", "pivot", "spike", "glue", "research", "library")
+CONCERNS = ("legibility", "architecture", "security", "testability", "concurrency", "durability",
+            "performance", "compatibility", "observability", "error-paths", "docs", "wiring", "measurement")
+SHAPE_CONCERNS = tuple(c for c in CONCERNS if c != "security")  # security follows the threat model
+# (prototype, beta, production) per concern. Mirrored in references/bars.md; a test keeps them equal.
+_EF = {"legibility": (9, 8, 7), "architecture": (7, 10, 8), "testability": (8, 8, 8),
+       "concurrency": (7, 8, 9), "durability": (7, 8, 9), "performance": (7, 7, 8), "compatibility": (7, 8, 9),
+       "observability": (7, 7, 8), "error-paths": (7, 8, 8), "docs": (7, 7, 8), "wiring": (7, 8, 8),
+       "measurement": (7, 7, 7)}
+TABLE = {
+    "explore-first": _EF,
+    "port": {**_EF, "legibility": (7, 7, 7), "architecture": (10, 8, 8), "compatibility": (7, 8, 9)},
+    "rewrite": {**_EF, "legibility": (7, 7, 7), "architecture": (9, 10, 8), "compatibility": (9, 9, 9),
+                "concurrency": (8, 9, 9), "durability": (8, 9, 9), "performance": (7, 8, 8),
+                "observability": (7, 8, 8), "error-paths": (8, 8, 8), "wiring": (8, 8, 8)},
+    "accretion": {**_EF, "legibility": (8, 7, 7), "wiring": (8, 8, 8)},
+    "pivot": dict(_EF),
+    "spike": {c: (6, 6, 6) for c in SHAPE_CONCERNS},
+    "glue": {"legibility": (7, 7, 7), "architecture": (7, 7, 6),
+             "testability": (7, 7, 7), "concurrency": (7, 8, 8), "durability": (8, 9, 9),
+             "performance": (7, 7, 7), "compatibility": (8, 8, 9), "observability": (7, 8, 8),
+             "error-paths": (8, 8, 8), "docs": (7, 7, 7), "wiring": (8, 9, 9), "measurement": (7, 7, 7)},
+    "research": {"legibility": (7, 7, 7), "architecture": (6, 6, 6),
+                 "testability": (7, 7, 7), "concurrency": (6, 6, 7), "durability": (6, 7, 7),
+                 "performance": (6, 6, 7), "compatibility": (6, 6, 7), "observability": (6, 7, 7),
+                 "error-paths": (6, 7, 7), "docs": (6, 7, 7), "wiring": (6, 7, 7), "measurement": (9, 9, 9)},
+    "library": {**_EF, "legibility": (7, 7, 7), "architecture": (8, 9, 9), "compatibility": (7, 9, 9),
+                "error-paths": (7, 8, 8), "docs": (7, 8, 8)},
+}
+# A category names the concerns a diff touches. A concern name also works as a category.
+CATEGORY_CONCERNS = {
+    "docs": ("docs",), "tooling": ("docs",), "ui": ("legibility",), "test": ("testability",),
+    "logic": ("legibility", "error-paths"),
+    "permissions": ("security",), "consent": ("security",), "pii": ("security",),
+    "signing": ("security",), "egress": ("security",),
+    "durable-state": ("durability",), "migration": ("compatibility",),
+    **{c: (c,) for c in CONCERNS},
+}
+DEFAULT_CATEGORIES = ("logic",)
+
+
+def bars_for(shape, stage):
+    """{concern: bar} for one shape at one stage. Security is not here: see security_bar."""
+    i = RANK[stage]
+    return {c: TABLE[shape][c][i] for c in SHAPE_CONCERNS}
+
+
+# Threat model facts, mildest first. The security bar is the highest bar any stated fact gives.
+THREAT_FACTS = {
+    "reach": {"local-single-user": 7, "other-local-users": 8, "network": 9, "public": 9},
+    "untrusted": {"none": 7, "local-data": 8, "network-input": 9, "third-party-code": 9},
+    "holds": {"nothing": 7, "owner-data": 8, "secrets": 9, "others-data": 9},
+}
+THREAT_LABEL = re.compile(r"^\s*(?:[-*]\s+)?(?P<k>reach|untrusted(?:[ -]inputs?)?|holds)\s*:\s*(?P<v>.+?)\s*$", re.I)
+THREAT_STATUS = re.compile(r"^\s*status\s*:\s*(?P<s>confirmed|inferred)\s*$", re.I)
+THREAT_SYNONYMS = {
+    "files": "local-data", "local-files": "local-data", "captured-data": "local-data",
+    "files-or-captured-data": "local-data", "local-files-or-captured-data": "local-data",
+    "local-untrusted-data": "local-data", "network": "network-input", "single-user": "local-single-user",
+    "owners-data": "owner-data", "other-local-users-or-agents": "other-local-users",
+    "local-users": "other-local-users", "third-party": "third-party-code",
+}
+# What an agent may assume when the owner gave no model: a guess by project kind, marked inferred.
+KIND_THREAT = {
+    "cli-tool": {"reach": "local-single-user", "untrusted": "local-data", "holds": "owner-data"},
+    "local-service": {"reach": "other-local-users", "untrusted": "local-data", "holds": "owner-data"},
+    "network-service": {"reach": "network", "untrusted": "network-input", "holds": "others-data"},
+    "library": {"reach": "other-local-users", "untrusted": "local-data", "holds": "nothing"},
+    "browser-extension": {"reach": "network", "untrusted": "network-input", "holds": "owner-data"},
+    "nix-host": {"reach": "network", "untrusted": "network-input", "holds": "secrets"},
+}
+
+
+def _slug(v):
+    v = re.sub(r"['\u2019]", "", v.lower())
+    return re.sub(r"^the-", "", re.sub(r"[^a-z0-9]+", "-", v).strip("-"))
+
+
+def parse_threat_model(text):
+    """(stated facts {reach, untrusted, holds}, status) from a threat model text. Only labelled lines
+    (`Reach: ..`, `Untrusted: ..`, `Holds: ..`) count; a list takes its worst value; status is
+    `confirmed`, `inferred` or None. Raises ValueError for a value outside the vocabulary."""
+    facts, status = {}, None
+    for line in text.splitlines():
+        st = THREAT_STATUS.match(line)
+        if st:
+            status = status or st["s"].lower()
+            continue
+        m = THREAT_LABEL.match(line)
+        if not m:
+            continue
+        key = m["k"].lower().split()[0].split("-")[0]
+        vocab = list(THREAT_FACTS[key])
+        picked = []
+        for part in re.split(r"[,;/]", m["v"]):
+            v = _slug(part)
+            if not v:
+                continue
+            if v not in vocab:
+                v = THREAT_SYNONYMS.get(v, v)
+            if v not in vocab:
+                raise ValueError(f"{key.capitalize()}: {part.strip()!r} is not one of: {', '.join(vocab)}")
+            picked.append(v)
+        if picked:
+            facts[key] = max(picked, key=vocab.index)
+    return facts, status
+
+
+def strip_status(text):
+    """The threat model text without its Status: line."""
+    return "\n".join(l for l in text.splitlines() if not THREAT_STATUS.match(l)).strip()
+
+
+def security_bar(facts, spike=False):
+    """The security bar a threat model gives: the highest bar of reach, untrusted and holds. A model
+    that does not state all three cannot lower it, so it stays at 9. A spike's trivial 7 is 6."""
+    if not facts or any(k not in facts for k in THREAT_FACTS):
+        return 9
+    n = max(THREAT_FACTS[k][facts[k]] for k in THREAT_FACTS)
+    return 6 if spike and n == 7 else n
+
+
+def concern_bars(shape, stage, facts):
+    """{concern: bar} for every concern: the shape x stage table plus security from the threat model."""
+    return {**bars_for(shape, stage), "security": security_bar(facts, spike=shape == "spike")}
+
+
+# The concern a canonical class slug belongs to; a reviewer may name another with [concern: ..].
+CLASS_CONCERN = {
+    "ordering-stale-write": "concurrency", "fail-open-read": "error-paths", "prod-wiring": "wiring",
+    "lifecycle-leak": "concurrency", "hidden-state": "legibility", "consent-bypass": "security",
+    "data-exposure": "security", "migration-safety": "compatibility", "main-thread-block": "performance",
+    "input-validation": "security", "test-weakness": "testability", "misleading-docs": "docs",
+}
+
+
+def touched_concerns(categories):
+    seen = []
+    for cat in categories or DEFAULT_CATEGORIES:
+        seen += [c for c in CATEGORY_CONCERNS[cat] if c not in seen]
+    return seen
+
+
+class Refusal(Exception):
+    pass
+
+
+def derive_shape(direction, users, formats, lifespan, throwaway, outside=None):
+    """The shape the declared facts imply; first match wins. Unset facts count as: direction no,
+    users no, formats reversible, lifespan long; outside-consumers stays unset. Accretion, pivot,
+    glue and research are never derived: they are named with --shape. Raises Refusal when the
+    facts fit both a rewrite and a library (known direction, existing users, and outside
+    consumers not ruled out): the owner names the shape."""
+    direction, users = direction or "no", users or "no"
+    formats, lifespan = formats or "reversible", lifespan or "long"
+    if throwaway or (lifespan == "short" and formats == "reversible" and users == "no" and outside != "yes"):
+        return "spike"
+    if users == "yes" and direction == "yes":
+        if outside == "no":
+            return "rewrite"
+        raise Refusal("the declared facts fit both rewrite (replaces a system with users) and library "
+                      "(consumers outside this repo): pass --shape rewrite|library, or --outside-consumers no "
+                      "for a replacement")
+    if outside == "yes" or (users == "yes" and formats == "costly" and outside is None):
+        return "library"
+    return "port" if direction == "yes" else "explore-first"
+DEFAULT_SHAPE, DEFAULT_STAGE, DEFAULT_REGION = "explore-first", "prototype", "."
+MAX_SUGGESTED = 9      # recurrence stops here; 10 is architecture at its peak or an owner floor
+RECENT_LEDGERS = 3
+HOT_COUNT = 2
+
+FINDING_HEAD = re.compile(r"^\s*(?P<id>S\d+)\s+\[(?P<sev>blocker|should|nit)\](?P<tail>.*)$", re.I)
+FINDING_TAG = re.compile(r"^\s*\[(?:needed for bar:\s*(?P<needed>yes|no)|class:\s*(?P<cls>[^\]]+)"
+                         r"|concern:\s*(?P<concern>[^\]]+)|(?P<pre>pre-existing))\]", re.I)
+WHERE = re.compile(r"^(?P<where>[\w./-]+:\d+(?:\s*,\s*[\w./-]+:\d+)*)\s+(?P<claim>.*)$")
+RESOLUTION = re.compile(r"^\s*(?P<id>S\d+)\s+(?P<st>resolved|still open)\b:?\s*(?P<why>.*)$", re.I)
+SCORE = re.compile(r"SCORE:\s*(\d+(?:\.\d+)?)\s*/\s*10", re.I)
+SCORE_CONCERN = re.compile(r"SCORE\[\s*(?P<c>[^\]\s]+)\s*\]:\s*(?P<n>\d+(?:\.\d+)?)\s*/\s*10", re.I)
+VERDICT = re.compile(r"VERDICT:\s*(APPROVE|CHANGES)", re.I)
+
+
+def load(path):
+    return json.loads(Path(path).read_text())
+
+
+def save(path, led):
+    Path(path).write_text(json.dumps(led, indent=1) + "\n")
+
+
+STASH_HEAD = re.compile(r"^\s*(?P<which>NIT|HARDENING)-STASH:\s*(?P<rest>.*)$", re.I)
+BULLET = re.compile(r"^\s*(?:[-*\u2022]|\d+[.)])\s+(?P<text>.+)$")
+NO_ITEM = {"", "-", "none", "n/a", "empty"}
+
+
+def split_stashes(text):
+    """(lines outside the stashes, nit items, hardening items). A stash is its header plus the
+    bullet lines after it. An indented line continues the item above. Directly under a bare header,
+    a finding-shaped line is an item too, and so is each one after it (any severity for the hardening
+    stash, only [nit] for the nit stash), until a bullet, a SCORE line or any other line ends it."""
+    keep, nits, hard, cur, bare = [], [], [], None, False
+    for line in text.splitlines():
+        h = STASH_HEAD.match(line)
+        if h:
+            cur = nits if h["which"].upper() == "NIT" else hard
+            rest = h["rest"].strip()
+            bare = not rest
+            if rest.strip(".").lower() not in NO_ITEM:
+                cur.append(rest)
+            continue
+        if cur is not None:
+            if not line.strip():
+                continue
+            b = BULLET.match(line)
+            if b:
+                bare = False
+                if b["text"].strip().strip(".").lower() not in NO_ITEM:
+                    cur.append(b["text"].strip())
+                continue
+            if line[0] in " \t" and cur:
+                cur[-1] += " " + line.strip()
+                continue
+            shaped = FINDING_HEAD.match(line)
+            if bare and (RESOLUTION.match(line) or (shaped and (cur is hard or shaped["sev"].lower() == "nit"))):
+                cur.append(line.strip())
+                continue  # still bare: the next finding-shaped line is an item too
+            cur = None
+        keep.append(line)
+    return keep, nits, hard
+
+
+def parse_stashes(text):
+    """(nit items, hardening items) from a reviewer reply."""
+    return split_stashes(text)[1:]
+
+
+def parse_scores(text):
+    """({concern: score} from `SCORE[concern]: n/10` lines, the plain `SCORE: n/10` or None)."""
+    per = {m["c"].lower(): float(m["n"]) for m in SCORE_CONCERN.finditer(text)}
+    m = SCORE.search(text)
+    return per, (float(m.group(1)) if m else None)
+
+
+def parse_finding(line):
+    """A finding dict from one reply line, or None. Tags may come in any order."""
+    f = FINDING_HEAD.match(line)
+    if not f:
+        return None
+    tags, tail = {}, f["tail"]
+    while True:
+        t = FINDING_TAG.match(tail)
+        if not t:
+            break
+        tags.update({k: v for k, v in t.groupdict().items() if v})
+        tail = tail[t.end():]
+    if not tail[:1].isspace() or not tail.strip():
+        return None
+    rest = tail.strip()
+    w = WHERE.match(rest)
+    where, claim = (w["where"], w["claim"]) if w else ("", rest)
+    claim, _, fix = claim.partition(" Fix:")
+    cls = (tags.get("cls") or "").strip()
+    slug = re.sub(r"\s+", "-", cls.lower())
+    extra = {}
+    if cls:
+        canonical = slug in CLASSES
+        cls = slug if canonical else cls
+        extra = {"class_canonical": canonical} if not canonical else {}
+    concern = re.sub(r"\s+", "-", (tags.get("concern") or "").strip().lower())
+    if concern and concern not in CONCERNS:
+        extra["concern_given"] = tags["concern"].strip()
+        concern = ""
+    return {**extra,
+        "id": f["id"].upper(), "severity": f["sev"].lower(),
+        "needed": (tags.get("needed") or "").lower() or None,
+        "class": cls or None,
+        "concern": concern or CLASS_CONCERN.get(cls),
+        "pre_existing": bool(tags.get("pre")),
+        "where": [x.strip() for x in where.split(",") if x.strip()],
+        "claim": claim.strip(), "fix": fix.strip(),
+    }
+
+
+def parse_reply(text):
+    """Return (score, verdict, findings, resolutions) from a reviewer reply. The score is the plain
+    SCORE line, else the lowest SCORE[concern] (see parse_scores for the per-concern scores)."""
+    per, plain = parse_scores(text)
+    score = plain if plain is not None else (min(per.values()) if per else None)
+    v = VERDICT.search(text)
+    verdict = v.group(1).upper() if v else None
+    findings, resolutions = [], []
+    for line in split_stashes(text)[0]:
+        r = RESOLUTION.match(line)
+        if r:
+            resolutions.append((r["id"].upper(), r["st"].lower(), r["why"].strip()))
+            continue
+        f = parse_finding(line)
+        if f:
+            findings.append(f)
+    return score, verdict, findings, resolutions
+
+
+def blocking(f):
+    if f["status"] in CLOSED:
+        return False
+    if f["status"] == "fixed":
+        return False  # until the reviewer says "still open"
+    return f["severity"] in BLOCKING_SEVERITIES or f.get("needed") == "yes"
+
+
+def same_spot(a, b):
+    """A new finding repeats an old one: same class, or same first location."""
+    if a.get("class") and a.get("class") != "other" and a.get("class") == b.get("class"):
+        return True
+    return bool(a["where"]) and bool(b["where"]) and a["where"][0] == b["where"][0] \
+        and a["claim"][:40].lower() == b["claim"][:40].lower()
+
+
+def phase_rounds(led):
+    """The rounds of the current phase (quality, then hardening); earlier phases stay in led["rounds"]."""
+    phase = led.get("phase", 0)
+    return [r for r in led["rounds"] if r.get("phase", 0) == phase]
+
+
+def round_meets_bar(led, r):
+    """Each touched concern's score meets that concern's own bar, and any other concern the reviewer
+    scored meets its table bar. Rounds or ledgers without per-concern data use the summary bar."""
+    bars, scores = led.get("concerns") or {}, r.get("scores")
+    if not bars or not scores:
+        return r["score"] is not None and r["score"] >= led["bar"]
+    if any(scores.get(c) is None or scores[c] < b for c, b in bars.items()):
+        return False
+    table = led.get("bar_table") or {}
+    return all(v >= table.get(c, 0) for c, v in scores.items() if c not in bars)
+
+
+def next_step(led):
+    rounds, fs = phase_rounds(led), led["findings"].values()
+    open_blocking = [f for f in fs if blocking(f)]
+    stuck = [f for f in fs if f["status"] == "disagree" and f.get("replies", 0) >= DISPUTE_CAP]
+    if stuck:
+        return "STOP-STUCK", f"disputed after {DISPUTE_CAP} replies: " + ", ".join(f["id"] for f in stuck)
+    if not rounds:
+        return "ROUND", "tier 1 round 1 (full diff from base)"
+    last = rounds[-1]
+    passed = round_meets_bar(led, last) and not open_blocking
+    t1 = [r for r in rounds if r["tier"] == 1]
+    t1_now = [r for r in t1 if r["approach"] == led["approach"]]
+    if last["tier"] == 1:
+        if passed:
+            if not led["checkpoint"]:
+                n = len(led.get("nit_stash", []))
+                return "CHECKPOINT", ("tier 1 reached the bar; answer §6c, then run `checkpoint`"
+                                      + (f"; {n} stashed nits to triage (run `stash`)" if n else ""))
+            return "ROUND", "tier 2 round 1 (full diff, fresh Opus)"
+        if len(t1) >= TIER1_TOTAL_CAP:
+            return "STOP-STUCK", f"tier 1 hit its {TIER1_TOTAL_CAP}-round cap below the bar"
+        if len(t1_now) >= TIER1_CAP:
+            return "STEP-BACK", f"{TIER1_CAP} rounds below the bar on this approach: ask for a step-back reply, then decide with the user"
+        return "ROUND", f"tier 1 round {len(t1_now) + 1} (diff-only since {last['sha'][:10]})"
+    t2 = [r for r in rounds if r["tier"] == 2]
+    if passed:
+        return "STOP-AGREED", f"tier 2 at {last['score']:g}/10, bar {led['bar']}, nothing blocking"
+    if len(t2) >= TIER2_CAP:
+        return "STOP-STUCK", "tier 2 re-review used; show both sides to the user"
+    return "ROUND", f"tier 2 re-review (diff-only since {last['sha'][:10]})"
+
+
+def next_id(led):
+    n = [int(k[1:]) for k in led["findings"]]
+    return f"S{max(n) + 1 if n else 1}"
+
+
+HEADER = """Review only. Do not edit, commit, push, comment on PRs, or start subagents.
+Do not use the manual-keepalive skill or any sleep loops.
+Repo: {repo} Base: {base} Intent: {intent} Out of scope: {oos} Checks: {checks}
+Bar: {bar}/10{ctx}{per}
+{tm}
+Classes: {classes}"""
+
+RULES = """Read surrounding code. Find bugs, broken callers, mismatch with intent.
+Skip style unless it hides a bug. Hold to the smallest change. Flag code,
+tests or guards the intent does not need. Other paths, rare cases, small
+perf, extra compat: nits.
+blocker = intended case wrong. should = real bug callers will hit, in intent. nit = rest.
+For each finding name one class slug and list every instance in the diff. Tag code
+this diff did not touch as [pre-existing].
+Reply, one item per line:
+{scores}
+(scores: 10 merge as is, 8 only nits, 6 a real bug callers hit, <=4 intent wrong or approach wrong)
+VERDICT: APPROVE|CHANGES
+{nid} [blocker|should|nit] [needed for bar: yes|no] [class: <slug>] [concern: <name>] <file>:<line>[, <file>:<line>] <claim>. Fix: <...>
+Judge each finding against its own concern's bar; [concern: ..] is optional when the class implies it.
+Number new findings from {nid} up.
+A blocker or should needs a realistic reproduction under the threat model above: who does what,
+how often. A finding without one is not a round item: put it under HARDENING-STASH.
+A security finding needs an attacker the threat model includes. Anything outside it goes under HARDENING-STASH.
+If your reply has a blocker or should, put every nit under NIT-STASH and do not number it.
+End the reply with the stash sections, one "- " line per item (write "none" if empty):
+NIT-STASH:
+- <file>:<line> <nit>
+HARDENING-STASH:
+- <file>:<line> <what fails, and under what use the threat model does not expect>"""
+
+SCORE_PLAIN = "SCORE: n/10 (what would raise it)"
+
+
+def score_lines(led):
+    bars = led.get("concerns") or {}
+    if not bars:
+        return SCORE_PLAIN
+    return "\n".join(f"SCORE[{c}]: n/10 (what would raise it; bar {b})" for c, b in bars.items())
+
+
+def threat_block(led):
+    """The brief's threat model lines; ledgers from before A1 keep their two old lines."""
+    status = led.get("threat_model_status")
+    tm = led.get("threat_model") or "-"
+    if not status:
+        return f"Threat model: {tm}\nUsage model: {led.get('usage_model') or '- (not recorded)'}"
+    if status == "inferred":
+        return (f"Threat model (inferred from the project kind, not yet confirmed by the owner): {tm}\n"
+                "Treat security findings as provisional; the owner may widen or narrow this model.")
+    return f"Threat model ({status}): {tm}"
+
+
+def ledger_lines(led):
+    out = []
+    for f in led["findings"].values():
+        where = ", ".join(f["where"]) or "-"
+        out.append(f"{f['id']} r{f['round']} [{f['severity']}] [{f.get('class') or '-'}]"
+                   + (f" <{f['concern']}>" if f.get("concern") else "") + f" {where} "
+                   f"{f['claim'][:100]} => {f['status']}" + (f": {f['evidence']}" if f.get("evidence") else ""))
+    return out
+
+
+def brief(led):
+    step, why = next_step(led)
+    paths = (" -- " + " ".join(led["paths"])) if led.get("paths") else ""
+    bars = led.get("concerns") or {}
+    head = HEADER.format(repo=led["repo"], base=led["base"], intent=led["intent"], oos=led["out_of_scope"] or "-",
+                         checks=led["checks"] or "-", bar=led["bar"], tm=threat_block(led),
+                         ctx=f" ({led['shape']}, {led.get('stage', DEFAULT_STAGE)})" if led.get("shape") else "",
+                         per=("\nConcern bars (each concern is judged against its own): "
+                              + ", ".join(f"{c} {b}" for c, b in bars.items())) if bars else "",
+                         classes=", ".join(CLASSES))
+    rules = RULES.format(nid=next_id(led), scores=score_lines(led))
+    if step == "STEP-BACK":
+        return (head + f"\nSee: git diff {led['base']}{paths}\nLedger:\n" + "\n".join(ledger_lines(led)) +
+                f"\nThree rounds have not reached the bar. Do not list more findings. Answer in at most 15 lines:\n"
+                "is the approach wrong? is there a smaller design? should the change split? what would you do instead?")
+    if step != "ROUND":
+        return f"No brief: next step is {step} ({why})."
+    here = phase_rounds(led)
+    last = here[-1] if here else None
+    full = last is None or (last["tier"] == 1 and "tier 2 round 1" in why)
+    if full:
+        diff = f"See: git diff {led['base']}{paths}; git status --short (read untracked)."
+    else:
+        diff = (f"See ONLY: git diff {last['sha']}{paths} (changes since your last review).\n"
+                "Mark each open id `<id> resolved` or `<id> still open: <reason>`. Raise new findings only on\n"
+                "the new diff or with new evidence. Do not repeat ledger items.")
+    parts = [head, diff, rules]
+    if led.get("hardening"):
+        h = led["hardening"]
+        parts.append(f"Hardening phase (stage {h['stage']}, bar {h['bar']}). Examine these stashed items; each "
+                     "needs a realistic reproduction under the threat model, or it stays out:\n"
+                     + "\n".join(f"H{i} {e['text']}" for i, e in enumerate(led.get("hardening_stash", []), 1)))
+    if led["findings"]:
+        if "tier 2 round 1" in why:
+            t1 = max(r["score"] or 0 for r in here if r["tier"] == 1)
+            parts.append(f"Tier 1 reached {t1:g}/10. Do not re-raise ledger items. Look for what tier 1 missed:\n"
+                         "wrong approach, broken callers, intent mismatch, threat-model gaps.")
+        parts.append("Ledger:\n" + "\n".join(ledger_lines(led)))
+        open_ids = [f["id"] for f in led["findings"].values() if f["status"] not in CLOSED]
+        if open_ids and not full:
+            parts.append("Open ids: " + ", ".join(open_ids))
+    return "\n".join(parts)
+
+
+def git_lines(repo, *args):
+    """Lines of `git -C repo ...` output; None when git fails."""
+    try:
+        r = subprocess.run(["git", "-C", repo, *args], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return r.stdout.splitlines() if r.returncode == 0 else None
+
+
+def changed_paths(repo, base, paths):
+    """Paths changed since base plus untracked files; None when git cannot say."""
+    scope = ["--", *paths] if paths else []
+    diff = git_lines(repo, "diff", "--name-only", base, *scope)
+    new = git_lines(repo, "ls-files", "--others", "--exclude-standard", *scope)
+    if diff is None or new is None:
+        return None
+    return sorted({p.strip() for p in diff + new if p.strip()})
+
+
+def norm_path(p):
+    return p[2:] if p.startswith("./") else p
+
+
+def default_research(repo):
+    r = Path(repo).resolve()
+    side = r.parent / (r.name + ".research")
+    return side if side.is_dir() else None
+
+
+def recent_ledgers(research, skip):
+    """The newest RECENT_LEDGERS readable *.ledger.json under research, minus `skip`."""
+    found = []
+    for p in Path(research).rglob("*.ledger.json"):
+        if p.resolve() == skip:
+            continue
+        try:
+            found.append((p.stat().st_mtime, p, json.loads(p.read_text())))
+        except (OSError, ValueError):
+            continue
+    found.sort(key=lambda t: t[0], reverse=True)
+    return [(p, led) for _, p, led in found[:RECENT_LEDGERS] if isinstance(led.get("findings"), dict)]
+
+
+def hot_classes(ledgers, changed):
+    """{class: (count, escaped, [ledger names])} for canonical classes that recur in changed files."""
+    paths = {norm_path(c) for c in changed}
+    hits = {}
+    for path, led in ledgers:
+        for f in led["findings"].values():
+            cls, where = f.get("class"), f.get("where") or []
+            if cls not in CLASSES or cls == "other" or not where:
+                continue
+            if norm_path(where[0].rsplit(":", 1)[0]) not in paths:
+                continue
+            esc = f.get("status") == "escaped"
+            if f.get("status") in ("repeat", "declined", "pre-existing") and not esc:
+                continue
+            n, e, names = hits.get(cls, (0, False, []))
+            hits[cls] = (n + 1, e or esc, names + ([path.name] if path.name not in names else []))
+    return {c: v for c, v in hits.items() if v[0] >= HOT_COUNT or v[1]}
+
+
+def valid_bar(n):
+    """A bar is an integer 6..10 (B1)."""
+    return isinstance(n, int) and not isinstance(n, bool) and 6 <= n <= 10
+
+
+def bar_arg(text):
+    """argparse type for --bar."""
+    try:
+        n = int(text)
+    except ValueError:
+        n = None
+    if n is None or not valid_bar(n):
+        raise argparse.ArgumentTypeError(f"--bar must be an integer 6..10, got {text!r}")
+    return n
+
+
+def owner_floors(research, changed):
+    """[(bar, reason, glob)] for owner entries in <research>/review/bars.json matching a changed path."""
+    f = Path(research) / "review" / "bars.json"
+    try:
+        entries = json.loads(f.read_text()).get("owner", [])
+    except (OSError, ValueError, AttributeError) as e:
+        if f.exists():
+            print(f"warning: ignoring unreadable {f}: {e}")
+        return []
+    out = []
+    for e in entries if isinstance(entries, list) else []:
+        for g in e.get("paths", []):
+            if any(fnmatch.fnmatch(norm_path(c), g) for c in changed):
+                bar = e.get("bar", 0)
+                if not valid_bar(bar):
+                    print(f"warning: ignoring owner floor {bar!r} for {g} in {f}: a bar is an integer 6..10")
+                    break
+                out.append((bar, e.get("reason", ""), g))
+                break
+    return out
+
+
+def residual_evidence(repo, changed):
+    """Lines of residual evidence; never changes the bar."""
+    d = Path(repo) / "residual"
+    if not (d / "components.csv").exists():
+        return ["residual: not set up (bar from paths and ledgers)"]
+    try:
+        with open(d / "components.csv", newline="") as fh:
+            rows = list(csv.DictReader(fh))
+        names = [(r.get("name") or r.get("component") or r.get("shortname") or "").strip() for r in rows]
+        with open(d / "residues.csv", newline="") as fh:
+            table = list(csv.reader(fh))
+    except (OSError, csv.Error) as e:
+        return [f"residual: unreadable ({e}); no evidence"]
+    head = [h.strip().lower() for h in table[0]] if table else []
+    low = [norm_path(c).lower() for c in changed]
+    out = []
+    for name in filter(None, names):
+        seg = [x for x in re.split(r"::|[./:]", name) if x]
+        if not seg or not any(seg[-1].lower() in c for c in low):
+            continue
+        col = head.index(name.lower()) if name.lower() in head else \
+            (head.index(seg[-1].lower()) if seg[-1].lower() in head else None)
+        n = sum(1 for r in table[1:] if col is not None and col < len(r) and r[col].strip() == "1")
+        out.append(f"residual: {name} carries {n} forces")
+    return out or ["residual: no component matches the changed paths"]
+
+
+def suggest_bar(a, ledger_path, table, shape, stage, research, why_security):
+    """(suggested bar, reasons, owner floor, residual lines, {concern: bar} the diff touches).
+    Each touched concern keeps its own bar; the suggested bar is their highest, as a summary."""
+    cats = a.category or []
+    touched = {c: table[c] for c in touched_concerns(cats)}
+    reasons = [f"categories: {', '.join(cats)}" if cats else "no category given (logic)"]
+    reasons += [f"{c}: {bar} ({why_security if c == 'security' else f'{shape}/{stage}'})" for c, bar in touched.items()]
+    changed = changed_paths(a.repo, a.base, a.paths)
+    floors, resid = [], residual_evidence(a.repo, changed or [])
+    if changed is None:
+        reasons.append("recurrence and owner floors unchecked: git could not list changed paths")
+    elif research is None or not research.is_dir():
+        reasons.append("no research dir: recurrence and owner floors unchecked")
+    else:
+        hot = hot_classes(recent_ledgers(research, Path(ledger_path).resolve()), changed)
+        for cls, (n, esc, names) in sorted(hot.items()):
+            reasons.append(f"hot class {cls}: {n} finding(s) in changed files"
+                           + (", one escaped" if esc else "") + f" ({', '.join(names)})")
+        if hot:  # a bar of 9 or 10 stays: recurrence never lowers a bar
+            touched = {c: bar + 1 if bar < MAX_SUGGESTED else bar for c, bar in touched.items()}
+        floors = owner_floors(research, changed)
+        for bar, why, g in floors:
+            reasons.append(f"owner floor {bar} for {g}" + (f": {why}" if why else ""))
+            touched = {c: max(b, bar) for c, b in touched.items()}
+    return max(touched.values()), reasons, max((f[0] for f in floors), default=0), resid, touched
+
+
+def read_bars(research):
+    """bars.json as a dict ({} when absent or unreadable)."""
+    try:
+        data = json.loads((Path(research) / "review" / "bars.json").read_text())
+    except (OSError, ValueError):
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def decide_region(a, research):
+    """Pick the shape and stage for this region from flags, facts, the region's record in
+    bars.json and the owner's entries. Raises Refusal on a silent downgrade."""
+    region = a.region or DEFAULT_REGION
+    checked = research is not None and research.is_dir()
+    data = read_bars(research) if checked else {}
+    regions = data.get("regions") if isinstance(data.get("regions"), dict) else {}
+    reg = regions.get(region) if isinstance(regions.get(region), dict) else {}
+    entries = data.get("stages") if isinstance(data.get("stages"), list) else []
+    pins = [e for e in entries if isinstance(e, dict) and e.get("region") == region and e.get("stage") in STAGES]
+    pin = pins[-1] if pins else None
+    pin_key = json.dumps(pin, sort_keys=True) if pin else None
+    notes = [] if checked else ["ratchet unchecked: no research dir (stage and shape are not recorded)"]
+    reset = bool(pin) and reg.get("pin") != pin_key  # an owner entry applies once, then the ratchet resumes
+    pin_shape = pin.get("shape") if reset and pin.get("shape") in SHAPES else None
+    # An entry that names no shape keeps the recorded one: a stage reset is not a shape change.
+    rec_shape = pin_shape or reg.get("shape")
+    rec_stage = pin["stage"] if reset else reg.get("stage")
+    rec_shape = rec_shape if rec_shape in SHAPES else None
+    rec_stage = rec_stage if rec_stage in STAGES else None
+    if reset:
+        notes.append(f"owner reset: bars.json puts region {region} at {rec_stage}")
+    where = f"{research}/review/bars.json" if checked else "<research>/review/bars.json"
+
+    facts = [a.direction_known, a.users_at_start, a.formats, a.lifespan, a.throwaway, a.outside_consumers]
+    if a.shape and any(facts):
+        raise Refusal("pass --shape or the declared facts it is derived from, not both")
+    given = a.shape or (derive_shape(*facts) if any(facts) else None)
+    old_shape = reg.get("shape") if reg.get("shape") in SHAPES else None
+    pivot_reset = bool(reset) and pin["stage"] == "prototype"
+    if a.shape == "pivot" and not pivot_reset and old_shape != "pivot":
+        raise Refusal(f"--shape pivot is an owner-declared reset: add region {region!r} with stage \"prototype\" "
+                      f"under \"stages\" in {where} (an entry that does not reset to prototype is no pivot)")
+    if given:
+        shape = given
+        shape_src = "--shape" if a.shape else "derived from the declared facts"
+        if shape != rec_shape and rec_shape and not (shape == "pivot" and pivot_reset):
+            allowed = f" (the owner's entry allows {rec_shape})" if pin_shape and old_shape != rec_shape else ""
+            raise Refusal(f"region {region} is recorded as {old_shape or rec_shape}{allowed}; changing it to {shape} "
+                          f"needs an owner entry naming {shape} under \"stages\" in {where}")
+    elif rec_shape or old_shape:
+        shape, shape_src = rec_shape or old_shape, f"reused from bars.json region {region}"
+    else:
+        shape, shape_src = DEFAULT_SHAPE, "default: no --shape or facts given"
+
+    change = None
+    if a.stage:
+        stage, stage_src = a.stage, "--stage"
+        if rec_stage and RANK[stage] < RANK[rec_stage]:
+            raise Refusal(f"region {region} is at {rec_stage}; {stage} would lower it. Only the owner lowers a "
+                          f"stage: add region {region!r} with stage {stage!r} under \"stages\" in {where}")
+    elif rec_stage:
+        stage, stage_src = rec_stage, f"reused from bars.json region {region}"
+    else:
+        stage, stage_src = DEFAULT_STAGE, "default: no --stage given"
+    if rec_stage and RANK[stage] > RANK[rec_stage]:
+        change = {"from": rec_stage, "to": stage}
+        notes.append(f"stage change {rec_stage} -> {stage}: a hardening phase is due "
+                     "(`review-ledger hardening --from <earlier ledgers>`)")
+    return {"region": region, "shape": shape, "shape_src": shape_src, "stage": stage, "stage_src": stage_src,
+            "notes": notes, "change": change, "pin": pin_key}
+
+
+def record_init(research, entry, region, record):
+    """Append `entry` to bars.json "history" and set the region's record."""
+    f = Path(research) / "review" / "bars.json"
+    data = read_bars(research)
+    data.setdefault("history", []).append(entry)
+    if not isinstance(data.get("regions"), dict):
+        data["regions"] = {}
+    data["regions"][region] = record
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(data, indent=1) + "\n")
+
+
+def residual_home(repo):
+    """<repo>/residual when residual is set up with inline metadata, else None. With the git sidecar
+    on, the metadata lives on a branch that only residual writes, so this script uses its fallback."""
+    d = Path(repo) / "residual"
+    cfg = d / "config.toml"
+    if not cfg.is_file() and not (d / "components.csv").is_file():
+        return None
+    try:
+        text = cfg.read_text() if cfg.is_file() else ""
+    except OSError:
+        return None
+    return None if re.search(r"^\s*git_sidecar_enabled\s*=\s*true\b", text, re.I | re.M) else d
+
+
+def threat_file(region):
+    """The file name of a region's threat model; the default region keeps the original name."""
+    return "threat-model.md" if region == DEFAULT_REGION else f"threat-model.{quote(region, safe='')}.md"
+
+
+def threat_paths(repo, research, region):
+    """(where to write a threat model or None, files to read it from, in order). The research dir is
+    the fallback home and is created on write, so a fresh project keeps its model for the next loop."""
+    spots, name = [], threat_file(region)
+    home = residual_home(repo)
+    if home is not None:
+        spots.append(home / name)
+    if research is not None:
+        spots.append(research / "review" / name)
+    return (spots[0] if spots else None), [p for p in spots if p.is_file()]
+
+
+def threat_text(value):
+    """The text of --threat-model: the contents of FILE when VALUE names a readable file, else VALUE."""
+    try:
+        if "\n" not in value and len(value) < 4096 and Path(value).is_file():
+            return Path(value).read_text()
+    except (OSError, ValueError):
+        pass
+    return value
+
+
+def write_threat(path, status, body):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"Status: {status}\n{body.strip()}\n")
+
+
+def resolve_threat(a, research):
+    """Decide the threat model for this init. Returns a dict (text, status, facts, path, store, source)
+    where `store` is (path, status, body) to write once init succeeds. Raises Refusal.
+    Order: --threat-model / --usage-model, the stored model, --project-kind (inferred)."""
+    flag = "--threat-model" if a.threat_model is not None else "--usage-model"
+    value = a.threat_model if a.threat_model is not None else a.usage_model
+    if a.threat_model is not None and a.usage_model is not None:
+        raise Refusal("pass --threat-model or its alias --usage-model, not both")
+    where, spots = threat_paths(a.repo, research, a.region or DEFAULT_REGION)
+    if value is not None:
+        text = threat_text(value)
+        if text.strip() in ("", "-"):
+            raise Refusal(f"{flag} is required: who can reach it, which inputs are untrusted, what it holds "
+                          "(empty and '-' are refused)")
+        try:
+            facts, status = parse_threat_model(text)
+        except ValueError as e:
+            raise Refusal(str(e))
+        status = status or "confirmed"
+        body = strip_status(text)
+        return {"text": body, "status": status, "facts": facts, "path": where, "store": (where, status, body),
+                "source": f"given with {flag}"}
+    stored = spots[0] if spots else None
+    kind = a.project_kind
+    if stored is not None:
+        text = stored.read_text()
+        try:
+            facts, status = parse_threat_model(text)
+        except ValueError as e:
+            raise Refusal(f"{stored}: {e}")
+        status = status or "confirmed"
+        if not (kind and status == "inferred"):  # a new kind re-guesses a guess, never the owner's word
+            note = f" ({kind} ignored: the stored model is the owner's)" if kind and status == "confirmed" else ""
+            return {"text": strip_status(text), "status": status, "facts": facts, "path": stored, "store": None,
+                    "source": f"read from {stored}{note}"}
+    if kind:
+        facts = dict(KIND_THREAT[kind])
+        body = "\n".join([f"Reach: {facts['reach']}", f"Untrusted: {facts['untrusted']}", f"Holds: {facts['holds']}",
+                          f"Derived from the project kind {kind}, not stated by the owner."])
+        return {"text": body, "status": "inferred", "facts": facts, "path": where,
+                "store": (where, "inferred", body), "source": f"guessed from --project-kind {kind}"}
+    raise Refusal("a threat model is required: pass --threat-model FILE|TEXT (reach, untrusted inputs, what it "
+                  "holds; --usage-model is an alias), or --project-kind "
+                  + "|".join(KIND_THREAT) + " to start from a guess marked inferred")
+
+
+def cmd_init(a):
+    research = Path(a.research) if a.research else default_research(a.repo)
+    if research is None and Path(a.repo).is_dir():  # a real project gets the sibling dir by convention
+        r = Path(a.repo).resolve()
+        research = r.parent / (r.name + ".research")
+    try:
+        tm = resolve_threat(a, research)
+        st = decide_region(a, research)
+    except Refusal as e:
+        sys.exit(_refuse(str(e)))
+    shape, stage = st["shape"], st["stage"]
+    facts = tm["facts"]
+    table = concern_bars(shape, stage, facts)
+    if len(facts) == len(THREAT_FACTS):
+        why = "threat model: " + ", ".join(f"{k} {facts[k]}" for k in THREAT_FACTS) + (" (spike: 6)" if shape == "spike" else "")
+    else:
+        why = ("threat model states no " + ", ".join(k for k in THREAT_FACTS if k not in facts)
+               + ": add `Reach:`, `Untrusted:` and `Holds:` lines; unstated stays at 9")
+    suggested, reasons, floor, resid, touched = suggest_bar(a, a.ledger, table, shape, stage, research, why)
+    reasons = st["notes"] + reasons
+    bar, capped, granted = suggested, [], {c for c, b in touched.items() if b >= 10}  # B2: peak or owner floor, per concern
+    if a.bar is not None:
+        if a.bar >= 10 and not a.bar_reason and granted:
+            capped = [c for c in touched if c not in granted]
+            touched = {c: 10 if c in granted else 9 for c in touched}
+        else:
+            touched = {c: a.bar for c in touched}
+        bar = max(touched.values())
+    print(f"Shape: {shape} ({st['shape_src']})")
+    print(f"Stage: {stage} ({st['stage_src']})")
+    kept = ""
+    if tm["store"]:
+        kept = f" (stored in {tm['store'][0]})" if tm["store"][0] else " (not stored: no residual or research dir)"
+    print(f"Threat model: {tm['status']}, {tm['source']}{kept}")
+    if tm["status"] == "inferred":
+        print("  inferred: ask the owner; run `review-ledger threat-model --confirm` once they agree")
+    print(f"Suggested bar: {suggested} (summary: the highest touched concern; each is judged against its own)")
+    for r in reasons + resid:
+        print(f"  {r}")
+    if a.bar is not None and not a.bar_reason:
+        if a.bar < suggested:
+            sys.exit(_bar_refusal(f"--bar {a.bar:g} is below the suggested {suggested}"))
+        if a.bar >= 10 and not granted:
+            sys.exit(_bar_refusal("--bar 10 has no concern at its peak or under an owner floor of 10"))
+    if capped:
+        print(f"warning: --bar 10 applies to {', '.join(c for c in touched if c not in capped)} only; "
+              f"{', '.join(capped)} capped at 9 (10 needs a peak, an owner floor or --bar-reason)")
+    led = {"repo": a.repo, "base": a.base, "bar": bar, "bar_suggested": suggested, "bar_reasons": reasons,
+           "categories": a.category or [], "intent": a.intent, "out_of_scope": a.out_of_scope,
+           "checks": a.checks, "threat_model": tm["text"], "threat_model_status": tm["status"],
+           "threat_facts": facts, "threat_model_path": str(tm["path"]) if tm["path"] else None,
+           "shape": shape, "stage": stage, "region": st["region"], "concerns": touched, "bar_table": table,
+           "owner_floor": floor, "phase": 0,
+           "paths": a.paths or [], "approach": 1, "checkpoint": False, "rounds": [], "findings": {},
+           "nit_stash": [], "hardening_stash": []}
+    if st["change"]:
+        led["stage_change"] = st["change"]
+    if shape == "spike":
+        led["note"] = ("spike touches security: review that part only" if "security" in touched
+                       else "no review needed: a spike's output is knowledge; review only if the owner asks")
+        print(f"  note: {led['note']}")
+    if a.bar_reason:
+        led["bar_reason"] = a.bar_reason
+    if tm["store"] and tm["store"][0]:
+        write_threat(*tm["store"])
+    save(a.ledger, led)
+    if research is not None and research.is_dir():
+        now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+        record = {"shape": shape, "stage": stage, "date": now, "ledger": str(a.ledger)}
+        if st["pin"]:
+            record["pin"] = st["pin"]
+        record_init(research, {"date": now, "ledger": str(a.ledger), "categories": a.category or [],
+                               "region": st["region"], "shape": shape, "stage": stage,
+                               "suggested": suggested, "chosen": bar, "reasons": reasons}, st["region"], record)
+    print(f"ledger {a.ledger}: bar {bar:g}/10")
+
+
+def _refuse(why):
+    print(f"error: {why}", file=sys.stderr)
+    return 2
+
+
+def _bar_refusal(why):
+    print(f"error: {why}; pass --bar-reason \"<text>\" to override", file=sys.stderr)
+    return 2
+
+
+def cmd_round(a):
+    led = load(a.ledger)
+    text = Path(a.reply).read_text()
+    score, verdict, findings, resolutions = parse_reply(text)
+    nits, hard = parse_stashes(text)
+    per, plain = parse_scores(text)
+    if score is None:
+        sys.exit("reply has no SCORE: n/10 or SCORE[concern]: n/10 line; ask the reviewer to resend in the brief's format")
+    unknown = [c for c in per if c not in CONCERNS]
+    if unknown:
+        sys.exit(_refuse(f"unknown concern in SCORE[{unknown[0]}]; use one of: " + ", ".join(CONCERNS)))
+    touched = list(led.get("concerns") or {})
+    missing = [c for c in touched if c not in per]
+    if missing and plain is None:
+        sys.exit(_refuse("reply scores no " + ", ".join(missing) + "; ask the reviewer for "
+                         + ", ".join(f"SCORE[{c}]: n/10" for c in missing)))
+    scores = {**{c: plain for c in missing}, **per} if touched else {}
+    score = min(scores.values()) if scores else score
+    for nf in findings:
+        if nf.get("class_canonical") is False:
+            print(f"warning: {nf['id']} class {nf['class']!r} is not a canonical slug; use one of: "
+                  + ", ".join(CLASSES))
+        if nf.get("concern_given"):
+            print(f"warning: {nf['id']} concern {nf['concern_given']!r} is not a concern; use one of: "
+                  + ", ".join(CONCERNS))
+    n = len(led["rounds"]) + 1
+    led["rounds"].append({"n": n, "tier": a.tier, "approach": led["approach"], "reviewer": a.reviewer,
+                          "sha": a.sha, "score": score, "verdict": verdict, "phase": led.get("phase", 0),
+                          **({"scores": scores} if scores else {})})
+    for fid, st, why in resolutions:
+        f = led["findings"].get(fid)
+        if not f:
+            continue
+        if st == "resolved":
+            f["status"] = "resolved"
+        else:
+            if f["status"] == "disagree":
+                f["replies"] = f.get("replies", 0) + 1
+            else:
+                f["status"] = "open"
+            f["evidence"] = why or f.get("evidence")
+    repeats = []
+    for nf in findings:
+        fid = nf["id"]
+        if fid in led["findings"]:
+            fid = next_id(led)  # reviewer reused an id: keep ids stable
+        # Re-raising something the author already declined or disputed is a repeat.
+        # A new instance of a fixed class is a missed instance: keep it open.
+        old = [f for f in led["findings"].values() if same_spot(nf, f)]
+        rejected = [f for f in old if f["status"] in REJECTED]
+        evidence = None
+        if nf["pre_existing"]:
+            status = "pre-existing"
+        elif rejected:
+            status, evidence = "repeat", f"repeat of {rejected[0]['id']}"
+            repeats.append(f"{fid} repeats {rejected[0]['id']}")
+        else:
+            status = "open"
+            if old:
+                evidence = f"same class or spot as {old[0]['id']}"
+        led["findings"][fid] = {**nf, "id": fid, "round": n, "tier": a.tier, "status": status,
+                                "evidence": evidence}
+    if nits:
+        led.setdefault("nit_stash", []).extend({"round": n, "text": t} for t in nits)
+    if hard:
+        led.setdefault("hardening_stash", []).extend(
+            {"round": n, "stage": led.get("stage", DEFAULT_STAGE), "text": t} for t in hard)
+    save(a.ledger, led)
+    step, why = next_step(led)
+    print(f"round {n} (tier {a.tier}, {a.reviewer}): score {score:g}/10, {len(findings)} new, "
+          f"{len(resolutions)} resolutions" + (f"; closed as repeats: {', '.join(repeats)}" if repeats else "")
+          + (f"; stashed {len(nits)} nits, {len(hard)} hardening" if nits or hard else ""))
+    print(f"NEXT: {step}: {why}")
+
+
+def cmd_outcome(a):
+    led = load(a.ledger)
+    f = led["findings"].get(a.id.upper())
+    if not f:
+        sys.exit(f"no finding {a.id}")
+    if a.status == "disagree" and f["status"] == "disagree":
+        f["replies"] = f.get("replies", 0) + 1
+    f["status"] = a.status
+    if a.evidence:
+        f["evidence"] = a.evidence
+    save(a.ledger, led)
+    print(f"{f['id']} => {a.status}")
+
+
+def cmd_flag(a):
+    led = load(a.ledger)
+    if a.cmd == "checkpoint":
+        led["checkpoint"] = True
+    else:
+        led["approach"] += 1
+        led["checkpoint"] = False
+    save(a.ledger, led)
+    print("NEXT: %s: %s" % next_step(led))
+
+
+def cmd_next(a):
+    print("%s: %s" % next_step(load(a.ledger)))
+
+
+def cmd_brief(a):
+    print(brief(load(a.ledger)))
+
+
+def cmd_status(a):
+    led = load(a.ledger)
+    sug = led.get("bar_suggested")
+    print(f"bar {led['bar']:g}/10" + (f" (suggested {sug:g})" if sug is not None else ""))
+    if led.get("shape"):
+        print(f"shape {led['shape']}, stage {led.get('stage', DEFAULT_STAGE)}, region {led.get('region', DEFAULT_REGION)}")
+    if led.get("concerns"):
+        print("concern bars: " + ", ".join(f"{c}: {b}" for c, b in led["concerns"].items()))
+    if led.get("threat_model_status"):
+        print(f"threat model: {led['threat_model_status']}")
+    if led.get("note"):
+        print(f"note: {led['note']}")
+    held = (len(led.get("nit_stash", [])), len(led.get("hardening_stash", [])))
+    if any(held):
+        print(f"stashes (hidden from the brief): {held[0]} nits, {held[1]} hardening; see `stash`")
+    for r in led["rounds"]:
+        print(f"r{r['n']} tier {r['tier']} approach {r['approach']} {r['reviewer']} {r['sha'][:10]} "
+              f"score {r['score']:g}/10 {r['verdict'] or ''}"
+              + (" " + " ".join(f"{c}={v:g}" for c, v in r["scores"].items()) if r.get("scores") else "")
+              + (f" (phase {r['phase']})" if r.get("phase") else ""))
+    for line in ledger_lines(led):
+        print(line)
+    print("NEXT: %s: %s" % next_step(led))
+
+
+def cmd_stash(a):
+    led = load(a.ledger)
+    nits, hard = led.get("nit_stash", []), led.get("hardening_stash", [])
+    nit_open = led.get("checkpoint") or next_step(led)[0] == "CHECKPOINT"
+    if not nits:
+        print("NIT-STASH: empty")
+    elif not nit_open:
+        print(f"NIT-STASH: {len(nits)} held, closed until the §6c checkpoint")
+    else:
+        print(f"NIT-STASH ({len(nits)}):")
+        for i, e in enumerate(nits, 1):
+            print(f"  N{i} [round {e.get('round', '-')}] {e['text']}")
+        print("Fix only nits that ONE central change solves and that maps to a code practice or feature facet "
+              "(a lint rule, a helper, a convention). Decline the rest with a reason.")
+    if not hard:
+        print("HARDENING-STASH: empty")
+    elif not led.get("hardening"):
+        print(f"HARDENING-STASH: {len(hard)} held, closed until a hardening phase (`hardening`)")
+    else:
+        print_hardening(led)
+
+
+def print_hardening(led):
+    h = led["hardening"]
+    print(f"HARDENING-STASH ({len(led.get('hardening_stash', []))}), stage {h['stage']}, bar {h['bar']}:")
+    for i, e in enumerate(led.get("hardening_stash", []), 1):
+        print(f"  H{i} [round {e.get('round', '-')}, {e.get('stage', DEFAULT_STAGE)}] {e['text']}")
+    print("Reproduce each under the threat model. Fix with a failing-first test, or decline with a reason.")
+
+
+def cmd_hardening(a):
+    led = load(a.ledger)
+    stash = led.setdefault("hardening_stash", [])
+    seen = {e["text"] for e in stash}
+    for path in a.from_ledgers or []:
+        for e in load(path).get("hardening_stash", []):
+            if e["text"] not in seen:
+                stash.append({**e, "source": str(path)})
+                seen.add(e["text"])
+    if led.get("hardening"):  # already open: only merge items, never restart the phase
+        save(a.ledger, led)
+        print(f"hardening phase already open (stage {led['hardening']['stage']}); items merged")
+        print_hardening(led)
+        return
+    shape, stage = led.get("shape", DEFAULT_SHAPE), led.get("stage", DEFAULT_STAGE)
+    filed = min(RANK[e.get("stage", stage)] for e in stash) if stash else RANK[stage]
+    phase = STAGES[max(RANK[stage], min(filed + 1, len(STAGES) - 1))]
+    table = concern_bars(shape, phase, led.get("threat_facts"))
+    names = list(led.get("concerns") or touched_concerns(led.get("categories")))
+    floor = led.get("owner_floor", 0)
+    concerns = {c: max(table[c], floor) for c in names}
+    bar = max(concerns.values())
+    led.setdefault("phases", []).append({"phase": led.get("phase", 0), "bar": led["bar"],
+                                         "checkpoint": led["checkpoint"], "approach": led["approach"]})
+    led["phase"] = led.get("phase", 0) + 1  # fresh round caps, checkpoint and a full-diff first brief
+    led["checkpoint"] = False
+    led["hardening"] = {"stage": phase, "bar": bar, "bar_before": led["bar"],
+                        "opened": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
+    led["bar"], led["concerns"], led["bar_table"] = bar, concerns, table
+    save(a.ledger, led)
+    print(f"hardening phase: stage {phase} (the stage after the one the items were filed in), bar {bar}; "
+          "new rounds, checkpoint and a full-diff brief; earlier rounds stay in the ledger")
+    print_hardening(led)
+
+
+def cmd_threat_model(a):
+    led = load(a.ledger)
+    status = led.get("threat_model_status")
+    if not status:
+        sys.exit(_refuse("no threat model recorded in this ledger (it predates --threat-model); run init again"))
+    if a.confirm and status != "confirmed":
+        led["threat_model_status"] = status = "confirmed"
+        path = Path(led["threat_model_path"]) if led.get("threat_model_path") else None
+        stale = path and path.is_file() and strip_status(path.read_text()) != led["threat_model"].strip()
+        if path and path.is_file() and not stale:
+            write_threat(path, "confirmed", strip_status(path.read_text()))
+        save(a.ledger, led)
+        print("threat model confirmed" + (f" (stored file {path} holds a different model and is unchanged)" if stale
+              else f" (updated {path})" if path else " (no stored file to update)"))
+    print(f"threat model: {status}")
+    print(led["threat_model"])
+    print(f"security bar {security_bar(led.get('threat_facts'), spike=led.get('shape') == 'spike')} "
+          f"from facts {led.get('threat_facts') or 'none stated'}")
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("-l", "--ledger", required=True)
+    sub = p.add_subparsers(dest="cmd", required=True)
+    i = sub.add_parser("init")
+    i.add_argument("--repo", required=True)
+    i.add_argument("--base", required=True)
+    i.add_argument("--bar", type=bar_arg, help="integer 6..10 for every touched concern (default: the suggested bars)")
+    i.add_argument("--bar-reason", default="")
+    i.add_argument("--category", action="append", choices=sorted(CATEGORY_CONCERNS))
+    i.add_argument("--research", help="research dir (default: sibling <repo>.research if present)")
+    i.add_argument("--intent", required=True)
+    i.add_argument("--out-of-scope", default="")
+    i.add_argument("--checks", default="")
+    i.add_argument("--paths", nargs="*")
+    i.add_argument("--threat-model", help="FILE or TEXT: reach (local single user / other local users / network / "
+                   "public), untrusted inputs (none / local files / network input / third-party code), what it holds "
+                   "(nothing / owner data / secrets / others data). Stored for later loops.")
+    i.add_argument("--usage-model", help="alias of --threat-model")
+    i.add_argument("--project-kind", choices=sorted(KIND_THREAT),
+                   help="no threat model given: start from a guess for this kind, marked inferred")
+    i.add_argument("--shape", choices=SHAPES)
+    i.add_argument("--stage", choices=STAGES, help="this region's stage (default: its recorded stage, else prototype)")
+    i.add_argument("--region", help="module or path the stage belongs to (default: the whole repo)")
+    i.add_argument("--direction-known", choices=["yes", "no"])
+    i.add_argument("--users-at-start", choices=["yes", "no"])
+    i.add_argument("--outside-consumers", choices=["yes", "no"], help="consumers outside this repo (library vs rewrite)")
+    i.add_argument("--formats", choices=["reversible", "costly"])
+    i.add_argument("--lifespan", choices=["short", "long"])
+    i.add_argument("--throwaway", action="store_true")
+    r = sub.add_parser("round")
+    r.add_argument("--tier", type=int, choices=[1, 2], required=True)
+    r.add_argument("--reviewer", required=True)
+    r.add_argument("--sha", required=True)
+    r.add_argument("--reply", required=True)
+    o = sub.add_parser("outcome")
+    o.add_argument("id")
+    o.add_argument("status", choices=["fixed", "disagree", "declined", "pre-existing", "resolved", "escaped"])
+    o.add_argument("--evidence", default="")
+    for name in ("checkpoint", "new-approach", "next", "brief", "status", "stash"):
+        sub.add_parser(name)
+    sub.add_parser("hardening").add_argument("--from", dest="from_ledgers", nargs="*")
+    sub.add_parser("threat-model").add_argument("--confirm", action="store_true",
+                                                help="the owner confirmed an inferred model")
+    a = p.parse_args(argv)
+    {"init": cmd_init, "round": cmd_round, "outcome": cmd_outcome, "checkpoint": cmd_flag,
+     "new-approach": cmd_flag, "next": cmd_next, "brief": cmd_brief, "status": cmd_status,
+     "stash": cmd_stash, "hardening": cmd_hardening, "threat-model": cmd_threat_model}[a.cmd](a)
+
+
+if __name__ == "__main__":
+    main()

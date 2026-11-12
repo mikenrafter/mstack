@@ -1,0 +1,181 @@
+#!/usr/bin/env python3
+"""Review-bot triage for build-loop §6e: lists bot findings on a PR in short form,
+groups them into passes, shows which threads you have not answered, and counts
+outcomes across PRs.
+
+  bot-triage list OWNER/REPO#N [--pass latest|all|K] [--unanswered]
+  bot-triage guard OWNER/REPO#N            # exit 1 if any bot thread is unanswered (run before a push)
+  bot-triage stats OWNER/REPO#N [...]      # passes, labels, fixed/declined per PR
+  bot-triage show OWNER/REPO#N COMMENT_ID  # one finding, details stripped
+
+Add --comments FILE to read a saved `gh api .../pulls/N/comments` array instead
+of calling gh (one PR only).
+
+A pass is the set of top-level bot comments made against one commit. Bodies are
+shown without <details> blocks and HTML comments: a CodeRabbit comment drops
+from about 5 KB to about 0.5 KB. Labels such as Minor/Major are the bot's own
+and do not track real weight; classify each finding yourself (§6e).
+"""
+import argparse
+import json
+import re
+import subprocess
+import sys
+from collections import Counter, defaultdict
+from pathlib import Path
+
+DETAILS = re.compile(r"<details>(?:(?!<details>).)*?</details>", re.S)
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
+CR_LABEL = re.compile(r'alt=""></picture> (\w+)\*\* · \*\*([^*]+)\*\*(?: · \*\*([^*]+)\*\*)?')
+BOLD = re.compile(r"^\*\*(.+?)\*\*\s*$", re.M)
+BOT_CLOSED = re.compile(r"Confirmed as addressed|review_comment_withdrawn|Review thread resolved", re.I)
+FIXED = re.compile(r"^\s*(?:fixed|done|addressed)\b", re.I)
+DECLINED = re.compile(r"^\s*(?:not changing|declin|won't|will not|leaving|keeping|no change|not fixing|this is intentional)", re.I)
+PR_REF = re.compile(r"^(?P<repo>[\w.-]+/[\w.-]+)#(?P<n>\d+)$")
+
+
+def is_bot(c):
+    return c["user"]["login"].endswith("[bot]") or c["user"].get("type") == "Bot"
+
+
+def strip(body):
+    prev = None
+    while prev != body:
+        prev, body = body, DETAILS.sub("", body)
+    body = HTML_COMMENT.sub("", body)
+    return re.sub(r"\n{3,}", "\n\n", body).strip()
+
+
+def fetch(ref):
+    m = PR_REF.match(ref)
+    if not m:
+        sys.exit(f"expected OWNER/REPO#N, got {ref!r}")
+    out = subprocess.run(["gh", "api", "--paginate", "--slurp", f"repos/{m['repo']}/pulls/{m['n']}/comments"],
+                         check=True, capture_output=True, text=True).stdout
+    return [c for page in json.loads(out) for c in page]
+
+
+def threads(comments):
+    """Top-level bot comments with their replies, numbered by pass."""
+    replies = defaultdict(list)
+    for c in comments:
+        if c.get("in_reply_to_id"):
+            replies[c["in_reply_to_id"]].append(c)
+    tops = sorted((c for c in comments if not c.get("in_reply_to_id") and is_bot(c)), key=lambda c: c["created_at"])
+    passes = {}
+    for c in tops:
+        passes.setdefault((c["user"]["login"], c["original_commit_id"]), len(passes) + 1)
+    out = []
+    for c in tops:
+        body = strip(c["body"])
+        label = CR_LABEL.search(c["body"])
+        title = BOLD.findall(body)
+        title = next((t for t in title if "<picture>" not in t), None) or body.splitlines()[0] if body else ""
+        rs = sorted(replies.get(c["id"], []), key=lambda r: r["created_at"])
+        human = [r for r in rs if not is_bot(r)]
+        if human:
+            first = human[0]["body"]
+            outcome = "fixed" if FIXED.match(first) else "declined" if DECLINED.match(first) else "replied"
+        else:
+            outcome = "unanswered"
+        closed_by_bot = bool(BOT_CLOSED.search(c["body"])) or any(BOT_CLOSED.search(r["body"]) for r in rs if is_bot(r))
+        out.append({
+            "id": c["id"], "bot": c["user"]["login"], "pass": passes[(c["user"]["login"], c["original_commit_id"])],
+            "commit": c["original_commit_id"][:10], "where": f"{c['path']}:{c.get('original_line') or c.get('line') or '-'}",
+            "severity": label[1] if label else None, "category": label[2] if label else None,
+            "effort": label[3] if label and label[3] else None, "title": title.strip(), "body": body,
+            "outcome": outcome, "closed_by_bot": closed_by_bot, "url": c.get("html_url", ""),
+            "chars": len(c["body"]), "stripped_chars": len(body),
+        })
+    return out
+
+
+def select(ts, which):
+    if which == "all" or not ts:
+        return ts
+    k = max(t["pass"] for t in ts) if which == "latest" else int(which)
+    return [t for t in ts if t["pass"] == k]
+
+
+def line(t):
+    sev = "/".join(x for x in (t["severity"], t["category"]) if x) or "-"
+    done = " (bot closed)" if t["closed_by_bot"] else ""
+    return f"{t['id']} p{t['pass']} {t['commit']} [{sev}] {t['where']} {t['title']} => {t['outcome']}{done}"
+
+
+def load(a, ref):
+    return threads(json.loads(Path(a.comments).read_text()) if a.comments else fetch(ref))
+
+
+def cmd_list(a):
+    ts = select(load(a, a.pr), a.pass_)
+    if a.unanswered:
+        ts = [t for t in ts if t["outcome"] == "unanswered"]
+    for t in ts:
+        print(line(t))
+    if a.unanswered and ts:
+        sys.exit(1)
+
+
+def cmd_guard(a):
+    open_ = [t for t in load(a, a.pr) if t["outcome"] == "unanswered" and not t["closed_by_bot"]]
+    for t in open_:
+        print(line(t))
+    if open_:
+        sys.exit(f"{len(open_)} bot thread(s) unanswered: answer each before pushing (§6e: one push per pass)")
+    print("no unanswered bot threads")
+
+
+def cmd_show(a):
+    for t in load(a, a.pr):
+        if str(t["id"]) == a.id:
+            print(line(t))
+            print(t["url"])
+            print(t["body"])
+            return
+    sys.exit(f"no bot comment {a.id}")
+
+
+def cmd_stats(a):
+    if a.comments and len(a.prs) > 1:
+        sys.exit("--comments reads one PR")
+    total = Counter()
+    for ref in a.prs:
+        ts = load(a, ref)
+        c = Counter(t["outcome"] for t in ts)
+        labels = Counter(t["severity"] or "-" for t in ts)
+        passes = len({t["pass"] for t in ts})
+        raw, small = sum(t["chars"] for t in ts), sum(t["stripped_chars"] for t in ts)
+        print(f"{ref}: {len(ts)} findings in {passes} passes; labels "
+              + ", ".join(f"{k} {v}" for k, v in labels.most_common())
+              + f"; fixed {c['fixed']}, declined {c['declined']}, other replies {c['replied']}, "
+              f"unanswered {c['unanswered']}; {raw} -> {small} chars stripped")
+        total.update(c)
+        total["findings"] += len(ts)
+        total["passes"] += passes
+    if len(a.prs) > 1:
+        print(f"total: {total['findings']} findings in {total['passes']} passes; fixed {total['fixed']}, "
+              f"declined {total['declined']}, other replies {total['replied']}, unanswered {total['unanswered']}")
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument("--comments", help="saved comments JSON instead of gh")
+    sub = p.add_subparsers(dest="cmd", required=True)
+    li = sub.add_parser("list")
+    li.add_argument("pr")
+    li.add_argument("--pass", dest="pass_", default="latest")
+    li.add_argument("--unanswered", action="store_true")
+    g = sub.add_parser("guard")
+    g.add_argument("pr")
+    sh = sub.add_parser("show")
+    sh.add_argument("pr")
+    sh.add_argument("id")
+    st = sub.add_parser("stats")
+    st.add_argument("prs", nargs="+")
+    a = p.parse_args(argv)
+    {"list": cmd_list, "guard": cmd_guard, "show": cmd_show, "stats": cmd_stats}[a.cmd](a)
+
+
+if __name__ == "__main__":
+    main()

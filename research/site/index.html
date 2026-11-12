@@ -1,0 +1,202 @@
+<title>Agentic Practice Dossier</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a lab-notebook reader. Fixed section rail on the left, one long
+   readable column on the right; the rail collapses to a scrolling strip on phones. */
+:root {
+  --paper: #f6f7f4;
+  --sheet: #ffffff;
+  --ink: #1d2430;
+  --muted: #5c6675;
+  --rule: #d9ddd6;
+  --accent: #23508f;
+  --accent-soft: #e3ebf6;
+  --code-bg: #eef0ec;
+  --grade-a: #1f7a4d; --grade-b: #2f6db3; --grade-c: #a66a00; --grade-d: #8a8f99;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Literata", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --rail: 17rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #13171d; --sheet: #191e26; --ink: #e3e7ee; --muted: #9aa4b2; --rule: #2c333e;
+  --accent: #8fb4ec; --accent-soft: #1f2a3b; --code-bg: #212833;
+  --grade-a: #5cc28f; --grade-b: #7fb0ee; --grade-c: #e0a84a; --grade-d: #9aa1ad;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #13171d; --sheet: #191e26; --ink: #e3e7ee; --muted: #9aa4b2; --rule: #2c333e;
+  --accent: #8fb4ec; --accent-soft: #1f2a3b; --code-bg: #212833;
+  --grade-a: #5cc28f; --grade-b: #7fb0ee; --grade-c: #e0a84a; --grade-d: #9aa1ad;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.62; }
+.shell { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-height: 100vh; }
+
+/* Rail */
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; height: 100vh; overflow-y: auto;
+  border-right: 1px solid var(--rule); padding-block: 1.5rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px;
+  display: flex; flex-direction: column; gap: 1.25rem; }
+.brand { font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: 1.35rem; line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
+.brand small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: .72rem; letter-spacing: .04em; color: var(--muted); margin-top: .35rem; font-stretch: 100%; }
+.nav { display: flex; flex-direction: column; gap: .15rem; }
+.nav a { display: grid; grid-template-columns: 2.1rem 1fr; gap: .25rem; padding: .4rem .5rem; border-radius: 4px; color: var(--ink); text-decoration: none;
+  font-family: var(--font-display); font-size: .92rem; font-weight: 500; line-height: 1.25; }
+.nav a .no { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); padding-top: .12rem; font-variant-numeric: tabular-nums; }
+.nav a:hover { background: var(--accent-soft); }
+.nav a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.nav a:focus-visible, button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.nav .group { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: .7rem .5rem .2rem; }
+.legend { font-size: .8rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1rem; display: grid; gap: .35rem; }
+.legend b { font-family: var(--font-display); color: var(--ink); font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; }
+.legend div { display: flex; gap: .5rem; align-items: baseline; }
+
+.grade { display: inline-block; min-width: 1.35em; text-align: center; font-family: var(--font-mono); font-weight: 600; font-size: .78em;
+  padding: 0 .3em; border-radius: 3px; color: var(--sheet); line-height: 1.5; }
+.grade.A { background: var(--grade-a); } .grade.B { background: var(--grade-b); } .grade.C { background: var(--grade-c); } .grade.D { background: var(--grade-d); }
+
+/* Reader */
+main { min-width: 0; padding-block: 2.5rem 5rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.doc { max-width: 46rem; margin-inline: auto; }
+.meta { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; margin-bottom: 1rem; }
+.toc { border: 1px solid var(--rule); background: var(--sheet); border-radius: 6px; padding: .8rem 1rem; margin: 0 0 2rem; font-size: .9rem; }
+.toc summary { cursor: pointer; font-family: var(--font-display); font-weight: 600; }
+.toc ol { margin: .5rem 0 0; padding-left: 1.3rem; columns: 2 16rem; column-gap: 2rem; }
+.toc a { color: var(--accent); text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+.md h1 { font-family: var(--font-display); font-stretch: 80%; font-weight: 800; font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.08; letter-spacing: -0.015em; margin: 0 0 1.2rem; text-wrap: balance; }
+.md h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.45rem; line-height: 1.2; margin: 2.6rem 0 .8rem; padding-top: .9rem; border-top: 1px solid var(--rule); text-wrap: balance; scroll-margin-top: 1rem; }
+.md h3 { font-family: var(--font-display); font-weight: 650; font-size: 1.13rem; margin: 1.8rem 0 .5rem; text-wrap: balance; scroll-margin-top: 1rem; }
+.md h4 { font-family: var(--font-display); font-weight: 600; font-size: 1rem; margin: 1.4rem 0 .4rem; }
+.md p, .md li { overflow-wrap: anywhere; }
+.md a { color: var(--accent); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+.md code { font-family: var(--font-mono); font-size: .84em; background: var(--code-bg); padding: .08em .3em; border-radius: 3px; }
+.md pre { background: var(--code-bg); padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: .86rem; line-height: 1.5; }
+.md pre code { background: none; padding: 0; }
+.md blockquote { margin: 1.2rem 0; padding: .2rem 1rem; border-left: 3px solid var(--accent); color: var(--muted); }
+.md .local-ref { border-bottom: 1px dotted var(--muted); cursor: help; }
+.md hr { border: 0; border-top: 1px solid var(--rule); margin: 2rem 0; }
+.table-wrap { overflow-x: auto; margin: 1.2rem 0; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); }
+.md table { border-collapse: collapse; width: 100%; font-family: var(--font-display); font-size: .86rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
+.md th, .md td { text-align: left; vertical-align: top; padding: .5rem .65rem; border-bottom: 1px solid var(--rule); min-width: 7rem; }
+.md th { font-weight: 700; background: var(--accent-soft); position: sticky; top: 0; }
+.md tr:last-child td { border-bottom: 0; }
+.pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3.5rem; border-top: 1px solid var(--rule); padding-top: 1.2rem; flex-wrap: wrap; }
+.pager a { font-family: var(--font-display); font-weight: 600; color: var(--accent); text-decoration: none; }
+.status { color: var(--muted); font-style: italic; }
+
+/* Phone: rail becomes a strip */
+.mobile-nav { display: none; }
+@media (max-width: 860px) {
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--rule); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .nav, .legend { display: none; }
+  .mobile-nav { display: block; }
+  .mobile-nav select { width: 100%; font: inherit; font-family: var(--font-display); padding: .5rem; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); color: var(--ink); }
+  main { padding-block: 1.5rem 4rem; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">Agentic Practice Dossier<small>phoe-nix · research round 2026-11</small></div>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+    <div class="mobile-nav"><label for="section-select" class="legend" style="display:block;border:0;padding:0;margin-bottom:.3rem">Section</label><select id="section-select"></select></div>
+    <div class="legend" aria-label="Evidence grades">
+      <b>Evidence grades</b>
+      <div><span class="grade A">A</span> controlled study or benchmark</div>
+      <div><span class="grade B">B</span> telemetry, observational (n stated)</div>
+      <div><span class="grade C">C</span> practitioner numbers or demo</div>
+      <div><span class="grade D">D</span> opinion or anecdote</div>
+    </div>
+  </aside>
+  <main>
+    <article class="doc">
+      <div class="meta" id="meta"></div>
+      <details class="toc" id="toc" open><summary>On this page</summary><ol id="toc-list"></ol></details>
+      <div class="md" id="content"><p class="status">Loading section…</p></div>
+      <nav class="pager" id="pager" aria-label="Previous and next section"></nav>
+    </article>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+const SECTIONS = [
+  { id: "s00", file: "md/00-index.md", no: "00", title: "Start here", group: "Overview" },
+  { id: "s01", file: "md/01-research-literature.md", no: "01", title: "What the research shows", group: "Agentic practice" },
+  { id: "s02", file: "md/02-practitioners.md", no: "02", title: "Practitioners and their data", group: "Agentic practice" },
+  { id: "s06", file: "md/06-usage-claude.md", no: "06", title: "Your Claude Code usage", group: "Your data" },
+  { id: "s07", file: "md/07-usage-codex.md", no: "07", title: "Your Codex usage", group: "Your data" },
+  { id: "s03", file: "md/03-moldable-development.md", no: "03", title: "Moldable development and a view spec", group: "Tooling" },
+  { id: "s04", file: "md/04-code-review-and-diff-core.md", no: "04", title: "AI code review and diff-core", group: "Tooling" },
+  { id: "s05", file: "md/05-classic-engineering.md", no: "05", title: "Classic engineering texts", group: "Craft and career" },
+  { id: "s08", file: "md/08-career-communication.md", no: "08", title: "Communication and career", group: "Craft and career" },
+  { id: "s09", file: "md/09-cross-check.md", no: "09", title: "Cross-check and corrections", group: "Verification" },
+];
+const nav = document.getElementById("nav"), sel = document.getElementById("section-select");
+let lastGroup = null;
+for (const s of SECTIONS) {
+  if (s.group !== lastGroup) { const g = document.createElement("div"); g.className = "group"; g.textContent = s.group; nav.appendChild(g); lastGroup = s.group; }
+  const a = document.createElement("a"); a.href = "#" + s.id; a.dataset.id = s.id;
+  a.innerHTML = `<span class="no">${s.no}</span><span></span>`; a.lastChild.textContent = s.title; nav.appendChild(a);
+  const o = document.createElement("option"); o.value = s.id; o.textContent = `${s.no} · ${s.title}`; sel.appendChild(o);
+}
+sel.addEventListener("change", () => { location.hash = sel.value; });
+
+const cache = {};
+const slug = t => t.toLowerCase().replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 60);
+
+function decorate(root) {
+  // Wrap tables so only they scroll sideways.
+  root.querySelectorAll("table").forEach(t => { const w = document.createElement("div"); w.className = "table-wrap"; t.replaceWith(w); w.appendChild(t); });
+  // Grade chips: a cell or bold that is just A/B/C/D, or "grade X" in text.
+  root.querySelectorAll("td, strong").forEach(el => {
+    const m = el.textContent.trim().match(/^(?:grade\s*)?([ABCD])(?:[\s—–-].*)?$/i);
+    if (m && el.children.length === 0 && el.textContent.trim().length <= 2) { el.innerHTML = `<span class="grade ${m[1].toUpperCase()}">${m[1].toUpperCase()}</span>`; }
+  });
+  // Links to sibling section files open in-page.
+  root.querySelectorAll("a[href]").forEach(a => {
+    const h = a.getAttribute("href"); const m = h.match(/(?:^|\/)(0\d)-[\w-]+\.md(#.*)?$/);
+    if (m) { a.setAttribute("href", "#s" + m[1]); a.removeAttribute("target"); }
+    else if (/^https?:/.test(h)) { a.target = "_blank"; a.rel = "noopener"; }
+    else if (!h.startsWith("#")) {
+      // Local repo paths (skills, transcripts, data files) do not exist on the page.
+      const s = document.createElement("span"); s.className = "local-ref"; s.title = "Local file: " + h; s.textContent = a.textContent; a.replaceWith(s);
+    }
+  });
+  // Heading anchors and TOC.
+  const list = document.getElementById("toc-list"); list.innerHTML = "";
+  const h2s = root.querySelectorAll("h2");
+  h2s.forEach((h, i) => { h.id = "h-" + i + "-" + slug(h.textContent); const li = document.createElement("li"); const a = document.createElement("a");
+    a.href = "#"; a.textContent = h.textContent; a.addEventListener("click", e => { e.preventDefault(); h.scrollIntoView(); }); li.appendChild(a); list.appendChild(li); });
+  document.getElementById("toc").hidden = h2s.length < 3;
+}
+
+async function show(id) {
+  const s = SECTIONS.find(x => x.id === id) || SECTIONS[0];
+  nav.querySelectorAll("a").forEach(a => { if (a.dataset.id === s.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  sel.value = s.id;
+  const content = document.getElementById("content");
+  try {
+    if (!cache[s.file]) { const r = await fetch(s.file); if (!r.ok) throw new Error(r.status); cache[s.file] = await r.text(); }
+    const md = cache[s.file];
+    content.innerHTML = DOMPurify.sanitize(marked.parse(md, { gfm: true }));
+    const words = md.split(/\s+/).length;
+    document.getElementById("meta").innerHTML = `<span>Section ${s.no}</span><span>${s.group}</span><span>${words.toLocaleString()} words · ~${Math.max(1, Math.round(words / 230))} min</span>`;
+    decorate(content);
+  } catch (e) {
+    content.innerHTML = `<p class="status">This section could not load (${String(e.message || e)}). Reload the page to try again.</p>`;
+  }
+  const i = SECTIONS.indexOf(s), prev = SECTIONS[i - 1], next = SECTIONS[i + 1];
+  document.getElementById("pager").innerHTML = (prev ? `<a href="#${prev.id}">← ${prev.no} ${prev.title}</a>` : "<span></span>") + (next ? `<a href="#${next.id}">${next.no} ${next.title} →</a>` : "");
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+show(location.hash.slice(1) || "s00");
+</script>

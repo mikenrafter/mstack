@@ -1,0 +1,69 @@
+---
+name: uw-agent
+description: Compact your own session or schedule your own resume through usagewindow. Use when your context is getting large, you are near a usage limit, or you want to continue a task later.
+---
+
+# uw-agent: compact yourself, resume yourself later
+
+`uw-agent` wraps the `uw` command. It starts a private usagewindow daemon on
+first use, with the T3 and Paseo credentials read from the host's secret files,
+so you never handle a token. Use it instead of plain `uw` for anything that
+changes state.
+
+## Find your session id
+
+```sh
+uw-agent self           # active sessions, newest first, with titles
+uw-agent self --id      # just the id, only if exactly one session is active
+```
+
+Check the title against your own task before using an id. If several sessions
+are active and you cannot tell which is yours, ask the user.
+
+## Compact
+
+```sh
+uw-agent compact ask <session-id> --reason "context at 80%, finishing the migration next"
+uw-agent compact status <session-id>
+```
+
+This queues a compaction request. When it completes you see a status message
+like `compacted from X to Y tokens` (see the usagewindow-status skill). Do not
+claim it happened before that message arrives.
+
+## Resume later
+
+```sh
+uw-agent resume <session-id> --message "Continue the APK queue work; start with uw-agent status"
+uw-agent resume <session-id> --at 2026-10-24T14:00:00Z --message "..."
+uw-agent resume cancel <session-id>
+```
+
+Without `--at`, the resume is scheduled for when the provider's usage window
+resets. `--at` takes an RFC 3339 UTC time. You see `will auto resume at <time>`
+when it is scheduled, and `auto resume canceled` after a cancel. Put what you
+need to remember in `--message`: the resumed session starts from that and the
+compacted context.
+
+## Check and troubleshoot
+
+```sh
+uw-agent status          # usage and daemon state (read-only, needs no daemon)
+uw-agent doctor          # checks binaries, secret files, T3, competing service; starts nothing
+uw-agent daemon-status
+uw-agent daemon-stop     # stops the private daemon (scheduled resumes then wait)
+```
+
+If `doctor` prints a FAIL about hooks, do not use compact or resume: the daemon
+only learns about your session from the hooks, and they are not yet pointed at
+it. Tell the user it needs `v0id.usagewindow.hookDaemonUrl` set and the host
+rebuilt.
+
+Notes:
+
+- The daemon keeps running after your shell exits. Scheduled resumes only fire
+  while it runs, so do not stop it with resumes pending.
+- It refuses to start while the system `usagewindow.service` is active, because
+  two daemons would resume a session twice. Then use plain `uw`.
+- It listens on 127.0.0.1:7879 only, with no web login.
+- Reads (`status`, `sessions list`) work even with no daemon.
