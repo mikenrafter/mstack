@@ -15,6 +15,21 @@ description: >-
 
 Commit first. r/g-tdd with subagents - the first subagent makes all red, you verify, the 2..nth use r/g-tdd per phase and receive context about what the prior agents have done in order to keep on track, you verify between each phase and pass pointers as you see fit to subagents, then you do one final verification at the end before handoff.
 
+## Implementation check-in and review arguments
+
+Implementers start immediately. Roughly five minutes into each batch, including
+red-test work, the orchestrator reads 1–5 relevant files and asks 2–3 questions
+grounded in the work, including what remains ambiguous. The implementer answers;
+the orchestrator pushes back and settles direction. Check shorter batches at
+handoff. This replaces upfront proposal approval and does not duplicate planning.
+Known blockers should be raised immediately.
+
+Every reviewer also exchanges arguments with the orchestrator at least once per
+round, including clean and final approvals. Fable keeps a minimum of two.
+Every brief names most-important behavior, invariants, priority concerns, lower
+priorities, and evidence. Use build-loop's `references/dialogue.md` and ledger
+commands to record this instead of relying on memory. Never manufacture a dispute.
+
 ## Workflow
 
 ```

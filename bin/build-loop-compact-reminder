@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# SessionStart(source=compact) hook: if the transcript shows the build-loop
+# skill was loaded, tell the agent to reread it (a summary keeps the task but
+# drops the skill's rules, keepalive above all). Silent for every other
+# session. jq and grep come from PATH (the flake wrapper sets it).
+set -u
+input="$(cat)"
+transcript="$(printf '%s' "$input" | jq -r '.transcript_path // empty' 2>/dev/null)"
+[ -n "$transcript" ] && [ -r "$transcript" ] || exit 0
+grep -q -E 'name: build-loop|"skill": ?"build-loop"|skills/build-loop' "$transcript" || exit 0
+read -r -d '' msg <<'MSG'
+REREAD build-loop §2 (agent cap) and §10, and vigil, before any other step: this session used build-loop before compaction, and the summary does not carry its rules. If any work is in flight (a subagent, a background command, a wait on CI or a usage reset, queued work), hold the session in this same turn: re-arm a vigil hold (even a bare one) and run `vigil keepalive <watch_id> --orchestrator` in the background (run_in_background, timeout at least 3600000 ms), again on each return; never a foreground keepalive call. Add each delegated run as an item of the session hold: `vigil hold add <session-hold> --for pid:N|file:<report>|none --expect-s N --label <run>` (pid or report file when one exists, else none); on the completion notification run `vigil hold done <session-hold> <run>`. Never cancel the session hold; if it releases (its last item ended), make a new hold (new id) in the same turn. Only when vigil is unavailable or failing, run the manual-keepalive tick (background `sleep 270 && echo keepalive`) and relaunch it on every completion.
+MSG
+jq -n --arg msg "$msg" '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $msg}}'

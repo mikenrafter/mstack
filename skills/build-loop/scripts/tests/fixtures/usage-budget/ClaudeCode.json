@@ -1,0 +1,39 @@
+{
+  "provider_status": [
+    {
+      "provider": "ClaudeCode",
+      "last_error": null,
+      "last_attempt_at": "2026-11-15T04:00:00Z",
+      "last_success_at": "2026-11-15T04:00:00Z"
+    }
+  ],
+  "usage": [
+    {
+      "provider": "ClaudeCode",
+      "account": null,
+      "plan": "fixture",
+      "windows": [
+        {
+          "window": {
+            "Rolling": {
+              "minutes": 300
+            }
+          },
+          "pct": 63,
+          "exceeded": false,
+          "resets_at": "2026-11-15T14:00:00Z"
+        },
+        {
+          "window": {
+            "Rolling": {
+              "minutes": 10080
+            }
+          },
+          "pct": 14,
+          "exceeded": false,
+          "resets_at": "2026-11-21T07:00:00Z"
+        }
+      ]
+    }
+  ]
+}

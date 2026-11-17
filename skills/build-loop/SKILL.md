@@ -1,316 +1,209 @@
 ---
 name: build-loop
 description: >-
-  Orchestrated red/green build with a tiered cross-model review loop. Opus
-  orchestrates, a Sonnet implementer writes the code, Sol runs the scored fix
-  rounds, and one fresh Opus pass reviews the stable result. Covers triage of
-  upstream review-bot comments. Roles and batching switch with usage budget. Use for multi-phase features, or when
-  the user says "build loop", "opus loop" or "sol loop" (rg-implement stays
-  a separate, single-model skill).
-  Companions: question-everything (interrogate the spec before code),
-  technical-excellence (design and code standards), test-quality (what a
-  good test is), vigil (stay alive while work runs; manual-keepalive is
-  the backup). After every compaction, reread this skill and vigil before
-  anything else.
+  Orchestrated red/green build with a scored cross-model review loop (Opus
+  orchestrates, Sonnet and Sol implement, Sol or Opus review, Fable decides
+  round 3) and triage of upstream review-bot comments. One working Claude
+  agent at a time; reviewers have their own cap of one; only the owner raises
+  it. Use for multi-phase features, or when the user says "build loop", "opus
+  loop" or "sol loop". Companions: question-everything, technical-excellence,
+  test-quality, vigil (manual-keepalive is the backup). After every
+  compaction, reread this skill and vigil before anything else.
 ---
 
 # build-loop
 
 **After compaction: reread this skill.** A summary keeps the task but loses
 these rules. When a session that used build-loop comes back from compaction,
-reread this file and `vigil` before any other step. If any work is
-in flight, re-arm a vigil watch and call `keepalive` in that same turn (§10). When you write
-a compaction summary yourself, make its first line:
-`REREAD the build-loop and vigil skills now; re-arm a vigil watch and call keepalive if work is in flight.`
-(The agent-integration module also adds this reminder through a
-SessionStart(compact) hook when the transcript shows the skill was loaded.)
+reread this file, `vigil` and the reference for the step you are on before any other step. If work is in
+flight, re-arm a vigil hold and start its background keepalive in that turn (§10). Compaction summaries preserve the reread and live-hold requirement.
 
-One workflow from three parts: rg-implement (red first, then green per phase),
-budget-driven batching, and tstack's sol-loop (bounded cross-model review).
+This file is a router; detail lives in `references/`. Section numbers are stable.
 
 **Load the companions.**
 
 | Skill | Load it when |
 |---|---|
-| `technical-excellence` | Before design or any code: interfaces, claims, naming, types, security stance. Also when judging a review finding. |
-| `test-quality` | Before the red phase, when a subagent hands back tests, and when a fix touches a test. |
-| `question-everything` | Before writing a spec, and before green: designer interview, checklists, reuse, spec review (§4a). |
-| `vigil` | As soon as any work is in flight (§10). `manual-keepalive` only when vigil is unavailable or failing. |
-| `qex`, `low-ram-hosts` | Before any heavy job (tests, builds, cargo, Gradle, nix build). Heavy work goes to Boat via `boat-run`; the few local jobs go through the shared qex queue (§8–9). |
+| `technical-excellence` | Before design or code, and when judging a finding. |
+| `test-quality` | Before red, when tests come back, when a fix touches a test. |
+| `question-everything` | Before a spec and before green (§4a). |
+| `vigil` | As soon as work is in flight (§10); `manual-keepalive` only if vigil fails. |
+| `qex`, `low-ram-hosts` | Before any heavy job (§8–9). |
 
-**Load the references when you reach their step.** They hold the full rules;
-this file is the route through them.
+**Load the references at their step.**
 
 | File | Read it |
 |---|---|
-| `references/review.md` | Before review round 1 (§6a–§6d: score and bar, rounds, checkpoint, answering, briefs, ledger). |
+| `references/phases.md` | Before §3, before launching red, before green. |
+| `references/roles.md`, `references/dialogue.md` | Before every implementer or reviewer brief; roles also on budget advice or reset. |
+| `references/review.md`, `-v2.md` | Before review round 1 (§6: bar, rounds, checkpoint, answering, ledger, v2 schedule). |
 | `references/bars.md` | At `review-ledger init`, to choose the bar (§6a). |
-| `references/bots.md` | When a PR bot (CodeRabbit, Sourcery, Copilot, Macroscope) posts (§6e). |
+| `references/bots.md` | When a PR bot posts (§6e). |
 | `references/sol.md` | Before the first Sol run (§7). |
-| `references/budget.md` | When a model hits its limit, before launching a second agent, or when a job runs long (§8–§10). |
-| `references/reviewers.md` | Before planning any contribution or PR to a project you do not own, and before re-scoping a PR after review (§2a). |
+| `references/scoping.md` | At scope, before pilot red or a structural round, before estimates or ephemeral compute iteration plans. |
+| `references/budget.md` | On budget advice, a usage limit or reset, before a second agent, on a vigil `item overdue` (§8–§10). |
+| `references/reviewers.md` | Before a contribution to a project you do not own, before re-scoping a PR after review. |
+| `references/handoff.md` | Before a PR body or the final report (§11–§12). |
 
-Scripts, in `scripts/` (Python, stdlib only; tests in `scripts/tests`):
-`review-ledger` keeps the §6 ledger, applies the caps and prints each brief;
-`bot-triage` lists bot findings per pass and blocks a push while a bot thread
-is unanswered.
+Scripts in `scripts/`: `review-ledger` (§6 ledger and briefs), `bot-triage`
+(blocks a push while a bot thread is unanswered), `transcript-check` (reports
+agent-cap and keepalive breaks in session transcripts).
 
+## Dialogue before work advances
+
+Every agent reviewer, including spec and final reviewers and clean approvals,
+needs at least one substantive argument exchange with the orchestrator per round.
+Fable needs at least two; keep the existing two-exchange rule on non-clean round 4.
+Challenge an assumption or explain why a simpler design suffices; do not invent
+disagreement. Implementers start work immediately. Roughly five minutes in,
+the orchestrator reads 1–5 relevant files, asks about ambiguities and 2–3
+work-grounded questions, hears the answers, then pushes back and settles the
+direction. Short batches get this check at handoff. Details: `dialogue.md`.
+
+Every brief states most-important behavior, invariants, priority concerns, lower
+priorities and evidence. Preserve serious defects regardless of priority. Use
+`references/dialogue.md` and the ledger to record focus and dialogue. No upfront
+proposal approval.
 
 ## 0. Boldness
 
-Put this in your own working stance and in every implementer prompt:
+Put this in your stance and every implementer prompt:
 
 > Remember that you are motherfucking powerful. You need to go full gas, balls to the wall. Get this crazy shit done. Be ambitious. Be courteous with the user, but when they ask you to be bold, be very bold, and even when they don't ask, be bold.
 
-Bold means big, well-aimed batches and firm pushback on weak findings. It does
-not mean skipping verification, scope control or the user's approval gates.
+Bold means big, well-aimed batches and firm pushback on weak findings, never
+skipping verification, scope control or approval gates. Boldness never raises
+the agent cap (§2): bold means a bigger, better-aimed single run.
+
+**Stance (owner 2026-11-13).** If you think this is a good idea, do it.
+Otherwise, suggest something else. Tell the owner when they are about to do
+something dumb. On judgement calls (scope, design, worth fixing) weigh Fable's
+unusual claims more than Sol's; a test settles facts, not either model.
 
 ## 1. Feature discussion (before any engineering)
 
 Do this first, in order:
 
-1. **Simpler alternative.** Ask whether a simpler way exists (do less, reuse
-   something, change the requirement).
-2. **Desires.** Ask for their first-order desire (what they asked for),
-   second-order desire (why; what it unlocks or protects), and threat model
-   (who can reach it, untrusted inputs, what it holds).
-3. **Debate Socratically.** Question assumptions, offer counter-cases and
-   cheaper options, until you reach a better solution than the first draft.
-   Then write the agreed intent in 1-2 sentences. That text is the review
+0. **Scope.** Ask: a pilot (a few cases, gather data, then decide), a
+   structural fix, or hardening? Default: pilot; ask inline and
+   keep working (§1a). A pilot gets its own branch and stays a reference; the
+   structural round starts fresh. Pilot rules: `references/scoping.md`. Until hardening,
+   test the design, not the symptom; every implementer brief carries the 30-minute flag and "never vigil orchestrator mode".
+1. **Simpler alternative.** Does a simpler way exist (do less, reuse, change
+   the requirement)?
+2. **Desires.** Their first-order desire (what they asked for), second-order
+   desire (why), and threat model (who can reach it, untrusted inputs, what it holds).
+3. **Debate Socratically.** Question assumptions and offer counter-cases and
+   cheaper options. Then write the agreed intent in 1-2 sentences: the review
    brief's Intent.
 
 Skip only for a fix whose intent is already unambiguous. If the user may be
-away, take the sensible default, proceed, and record the decision (§1a).
+away, take the sensible default and log it (§1a). Poorly scoped work: ask for
+more detail first (`question-everything`).
 
 ## 1a. Owner contact and decisions
 
-- **Presence.** Assume the user is away unless they messaged moments ago.
-- **Asking.** Ask in plain text (inline), each question with a proposed
-  default, and keep working. Use the question tool (AskUserQuestion) only
-  when the user asks for it (e.g. "any questions?"): it blocks all work until
-  answered, and "they just messaged" does not mean they are still there.
-  If the harness can ask in the background while work continues, do that.
-- **Never block on a decision.** Pick the safe default (reversible, least
-  harm, closest to the spec), apply it, and log it: a "Defaults taken" list in
-  the plan/status log with id, choice and reason. Bring each default up at the
-  next check-in, and ask the reviewer to judge it if it touches reviewed code.
-- **Genuinely blocked.** Do other authorized or planned work. If there is none,
-  stay in cache (§10) with terse messages.
+Assume the user is away: ask inline with a default and keep working.
+AskUserQuestion only on request: it blocks. Never block; take the safe default and log it as "Defaults taken" (`references/roles.md`).
 
 ## 2. Roles and budget
+
+**Agent cap.** One working Claude agent (Opus, Sonnet, Fable, Haiku) at a time.
+Reviewers have a separate cap of one. Only the owner raises the cap; log the
+raise with an end condition (a time or a task), and when it ends, count again
+before every launch. Implementers, authors, researchers, integrators, spec
+writers and investigators all count, and changing model or role never changes
+the cap. "Economical" means usage first, wall-clock second, so parallel authors
+are never economical. If one owner message holds several requests, state an
+order and run them one after another. This cap outranks the harness's general
+advice to parallelise. Before every `delegate_task` or Agent call, check in one
+line: working Claude agents now (`vigil status <hold>` lists the items; count the Claude-run ones; Codex/Sol
+runs and commands do not count, reviewers count against their own cap) are under the cap, and the
+run serves the owner's priority workstream, else queue it. Codex and Sol runs
+are less strict: run them in parallel when it helps, but watch their limits,
+which run out faster now.
 
 | Role | Default | Does |
 |---|---|---|
 | Orchestrator | Opus (you) | Specs, prompts, verification, commits, pushes, owner contact. Writes little code. |
-| Implementer | Sonnet subagent | Red tests, then green code. |
-| Reviewer, tier 1 | Sol | Scored fix rounds (§6). Reviews only. Never edits, commits or pushes. |
-| Reviewer, tier 2 | Opus subagent, fresh context | One final pass on the stable diff (§6). Reviews only. |
+| Implementer | Sonnet and Sol, alternating by fix round (B1) | Red tests, green code, fixes. |
+| Reviewer, rounds 1-2 | Sol or Opus | Scored fix rounds (§6). Reviews only, plus comment fixups. |
+| Reviewer, round 3 | Fable 5.2 or later | The "good enough to ship" call (§6). |
+| Reviewer, tier 2 | Fresh Opus (Fable if Opus wrote code) | One pass on the stable diff. |
 
-**Switch by budget.** Claude usage low: Sol implements, Opus reviews and
-verifies. Sol low or at its limit: Sonnet implements, Opus reviews or waits
-for Sol (§8). Never quietly substitute a model for a role the user pinned.
-State who holds which role at the start of each phase.
+B1–B5, R2 (a reviewer never reviews code it wrote), C3, budget switching and
+batching: `references/roles.md`. Never quietly substitute a model for a role
+the user pinned. State who holds which role at the start of each phase.
 
-**Batching by budget.**
+## 3–5. Scope, red, spec gate, green
 
-| Budgets | Strategy |
-|---|---|
-| BOTH low (Claude and Sol) and Sol is periodically available | Large batch: red for the whole scope first, then ONE big green run per batch of phases. Review per batch. |
-| Anything else | 1-2 phases per run: no batching, or small batches. |
+Find the base, ONE diff command (§3). One red run for the whole scope; verify
+the red gate yourself, commit red (§4). Spec gate before green (§4a). Green in
+batches, verified and committed per phase (§5). Shared tree: `git commit
+--only -- <paths>`; never stash. Steps: `references/phases.md`.
 
-Fewer, larger runs cost the orchestrator less context, but only pay off when
-reviews are scarce. With budget to spare, small runs are easier to verify.
+## 6. Review loop (scored, bounded)
 
-## 2a. Reviewer analysis (contributions to other people's projects)
+After green, or before filing a PR, review runs across model families, then
+bots get triaged (§6e). **Read `references/review.md` and
+`references/review-v2.md` before round 1**; drive the rounds with
+`scripts/review-ledger`.
 
-Before planning a contribution or PR, study how the target's maintainers
-review: the contributor guide and PR rules first, then their public review
-comments, split requests and own PRs, in this repo and other public projects.
-Save it to `<project>.research/review/` with dated source links. Keep
-explicit requirements, observed examples, owner observations and uncertain
-inferences apart; never treat an inferred size (a line count) as policy.
-Plan from it: split by coherent concern and dependency, correctness before
-optional UI, evidence and test descriptions matched to claims, hardware
-limits stated, already-merged work omitted. Put its explicit requirements
-into the review brief (§6). Full rules: `references/reviewers.md`.
+Stages: pilot → structural → hardening. Pilots use agreed bars, round-2 Fable and owner approval; see `scoping.md`. Integration branches the owner runs need structural review; upstream PRs and project releases need hardening.
 
-## 3. Scope and base
+Rounds 1–2 use Sol or Opus, excluding authors. Round 3 uses Fable, then a
+step-back if needed. Rounds 4–5 follow the documented pivot schedule; stop
+stuck after five. Each round completes its argument minimum before advancing.
+The pilot schedule, score bars, checkpoint, cull and final-fix rules remain in
+`references/review-v2.md`.
 
-1. `git status --short`. Never stash, discard or include unrelated changes.
-   Limit the work to the change paths if they separate cleanly from other
-   edits; if they do not, stop and ask.
-2. `git fetch origin`, then find the base:
-   - PR: `gh pr view <n> --json baseRefName,headRefOid`. Check the branch out
-     only if the tree is clean. Confirm `HEAD` is the PR head, or ahead only
-     by this change. Base: `git merge-base HEAD origin/<baseRefName>`.
-   - Local: `git merge-base HEAD origin/<default-branch>`. No remote: a base
-     the user names, or `HEAD` for uncommitted changes only.
-3. The change is base to working tree in those paths, plus untracked files.
-   Use ONE diff command every round.
-4. State intent and out-of-scope in 1-2 sentences. Run covering checks. Do
-   not send code this change breaks. Note missing or pre-failing checks in
-   the brief.
-5. Fresh worktree: run project setup first (codegen, dependency fetch, l10n)
-   before any test run.
-6. Commit the current state so red and green land on a clean base. Record the
-   base SHA.
-
-## 4. Red (one run)
-
-One implementer run writes failing tests for the WHOLE scope, plus only the
-stubs needed to compile. No behaviour. Prompt it with `test-quality`.
-
-Verify the red gate yourself:
-- tests fail on assertions, not on compile or import errors;
-- failures match the intended contract gaps;
-- controls (tests that must stay green) pass;
-- each test states its WHY, and CLAIM ids where a claim is proved.
-
-Commit red.
-
-## 4a. Spec review gate (before green)
-
-Load `question-everything`. Before the spec is written, interview the designer
-and yourself (its §1–§3): states, edges, data lifecycle, precedence, safety,
-look, which checklists apply (offer defaults), and what is reusable. Push back
-until the detail is high-fidelity.
-
-After red is committed, send the spec, the red tests and the applicable
-project checklists to the reviewer (Sol). Fix the spec and red tests, then
-re-verify the red gate. At most two spec rounds; anything still open becomes a
-logged default (§1a). Only then start green, followed by the usual code review
-loop (§6).
-
-## 5. Green
-
-Batch size follows §2. Each prompt carries: what earlier phases did (commit
-SHAs, report paths), file pointers, decisions, the remaining red tests, and
-"stop when" criteria. The implementer writes its report EARLY and keeps it
-current, so a cut-off run still leaves a usable report.
-
-Prefer the type-level fix over runtime checks (`technical-excellence`): if a
-red test exists only to catch an invalid state, ask whether a type can make
-that state unrepresentable instead.
-
-Verify between phases with the project's runner, on touched suites plus
-guards. Commit each phase before the next.
-
-**Commit hygiene.** Commit only what your run staged. Check
-`git diff --cached --stat` before every commit. In a shared tree use
-`git commit --only -- <paths>`.
-
-**Crash or cut-off.** If a run dies or ends without a report, the
-orchestrator verifies directly: read the diff, run the tests, and judge the
-state yourself. Do not trust silence or a stale report.
-
-
-## 6. Review loop (tiered, scored, bounded)
-
-After green, or before filing a PR, review runs in two tiers from two model
-families, then upstream bots get triaged (§6e). **Read `references/review.md`
-before round 1** and drive the rounds with `scripts/review-ledger`.
-
-| Tier | Reviewer | Rounds | Ends when |
-|---|---|---|---|
-| 1. Fix rounds | Sol | 1 full, then diff-only; cap 3 | scores ≥ bars, no blocker or should open |
-| Stability checkpoint (§6c) | you | once | answered; diff cut back if it can be |
-| 2. Final pass | Opus subagent, fresh context | 1 full + at most 1 diff-only | scores ≥ bars, or the user decides |
-
-If Sol implemented (§2), tier 1 is Opus and tier 2 is a second Opus subagent
-with fresh context. The final reviewer never shares the implementer's context.
-Run Sol per §7. Run the Opus reviewer as a subagent (`model: opus`) with the
-review-only brief and no history.
-
-The rules in short (full text in the reference):
-- **6a.** Replies give `SCORE[concern]: n/10`, each against its own bar set at
-  `init` from shape, stage and threat model (`references/bars.md`); only
-  `needed for bar: yes` findings block. Nits and findings with no realistic
-  reproduction go to stashes: nits open at §6c, the rest only in a hardening phase.
-- **6b.** Full diff in round 1, then diff-only plus the ledger; every instance
-  of a class at once; three tier-1 rounds below the bar → one step-back reply.
-  A timeout is not approval.
-- **6c.** Between tiers, answer in writing which layer stops each bug class.
-- **6d.** Smallest fix per instance, with a failing-first test; never agree
-  just to end the loop; disputes after two replies go to the user.
-- **6e.** PR bots: `references/bots.md`; `bot-triage guard` before each push.
+Tier 2 is a fresh Opus pass, or Fable if Opus wrote code. After a passing
+Fable round there is no tier 2. A ledger without `schema: 2` keeps the legacy
+schedule. Run Sol per §7; run Opus as a subagent (`model: opus`) with the
+review-only brief and no history. In `references/`: **6a** replies carry
+`SCORE[concern]: n/10` against bars; only `needed for bar: yes` blocks; **6b** full diff in round 1, then diff-only
+(a timeout is not approval); **6c** which layer stops each bug class; **6d**
+smallest fix, failing test first, never agree to end the loop; **6e** PR bots,
+`bot-triage guard` before each push; **A7** comment fixups only.
 
 ## 7. Running Sol
 
-T3 `delegate_task` first, then the `codex` binary; with no Sol route, report
-the blocker and do not substitute a model. Codex mounts `.git` read-only, so
-commits come back as bundles. Details and prompt wording: `references/sol.md`.
+T3 `delegate_task` first, then `codex`; no Sol route: report the blocker,
+substitute no model. `references/sol.md`.
 
 ## 8–9. Usage limits and concurrency
 
-- On a usage limit, save partial work, wait for the reset with one timer,
-  probe, then resume. Never restart from scratch.
-- One working subagent at a time (at most two, only at the start of a fresh
-  usage window); read-only reviewers share their own cap of one. Stay on the
-  workstream the user named. Count what is in flight before launching.
-- Heavy work goes to Boat, not this host. Run test runs beyond one or two
-  files, suites, builds and APKs with
-  `edge.research/bin/boat-run [--shell PREFIX] <worktree> -- <cmd>` (it syncs
-  the worktree and returns the exit code and log; `boat` skill). Briefs to
-  subagents and Sol name `boat-run`, never a local runner. Use the local queue
-  only for one or two quick runs, or when the `boat-budget` advisory (`vigil
-  advice`, also in every keepalive result's `advice`) says Boat's hours are
-  at or below its threshold (default 10%; `vigil advisory set boat-budget
-  threshold=N`). Those local jobs go through qex with a real claim
-  (`qex submit --wait --cpu 2 --mem 3GB --id-file <f> -- <cmd>`, in the
-  background); `qex list` first. Details: `low-ram-hosts`.
-- Wait on a pid (`tail --pid=<pid> -f /dev/null`), never `while pgrep -f`.
-- Parallel implementers get their own worktrees; forbid `git stash`.
-
-Full rules: `references/budget.md`.
+On a usage limit: save partial work, wait for the reset, probe, resume; never
+restart. The cap is §2. Heavy work runs on ephemeral compute, the few local
+jobs through qex. Extra implementers get their own worktree; forbid `git
+stash`. `references/budget.md`, `references/scoping.md`.
 
 ## 10. Keepalive and low-budget conduct
 
-**Keepalive is a near-constant duty.** While work is in flight, hold the
-session with **vigil**: watch the job (pid with `want: exited`, log, port or
-URL; `expect_s` wakes you early on a stuck job), then call `keepalive` with
-`orchestrator: true` while `next` says so. Hold a watch even with nothing to watch (a
-subagent): each `keepalive` also checks usage limits and advisories. Manual
-tick only if vigil is unavailable or failing. A project rule naming the manual tick means "keep the session
-alive": use vigil. Never use a loop or chained sleeps.
+**Hold the session with vigil** while anything is in flight, even with nothing
+to watch: each wait also checks usage limits and advisories. Manual tick only
+if vigil is unavailable or failing; never loops or chained sleeps.
 
-"In flight" is broad: a working or paused subagent, Sol run or reviewer; a
-background command; a wait on CI, a bot or a usage reset; queued work you
-will start yourself; or the user asked (only they end it). Never end a turn
-with work in flight and no live watch or tick; re-arm silently; one hold only
-(`vigil` has the rest).
+**Wait in the background:** `vigil keepalive <hold> --orchestrator`,
+`run_in_background`, timeout at least 3,600,000 ms; on each return, act and
+start the next. Subagents never use orchestrator mode. One session hold
+(bare is fine); each delegated run is an item: `vigil hold add <hold> --for
+pid:N|file:<report>|none --expect-s N --label <run>`, and `vigil hold done
+<hold> <run>` on a `none` run's notification. Never cancel it; if it
+releases, make a new hold in the same turn.
 
-Check long jobs against `TIMINGS.md`: past 1.5x the expected time or 9
-minutes over, investigate the host. On low budget: one-line statuses, no recaps, targeted reads.
-Details: `references/budget.md` §10.
+"In flight": a working or paused subagent, Sol run or reviewer; a background
+command; a wait on CI, a bot or a usage reset; queued work; or the user asked
+(only they end it). Never end a turn with work in flight and no live hold.
+
+Long jobs and low budget: `references/budget.md` §10.
 
 ## 11. Ship
 
-Push only after agreement, and only if the user asked to push, ship or update
-the PR. Never push during the loop. For a project you do not own, check the PR
-against its reviewer notes (§2a) before asking: one concern, stated
-dependencies and merge order, nothing already on main, untested hardware
-behaviour named. In a PR body, add:
-
-`Reviewed with build-loop: <N> rounds with <model> (score <n>/10), then 1 pass with <model> (score <n>/10, bar <n>).`
-
-Add `on <effort>` only if the tool exposed it. If the project forbids
-harness-attribution trailers or similar, follow the project.
-
-**Outward actions.** PRs, issue or PR comments, and pushes to upstream need the
-user's approval. Show the draft first. Pushing to the user's own integration
-branch follows the project's rules.
+Push only if the user asked to push, ship or update the PR; never during the
+loop. Outward actions (PRs, comments, upstream pushes) need approval; show the
+draft first. PR body line: `references/handoff.md`.
 
 ## 12. Hand-off report
 
-- phases and commits;
-- tests run, with counts;
-- review rounds per tier, reviewer model (and effort, if exposed), score per
-  round and the bar;
-- the stability checkpoint answers (§6c), including the enforcement layer
-  chosen for each bug class;
-- bot passes to quiet per PR, findings per class and outcome (§6e);
-- fixed and declined findings, with reasons and threat-model verdicts;
-- diff size before and after review (`git diff --shortstat <base>`);
-- what was pushed and where, or "not pushed";
-- anything left red, and why. Report failures, skips and cut-off runs
-  faithfully, with output.
+Contents: `references/handoff.md`.

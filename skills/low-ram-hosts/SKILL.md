@@ -36,6 +36,9 @@ the worktree, fixes the Nix socket, runs detached and returns the exit code and
 the log (see the `boat` skill). Queuing heavy runs in qex on these 8GB hosts
 cost 20 to 120 minutes of waiting on 2026-11-11, and Boat has no memory
 problem. Briefs to subagents name `boat-run`, not a local runner.
+Boat spends plan hours: use the boat skill's "Spend" table (cheap by default: `default`
+size for test iterations, sandbox stops itself between batches; `large` and keep-up only under an
+owner deadline).
 
 Use qex on this host only:
 

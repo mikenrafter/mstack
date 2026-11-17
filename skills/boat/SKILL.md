@@ -75,6 +75,27 @@ example `| python3 -c 'import json,sys; d=json.loads(sys.stdin.readline()); prin
   `holdsCreatorLogins` in `info` shows whether account logins are on it; a
   sandbox made with `--no-env` has none.
 - **Costs.** Stop a sandbox when the work is done. Create one only when the
-  task needs it; never delete one unless the user asks.
+  task needs it; never delete one unless the user asks. Sandboxes owned by
+  another project or session are theirs: check (`boat exec <id> -- ps`) before
+  touching one, and never stop one that is busy.
+
+## Spend: cheap by default, fast under a deadline
+
+Plan hours are finite (`boat limits`: `planIncluded.vmHoursRemaining`), a
+`large` sandbox bills 2x, and a keepalive bills while nothing runs. Pick the
+mode from the situation and say which one you are in.
+
+| | Cheap (default) | Time crunch (owner deadline) |
+|---|---|---|
+| When | No deadline given | The owner asked for a result by a time |
+| Size | `default` for test iterations; `large` only for full suites, APK builds and jobs that need its RAM | `large` throughout |
+| Idle | Sandbox stops itself ~15 min after the last job (`boat-run` and `boat-sync-test` set the idle TTL); stop it explicitly at the end of a batch | Keep it up for the window; still stop it when the deadline work is delivered |
+| Runs | Targeted files; batch checks into one run; full suite only at a gate (before pushing a shared branch) | Same targeting; run independent jobs in parallel; start a warm build early |
+| Never | Leave a sandbox up overnight, or a 2-hour keepalive for one quick run | Run past the deadline work at `large` "while you are there" |
+
+Check the spend once a session (`boat limits`, `boat usage <id>`) and say it
+when the remaining hours will not reach the plan's period end at the current
+rate. Shrinking (`boat resume <id> --type default`) needs the data to fit:
+trim old run directories and `nix-store --gc` first.
 - **Docs.** `https://docs.boat.dev/llms.txt` lists every page; fetch any page
   as `.md`. `boat <command> --help` is authoritative for flags.

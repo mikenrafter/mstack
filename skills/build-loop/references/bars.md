@@ -1,16 +1,20 @@
 # Choosing the bar
 
-Set the bar once, at `review-ledger init`, before round 1. The script prints the
-shape, the stage, each touched concern's bar, and why. Take the suggestion unless a
-rule below says otherwise.
-
-A bar follows the project's life: early on the direction and the costly-to-change
-structure matter most; robustness matters later. Every bar is an integer 6 to 10.
-Most are 7 or 8. 6 is rare: a spike, a concern past its peak, or one the shape names
-as low. A ramp stops at 9. 10 is rare: architecture at its peak, or an owner floor.
+Set bars at `review-ledger init`, before round 1. It prints each touched concern's
+bar and why. Normal bars follow shape × stage; robustness rises later. Bars are
+integers 6–10, usually 7–8. Ramps stop at 9; 10 needs an architecture peak or owner floor.
 
 **Each concern has its own bar.** Scores and findings are judged against their own
 concern's bar. The highest bar is only a summary line.
+
+## Pilots
+
+`init --pilot --bar concern=N` (repeatable) with `--bars-agreed "<owner quote or note>"`
+records the feature's agreed concerns/bars before starting. Defaults: durability 7,
+others 6; `--touches-data` selects durability 9 when the pilot writes stored data,
+changes schema or migrations, or sends notifications or other outward messages.
+Other concerns go to the hardening stash. Pilots leave `bars.json`
+untouched; normal stage bars and schedule resume at hardening. See `scoping.md`.
 
 ## Shape (`--shape`, or the facts it comes from)
 
@@ -60,8 +64,8 @@ If signals disagree, take the later stage and say why.
 
 A region's stage only rises on its own. `init` records region, shape and stage in
 `<project>.research/review/bars.json` and reuses them when the flags are absent. It
-refuses a lower stage or a different shape (exit 2); a stage rise says a hardening
-phase is due. Only the owner lowers a stage or changes a shape, with an entry:
+refuses a lower stage or different shape (exit 2). Only the owner lowers a stage
+or changes a shape, with an entry:
 
 ```json
 {"stages": [{"region": ".", "stage": "prototype", "shape": "pivot", "reason": "...", "date": "..."}]}
@@ -106,8 +110,7 @@ three facts as `Label: value` lines; a list takes its worst value.
 The security bar is the highest of the three. A spike's 7 becomes 6. 10 comes
 only from an owner floor. A model that omits a fact stays at 9 and `init` says so.
 
-- **Stored once.** `init` writes it to `residual/threat-model.md` when residual is
-  set up with inline metadata (git sidecar on: fallback), else to
+- **Stored once.** `init` writes it to `residual/threat-model.md` with inline metadata, else to
   `<project>.research/review/threat-model.md`, and reads it back when the flag is absent.
 - **Inferred until confirmed.** With none, pass `--project-kind` (cli-tool,
   local-service, network-service, library, browser-extension, nix-host). The script
@@ -161,9 +164,9 @@ anything else is ignored with a warning.
 - The nit stash opens at the §6c checkpoint. Fix only nits that ONE central change
   solves and that map to a code practice or feature facet (a lint rule, a helper, a
   convention). Decline the rest with a reason.
-- The hardening stash opens only in a separate hardening phase, never in a quality
-  round: at a stage rise, or on `review-ledger hardening` (`--from` pulls items from
-  earlier ledgers). A new phase: fresh round caps, checkpoint and a full-diff brief,
+- Open hardening with `review-ledger hardening` (`--from` imports earlier stashes),
+  before an upstream PR opens/goes ready or a project release. Owner-run integration
+  needs structural review only. A new phase: fresh round caps, checkpoint, full-diff brief,
   at the bars of the stage after the one the items were filed in.
 
 ## Residual

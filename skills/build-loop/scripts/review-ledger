@@ -3,6 +3,7 @@
 next step, and prints the next reviewer brief.
 
   review-ledger -l L init --repo R --base SHA --intent "..." [--category logic ..]
+                          [--pilot [--bar concern=N .. --bars-agreed "<owner note>"] [--touches-data]]
                           (--threat-model FILE|TEXT | --project-kind KIND, or a model already stored)
                           [--shape S | --direction-known yes|no --users-at-start yes|no
                            --outside-consumers yes|no --formats reversible|costly
@@ -10,10 +11,13 @@ next step, and prints the next reviewer brief.
                           [--stage prototype|beta|production] [--region NAME]
                           [--bar N [--bar-reason ".."]] [--research DIR] [--out-of-scope ..]
                           [--checks ..] [--paths a b]      # --usage-model is an alias of --threat-model
-  review-ledger -l L round --tier 1 --reviewer sol --sha SHA --reply reply.txt
-  review-ledger -l L outcome S3 fixed|disagree|declined|pre-existing|escaped [--evidence ".."]
+  review-ledger -l L round --tier 1 --reviewer sol --author sonnet[,opus] --sha SHA --reply reply.txt
+  review-ledger -l L argue --note FILE      # one labelled orchestrator/reviewer exchange; every new round
+  review-ledger -l L cull --reply FILE      # KEEP: S1, N2 (at most 2 nit ids; KEEP: none discards all)
+  review-ledger -l L outcome S3|N1 fixed|disagree|declined|pre-existing|resolved|escaped [--evidence ".."]
                                            # escaped = found after delivery; counts toward recurrence
   review-ledger -l L checkpoint            # §6c answered
+  review-ledger -l L owner-ok "<quote>"    # owner's pilot-build thumbs-up
   review-ledger -l L new-approach          # after a step-back changed the approach
   review-ledger -l L next                  # one line: what to do now
   review-ledger -l L brief                 # the brief for the next round
@@ -29,6 +33,21 @@ Reply format (the brief asks for it):
   S1 [should] [needed for bar: yes] [class: slug] [concern: name] lib/a.dart:12, lib/b.dart:9 claim. Fix: ...
   S1 resolved
   S2 still open: reason
+  COMMENT-FIXUPS:
+  - <file>:<line> <what changed>
+
+New ledgers use schema 2 and require --author on every round: a comma list of all code
+authors in the reviewed diff. A reviewer in that list is refused. Ledgers without schema
+keep the legacy schedule and optional authors. Schema 2 names Fable for tier-1 round 3,
+requires one exchange on every new round, two on Fable and non-clean round 4, and ends a passing round 3+
+after the checkpoint and nit cull. Kept nit ids need `outcome ... fixed|declined` before
+STOP-AGREED; discarded nits remain visible. Early passes still get tier 2: fresh Opus,
+or Fable if Opus has authored code. Comment-only fixups are stored and shown by `status`.
+
+Pilot mode records agreed concern bars and an owner note at init; defaults are 6, durability
+7 (9 with --touches-data or durable-state/migration categories). It leaves bars.json untouched.
+Fable and its round-3 machinery move to round 2. CHECKPOINT and STOP-AGREED require owner-ok.
+Off-bar findings go to the existing hardening stash; hardening restores normal bars and schedule.
 
 Classes: a reviewer names one slug from CLASSES. Free text is kept (class_canonical
 false, with a warning) and never rejected; old ledgers with free-text classes still load.
@@ -57,15 +76,17 @@ lowering it, or changing its shape, needs an owner entry under "stages" in bars.
 `init` records region, shape and stage in bars.json "regions" and a record in "history".
 
 Stashes: while a blocker or should is open, reviewers list nits under NIT-STASH: and findings
-with no realistic reproduction under the threat model under HARDENING-STASH:. `brief` never
-shows them. `stash` prints the nit stash from the checkpoint on; `hardening` opens the
+with no realistic reproduction under the threat model under HARDENING-STASH:. Normal review
+briefs hide stashes; a nit-cull brief shows open nits. `stash` prints the nit stash from the checkpoint on; `hardening` opens the
 hardening stash, with the bars of the stage after the one it was filed in; that is a new
 phase (phase counter, fresh round caps and checkpoint, full-diff brief). Earlier rounds stay.
 """
 import argparse
+import copy
 import csv
 import datetime
 import fnmatch
+import hashlib
 import json
 import re
 import subprocess
@@ -78,7 +99,7 @@ TIER1_TOTAL_CAP = 5    # tier-1 rounds over the whole change
 TIER2_CAP = 2          # one full pass + one diff-only re-review
 DISPUTE_CAP = 2        # replies on one disputed finding before the user decides
 BLOCKING_SEVERITIES = {"blocker", "should"}
-CLOSED = {"resolved", "declined", "pre-existing", "repeat", "escaped"}
+CLOSED = {"resolved", "declined", "pre-existing", "repeat", "escaped", "discarded"}
 REJECTED = {"declined", "pre-existing", "repeat", "disagree"}
 
 CLASSES = {
@@ -288,21 +309,150 @@ def save(path, led):
     Path(path).write_text(json.dumps(led, indent=1) + "\n")
 
 
-STASH_HEAD = re.compile(r"^\s*(?P<which>NIT|HARDENING)-STASH:\s*(?P<rest>.*)$", re.I)
+CONTEXT_FIELDS = ("most_important", "invariants", "priority_concerns", "lower_priority", "evidence")
+
+
+def read_object(path, label):
+    try:
+        obj = json.loads(Path(path).read_text())
+    except (OSError, ValueError) as exc:
+        sys.exit(_refuse(f"{label}: {exc}"))
+    if not isinstance(obj, dict):
+        sys.exit(_refuse(f"{label} must be a JSON object"))
+    return obj
+
+
+def valid_text(value):
+    return isinstance(value, str) and bool(value.strip())
+
+
+def require_fields(obj, label, text=(), arrays=(), nonempty=()):
+    if (any(not valid_text(obj.get(k)) for k in text)
+            or any(not isinstance(obj.get(k), list) or
+                   any(not valid_text(v) for v in obj[k]) for k in arrays)
+            or any(not obj.get(k) for k in nonempty)):
+        sys.exit(_refuse(f"{label} has missing, blank, or invalid fields"))
+
+
+def exchange_minimum(review_round):
+    # CLAIM(dialogue-history): new rounds capture their minimum; historical records retain
+    # their existing two-exchange flag [test_legacy_and_completed_historical_rounds_are_not_retroactively_blocked].
+    return review_round.get("exchange_minimum", 2 if review_round.get("argue_required") else 0)
+
+
+def pending_exchange(led):
+    # CLAIM(argue-captured): later outcomes cannot waive the stored minimum
+    # [test_argue_required_survives_later_outcomes; test_terminal_round_cap_does_not_waive_pending_argument].
+    if led.get("schema") == 2:
+        current = phase_rounds(led)
+        latest = current[-1] if current else None
+        return next((r for r in led["rounds"]
+                     if ("exchange_minimum" in r or r is latest)
+                     and len(r.get("exchanges", [])) < exchange_minimum(r)), None)
+    return None
+
+
+def refuse_pending_exchange(led):
+    if pending_exchange(led):
+        sys.exit(_refuse("complete pending argument exchanges before changing rounds or phases"))
+
+
+def cmd_context(a):
+    led = load(a.ledger)
+    focus = read_object(a.file, "context")
+    require_fields(focus, "context", arrays=CONTEXT_FIELDS,
+                   nonempty=("most_important", "invariants", "evidence"))
+    led["context"] = {k: focus[k] for k in CONTEXT_FIELDS}
+    save(a.ledger, led)
+    print("context recorded")
+
+
+def cmd_plan(a):
+    led = load(a.ledger)
+    proposal = read_object(a.file, "plan")
+    require_fields(proposal, "plan", text=("goal", "simplest_change"),
+                   arrays=("assumptions", "questions", "non_goals"))
+    if not valid_text(a.agent):
+        sys.exit(_refuse("plan requires a nonblank agent"))
+    canonical = json.dumps({"agent": a.agent, "proposal": proposal}, sort_keys=True,
+                           separators=(",", ":"), ensure_ascii=False)
+    digest = hashlib.sha256(canonical.encode()).hexdigest()
+    if led.get("plan", {}).get("digest") != digest:
+        led["plan"] = {"agent": a.agent, "proposal": proposal, "digest": digest}
+    save(a.ledger, led)
+    print(digest)
+
+
+def cmd_plan_answer(a):
+    led = load(a.ledger)
+    proposal = led.get("plan")
+    if not proposal:
+        sys.exit(_refuse("no active proposal"))
+    if proposal["digest"] != a.proposal_digest:
+        sys.exit(_refuse("proposal digest does not match the active proposal"))
+    answer = read_object(a.file, "plan answer")
+    require_fields(answer, "plan answer", text=("response", "rationale"))
+    if answer.get("decision") not in ("proceed", "revise"):
+        sys.exit(_refuse("plan answer decision must be proceed or revise"))
+    proposal["answer"] = {**answer, "proposal_digest": a.proposal_digest}
+    save(a.ledger, led)
+    cmd_plan_status(a)
+
+
+def cmd_plan_status(a):
+    proposal = load(a.ledger).get("plan", {})
+    answer = proposal.get("answer", {})
+    ready = answer.get("decision") == "proceed" and answer.get("proposal_digest") == proposal.get("digest")
+    print(("READY: " if ready else "NOT-READY: ") +
+          ("orchestrator agreed to the active proposal" if ready else "active proposal needs orchestrator agreement"))
+
+
+def cmd_implementation_check(a):
+    """Record the work-grounded exchange; it never gates starting implementation."""
+    led = load(a.ledger)
+    note = read_object(a.file, "implementation check")
+    require_fields(note, "implementation check", text=("agent", "started_at", "pushback", "resolution"),
+                   arrays=("inspected_files", "ambiguities"))
+    files, questions = note["inspected_files"], note.get("questions")
+    if not 1 <= len(files) <= 5 or len(set(files)) != len(files):
+        sys.exit(_refuse("implementation check requires 1–5 distinct inspected files"))
+    if (not isinstance(questions, list) or not 2 <= len(questions) <= 3
+            or any(not isinstance(q, dict) or not valid_text(q.get("question"))
+                   or not valid_text(q.get("answer")) for q in questions)):
+        sys.exit(_refuse("implementation check requires 2–3 questions with implementer answers"))
+    now = datetime.datetime.now(datetime.timezone.utc)
+    try:
+        started = datetime.datetime.fromisoformat(note["started_at"].replace("Z", "+00:00"))
+        if started.tzinfo is None or started > now:
+            raise ValueError("start time must include a timezone and cannot be in the future")
+        elapsed = (now - started).total_seconds()
+    except (ValueError, OverflowError) as error:
+        sys.exit(_refuse(f"invalid implementation start time: {error}"))
+    digest = hashlib.sha256(json.dumps(note, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    checks = led.setdefault("implementation_checks", [])
+    if any(check.get("digest") == digest for check in checks):
+        sys.exit(_refuse("duplicate implementation check"))
+    checks.append({**note, "digest": digest, "recorded_at": now.isoformat(), "elapsed_s": elapsed})
+    save(a.ledger, led)
+    print(f"implementation check recorded for {note['agent']} after {elapsed:.0f}s")
+
+
+SECTION_HEAD = re.compile(r"^\s*(?P<which>NIT-STASH|HARDENING-STASH|COMMENT-FIXUPS):\s*(?P<rest>.*)$", re.I)
 BULLET = re.compile(r"^\s*(?:[-*\u2022]|\d+[.)])\s+(?P<text>.+)$")
 NO_ITEM = {"", "-", "none", "n/a", "empty"}
 
 
-def split_stashes(text):
-    """(lines outside the stashes, nit items, hardening items). A stash is its header plus the
+def split_sections(text):
+    """(lines outside sections, nit items, hardening items, comment fixups). A section is its header plus the
     bullet lines after it. An indented line continues the item above. Directly under a bare header,
     a finding-shaped line is an item too, and so is each one after it (any severity for the hardening
     stash, only [nit] for the nit stash), until a bullet, a SCORE line or any other line ends it."""
-    keep, nits, hard, cur, bare = [], [], [], None, False
+    keep, nits, hard, fixups, cur, bare = [], [], [], [], None, False
+    sections = {"NIT-STASH": nits, "HARDENING-STASH": hard, "COMMENT-FIXUPS": fixups}
     for line in text.splitlines():
-        h = STASH_HEAD.match(line)
+        h = SECTION_HEAD.match(line)
         if h:
-            cur = nits if h["which"].upper() == "NIT" else hard
+            cur = sections[h["which"].upper()]
             rest = h["rest"].strip()
             bare = not rest
             if rest.strip(".").lower() not in NO_ITEM:
@@ -321,12 +471,17 @@ def split_stashes(text):
                 cur[-1] += " " + line.strip()
                 continue
             shaped = FINDING_HEAD.match(line)
-            if bare and (RESOLUTION.match(line) or (shaped and (cur is hard or shaped["sev"].lower() == "nit"))):
+            if cur is not fixups and bare and (RESOLUTION.match(line) or (shaped and (cur is hard or shaped["sev"].lower() == "nit"))):
                 cur.append(line.strip())
                 continue  # still bare: the next finding-shaped line is an item too
             cur = None
         keep.append(line)
-    return keep, nits, hard
+    return keep, nits, hard, fixups
+
+
+def split_stashes(text):
+    """Legacy parser interface; comment fixups also stay out of findings and stashes."""
+    return split_sections(text)[:3]
 
 
 def parse_stashes(text):
@@ -422,6 +577,14 @@ def phase_rounds(led):
     return [r for r in led["rounds"] if r.get("phase", 0) == phase]
 
 
+def pilot_phase(led):
+    return bool(led.get("pilot")) and not led.get("hardening")
+
+
+def fable_round(led):
+    return 2 if pilot_phase(led) else 3
+
+
 def round_meets_bar(led, r):
     """Each touched concern's score meets that concern's own bar, and any other concern the reviewer
     scored meets its table bar. Rounds or ledgers without per-concern data use the summary bar."""
@@ -430,40 +593,103 @@ def round_meets_bar(led, r):
         return r["score"] is not None and r["score"] >= led["bar"]
     if any(scores.get(c) is None or scores[c] < b for c, b in bars.items()):
         return False
+    if pilot_phase(led):
+        return True  # Only the pilot's named concerns are scored [CLAIM(pilot-bars)].
     table = led.get("bar_table") or {}
     return all(v >= table.get(c, 0) for c, v in scores.items() if c not in bars)
 
 
+def authors_of(review_round):
+    """Read both list and comma-list author representations, including old rounds without authors."""
+    authors = review_round.get("author") or []
+    return [a.strip().lower() for a in (authors.split(",") if isinstance(authors, str) else authors) if a.strip()]
+
+
+def nit_items(led):
+    """Open nit ids paired with their mutable finding or stash records. N ids are stable list positions."""
+    return {**{fid: f for fid, f in led["findings"].items()
+               if f["severity"] == "nit" and f["status"] not in CLOSED | {"fixed"}},
+            **{f"N{i}": item for i, item in enumerate(led.get("nit_stash", []), 1)
+               if item.get("status", "open") not in CLOSED | {"fixed"}}}
+
+
+def ledger_item(led, fid):
+    if re.fullmatch(r"N[1-9]\d*", fid):
+        stash = led.get("nit_stash", [])
+        index = int(fid[1:]) - 1
+        return stash[index] if index < len(stash) else None
+    return led["findings"].get(fid)
+
+
 def next_step(led):
+    step, why = _next_step(led)
+    # CLAIM(pilot-owner): scores and checkpoint flags cannot replace owner evidence
+    # [owner 2026-11-15; test_owner_gate_rejects_checkpoint_and_blocks_stop].
+    if led.get("pilot") and not led.get("owner_ok") and step in {"CHECKPOINT", "STOP-AGREED"}:
+        return "OWNER-OK", "record the owner's pilot-build thumbs-up with `owner-ok \"<quote>\"`"
+    return step, why
+
+
+def _next_step(led):
+    """Decide the phase's next action. Schema-less ledgers retain the v1 schedule [spec R1]."""
+    pending = pending_exchange(led)
+    if pending:
+        return "ARGUE", (f"round {pending['n']} with {pending['reviewer']}: record "
+                         f"{exchange_minimum(pending)} exchanges with `argue --note FILE`")
     rounds, fs = phase_rounds(led), led["findings"].values()
+    v2 = led.get("schema") == 2
     open_blocking = [f for f in fs if blocking(f)]
     stuck = [f for f in fs if f["status"] == "disagree" and f.get("replies", 0) >= DISPUTE_CAP]
     if stuck:
         return "STOP-STUCK", f"disputed after {DISPUTE_CAP} replies: " + ", ".join(f["id"] for f in stuck)
     if not rounds:
-        return "ROUND", "tier 1 round 1 (full diff from base)"
+        return "ROUND", "tier 1 round 1 (full diff from base)" + ("; reviewer: sol or opus" if v2 else "")
     last = rounds[-1]
     passed = round_meets_bar(led, last) and not open_blocking
     t1 = [r for r in rounds if r["tier"] == 1]
     t1_now = [r for r in t1 if r["approach"] == led["approach"]]
+    if v2 and "nit_cull" in last:
+        pending = [fid for fid in last["nit_cull"]["kept"]
+                   if ledger_item(led, fid).get("status", "open") not in {"fixed", "declined"}]
+        if pending:
+            return "FIX-KEPT", ", ".join(pending)
+        return "STOP-AGREED", "nit cull complete; every kept item fixed or declined"
     if last["tier"] == 1:
         if passed:
+            if pilot_phase(led) and len(t1) == 1:
+                return "ROUND", f"tier 1 round 2 (diff-only since {last['sha'][:10]}); reviewer: fable"
             if not led["checkpoint"]:
                 n = len(led.get("nit_stash", []))
-                return "CHECKPOINT", ("tier 1 reached the bar; answer §6c, then run `checkpoint`"
-                                      + (f"; {n} stashed nits to triage (run `stash`)" if n else ""))
+                note = ""
+                if v2 and len(t1) >= fable_round(led) and nit_items(led):
+                    note = "; the cull follows"
+                elif n:
+                    note = f"; {n} stashed nits to triage (run `stash`)"
+                return "CHECKPOINT", "tier 1 reached the bar; answer §6c, then run `checkpoint`" + note
+            if v2 and len(t1) >= fable_round(led):
+                if nit_items(led):
+                    return "NIT-CULL", "keep at most 2 nits, discard the rest; run `brief`"
+                return "STOP-AGREED", f"tier 1 at {last['score']:g}/10, bar {led['bar']}, nothing blocking"
+            reviewer = "fable" if any("opus" in authors_of(r) for r in led["rounds"]) else "opus"
+            if v2:
+                return "ROUND", f"tier 2 round 1 (full diff, fresh {reviewer.title()}); reviewer: {reviewer}"
             return "ROUND", "tier 2 round 1 (full diff, fresh Opus)"
         if len(t1) >= TIER1_TOTAL_CAP:
             return "STOP-STUCK", f"tier 1 hit its {TIER1_TOTAL_CAP}-round cap below the bar"
-        if len(t1_now) >= TIER1_CAP:
-            return "STEP-BACK", f"{TIER1_CAP} rounds below the bar on this approach: ask for a step-back reply, then decide with the user"
-        return "ROUND", f"tier 1 round {len(t1_now) + 1} (diff-only since {last['sha'][:10]})"
+        if len(t1_now) >= TIER1_CAP or (pilot_phase(led) and len(t1) == 2 and len(t1_now) == 2):
+            return "STEP-BACK", f"{len(t1_now)} rounds below the bar on this approach: ask for a step-back reply, then decide with the user"
+        advice = ""
+        if v2:
+            # The next author is whoever wrote the fixes since last["sha"]; the ledger cannot know who.
+            advice = ("; reviewer: fable" if len(t1) + 1 == fable_round(led) else
+                      f"; reviewer: sol or opus, not the author of the fixes since {last['sha'][:10]}")
+        return "ROUND", f"tier 1 round {len(t1_now) + 1} (diff-only since {last['sha'][:10]})" + advice
     t2 = [r for r in rounds if r["tier"] == 2]
     if passed:
         return "STOP-AGREED", f"tier 2 at {last['score']:g}/10, bar {led['bar']}, nothing blocking"
     if len(t2) >= TIER2_CAP:
         return "STOP-STUCK", "tier 2 re-review used; show both sides to the user"
-    return "ROUND", f"tier 2 re-review (diff-only since {last['sha'][:10]})"
+    return "ROUND", f"tier 2 re-review (diff-only since {last['sha'][:10]})" + (f"; reviewer: {last['reviewer']}" if v2 else "")
 
 
 def next_id(led):
@@ -471,7 +697,10 @@ def next_id(led):
     return f"S{max(n) + 1 if n else 1}"
 
 
-HEADER = """Review only. Do not edit, commit, push, comment on PRs, or start subagents.
+HEADER = """Review only, except comment-only fixups after judging that code comments need rewriting: no code, no docs.
+Load unslop for comment fixups. List each under COMMENT-FIXUPS: as - <file>:<line> <what changed>.
+Sol returns comment fixups as a patch; the orchestrator checks that it touches only comments before applying it.
+Do not commit, push, comment on PRs, or start subagents.
 Do not use the manual-keepalive skill or any sleep loops.
 Repo: {repo} Base: {base} Intent: {intent} Out of scope: {oos} Checks: {checks}
 Bar: {bar}/10{ctx}{per}
@@ -495,7 +724,8 @@ Number new findings from {nid} up.
 A blocker or should needs a realistic reproduction under the threat model above: who does what,
 how often. A finding without one is not a round item: put it under HARDENING-STASH.
 A security finding needs an attacker the threat model includes. Anything outside it goes under HARDENING-STASH.
-If your reply has a blocker or should, put every nit under NIT-STASH and do not number it.
+Findings not needed for the current bars belong in HARDENING-STASH, not this round's fixes.
+If your reply has a blocker or should, put remaining nits under NIT-STASH and do not number them.
 End the reply with the stash sections, one "- " line per item (write "none" if empty):
 NIT-STASH:
 - <file>:<line> <nit>
@@ -534,8 +764,40 @@ def ledger_lines(led):
     return out
 
 
+FABLE_BOLD = ("Fuck me up, fam. Balls to the wall: say what you actually think, torch a wrong approach, and say ship it when it is good enough. No hedging, no asking permission.")
+
+
 def brief(led):
+    """The brief for the next step. Briefs that go to Fable start with FABLE_BOLD (owner, 2026-11-13)."""
     step, why = next_step(led)
+    text = _brief(led, step, why)
+    pending = pending_exchange(led)
+    context = pending.get("context") if pending else led.get("context")
+    if context:
+        text += "\nReview focus (weighting; report serious concerns even outside these priorities):\n" + "\n".join(
+            f"{k}: " + ("; ".join(context[k]) or "none") for k in CONTEXT_FIELDS)
+    if step == "ARGUE":
+        text = (f"Discuss round {pending['n']} with {pending['reviewer']}. Record distinct "
+                "Orchestrator: and Reviewer: sections with the question and answer.\n" + text)
+    to_fable = (step == "NIT-CULL"
+                or (step == "ROUND" and "reviewer: fable" in why)
+                or (step == "STEP-BACK" and phase_rounds(led)[-1]["reviewer"].lower() == "fable"))
+    return FABLE_BOLD + "\n" + text if to_fable and led.get("schema") == 2 else text
+
+
+def _brief(led, step, why):
+    if step == "ARGUE":
+        return "Challenge an assumption or ask for reasoning, then record the reviewer's answer. Agreement is valid."
+    if step == "NIT-CULL":
+        lines = [f"{fid} " + (item.get("text") or ", ".join(item["where"]) + " " + item["claim"])
+                 for fid, item in nit_items(led).items()]
+        return ("Cull these nits in the same Fable thread. Keep at most 2; the rest are discarded.\n"
+                "Reply KEEP: <ids> (S or N ids, comma-separated), or KEEP: none.\n"
+                "Put KEEP: in the first column, no markup (no bold, no list dash).\n"
+                "Give one line of reason per kept id.\n" + "\n".join(lines))
+    here = phase_rounds(led)
+    if step == "STEP-BACK" and led.get("schema") == 2 and here[-1]["reviewer"].lower() == "fable":
+        return "You rejected this. What should I pivot to instead? At most 15 lines."
     paths = (" -- " + " ".join(led["paths"])) if led.get("paths") else ""
     bars = led.get("concerns") or {}
     head = HEADER.format(repo=led["repo"], base=led["base"], intent=led["intent"], oos=led["out_of_scope"] or "-",
@@ -545,6 +807,11 @@ def brief(led):
                               + ", ".join(f"{c} {b}" for c, b in bars.items())) if bars else "",
                          classes=", ".join(CLASSES))
     rules = RULES.format(nid=next_id(led), scores=score_lines(led))
+    if pilot_phase(led):
+        rules += ("\nPilot: only the named concerns and bars above block. Other concerns go to HARDENING-STASH."
+                  "\nDefer pixel/frame tests, sweeps, stricter measurement, micro-performance, screen readers,"
+                  " translations of changing copy and maintainability tidy-ups unless needed for these bars."
+                  + (f"\nBars agreed: {led['bars_agreed']}" if led.get("bars_agreed") else "\nPilot default bars apply."))
     if step == "STEP-BACK":
         return (head + f"\nSee: git diff {led['base']}{paths}\nLedger:\n" + "\n".join(ledger_lines(led)) +
                 f"\nThree rounds have not reached the bar. Do not list more findings. Answer in at most 15 lines:\n"
@@ -647,6 +914,13 @@ def valid_bar(n):
 
 def bar_arg(text):
     """argparse type for --bar."""
+    if "=" in text:
+        concern, value = text.split("=", 1)
+        if "=" in value:
+            raise argparse.ArgumentTypeError("--bar expects concern=N with integer N")
+        if concern not in CONCERNS:
+            raise argparse.ArgumentTypeError(f"unknown bar concern {concern!r}; use one of: " + ", ".join(CONCERNS))
+        return concern, bar_arg(value)
     try:
         n = int(text)
     except ValueError:
@@ -798,8 +1072,8 @@ def decide_region(a, research):
         stage, stage_src = DEFAULT_STAGE, "default: no --stage given"
     if rec_stage and RANK[stage] > RANK[rec_stage]:
         change = {"from": rec_stage, "to": stage}
-        notes.append(f"stage change {rec_stage} -> {stage}: a hardening phase is due "
-                     "(`review-ledger hardening --from <earlier ledgers>`)")
+        notes.append(f"stage change {rec_stage} -> {stage}: hardening before an upstream PR or project release "
+                     "(`review-ledger hardening --from <earlier ledgers>`); owner-run integration needs structural review only")
     return {"region": region, "shape": shape, "shape_src": shape_src, "stage": stage, "stage_src": stage_src,
             "notes": notes, "change": change, "pin": pin_key}
 
@@ -909,13 +1183,25 @@ def resolve_threat(a, research):
 
 
 def cmd_init(a):
+    bars = a.bar or []
+    named = [b for b in bars if isinstance(b, tuple)]
+    if named:
+        if not a.pilot or len(named) != len(bars) or not (a.bars_agreed or "").strip():
+            sys.exit(_refuse("named --bar concern=N needs --pilot and --bars-agreed; do not mix with numeric --bar"))
+        if len(dict(named)) != len(named):
+            sys.exit(_refuse("name each pilot bar concern once"))
+    elif len(bars) > 1 or (a.pilot and bars) or a.bars_agreed:
+        sys.exit(_refuse("pilots use named --bar concern=N with --bars-agreed; normal mode uses one numeric --bar"))
+    if a.touches_data and not a.pilot:
+        sys.exit(_refuse("--touches-data is a pilot default selector"))
+    a.bar = None if named or not bars else bars[0]
     research = Path(a.research) if a.research else default_research(a.repo)
     if research is None and Path(a.repo).is_dir():  # a real project gets the sibling dir by convention
         r = Path(a.repo).resolve()
         research = r.parent / (r.name + ".research")
     try:
         tm = resolve_threat(a, research)
-        st = decide_region(a, research)
+        st = decide_region(a, None if a.pilot else research)
     except Refusal as e:
         sys.exit(_refuse(str(e)))
     shape, stage = st["shape"], st["stage"]
@@ -926,7 +1212,23 @@ def cmd_init(a):
     else:
         why = ("threat model states no " + ", ".join(k for k in THREAT_FACTS if k not in facts)
                + ": add `Reach:`, `Untrusted:` and `Holds:` lines; unstated stays at 9")
-    suggested, reasons, floor, resid, touched = suggest_bar(a, a.ledger, table, shape, stage, research, why)
+    # A durability category names data safety, not necessarily a write. Only write categories imply writes.
+    touches_data = a.touches_data or bool(set(a.category or []) & {"durable-state", "migration"})
+    if a.pilot:
+        table = {c: 6 for c in CONCERNS}
+        table["durability"] = 9 if touches_data else 7
+        touched = dict(named) if named else {c: table[c] for c in touched_concerns(a.category)}
+        if touches_data and not named:
+            touched["durability"] = 9
+        suggested, floor, resid = max(touched.values()), 0, []
+        reasons = ([f"pilot bars agreed: {a.bars_agreed.strip()}"] if named else
+                   ["pilot default: durability 9, others 6 (stored data, schema/migrations, notifications or other outward messages)"
+                    if touches_data else "pilot default: durability 7, others 6 (no data writes declared)"])
+        if not named and not touches_data:
+            reasons.append("For stored writes, schema/migrations, notifications or other outward messages, pass --touches-data.")
+        st["notes"] = ["pilot: region shape/stage rules and bars.json are untouched"]
+    else:
+        suggested, reasons, floor, resid, touched = suggest_bar(a, a.ledger, table, shape, stage, research, why)
     reasons = st["notes"] + reasons
     bar, capped, granted = suggested, [], {c for c, b in touched.items() if b >= 10}  # B2: peak or owner floor, per concern
     if a.bar is not None:
@@ -955,7 +1257,7 @@ def cmd_init(a):
     if capped:
         print(f"warning: --bar 10 applies to {', '.join(c for c in touched if c not in capped)} only; "
               f"{', '.join(capped)} capped at 9 (10 needs a peak, an owner floor or --bar-reason)")
-    led = {"repo": a.repo, "base": a.base, "bar": bar, "bar_suggested": suggested, "bar_reasons": reasons,
+    led = {"schema": 2, "repo": a.repo, "base": a.base, "bar": bar, "bar_suggested": suggested, "bar_reasons": reasons,
            "categories": a.category or [], "intent": a.intent, "out_of_scope": a.out_of_scope,
            "checks": a.checks, "threat_model": tm["text"], "threat_model_status": tm["status"],
            "threat_facts": facts, "threat_model_path": str(tm["path"]) if tm["path"] else None,
@@ -963,9 +1265,13 @@ def cmd_init(a):
            "owner_floor": floor, "phase": 0,
            "paths": a.paths or [], "approach": 1, "checkpoint": False, "rounds": [], "findings": {},
            "nit_stash": [], "hardening_stash": []}
+    if a.pilot:
+        led.update(pilot=True, touches_data=touches_data)
+        if named:
+            led["bars_agreed"] = a.bars_agreed.strip()
     if st["change"]:
         led["stage_change"] = st["change"]
-    if shape == "spike":
+    if shape == "spike" and not a.pilot:
         led["note"] = ("spike touches security: review that part only" if "security" in touched
                        else "no review needed: a spike's output is knowledge; review only if the owner asks")
         print(f"  note: {led['note']}")
@@ -974,7 +1280,7 @@ def cmd_init(a):
     if tm["store"] and tm["store"][0]:
         write_threat(*tm["store"])
     save(a.ledger, led)
-    if research is not None and research.is_dir():
+    if not a.pilot and research is not None and research.is_dir():
         now = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
         record = {"shape": shape, "stage": stage, "date": now, "ledger": str(a.ledger)}
         if st["pin"]:
@@ -997,9 +1303,25 @@ def _bar_refusal(why):
 
 def cmd_round(a):
     led = load(a.ledger)
+    authors = authors_of({"author": a.author})
+    if led.get("schema") == 2:
+        refuse_pending_exchange(led)
+        if not led.get("context"):
+            sys.exit(_refuse("schema 2 requires review context; run context --file FILE"))
+        if not authors:
+            sys.exit(_refuse("schema 2 requires --author with every model that wrote code in the reviewed diff"))
+        if a.reviewer.strip().lower() in authors:
+            sys.exit(_refuse(f"reviewer {a.reviewer} is in the author list: {', '.join(authors)}"))
+        if pilot_phase(led) and a.tier == 2:
+            sys.exit(_refuse("pilot reviews use tier 1, with Fable at round 2; no tier-2 bypass"))
+        if a.tier == 1:
+            number = sum(r["tier"] == 1 for r in phase_rounds(led)) + 1
+            expected = {"fable"} if number == fable_round(led) else {"sol", "opus"}
+            if a.reviewer.strip().lower() not in expected:
+                sys.exit(_refuse(f"tier 1 round {number} expects reviewer " + " or ".join(sorted(expected))))
     text = Path(a.reply).read_text()
     score, verdict, findings, resolutions = parse_reply(text)
-    nits, hard = parse_stashes(text)
+    _, nits, hard, fixups = split_sections(text)
     per, plain = parse_scores(text)
     if score is None:
         sys.exit("reply has no SCORE: n/10 or SCORE[concern]: n/10 line; ask the reviewer to resend in the brief's format")
@@ -1012,7 +1334,15 @@ def cmd_round(a):
         sys.exit(_refuse("reply scores no " + ", ".join(missing) + "; ask the reviewer for "
                          + ", ".join(f"SCORE[{c}]: n/10" for c in missing)))
     scores = {**{c: plain for c in missing}, **per} if touched else {}
-    score = min(scores.values()) if scores else score
+    score = min(scores[c] for c in touched) if pilot_phase(led) and touched else (min(scores.values()) if scores else score)
+    # CLAIM(pilot-stash): explicit off-bar findings reuse the existing hardening list
+    # [owner 2026-11-15; test_nonblocking_and_unagreed_findings_use_existing_hardening_stash].
+    if led.get("schema") == 2 and not led.get("hardening"):
+        deferred = [f for f in findings if f.get("needed") == "no" or
+                    (pilot_phase(led) and f.get("concern") and f["concern"] not in touched)]
+        for f in deferred:
+            hard.append(", ".join(f["where"]) + " " + f["claim"] + (f" Fix: {f['fix']}" if f["fix"] else ""))
+        findings = [f for f in findings if f not in deferred]
     for nf in findings:
         if nf.get("class_canonical") is False:
             print(f"warning: {nf['id']} class {nf['class']!r} is not a canonical slug; use one of: "
@@ -1023,7 +1353,15 @@ def cmd_round(a):
     n = len(led["rounds"]) + 1
     led["rounds"].append({"n": n, "tier": a.tier, "approach": led["approach"], "reviewer": a.reviewer,
                           "sha": a.sha, "score": score, "verdict": verdict, "phase": led.get("phase", 0),
-                          **({"scores": scores} if scores else {})})
+                          **({"context": copy.deepcopy(led["context"])} if led.get("schema") == 2 else {}),
+                          **({"model": a.model} if a.model else {}),
+                          **({"effort": a.effort or "unknown"} if led.get("schema") == 2 else {}),
+                          **({"requested_effort": a.requested_effort} if a.requested_effort else {}),
+                          **({"scores": scores} if scores else {}),
+                          **({"author": authors} if authors else {}),
+                          **({"comment_fixups": fixups} if fixups else {})})
+    if led.get("schema") == 2:
+        led["authors"] = sorted({author for r in led["rounds"] for author in authors_of(r)})
     for fid, st, why in resolutions:
         f = led["findings"].get(fid)
         if not f:
@@ -1062,6 +1400,16 @@ def cmd_round(a):
     if hard:
         led.setdefault("hardening_stash", []).extend(
             {"round": n, "stage": led.get("stage", DEFAULT_STAGE), "text": t} for t in hard)
+    tier1_count = sum(r["tier"] == 1 for r in phase_rounds(led))
+    if led.get("schema") == 2 and a.tier == 1 and tier1_count in (fable_round(led), 4):
+        # ↳ CLAIM(argue-captured)
+        led["rounds"][-1]["argue_required"] = (
+            verdict == "CHANGES" or any(f["severity"] in BLOCKING_SEVERITIES for f in findings)
+            or any(blocking(f) and f["severity"] in BLOCKING_SEVERITIES for f in led["findings"].values()))
+    if led.get("schema") == 2:
+        review_round = led["rounds"][-1]
+        review_round["exchange_minimum"] = (2 if a.reviewer.strip().lower() == "fable"
+                                             or review_round.get("argue_required") else 1)
     save(a.ledger, led)
     step, why = next_step(led)
     print(f"round {n} (tier {a.tier}, {a.reviewer}): score {score:g}/10, {len(findings)} new, "
@@ -1072,21 +1420,97 @@ def cmd_round(a):
 
 def cmd_outcome(a):
     led = load(a.ledger)
-    f = led["findings"].get(a.id.upper())
-    if not f:
+    fid = a.id.upper()
+    f = ledger_item(led, fid) if led.get("schema") == 2 else led["findings"].get(fid)
+    if f is None:
         sys.exit(f"no finding {a.id}")
-    if a.status == "disagree" and f["status"] == "disagree":
+    if a.status == "disagree" and f.get("status") == "disagree":
         f["replies"] = f.get("replies", 0) + 1
     f["status"] = a.status
     if a.evidence:
         f["evidence"] = a.evidence
     save(a.ledger, led)
-    print(f"{f['id']} => {a.status}")
+    print(f"{fid} => {a.status}")
+
+
+def cmd_argue(a):
+    led = load(a.ledger)
+    r = pending_exchange(led)
+    if r is None:
+        rounds = phase_rounds(led)
+        r = rounds[-1] if led.get("schema") == 2 and rounds and exchange_minimum(rounds[-1]) else None
+    if r is None:
+        sys.exit(_refuse("no round requires argument exchanges"))
+    note = Path(a.note).read_text()
+    if "exchange_minimum" in r:
+        speakers = list(re.finditer(r"^(Orchestrator|Reviewer):[ \t]*", note, re.M))
+        if (len(speakers) != 2 or {m[1] for m in speakers} != {"Orchestrator", "Reviewer"}
+                or any(not note[m.end():speakers[i + 1].start() if i + 1 < len(speakers) else len(note)].strip()
+                       for i, m in enumerate(speakers))):
+            sys.exit(_refuse("exchange needs nonblank Orchestrator: and Reviewer: sections"))
+        if note in r.get("exchanges", []):
+            sys.exit(_refuse("duplicate exchange note"))
+    elif not note.strip():
+        sys.exit(_refuse("an exchange note must contain the argument and reviewer answer"))
+    # CLAIM(argue-revised-score): a reviewer persuaded during argument can revise its score; the note
+    # carries its SCORE / SCORE[concern] / VERDICT lines and they replace the round's [test_argue_note_*].
+    reviewer_text = note
+    if "exchange_minimum" in r:
+        index = next(i for i, marker in enumerate(speakers) if marker[1] == "Reviewer")
+        marker = speakers[index]
+        reviewer_text = note[marker.end():speakers[index + 1].start() if index + 1 < len(speakers) else len(note)]
+    score, verdict, _, _ = parse_reply(reviewer_text)
+    per, plain = parse_scores(reviewer_text)
+    unknown = [c for c in per if c not in CONCERNS]
+    if unknown:
+        sys.exit(_refuse(f"unknown concern in SCORE[{unknown[0]}]; use one of: " + ", ".join(CONCERNS)))
+    if score is not None or verdict is not None:
+        if score is not None:
+            touched = list(led.get("concerns") or {})
+            scores = {**(r.get("scores") or {}), **({c: plain for c in touched} if plain is not None else {}), **per}
+            r.setdefault("original_score", r["score"])
+            if r.get("scores"):
+                r.setdefault("original_scores", dict(r["scores"]))
+            r["score"] = min(scores.values()) if scores else score
+            if scores:
+                r["scores"] = scores
+        if verdict is not None:
+            r.setdefault("original_verdict", r["verdict"])
+            r["verdict"] = verdict
+    r.setdefault("exchanges", []).append(note)
+    save(a.ledger, led)
+    print("NEXT: %s: %s" % next_step(led))
+
+
+def cmd_cull(a):
+    led = load(a.ledger)
+    if next_step(led)[0] != "NIT-CULL":
+        sys.exit(_refuse("nit cull is only available after a passing Fable round or later and checkpoint"))
+    reply = Path(a.reply).read_text()
+    match = re.search(r"^KEEP:[ \t]*([^\n]*)$", reply, re.I | re.M)
+    if not match:
+        sys.exit(_refuse("cull reply needs KEEP: <ids> or KEEP: none"))
+    selection = match[1].strip()
+    kept = [] if selection.lower() in ("", "none") else re.split(r"[,\s]+", selection.upper())
+    if len(kept) > 2:
+        sys.exit(_refuse("keep at most 2 nit ids"))
+    items = nit_items(led)
+    if len(set(kept)) != len(kept) or any(fid not in items for fid in kept):
+        sys.exit(_refuse("KEEP must name distinct open nit ids from the cull brief"))
+    for fid, item in items.items():
+        if fid not in kept:
+            item["status"] = "discarded"
+    phase_rounds(led)[-1]["nit_cull"] = {"kept": kept, "reply": reply}
+    save(a.ledger, led)
+    print("NEXT: %s: %s" % next_step(led))
 
 
 def cmd_flag(a):
     led = load(a.ledger)
+    refuse_pending_exchange(led)
     if a.cmd == "checkpoint":
+        if led.get("pilot") and not led.get("owner_ok"):
+            sys.exit(_refuse("pilot checkpoint needs the owner's build thumbs-up; run owner-ok \"<quote>\""))
         led["checkpoint"] = True
     else:
         led["approach"] += 1
@@ -1099,12 +1523,36 @@ def cmd_next(a):
     print("%s: %s" % next_step(load(a.ledger)))
 
 
+def cmd_owner_ok(a):
+    led = load(a.ledger)
+    if not led.get("pilot") or not a.quote.strip():
+        sys.exit(_refuse("owner-ok needs a pilot ledger and the owner's nonempty build thumbs-up quote"))
+    led["owner_ok"] = {"quote": a.quote.strip(),
+                       "date": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
+    save(a.ledger, led)
+    print("NEXT: %s: %s" % next_step(led))
+
+
 def cmd_brief(a):
-    print(brief(load(a.ledger)))
+    text = brief(load(a.ledger))
+    if a.model:
+        command = [sys.executable, str(Path(__file__).with_name("review-profile")), a.model, "--role", "reviewer", "--mask-only"]
+        if a.family:
+            command += ["--family", a.family]
+        profile = subprocess.run(command, text=True, capture_output=True)
+        if profile.returncode:
+            sys.exit(_refuse(profile.stderr.strip() or "reviewer profile unavailable"))
+        text += "\n" + profile.stdout.strip()
+    print(text)
 
 
 def cmd_status(a):
     led = load(a.ledger)
+    if led.get("pilot"):
+        print("pilot: " + ("hardening phase" if led.get("hardening") else "pilot review"))
+        print("owner build thumbs-up: " + (led["owner_ok"]["quote"] if led.get("owner_ok") else "pending"))
+        if led.get("bars_agreed"):
+            print("bars agreed: " + led["bars_agreed"])
     sug = led.get("bar_suggested")
     print(f"bar {led['bar']:g}/10" + (f" (suggested {sug:g})" if sug is not None else ""))
     if led.get("shape"):
@@ -1123,6 +1571,19 @@ def cmd_status(a):
               f"score {r['score']:g}/10 {r['verdict'] or ''}"
               + (" " + " ".join(f"{c}={v:g}" for c, v in r["scores"].items()) if r.get("scores") else "")
               + (f" (phase {r['phase']})" if r.get("phase") else ""))
+        if "original_score" in r or "original_verdict" in r:
+            was = (f"{r['original_score']:g}/10" if "original_score" in r else f"{r['score']:g}/10")
+            print(f"  argued from {was} {r.get('original_verdict', r['verdict']) or ''}".rstrip()
+                  + (" " + " ".join(f"{c}={v:g}" for c, v in r["original_scores"].items()) if r.get("original_scores") else ""))
+        if r.get("argue_required") or r.get("exchanges"):
+            notes = r.get("exchanges", [])
+            print(f"  {len(notes)} exchanges")
+            for note in notes:
+                print("    " + note.splitlines()[0])
+        if r.get("comment_fixups"):
+            print("  COMMENT-FIXUPS:")
+            for fixup in r["comment_fixups"]:
+                print("    - " + fixup)
     for line in ledger_lines(led):
         print(line)
     print("NEXT: %s: %s" % next_step(led))
@@ -1139,7 +1600,8 @@ def cmd_stash(a):
     else:
         print(f"NIT-STASH ({len(nits)}):")
         for i, e in enumerate(nits, 1):
-            print(f"  N{i} [round {e.get('round', '-')}] {e['text']}")
+            print(f"  N{i} [round {e.get('round', '-')}] {e['text']}"
+                  + (f" => {e['status']}" if e.get("status") else ""))
         print("Fix only nits that ONE central change solves and that maps to a code practice or feature facet "
               "(a lint rule, a helper, a convention). Decline the rest with a reason.")
     if not hard:
@@ -1160,6 +1622,7 @@ def print_hardening(led):
 
 def cmd_hardening(a):
     led = load(a.ledger)
+    refuse_pending_exchange(led)
     stash = led.setdefault("hardening_stash", [])
     seen = {e["text"] for e in stash}
     for path in a.from_ledgers or []:
@@ -1220,7 +1683,10 @@ def main(argv=None):
     i = sub.add_parser("init")
     i.add_argument("--repo", required=True)
     i.add_argument("--base", required=True)
-    i.add_argument("--bar", type=bar_arg, help="integer 6..10 for every touched concern (default: the suggested bars)")
+    i.add_argument("--bar", type=bar_arg, action="append", help="normal: integer 6..10; pilot: repeat concern=N")
+    i.add_argument("--pilot", action="store_true", help="pilot bars, round-2 Fable, owner-build gate; no region recording")
+    i.add_argument("--bars-agreed", help="owner quote or note agreeing the pilot's named bars before it starts")
+    i.add_argument("--touches-data", action="store_true", help="pilot writes stored data, changes schema or migrations, or sends notifications or other outward messages")
     i.add_argument("--bar-reason", default="")
     i.add_argument("--category", action="append", choices=sorted(CATEGORY_CONCERNS))
     i.add_argument("--research", help="research dir (default: sibling <repo>.research if present)")
@@ -1248,19 +1714,40 @@ def main(argv=None):
     r.add_argument("--reviewer", required=True)
     r.add_argument("--sha", required=True)
     r.add_argument("--reply", required=True)
+    r.add_argument("--model", help="requested reviewer model identifier")
+    r.add_argument("--effort", help="effective reasoning effort only when exposed; omitted means unknown")
+    r.add_argument("--requested-effort", help="requested effort, separately from the effective exposed value")
+    r.add_argument("--author", help="comma list of code authors in the reviewed diff; required for schema 2")
+    sub.add_parser("argue").add_argument("--note", required=True)
+    sub.add_parser("cull").add_argument("--reply", required=True)
+    sub.add_parser("owner-ok").add_argument("quote")
     o = sub.add_parser("outcome")
     o.add_argument("id")
     o.add_argument("status", choices=["fixed", "disagree", "declined", "pre-existing", "resolved", "escaped"])
     o.add_argument("--evidence", default="")
-    for name in ("checkpoint", "new-approach", "next", "brief", "status", "stash"):
+    for name in ("checkpoint", "new-approach", "next", "status", "stash", "plan-status"):
         sub.add_parser(name)
+    b = sub.add_parser("brief")
+    b.add_argument("--model")
+    b.add_argument("--family")
+    sub.add_parser("context").add_argument("--file", required=True)
+    sub.add_parser("implementation-check").add_argument("--file", required=True)
+    plan = sub.add_parser("plan")
+    plan.add_argument("--agent", required=True)
+    plan.add_argument("--file", required=True)
+    answer = sub.add_parser("plan-answer")
+    answer.add_argument("--proposal-digest", required=True)
+    answer.add_argument("--file", required=True)
     sub.add_parser("hardening").add_argument("--from", dest="from_ledgers", nargs="*")
     sub.add_parser("threat-model").add_argument("--confirm", action="store_true",
                                                 help="the owner confirmed an inferred model")
     a = p.parse_args(argv)
-    {"init": cmd_init, "round": cmd_round, "outcome": cmd_outcome, "checkpoint": cmd_flag,
+    {"context": cmd_context, "implementation-check": cmd_implementation_check,
+     "plan": cmd_plan, "plan-answer": cmd_plan_answer,
+     "plan-status": cmd_plan_status, "init": cmd_init, "round": cmd_round, "outcome": cmd_outcome, "checkpoint": cmd_flag,
      "new-approach": cmd_flag, "next": cmd_next, "brief": cmd_brief, "status": cmd_status,
-     "stash": cmd_stash, "hardening": cmd_hardening, "threat-model": cmd_threat_model}[a.cmd](a)
+     "stash": cmd_stash, "argue": cmd_argue, "cull": cmd_cull, "owner-ok": cmd_owner_ok,
+     "hardening": cmd_hardening, "threat-model": cmd_threat_model}[a.cmd](a)
 
 
 if __name__ == "__main__":

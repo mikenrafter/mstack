@@ -1,0 +1,271 @@
+#!/usr/bin/env -S python3 -I
+"""Opt-in owner inbox and ordered work items. See workq-pilot-spec.md v2.
+
+CLAIM(replay): events are append-only; broken rows are skipped [v2 State;
+ test_fixture_age_bad_line_and_append_recovery]. The CLI and workq-hook share
+ Queue under one events-file lock, including inbox numbering.
+CLI errors: bad references/arguments exit 2, unreadable/absent queue exit 1.
+"""
+import argparse
+from contextlib import contextmanager
+import fcntl
+import json
+import math
+import os
+from pathlib import Path
+import re
+import sys
+import time
+
+
+class BadNumber(ValueError):
+    pass
+
+
+def session_id(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", value):
+        raise BadNumber("a session id must contain only letters, digits, _ or -")
+    return value
+
+
+def number(value, message=False):
+    pattern = r"m([1-9][0-9]*)" if message else r"([1-9][0-9]*)"
+    match = re.fullmatch(pattern, str(value))
+    if not match:
+        raise BadNumber(f"bad {'message' if message else 'item'} number: {value}")
+    return int(match[1])
+
+
+def state_path(sid):
+    root = Path(os.environ.get("XDG_STATE_HOME") or Path.home() / ".local/state")
+    return root / "workq" / session_id(sid)
+
+
+def private_file(path):
+    descriptor = os.open(path, os.O_RDWR | os.O_APPEND | os.O_CREAT | os.O_NOFOLLOW, 0o600)
+    os.fchmod(descriptor, 0o600)
+    return os.fdopen(descriptor, "a+", encoding="utf-8")
+
+
+def rows(stream):
+    stream.seek(0)
+    for line in stream:
+        try:
+            row = json.loads(line)
+            if isinstance(row, dict):
+                yield row
+        except ValueError:
+            continue
+
+
+def append(stream, row):
+    # A torn final row stays in history but cannot swallow the next valid row.
+    stream.seek(0)
+    content = stream.read()
+    if content and not content.endswith("\n"):
+        stream.write("\n")
+    stream.write(json.dumps(row, ensure_ascii=False) + "\n")
+    stream.flush()
+
+
+class Queue:
+    def __init__(self, path, events):
+        self.path, self.events = path, events
+        self.enabled = self.exists = False
+        self.items, self.order, self.messages, self.filed = {}, [], {}, set()
+        for event in rows(events):
+            self.replay(event)
+        inbox = path / "inbox.jsonl"
+        if inbox.exists():
+            with inbox.open(encoding="utf-8") as stream:
+                for row in rows(stream):
+                    try:
+                        number(row.get("m"), message=True)
+                        if isinstance(row.get("text"), str):
+                            self.messages[row["m"]] = row
+                    except BadNumber:
+                        continue
+
+    def replay(self, event):
+        op = event.get("op")
+        if op in ("on", "off"):
+            self.enabled = op == "on"
+            self.exists |= self.enabled
+            return
+        try:
+            timestamp = event["t"]
+            if not isinstance(timestamp, (int, float)) or not math.isfinite(timestamp):
+                return
+            if op == "nothing":
+                number(event.get("m"), message=True)
+                self.filed.add(event["m"])
+                return
+            n = number(event.get("n"))
+            if op == "add" and n not in self.items and isinstance(event.get("text"), str):
+                source = event.get("m")
+                if source is not None:
+                    number(source, message=True)
+                self.items[n] = {"n": n, "t": timestamp, "text": event["text"],
+                                 "m": source, "status": "open"}
+                self.order.append(n)
+                if source:
+                    self.filed.add(source)
+            elif n in self.items:
+                if op in ("start", "done", "drop", "reopen"):
+                    self.items[n]["status"] = {"start": "running", "done": "done",
+                                                "drop": "dropped", "reopen": "open"}[op]
+                elif op == "move":
+                    after = event.get("after")
+                    if after != n and (after == 0 or after in self.items):
+                        self.order.remove(n)
+                        self.order.insert(self.order.index(after) + 1 if after else 0, n)
+        except (BadNumber, KeyError, TypeError, ValueError):
+            return
+
+    def record(self, op, **fields):
+        event = {"t": time.time(), "op": op, **fields}
+        append(self.events, event)
+        self.replay(event)
+
+    def capture(self, text):
+        n = max((number(m, message=True) for m in self.messages), default=0) + 1
+        message = {"m": f"m{n}", "t": time.time(), "chars": len(text), "text": text}
+        with private_file(self.path / "inbox.jsonl") as stream:
+            append(stream, message)
+        self.messages[message["m"]] = message
+        return message
+
+    def open_items(self):
+        return [self.items[n] for n in self.order if self.items[n]["status"] in ("open", "running")]
+
+    def unfiled(self):
+        return sorted((row for m, row in self.messages.items() if m not in self.filed),
+                      key=lambda row: number(row["m"], message=True))
+
+    def item_number(self, value):
+        n = number(value)
+        if n not in self.items:
+            raise BadNumber(f"unknown item: {value}")
+        return n
+
+    def message_number(self, value):
+        number(value, message=True)
+        if value not in self.messages:
+            raise BadNumber(f"unknown message: {value}")
+        return value
+
+
+@contextmanager
+def queue_for(sid, create=False):
+    path = state_path(sid)
+    if create:
+        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+        path.parent.chmod(0o700)
+        path.mkdir(exist_ok=True, mode=0o700)
+        path.chmod(0o700)
+    elif not (path / "events.jsonl").is_file():
+        raise OSError("no queue for this session; opt in with workq on")
+    with private_file(path / "events.jsonl") as events:
+        fcntl.flock(events, fcntl.LOCK_EX)
+        queue = Queue(path, events)
+        if not queue.exists and not create:
+            raise OSError("no queue for this session; opt in with workq on")
+        yield queue
+
+
+def age(timestamp):
+    seconds = max(0, int(time.time() - timestamp))
+    for unit, divisor in (("d", 86400), ("h", 3600), ("m", 60)):
+        if seconds >= divisor:
+            return f"{seconds // divisor}{unit}"
+    return f"{seconds}s"
+
+
+def one_line(text, limit=None):
+    text = " ".join(text.split())
+    return text if limit is None or len(text) <= limit else text[:limit - 1] + "…"
+
+
+def item_line(item, limit=None):
+    source = f" ({item['m']})" if item["m"] else ""
+    return one_line(f"#{item['n']} [{item['status']} {age(item['t'])}] {item['text']}{source}", limit)
+
+
+def message_line(message):
+    return f"{message['m']} ({len(message['text'])} chars) {one_line(message['text'], 80)}"
+
+
+def parser():
+    arguments = argparse.ArgumentParser(description=__doc__)
+    arguments.add_argument("-s", "--session")
+    commands = arguments.add_subparsers(dest="command", required=True)
+    for command in ("on", "off"):
+        commands.add_parser(command)
+    add = commands.add_parser("add")
+    add.add_argument("--from", dest="source")
+    add.add_argument("text", nargs="+")
+    listing = commands.add_parser("list")
+    listing.add_argument("--all", action="store_true")
+    for command in ("start", "done", "drop", "reopen", "move", "nothing"):
+        sub = commands.add_parser(command)
+        sub.add_argument("number")
+        if command == "done":
+            sub.add_argument("--note")
+        if command in ("drop", "nothing"):
+            sub.add_argument("--why", required=True)
+        if command == "move":
+            sub.add_argument("--after", required=True)
+    return arguments
+
+
+def main():
+    args = parser().parse_args()
+    sid = os.environ.get("CLAUDE_CODE_SESSION_ID") or args.session or os.environ.get("WORKQ_SESSION")
+    try:
+        if not sid:
+            raise OSError("set CLAUDE_CODE_SESSION_ID, -s, or WORKQ_SESSION")
+        with queue_for(sid, create=args.command == "on") as queue:
+            command = args.command
+            if command in ("on", "off"):
+                queue.record(command)
+            elif command == "list":
+                for n in queue.order:
+                    if args.all or queue.items[n]["status"] in ("open", "running"):
+                        print(item_line(queue.items[n]))
+                for message in queue.unfiled():
+                    print(message_line(message))
+            elif command == "add":
+                source = queue.message_number(args.source) if args.source else None
+                n = max(queue.items, default=0)
+                for text in args.text:
+                    n += 1
+                    queue.record("add", n=n, text=text, m=source)
+                    print(n)
+            elif command == "nothing":
+                queue.record(command, m=queue.message_number(args.number), why=args.why)
+            else:
+                n = queue.item_number(args.number)
+                fields = {"n": n}
+                if command == "move":
+                    fields["after"] = 0 if args.after == "0" else queue.item_number(args.after)
+                    if fields["after"] == n:
+                        raise BadNumber("cannot move an item after itself")
+                if command == "done" and args.note is not None:
+                    fields["note"] = args.note
+                if command == "drop":
+                    fields["why"] = args.why
+                queue.record(command, **fields)
+                if command == "done":
+                    pending = queue.open_items()
+                    print(item_line(pending[0]) if pending else "workq: no open items")
+    except BadNumber as error:
+        print(f"workq: {error}", file=sys.stderr)
+        return 2
+    except (OSError, UnicodeError, ValueError) as error:
+        print(f"workq: unreadable state: {error}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

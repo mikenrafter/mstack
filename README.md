@@ -2,7 +2,7 @@
 
 Skills, helper scripts and research from my work with coding agents. Start with a skill you need, or read the [research index](research/00-index.md) for the evidence and its limits.
 
-This first release publishes the workflow snapshot collected on 2026-11-12. It includes 13 skills and two Python helper scripts. The skills encode my own tools, hosts and preferences; adapt those assumptions before using them. The workflow continues to change, and this snapshot is behind the versions I currently run.
+mstack is the source of truth for my shared coding-agent skills, workflow helpers and global instructions. The skills encode my own tools, hosts and preferences; adapt those assumptions before using them. The research preserves dated observations. The original 2026-11-12 snapshot remains available as the v0.1.0 release.
 
 ## How I approach agent work
 
@@ -47,7 +47,7 @@ python3 skills/build-loop/scripts/bot-triage --help
 python3 -I -m unittest discover -s skills/build-loop/scripts/tests
 ```
 
-The initial publication passed all 158 helper-script tests. These tests check the scripts, not whether the workflow improves software outcomes.
+The script tests check helper behavior, not whether the workflow improves software outcomes. Run them from the repository root; some hook tests also need Bash, jq and grep.
 
 ## Research and open work
 
@@ -59,7 +59,8 @@ The initial publication passed all 158 helper-script tests. These tests check th
 
 ## For agents and contributors
 
-- Treat this repository as a dated publication snapshot. The live originals are maintained in `scout-modules/agent-integration/skills/` in my private phoe-nix repository. Edits here do not update my installed agents. Moving the canonical source and creating a repeatable export remain open work.
+- Edit shared skills in `skills/`, workflow helpers in `bin/`, and global instructions in `global-instructions.md` here. phoe-nix consumes a locked `mstack` source input and installs these files through its agent-integration scout module and Kasetto. There is no second editable copy in phoe-nix.
+- To test unpublished changes in phoe-nix, stage new files here and build the consumer with `--override-input mstack path:/absolute/path/to/mstack`. After publishing, update the named `mstack` lock and deploy `nix-scout switch agent-integration` without the override.
 - Read the matching skill and its companions before applying a workflow. User instructions and available tools determine what can actually run.
 - Do not open issues, forks, pull requests, discussions or other outreach without the owner's explicit request. See [no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md).
 - Keep transcripts, credentials, personal highlights and session handoffs out of this repository.

@@ -80,7 +80,10 @@ After the red phase commits and before any green code:
    checklists, and the designer's answers. Ask for: gaps (states, edges,
    lifecycle paths, precedence), contradictions, tests that would pass
    without the feature, missing invariants, and simpler designs or reuse.
-2. Fix the spec and red tests. Re-run the red gate.
+2. Exchange at least one substantive argument with each spec reviewer before
+   accepting its review, even an approval. Fable needs at least two. Give the
+   reviewer the round priorities and invariants; record the exchange using
+   build-loop `references/dialogue.md`. Fix the spec and red tests, then rerun the red gate.
 3. At most two spec rounds. Anything still open after round two becomes an
    explicit decision (default + log + raise), not a third round.
 4. Then implement, and run the normal code review loop (build-loop §6).

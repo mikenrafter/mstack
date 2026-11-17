@@ -1,0 +1,498 @@
+#!/usr/bin/env python3
+"""Transcript checker for build-loop (W47-T pilot): reads Claude Code session
+transcripts (JSONL) and reports where the agent cap and the keepalive rules broke.
+
+  python3 -I transcript-check [--json] TRANSCRIPT.jsonl [...]
+
+Rules (SKILL.md §2 and §10):
+  CAP           a second working Claude agent (or a second reviewer) launched while
+                one is still unfinished. Codex/Sol launches are tracked, never flagged.
+                Counts launches over the cap, not incidents: seven at once is six findings.
+  FG-KEEPALIVE  a Bash call running `vigil keepalive` or `vigil wait` without run_in_background,
+                or, in a main session, the MCP tool mcp__vigil__keepalive (also a foreground
+                wait). A delegated child (first message "Act as the ... sub-agent") and a
+                harness sidechain (any record with isSidechain true) may wait in the foreground,
+                so neither form is flagged there.
+  MANUAL-TICK   a turn ended with a launch unfinished, held only by a background
+                `sleep N && echo keepalive` tick (the allowed backup when vigil fails). A tick
+                counts while the turn end is within N + 60 s of its start, or a timestamp is missing.
+  NO-HOLD       a turn ended (an owner message immediately following an assistant
+                message with no tool_use, ignoring non-user/assistant records)
+                with a launch unfinished and no background wait running at that point: a
+                `vigil keepalive` or `vigil wait` not yet returned. A live `vigil hold` alone
+                holds nothing (only the wait's return wakes the session). A wait that started in
+                the turn but already returned is no hold, and a wait on a hold that has ended
+                (below) stops counting.
+Holds end on cold, CLI cancel, MCP watch_cancel, timestamped deadline expiry, or a
+returned keepalive event whose summary starts with "hold released:". Release events
+must be visible in a tool_result or completion notice (including TaskOutput results);
+output files are not read. Item auto-release without such an event is not inferred.
+Missing/invalid timestamps prevent deadline expiry; otherwise deadlines use transcript
+time, never the host clock. Without an explicit deadline vigil's 7-day default applies.
+
+How a launch finishes (read off real transcripts):
+  Agent, foreground   its tool_result.
+  Agent, background   a <task-notification> naming its agentId or tool-use id, as a
+                      user message, a queued_command attachment, or (earliest, when the
+                      task really ended) a queue-operation enqueue record.
+  delegate_task       a "Delegated task <taskId> (...) [status]:" message.
+  Also TaskStop / task_cancel naming it.
+When no completion announcement exists anywhere in the file, CAP treats the launch
+as finished at the next owner message and counts it under "assumed_finished".
+NO-HOLD uses only evidence seen before the turn ended.
+
+Exit status is 0 always: this is a report.
+"""
+import argparse
+import json
+import re
+import sys
+from dataclasses import dataclass, field
+from datetime import datetime
+
+RULES = ("CAP", "FG-KEEPALIVE", "NO-HOLD", "MANUAL-TICK")
+INF = (float("inf"), 0)
+
+CMD_START = r"(?:^|[;&|(\n])\s*(?:\w+=\S+\s+)*(?:timeout\s+\S+\s+)?(?:\S*/)?"
+KEEPALIVE_RE = re.compile(CMD_START + r"vigil\s+(?:keepalive|wait)\b")
+HOLD_RE = re.compile(CMD_START + r"vigil\s+hold\b(?!\s+(?:done|add)\b)")
+TICK_RE = re.compile(CMD_START + r"sleep\s+(\d+)\s*&&\s*echo\s+keepalive\b")
+CHILD_RE = re.compile(r"^Act as the [\w-]+ sub-agent\b")
+COLD_RE = re.compile(CMD_START + r"vigil\s+cold\b")
+CANCEL_RE = re.compile(CMD_START + r"vigil\s+cancel\s+([^\s;&|]+)")
+QUOTED_RE = re.compile(r"\"(?:[^\"\\]|\\.)*\"|'[^']*'")
+HEREDOC_RE = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\b", re.S)
+REVIEW_RE = re.compile(r"\breview", re.I)
+SYSTEM_PREFIXES = ("<task-notification>", "Delegated task ", "<local-command", "<command-name>",
+                   "<system-reminder>", "This session is being continued", "Another Claude session",
+                   "<cross-session-message", "Caveat:", "[Request interrupted")
+DONE_STATES = {"completed", "failed", "killed", "stopped", "cancelled", "canceled", "interrupted", "error"}
+AGENT_TOOLS = ("Agent", "Task")
+DELEGATE_TOOL = "mcp__t3-code__delegate_task"
+
+
+@dataclass
+class Launch:
+    pos: tuple
+    line: int
+    tool_use_id: str
+    label: str
+    provider: object          # "claude" | "codex" | None (unknown)
+    reviewer: bool
+    agent: bool               # Agent/Task (foreground unless the result says async); else delegate_task
+    keys: set = field(default_factory=set)
+    voided: bool = False      # the tool call errored: nothing started
+    fg_end: object = None     # foreground Agent: position of its tool_result
+    real_end: object = None   # earliest evidence that it finished
+    assumed: bool = False
+    end: tuple = INF          # real_end, else the next owner message (assumed), else EOF
+
+
+@dataclass
+class Finding:
+    file: str
+    line: int
+    rule: str
+    reason: str
+    key: str = ""             # tool_use id (turn-end rules: launch id @ message uuid); "" never deduplicates
+
+    def as_dict(self):
+        return {"file": self.file, "line": self.line, "rule": self.rule, "reason": self.reason}
+
+
+@dataclass
+class Hold:
+    pos: tuple
+    watch_id: object = None
+    deadline: object = None   # timestamp, if the creation record has one
+
+
+def text_of(content):
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return "\n".join(b.get("text", "") for b in content if isinstance(b, dict) and b.get("type") == "text")
+    return ""
+
+
+def read_events(path):
+    """[(line, obj)] for every parseable JSON object line."""
+    out = []
+    with open(path, encoding="utf-8", errors="replace") as fh:
+        for n, raw in enumerate(fh, 1):
+            raw = raw.strip()
+            if not raw:
+                continue
+            try:
+                obj = json.loads(raw)
+            except ValueError:
+                continue
+            if isinstance(obj, dict):
+                out.append((n, obj))
+    return out
+
+
+def completion_keys(text):
+    """Keys the notifications in one delivered message finish. A message can batch several."""
+    keys = set()
+    for block in re.findall(r"<task-notification>.*?(?:</task-notification>|\Z)", text, re.S):
+        status = re.search(r"<status>(.*?)</status>", block)
+        if status and status.group(1).strip().lower() not in DONE_STATES:
+            continue
+        keys.update(re.findall(r"<tool-use-id>(.*?)</tool-use-id>", block))
+        keys.update(re.findall(r"<task-id>(.*?)</task-id>", block))
+    for task, status in re.findall(r"^Delegated task (\S+) \(.*?\) \[(\w+)\]:", text, re.M):
+        if status.lower() in DONE_STATES:
+            keys.add(task)
+    return keys
+
+
+def is_owner_message(obj):
+    if obj.get("type") != "user" or obj.get("isMeta") or obj.get("toolUseResult") is not None:
+        return False
+    content = (obj.get("message") or {}).get("content")
+    if isinstance(content, list) and any(isinstance(b, dict) and b.get("type") == "tool_result" for b in content):
+        return False
+    text = text_of(content).strip()
+    return bool(text) and not text.startswith(SYSTEM_PREFIXES)
+
+
+def command_words(cmd):
+    """The command with quoted strings and heredoc bodies blanked, so a grep pattern or a commit message
+    that mentions `vigil keepalive` is not read as running it."""
+    return QUOTED_RE.sub('""', HEREDOC_RE.sub("", cmd))
+
+
+def timestamp(raw):
+    """UTC seconds from a timezone-aware record; absent or malformed means unknown."""
+    try:
+        dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        return dt.timestamp() if dt.tzinfo is not None else None
+    except (AttributeError, ValueError, TypeError, OverflowError):
+        return None
+
+
+def command_args(cmd, match):
+    return re.split(r"[;&|\n]", cmd[match.end():], maxsplit=1)[0].strip()
+
+
+def option(args, name):
+    m = re.search(r"(?:^|\s)--" + name + r"(?:=|\s+)([^\s]+)", args)
+    return m.group(1) if m else None
+
+
+def released_holds(text):
+    """Read vigil's release events even when a Bash/TaskOutput wrapper surrounds the JSON."""
+    for m in re.finditer(r"\{", text):
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(text[m.start():])
+        except ValueError:
+            continue
+        if not isinstance(obj, dict):
+            continue
+        for event in obj.get("events", []):
+            if isinstance(event, dict) and str(event.get("summary", "")).startswith("hold released:"):
+                if event.get("watch_id"):
+                    yield str(event["watch_id"])
+
+
+def classify(name, inp):
+    """(provider, reviewer, label) of a launch tool call."""
+    if name in AGENT_TOOLS:
+        head = " ".join([str(inp.get("description", "")), str(inp.get("subagent_type", "")),
+                         str(inp.get("prompt", ""))[:200]])
+        return "claude", bool(REVIEW_RE.search(head)), str(inp.get("description") or inp.get("subagent_type") or name)
+    target = inp.get("target") if isinstance(inp.get("target"), dict) else {}
+    hint = " ".join(str(target.get(k, "")) for k in ("providerInstanceId", "driverKind", "model")).lower()
+    provider = "claude" if "claude" in hint else "codex" if ("codex" in hint or "gpt" in hint) else None
+    head = " ".join([str(inp.get("title", "")), str(inp.get("task", inp.get("prompt", "")))[:200]])
+    reviewer = inp["role"] == "review" if "role" in inp else bool(REVIEW_RE.search(head))
+    return provider, reviewer, str(inp.get("title") or name)
+
+
+def scan(events):
+    """One pass: launches, hold events, completions and owner messages, all with positions."""
+    launches, by_id = [], {}
+    holds, colds, keepalives = [], [], []     # Hold / (pos, watch_id or None=all) / (pos, tool_use_id)
+    ticks, mcp_keepalives = [], []            # (pos, tool_use_id, sleep seconds) / (line, tool_use_id)
+    child = None                              # decided by the first owner message
+    sidechain = False                         # any record with isSidechain true: a harness sub-agent log
+    uuids = {}                                # line -> record uuid
+    hold_tools, keepalive_watches = {}, {}   # tool_use_id -> Hold / watch_id
+    fg_findings = []                          # (line, command)
+    completions = {}                          # key -> earliest position
+    cancels = []                              # (pos, key)
+    owners, turn_ends, times = [], [], {}
+    previous_message = None
+    for line, obj in events:
+        msg = obj.get("message") if isinstance(obj.get("message"), dict) else {}
+        content = msg.get("content")
+        typ = obj.get("type")
+        times[line] = timestamp(obj.get("timestamp"))
+        uuids[line] = obj.get("uuid")
+        sidechain = sidechain or obj.get("isSidechain") is True
+        if typ == "assistant" and isinstance(content, list):
+            for i, b in enumerate(content):
+                if not (isinstance(b, dict) and b.get("type") == "tool_use"):
+                    continue
+                pos, name, inp = (line, i), b.get("name", ""), b.get("input") or {}
+                if name in AGENT_TOOLS or name == DELEGATE_TOOL:
+                    provider, reviewer, label = classify(name, inp)
+                    ln = Launch(pos, line, b.get("id", ""), label, provider, reviewer, name in AGENT_TOOLS, {b.get("id", "")})
+                    launches.append(ln)
+                    by_id[ln.tool_use_id] = ln
+                elif name == "Bash":
+                    cmd = command_words(str(inp.get("command", "")))
+                    bg = bool(inp.get("run_in_background"))
+                    if KEEPALIVE_RE.search(cmd) and not re.search(r"\s(?:--help|-h)\b", cmd):
+                        args = command_args(cmd, KEEPALIVE_RE.search(cmd)).split()
+                        keepalive_watches[b.get("id", "")] = args[0] if args else None
+                        if bg:
+                            keepalives.append((pos, b.get("id", "")))
+                        else:
+                            fg_findings.append((line, cmd, b.get("id", "")))
+                    tick = TICK_RE.search(cmd)
+                    if bg and tick:
+                        ticks.append((pos, b.get("id", ""), int(tick.group(1))))
+                    for m in HOLD_RE.finditer(cmd):
+                        args = command_args(cmd, m)
+                        if re.search(r"(?:^|\s)(?:--help|-h)\b", args):
+                            continue
+                        seconds = option(args, "deadline-s") or "604800"
+                        deadline = times[line] + int(seconds) if times[line] is not None and seconds.isdigit() else None
+                        hold = Hold(pos, option(args, "id"), deadline)
+                        holds.append(hold)
+                        hold_tools[b.get("id", "")] = hold
+                    for m in COLD_RE.finditer(cmd):
+                        ids = command_args(cmd, m).split()
+                        colds.extend((pos, watch_id) for watch_id in ids or [None])
+                    colds.extend((pos, m.group(1)) for m in CANCEL_RE.finditer(cmd))
+                elif name == "mcp__vigil__hold":
+                    seconds = inp.get("deadline_s") or 604800
+                    deadline = times[line] + seconds if times[line] is not None and isinstance(seconds, (int, float)) else None
+                    hold = Hold(pos, inp.get("id"), deadline)
+                    holds.append(hold)
+                    hold_tools[b.get("id", "")] = hold
+                elif name == "mcp__vigil__cold":
+                    ids = inp.get("watch_ids")
+                    colds.extend((pos, watch_id) for watch_id in ([None] if ids is None else ids))
+                elif name == "mcp__vigil__watch_cancel":
+                    colds.append((pos, inp.get("watch_id")))
+                elif name == "mcp__vigil__keepalive":
+                    keepalive_watches[b.get("id", "")] = inp.get("watch_id")
+                    mcp_keepalives.append((line, b.get("id", "")))
+                elif name == "TaskOutput" and inp.get("task_id") in keepalive_watches:
+                    keepalive_watches[b.get("id", "")] = keepalive_watches[inp["task_id"]]
+                elif name == "TaskStop":
+                    cancels.append((pos, str(inp.get("task_id") or inp.get("shell_id") or "")))
+                elif name == "mcp__t3-code__task_cancel":
+                    cancels.append((pos, str(inp.get("taskId") or inp.get("task_id") or "")))
+        elif typ == "user" and isinstance(content, list):
+            for i, b in enumerate(content):
+                if not (isinstance(b, dict) and b.get("type") == "tool_result"):
+                    continue
+                tid = b.get("tool_use_id")
+                pos, text = (line, i), text_of(b.get("content"))
+                result = obj.get("toolUseResult")
+                if tid in hold_tools and not b.get("is_error"):
+                    hold = hold_tools[tid]
+                    m = re.search(r'"watch_id"\s*:\s*"([^"]+)"', text)
+                    if m:
+                        hold.watch_id = m.group(1)
+                    m = re.search(r'"deadline_at"\s*:\s*"([^"]+)"', text)
+                    if m and timestamp(m.group(1)) is not None:
+                        hold.deadline = timestamp(m.group(1))
+                if tid in keepalive_watches and not b.get("is_error"):
+                    if isinstance(result, dict) and result.get("backgroundTaskId"):
+                        keepalive_watches[result["backgroundTaskId"]] = keepalive_watches[tid]
+                    released = list(released_holds(text))
+                    colds.extend((pos, watch_id) for watch_id in released)
+                    if released:
+                        completions.setdefault(tid, pos)
+                ln = by_id.get(tid)
+                if ln is None:
+                    continue
+                if b.get("is_error"):
+                    ln.voided = True
+                    continue
+                if ln.agent:
+                    # The structured result decides; a report may quote the phrase (W49 r1 S1).
+                    if isinstance(result, dict):
+                        is_async = bool(result.get("isAsync")) or result.get("status") == "async_launched"
+                    else:
+                        is_async = text.lstrip().startswith("Async agent launched")
+                    if not is_async:
+                        ln.fg_end = pos           # a foreground Agent ends at its result
+                    m = re.search(r"agentId:\s*(\w+)", text)
+                    if m:
+                        ln.keys.add(m.group(1))
+                    if isinstance(result, dict) and result.get("agentId"):
+                        ln.keys.add(str(result["agentId"]))
+                else:
+                    m = re.search(r'"taskId"\s*:\s*"([^"]+)"', text)
+                    if m:
+                        ln.keys.add(m.group(1))
+        if typ in ("user", "attachment", "queue-operation"):
+            if typ == "attachment":
+                att = obj.get("attachment") or {}
+                notice = text_of(att.get("prompt")) if att.get("type") == "queued_command" else ""
+            elif typ == "queue-operation":
+                # the harness queues a notification when the task ends and delivers it later
+                notice = text_of(obj.get("content")) if obj.get("operation") == "enqueue" else ""
+            else:
+                notice = text_of(content)
+            for key in completion_keys(notice):
+                completions.setdefault(key, (line, 0))
+                if key in keepalive_watches:
+                    colds.extend(((line, 0), watch_id) for watch_id in released_holds(notice))
+        if is_owner_message(obj):
+            if child is None:
+                child = bool(CHILD_RE.match(text_of(content).strip()))
+            owners.append(line)
+            if previous_message is not None:
+                prev_line, prev_type, prev_content = previous_message
+                if prev_type == "assistant" and not any(
+                        isinstance(b, dict) and b.get("type") == "tool_use"
+                        for b in (prev_content if isinstance(prev_content, list) else [])):
+                    turn_ends.append((line, prev_line))
+        if typ in ("user", "assistant"):
+            previous_message = (line, typ, content)
+    return {"launches": launches, "holds": holds, "colds": colds, "keepalives": keepalives,
+            "fg": [] if child or sidechain else fg_findings, "uuids": uuids, "completions": completions, "cancels": cancels,
+            "owners": owners, "turn_ends": turn_ends, "times": times,
+            "keepalive_watches": keepalive_watches, "ticks": ticks,
+            "mcp_fg": [] if child or sidechain else mcp_keepalives}
+
+
+def resolve_ends(sc):
+    """Fill each launch's real_end / end, count the assumed ones."""
+    owners = sc["owners"]
+    assumed = 0
+    for ln in sc["launches"]:
+        if ln.voided:
+            continue
+        ends = [sc["completions"][k] for k in ln.keys if k in sc["completions"]]
+        ends += [pos for pos, key in sc["cancels"] if key in ln.keys and pos > ln.pos]
+        if ln.fg_end:
+            ends.append(ln.fg_end)
+        ln.real_end = min(ends) if ends else None
+        if ln.real_end is not None:
+            ln.end = ln.real_end
+            continue
+        nxt = next((o for o in owners if o > ln.line), None)
+        if nxt is not None:
+            ln.end, ln.assumed = (nxt, 0), True
+            assumed += 1
+    return assumed
+
+
+def check_cap(path, sc):
+    found = []
+    live = [ln for ln in sc["launches"] if not ln.voided]
+    for who, pick in (("working Claude agent", lambda ln: ln.provider == "claude" and not ln.reviewer),
+                      ("Claude reviewer", lambda ln: ln.provider == "claude" and ln.reviewer)):
+        group = [ln for ln in live if pick(ln)]
+        for ln in group:
+            open_ = [o for o in group if o.pos < ln.pos < o.end]
+            if open_:
+                names = "; ".join(f"{o.label!r} (line {o.line})" for o in open_)
+                found.append(Finding(path, ln.line, "CAP",
+                                     f"{ln.label!r} launched while {len(open_)} other {who}(s) unfinished: {names}",
+                                     ln.tool_use_id))
+    return found
+
+
+def check_fg_keepalive(path, sc):
+    return [Finding(path, line, "FG-KEEPALIVE",
+                    f"foreground `vigil keepalive`/`vigil wait` (no run_in_background): {cmd.strip()[:80]}", tid)
+            for line, cmd, tid in sc["fg"]] + [
+        Finding(path, line, "FG-KEEPALIVE", "foreground MCP keepalive (mcp__vigil__keepalive) in a main session: "
+                "use `vigil keepalive <hold> --orchestrator` with run_in_background", tid) for line, tid in sc["mcp_fg"]]
+
+
+def check_no_hold(path, sc):
+    found = []
+    live = [ln for ln in sc["launches"] if not ln.voided]
+    for o, last in sc["turn_ends"]:
+        end_pos = (o, 0)
+        unfinished = [ln for ln in live if ln.pos < end_pos and (ln.real_end is None or ln.real_end > end_pos)]
+        if not unfinished:
+            continue
+        def ended(pos, watch_id):
+            return any(pos < c < end_pos and (key is None or key == watch_id) for c, key in sc["colds"])
+
+        def expired(hold):
+            return hold.deadline is not None and sc["times"][o] is not None and sc["times"][o] >= hold.deadline
+
+        def keepalive_running(pos, tid):
+            watch_id = sc["keepalive_watches"].get(tid)
+            matching = [h for h in sc["holds"] if h.pos < pos and h.watch_id == watch_id]
+            return (pos < end_pos and not ended(pos, watch_id)
+                    and not (matching and expired(matching[-1]))
+                    and sc["completions"].get(tid, INF) > end_pos)
+
+        running = any(keepalive_running(pos, tid) for pos, tid in sc["keepalives"])
+        if running:
+            continue
+
+        def tick_running(pos, tid, seconds):
+            start, now = sc["times"][pos[0]], sc["times"][o]
+            in_time = start is None or now is None or now - start <= seconds + 60
+            return pos < end_pos and sc["completions"].get(tid, INF) > end_pos and in_time
+
+        key = f"{unfinished[0].tool_use_id}@{sc['uuids'].get(last) or last}"
+        if any(tick_running(*tick) for tick in sc["ticks"]):
+            found.append(Finding(path, last, "MANUAL-TICK",
+                                 f"turn ended with {len(unfinished)} launch(es) unfinished, held only by a manual sleep tick", key))
+            continue
+        names = "; ".join(f"{ln.label!r} (line {ln.line})" for ln in unfinished[:3])
+        more = f" and {len(unfinished) - 3} more" if len(unfinished) > 3 else ""
+        found.append(Finding(path, last, "NO-HOLD",
+                             f"turn ended with {len(unfinished)} launch(es) unfinished and no vigil keepalive/wait running: {names}{more}", key))
+    return found
+
+
+def check_file(path):
+    events = read_events(path)
+    sc = scan(events)
+    assumed = resolve_ends(sc)
+    findings = check_cap(path, sc) + check_fg_keepalive(path, sc) + check_no_hold(path, sc)
+    findings.sort(key=lambda f: (f.line, f.rule))
+    return findings, assumed
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Report build-loop agent-cap and keepalive breaks in session transcripts.")
+    ap.add_argument("transcripts", nargs="+")
+    ap.add_argument("--json", action="store_true", help="machine output")
+    args = ap.parse_args(argv)
+    report = {"findings": [], "counts": {r: 0 for r in RULES}, "assumed_finished": 0, "unreadable": []}
+    seen = set()
+    for path in args.transcripts:
+        try:
+            findings, assumed = check_file(path)
+        except OSError as e:
+            report["unreadable"].append({"file": path, "error": str(e)})
+            continue
+        report["assumed_finished"] += assumed
+        for f in findings:
+            if f.key and (f.rule, f.key) in seen:     # a continued session copies earlier history
+                continue
+            seen.add((f.rule, f.key))
+            report["findings"].append(f.as_dict())
+            report["counts"][f.rule] += 1
+    if args.json:
+        json.dump(report, sys.stdout, indent=2)
+        print()
+        return 0
+    for f in report["findings"]:
+        print(f"{f['file']}:{f['line']}: {f['rule']}: {f['reason']}")
+    for u in report["unreadable"]:
+        print(f"{u['file']}: unreadable: {u['error']}")
+    print(" ".join(f"{r}={report['counts'][r]}" for r in RULES)
+          + f" (assumed finished at the next owner message: {report['assumed_finished']} launches)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

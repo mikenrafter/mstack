@@ -107,6 +107,13 @@ under test, mutate one at a time, run the focused tests:
 Use the result to decide: more tests needed, or tests that prove nothing
 (remove them). Revert every mutation; never commit one.
 
+**`# catches:` and post-green spot mutations (build-loop red/green).** Each
+red test carries a `# catches: <a plausible wrong implementation this fails>`
+line. If you cannot name one, the test is likely a tautology; rewrite or drop
+it. After green, the orchestrator applies 2-3 of those named wrong
+implementations and checks the matching tests go red. A green implementer that
+edits a red test says so in its report; the edit becomes a review finding.
+
 **Mutation tool, periodically.** If the stack has one (for example Stryker,
 mutmut, cargo-mutants, PIT), run it every so often on a stable module.
 Surviving mutants show gaps. Tests that kill no unique mutant and duplicate

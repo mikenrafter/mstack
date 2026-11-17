@@ -1,0 +1,307 @@
+#!/usr/bin/env python3
+"""Concern-specific project review reminders. Probes are read-only; complete records evidence.
+
+Vigil delivers these only during an existing session, never as an unattended audit.
+"""
+import argparse
+import contextlib
+import datetime as dt
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+CONCERNS = ('test-effectiveness', 'simplification', 'end-to-end',
+            'state-durability', 'trust-boundaries')
+FOCUS_KEYS = ('most_important', 'invariants', 'priority_concerns', 'lower_priority', 'evidence')
+
+
+def focus(value):
+    if not isinstance(value, dict):
+        raise ValueError('context must be an object')
+    for key in FOCUS_KEYS:
+        entries = value.get(key)
+        if not isinstance(entries, list) or any(not isinstance(x, str) or not x.strip() for x in entries):
+            raise ValueError(f'context {key} must be an array of nonblank strings')
+        if key in ('most_important', 'invariants', 'evidence') and not entries:
+            raise ValueError(f'context {key} must name the facts or explain what is unknown')
+    return {key: value[key] for key in FOCUS_KEYS}
+
+
+def timestamp(value):
+    if not isinstance(value, str):
+        raise ValueError('timestamp must be a string')
+    result = dt.datetime.fromisoformat(value.replace('Z', '+00:00'))
+    if result.tzinfo is None:
+        raise ValueError('timestamp must include timezone')
+    return result.astimezone(dt.timezone.utc)
+
+
+def project_key(project):
+    return hashlib.sha256(str(project).encode()).hexdigest()[:24]
+
+
+def load(path, project):
+    if not path.exists():
+        return {'schema': 1, 'project': str(project), 'completed': {}, 'context': None}
+    state = json.loads(path.read_text())
+    if (not isinstance(state, dict) or state.get('schema') != 1 or
+            state.get('project') != str(project) or not isinstance(state.get('completed'), dict)):
+        raise ValueError('invalid maintenance state')
+    for concern, record in state['completed'].items():
+        if (concern not in (*CONCERNS, 'user-fit') or not isinstance(record, dict)
+                or not isinstance(record.get('evidence'), str) or not record['evidence'].strip()):
+            raise ValueError('invalid completed audit')
+        timestamp(record['at'])
+    if state.get('context') is not None:
+        focus(state['context'])
+    if 'audit_count' in state and (type(state['audit_count']) is not int or state['audit_count'] < 0):
+        raise ValueError('invalid audit count')
+    return state
+
+
+@contextlib.contextmanager
+def locked(root, key):
+    root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with (root / (key + '.lock')).open('a') as handle:
+        fcntl.flock(handle, fcntl.LOCK_EX)
+        yield
+
+
+def save(path, state):
+    # CLAIM(maintenance-atomic): readers see the previous or complete new record
+    # [os.replace atomic same-filesystem contract; completion/rotation tests].
+    name = None
+    try:
+        with tempfile.NamedTemporaryFile(mode='w', dir=path.parent, delete=False) as handle:
+            name = handle.name
+            json.dump(state, handle, indent=2)
+            handle.write('\n')
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(name, path)
+    finally:
+        if name is not None and os.path.exists(name):
+            os.unlink(name)
+
+
+def scopes(project):
+    paths = [project]
+    for suffix in ('.research', '.worktrees'):
+        sibling = project.with_name(project.name + suffix)
+        if sibling.is_dir():
+            paths.append(sibling)
+    result = subprocess.run(['git', '-C', str(project), 'worktree', 'list', '--porcelain'],
+                            text=True, capture_output=True, timeout=10)
+    if result.returncode == 0:
+        paths.extend(Path(line[9:]).resolve() for line in result.stdout.splitlines()
+                     if line.startswith('worktree ') and Path(line[9:]).is_dir())
+    unique = list(dict.fromkeys(paths))
+    # Collapse only known project containers, never a shared parent such as
+    # ~/Documents/repos or ~/.t3/worktrees that would match unrelated projects.
+    grouped = Path.home() / '.t3/worktrees' / project.name
+    if grouped.is_dir() and any(p.is_relative_to(grouped) for p in unique):
+        unique.append(grouped)
+    return [str(p) for p in unique if not any(p != parent and p.is_relative_to(parent) for parent in unique)]
+
+
+def repository(path):
+    """Linked worktrees and subdirectories share the main checkout identity."""
+    path = path.resolve(strict=True)
+    if not path.is_dir():
+        raise ValueError('project must be an existing directory')
+    result = subprocess.run(['git', '-C', str(path), 'worktree', 'list', '--porcelain'],
+                            capture_output=True, text=True, timeout=10)
+    if result.returncode == 0:
+        for line in result.stdout.splitlines():
+            if line.startswith('worktree '):
+                return Path(line[9:]).resolve()
+    return path
+
+
+def registry(root):
+    path = root / 'projects/registry.json'
+    data = json.loads(path.read_text()) if path.exists() else {}
+    if not isinstance(data, dict):
+        raise ValueError('invalid project registry')
+    seen = set()
+    for ident, record in data.items():
+        if (not isinstance(ident, str) or not ident or not isinstance(record, dict)
+                or not isinstance(record.get('title'), str)
+                or not isinstance(record.get('repositories'), list) or not record['repositories']):
+            raise ValueError('invalid project membership')
+        for member in record['repositories']:
+            if not isinstance(member, str) or not Path(member).is_absolute() or member in seen:
+                raise ValueError('overlapping or invalid project membership')
+            seen.add(member)
+    return data
+
+
+def identity(project, groups):
+    for ident, record in groups.items():
+        if str(project) in record['repositories']:
+            return 'project:' + ident, record
+    return str(project), {'title': project.name, 'repositories': [str(project)]}
+
+
+def group(root, groups, ident, title, members):
+    if not ident.strip() or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-_' for c in ident):
+        raise ValueError('project id must use lowercase letters, digits, hyphens or underscores')
+    previous = groups.get(ident, {})
+    members = list(dict.fromkeys(previous.get('repositories', []) + [str(p) for p in members]))
+    for other, record in groups.items():
+        if other != ident and set(members).intersection(record['repositories']):
+            raise ValueError('repository already belongs to another project; remove that membership first')
+    destination = 'project:' + ident
+    path = root / (project_key(destination) + '.json')
+    state = load(path, destination)
+    # Preserve historical evidence while moving path-keyed projects into a product.
+    for member in members:
+        old = load(root / (project_key(member) + '.json'), member)
+        for concern, record in old['completed'].items():
+            prior = state['completed'].get(concern)
+            if prior is None or timestamp(record['at']) > timestamp(prior['at']):
+                state['completed'][concern] = record
+        if old.get('context') is not None and (state.get('context') is None or
+                timestamp(old['context_updated_at']) > timestamp(state['context_updated_at'])):
+            state['context'] = old['context']
+            state['context_updated_at'] = old['context_updated_at']
+    state['audit_count'] = max(state.get('audit_count', 0), len(state['completed']))
+    save(path, state)
+    groups[ident] = {'title': title, 'repositories': members}
+    (root / 'projects').mkdir(exist_ok=True)
+    save(root / 'projects/registry.json', groups)
+    return destination, groups[ident]
+
+
+def retire_member_reminders(root, ident, record):
+    if not ident.startswith('project:'):
+        return
+    for member in record['repositories']:
+        key = project_key(member)
+        receipt = root / 'projects' / (key + '.registration.json')
+        if not receipt.exists():
+            continue
+        previous = json.loads(receipt.read_text())
+        for start in range(0, len(previous['scopes']), 16):
+            reminder_id = 'review-' + key + (f'-{start // 16 + 1}' if start else '')
+            result = subprocess.run([os.environ.get('VIGIL_BIN', 'vigil'), 'remind', 'rm', reminder_id],
+                                    capture_output=True, text=True, timeout=20)
+            if result.returncode and 'no reminder named' not in (result.stderr + result.stdout):
+                raise ValueError(result.stderr.strip() or 'cannot retire member reminder')
+        receipt.unlink()
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--state-dir', type=Path, default=Path(os.environ.get(
+        'XDG_STATE_HOME', str(Path.home() / '.local/state'))) / 'vigil/review-maintenance')
+    parser.add_argument('--now', help='explicit RFC3339 time for reproducible probes')
+    sub = parser.add_subparsers(dest='command', required=True)
+    for command in ('due', 'complete', 'context', 'register', 'ensure', 'group'):
+        child = sub.add_parser(command)
+        child.add_argument('--project', type=Path, default=Path.cwd())
+        if command == 'complete':
+            child.add_argument('--concern', choices=CONCERNS, required=True)
+            child.add_argument('--evidence', required=True)
+        elif command == 'context':
+            child.add_argument('--file', type=Path, required=True)
+        elif command in ('register', 'ensure', 'group'):
+            child.add_argument('--title')
+            if command == 'group':
+                child.add_argument('--id', required=True)
+                child.add_argument('--repo', type=Path, action='append', default=[])
+    args = parser.parse_args(argv)
+    try:
+        # Serialize membership changes with completions so migration cannot lose an audit.
+        with contextlib.ExitStack() as stack:
+            if args.command != 'due':
+                stack.enter_context(locked(args.state_dir, 'projects'))
+            project = repository(args.project)
+            groups = registry(args.state_dir)
+            if args.command == 'group':
+                ident, record = group(args.state_dir, groups, args.id,
+                                      args.title or args.id, [project, *(repository(p) for p in args.repo)])
+                print(json.dumps({'project': ident, **record}))
+                return 0
+            ident, record = identity(project, groups)
+            key = project_key(ident)
+            path = args.state_dir / (key + '.json')
+            now = timestamp(args.now) if args.now else dt.datetime.now(dt.timezone.utc)
+            if args.command in ('register', 'ensure'):
+                project_scopes = list(dict.fromkeys(scope for member in record['repositories']
+                                                    for scope in scopes(Path(member))))
+                signature = {'scopes': project_scopes, 'title': args.title or record['title'], 'version': 2}
+                receipt_path = args.state_dir / 'projects' / (key + '.registration.json')
+                if args.command == 'ensure' and receipt_path.exists() and json.loads(receipt_path.read_text()) == signature:
+                    retire_member_reminders(args.state_dir, ident, record)
+                    print(json.dumps({'id': 'review-' + key, 'project': ident, 'unchanged': True}))
+                    return 0
+                probe = [sys.executable, str(Path(__file__).resolve()), '--state-dir',
+                         str(args.state_dir.resolve()), 'due', '--project', str(project)]
+                message = ('Periodic technical review for ' + signature['title'] + ': {output}. '
+                           'Use adaptive-hardening. Audit the selected concern across relevant member '
+                           'repositories; current priorities guide inspection without replacing the rotation. '
+                           'Establish missing focus first. Check provider headroom and owner allowance. '
+                           'Give reviewers most-important behavior, invariants, priority concerns, lower '
+                           'priorities and evidence. Record an actual audit with review-maintenance complete, '
+                           'then vigil remind done. Snooze if busy; this reminder does not authorize paid work.')
+                receipts = []
+                for start in range(0, len(project_scopes), 16):
+                    reminder_id = 'review-' + key + (f'-{start // 16 + 1}' if start else '')
+                    command = [os.environ.get('VIGIL_BIN', 'vigil'), 'remind', 'add',
+                           reminder_id, '--scope', *project_scopes[start:start + 16], '--days',
+                           'mon,tue,wed,thu,fri,sat,sun', '--tz', 'America/Denver',
+                           '--period', 'week', '--cache-s', '3600', '--timeout-s', '4',
+                           '--probe', json.dumps(probe), '--message', message]
+                    result = subprocess.run(command, capture_output=True, text=True, timeout=20)
+                    if result.returncode and 'already exists' in (result.stderr + result.stdout):
+                        # This id belongs to this maintenance project; refresh changed scopes.
+                        removed = subprocess.run([command[0], 'remind', 'rm', reminder_id],
+                                                 capture_output=True, text=True, timeout=20)
+                        if removed.returncode:
+                            raise ValueError(removed.stderr.strip() or 'cannot refresh reminder')
+                        result = subprocess.run(command, capture_output=True, text=True, timeout=20)
+                    if result.returncode:
+                        raise ValueError(result.stderr.strip() or result.stdout.strip() or 'vigil registration failed')
+                    receipts.append({'id': reminder_id, 'result': result.stdout.strip()})
+                receipt_path.parent.mkdir(exist_ok=True)
+                save(receipt_path, signature)
+                retire_member_reminders(args.state_dir, ident, record)
+                print(json.dumps({'id': 'review-' + key, 'project': ident,
+                                  'scopes': project_scopes, 'registrations': receipts}))
+                return 0
+            state = load(path, ident)
+            if args.command == 'due':
+                dates = {c: timestamp(r['at']) for c, r in state['completed'].items() if c in CONCERNS}
+                latest = max(dates.values(), default=None)
+                due = latest is None or now - latest >= dt.timedelta(days=7)
+                concern = min(CONCERNS, key=lambda c: dates.get(c, dt.datetime.min.replace(tzinfo=dt.timezone.utc)))
+                print(json.dumps({'due': due, 'concern': concern, 'project': ident,
+                                  'repositories': record['repositories'],
+                                  'last_completed': latest.isoformat() if latest else None,
+                                  'context': state.get('context'),
+                                  'missing_focus': state.get('context') is None}))
+                return 0 if due else 1
+            if args.command == 'complete':
+                if not args.evidence.strip():
+                    raise ValueError('completion needs evidence')
+                state['completed'][args.concern] = {'at': now.isoformat(), 'evidence': args.evidence}
+                state['audit_count'] = state.get('audit_count', len(state['completed']) - 1) + 1
+            else:
+                state['context'] = focus(json.loads(args.file.read_text()))
+                state['context_updated_at'] = now.isoformat()
+            save(path, state)
+            print(json.dumps(state))
+            return 0
+    except (OSError, ValueError, KeyError, TypeError, OverflowError, subprocess.SubprocessError) as error:
+        print(f'review-maintenance: {error}', file=sys.stderr)
+        return 2
+
+
+if __name__ == '__main__':
+    sys.exit(main())

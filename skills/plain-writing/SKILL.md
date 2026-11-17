@@ -1,6 +1,6 @@
 ---
 name: plain-writing
-description: Plain, direct writing voice — no undefined jargon, no throat-clearing, no showing off — for any prose a person reads (reports, docs, emails, proposals, summaries, chat replies). Use by default when writing or revising prose.
+description: Plain, direct writing voice (no undefined jargon, no throat-clearing, no showing off) for prose a person reads. Applies to the top-level agent talking to the owner, to copy (see writing-copy), and to reviewers fixing comments. Subagents do not load it otherwise.
 ---
 
 # Plain writing

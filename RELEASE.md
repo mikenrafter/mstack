@@ -13,7 +13,7 @@ This release publishes the 2026-11-12 collection as a research and workflow snap
 
 ## Open decisions and research
 
-1. **Source ownership and export.** Decide when mstack becomes the canonical home for the skills. Until then, the live phoe-nix copies and this publication can diverge. A repeatable, reviewed export should include provenance, companion dependencies and publication checks.
+1. **Source ownership, resolved after v0.1.0.** mstack now owns the current skills, workflow helpers and global instructions. phoe-nix consumes a locked source input. Keep testing changes with a local input override before updating the published pin.
 2. **Portability.** Separate general guidance from host policies and provider-specific orchestration. Supply or replace the private wrappers before promising an install-and-run workflow.
 3. **Workflow effectiveness.** Compare a small review against the full loop at equal cost. Measure escaped defects, owner time, elapsed time and reverts. Numeric review scores are conventions, not validated quality measures.
 4. **Agent context and waiting.** Measure fresh child versus resumed child, compaction thresholds and keepalive cadence, including delivery, recovery and cost. Current savings estimates are modeled, not demonstrated.

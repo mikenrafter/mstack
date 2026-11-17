@@ -11,31 +11,60 @@ When a model hits its limit mid-run:
 4. Relaunch with a "resume" prompt pointing at the partial work and report.
    Never restart from scratch.
 
+## B5. Back to default roles
+
+Read `vigil advice` by window, at a threshold of 15% left:
+
+- Low `claude-budget-5h`: wait until its reset or shift work to Sol for now.
+- Low `claude-budget-weekly`: switch Claude's roles for the rest of the week,
+  until its weekly reset.
+- Low `codex-budget-weekly`: switch Sol's roles for the rest of the week,
+  until its weekly reset. This Codex plan has no 5-hour limit.
+
+Read `resets_at` with `usage-budget-probe ClaudeCode --window 5h`,
+`usage-budget-probe ClaudeCode --window weekly`, or `usage-budget-probe Codex
+--window weekly`. Do not infer weekly headroom from the combined `pct_left`.
+Missing windows or adapter failures are unavailable, not recovered; keep current
+roles when unknown.
+
+Return to default roles, Sonnet and Sol alternating with Opus orchestrating,
+at the next phase boundary once all relevant windows have recovered. A 5-hour
+reset or `on_credits: false` alone does not clear a low weekly window. Say the
+switch in the next phase's role statement. Replace the old combined
+`claude-budget` and `codex-budget` advisories with the three named windows.
+
+## Heavy work (§8-9)
+
+Run test runs beyond one or two files, suites, builds and APKs with
+`edge.research/bin/boat-run [--shell PREFIX] <worktree> -- <cmd>` (`boat`
+skill). Briefs to subagents and Sol name `boat-run`, never a local runner. Use
+the local queue only for one or two quick runs, or when the `boat-budget`
+advisory says Boat's hours are at or below its threshold (default 10%; `vigil
+advisory set boat-budget threshold=N`). Local jobs go through qex with a real
+claim (`qex submit --wait --cpu 2 --mem 3GB --id-file <f> -- <cmd>`, in the
+background); `qex list` first. Details: `low-ram-hosts`.
+
 ## 9. Concurrency
 
-- One implementer run at a time. At most two, and only at the start of a fresh
-  usage window.
-- The cap counts every working subagent, not only implementers: spec and red
-  writers, researchers, investigators and integrators count too. Read-only
-  reviewers (Sol in tier 1, the Opus subagent in tier 2) share their own cap:
-  one run at a time, at most two and only at the start of a fresh usage
-  window.
+- The cap is in SKILL.md §2: one working Claude agent, reviewers a separate
+  cap of one, Codex and Sol less strict. Only the owner raises it, by a logged
+  exception with an end condition. When it ends, go back to one and count
+  again before every launch, not only at the boundary.
 - Focus on one workstream: the one the user named as the priority. Do not
   start agents for other queued work just because you are waiting; queue it,
   log it, and start it when the focus work is done or the user redirects.
-- Exception: when research is the only task in flight (no implementer,
-  integrator or spec writer running), several research agents may run in
-  parallel, preferably on a cheap model (e.g. Haiku).
-- Before launching any agent, count what is already in flight. If the cap is
-  reached, wait (keepalive) instead of launching.
+- Before launching any agent, count the working Claude agents in flight (Codex/Sol
+  runs and commands do not count; reviewers have their own cap). At the cap, wait
+  (background `vigil keepalive --orchestrator`) instead of launching.
 - Wait on a run's process (`tail --pid=<pid> -f /dev/null`), not by grepping
   its log. Logs can quote old errors.
   Take the pid when you start the run (`$!`). Never wait with
   `while pgrep -f <pattern>` inside `bash -c`/`fish -c`: `pgrep -f` matches the
   waiting shell's own command line, so the loop never ends and spins on
   fork/exec (five such loops once held ~70% of an 8-core host for two days).
-- Reviewer subagents never use keepalive or sleep loops. Implementers use
-  single keepalive ticks only while their own long test runs are going (§7.6).
+- Subagents (reviewers and implementers) may use vigil but never orchestrator
+  mode, and never sleep loops (owner 2026-11-14). Implementers call
+  `keepalive` (270 s, foreground) only while their own long test runs are going.
 - Parallel implementers each get their own git worktree with disjoint file
   ownership, and every prompt names the worktree's absolute path. Forbid
   `git stash` in their prompts: the stash is shared by all worktrees of a
@@ -44,7 +73,7 @@ When a model hits its limit mid-run:
 
 ## 10. Timing and low budget
 
-**Is it taking too long?** Long keepalive chains are also a clock. Keep a
+**Is it taking too long?** Long waits are also a clock. Keep a
 per-project `TIMINGS.md` (in the project's research dir): expected durations
 for suites, single heavy files, builds and agent jobs, plus a log of actuals.
 - Before a long job, note its start time and the expected duration from
@@ -62,15 +91,25 @@ for suites, single heavy files, builds and agent jobs, plus a log of actuals.
   kill processes you did not start without the user's OK.
 - When the job ends, add a row to TIMINGS.md (took vs expected, contention).
 
-A completion notification (background command, qex wait, `boat exec`,
-subagent, T3 delegate) fires when the work ends, which can be past the cache
-TTL. It never replaces the tick. After cancelling or consuming a hold, re-arm
-one in the same turn while anything is in flight, queued qex jobs included
-(2026-11-12: a polara-port session went ~1h35 without a hold this way).
+Wait in the background (owner 2026-11-13): `vigil keepalive <watch_id>
+--orchestrator` with `run_in_background` and a timeout of at least
+3,600,000 ms; it returns within 50 minutes, so start the next call on each
+return. Never a foreground `keepalive` call (every user message interrupts
+it). Keep one session hold (a bare one is fine) and add each delegated run to
+it as an item rather than making a hold per run: `vigil hold add <hold> --for
+pid:N|file:<report>|none --expect-s N --label <run>` (the pid or report file
+when the run has one, else `none`; always `--expect-s`, so a stalled run raises
+`item overdue: <run>`). The same keepalive covers every item; each one that
+ends raises `item ended: <run>: <why>` and the hold stays live while other items remain (the last item's event comes with the release). When a `none`
+run's completion notification arrives, `vigil hold done <hold> <run>`. Another
+watch firing does not touch the session hold, and it is never cancelled. When
+it releases (its last item ended) or expires, make a new one in the same turn
+while anything is in flight (2026-11-12: a polara-port session went ~1h35
+without a hold this way).
 
 When budget is low (either side):
 - one-line status messages; no recaps;
 - do not re-read large files; use `git diff --stat` and targeted ranges;
 - delegate drafting (reports, prompts, boilerplate) to a subagent;
-- while waiting on a long job, arm one completion watcher and relaunch ticks
-  silently; check in every few ticks, not every tick.
+- while waiting on a long job, keep one background wait and restart it
+  silently; check in every few waits, not every one.

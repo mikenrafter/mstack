@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# PreToolUse hook (Claude Code and Codex): before a HEAVY shell command, put
+# the operator's current vigil advice in the agent's context (e.g. the
+# boat-budget rule: prefer Boat via boat-run, or qex locally when Boat's hours
+# are low). Light commands pass through untouched.
+#
+# Fast: `vigil advice` answers from its probe cache (cache_s, default 600 s);
+# only an advisory cache miss runs a probe. Reminders read the cache only;
+# their refresh never holds up the advice output. Fail-open: any error, a missing vigil, a
+# timeout, empty advice or unparsable input prints nothing and exits 0, so a
+# tool call is never blocked or delayed by more than the timeout below.
+#
+# Input: the hook JSON on stdin; the command is .tool_input.command (a string,
+# or an argv array in some Codex versions). Output: PreToolUse
+# hookSpecificOutput.additionalContext, or nothing.
+set -u
+
+input="$(cat)" || exit 0
+command_line="$(printf '%s' "$input" | jq -r '(.tool_input.command // .tool_input.cmd // empty) | if type == "array" then join(" ") else . end' 2>/dev/null)" || exit 0
+[ -n "$command_line" ] || exit 0
+
+# Already routed through Boat's runner: the advice has been followed.
+case "$command_line" in *boat-run*) exit 0 ;; esac
+
+# Heavy: flutter test, edge-test, cargo build/test, gradle, nix build, qex submit
+# (and their close relatives), at the start of the command, after ; & | ( or a
+# space, or as the tail of a path (edge.research/bin/edge-test).
+heavy='(^|[;&|(/[:space:]])(flutter[[:space:]]+(test|build)|edge-test|cargo[[:space:]]+(build|test|nextest|bench|clippy|check)|(\./)?gradlew?([[:space:]]|$)|nix[[:space:]]+build|qex[[:space:]]+submit)'
+printf '%s' "$command_line" | grep -Eq "$heavy" || exit 0
+
+command -v vigil >/dev/null 2>&1 || exit 0
+report="$(timeout 20 vigil advice --json 2>/dev/null)" || exit 0
+context="$(printf '%s' "$report" | jq -er '
+  [if ((.advice // []) | length) > 0 then
+     "vigil advice (operator rules; follow them for this heavy job):\n" +
+     ([.advice[] | .id + ": " + .message] | join("\n"))
+   else empty end,
+   if ((.reminders // []) | length) > 0 then
+     "vigil project reminders:\n" +
+     ([.reminders[] | .id + ": " + .message] | join("\n"))
+   else empty end,
+   .reminders_error // empty] | join("\n\n") | select(length > 0)
+' 2>/dev/null)" || exit 0
+
+jq -n --arg context "$context" \
+  '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $context}}' 2>/dev/null || exit 0

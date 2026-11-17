@@ -1,0 +1,1225 @@
+{
+  "schema": 1,
+  "updated_at": "2026-11-16",
+  "archetypes": [
+    {
+      "id": "contract-cartographer",
+      "nickname": "Contract cartographer",
+      "description": "Traces contract boundaries and whether the oracle proves them."
+    },
+    {
+      "id": "copy-mechanic",
+      "nickname": "Copy mechanic",
+      "description": "Checks claims, comments, names, and small inconsistencies against behavior."
+    },
+    {
+      "id": "assumption-setter",
+      "nickname": "Assumption setter",
+      "description": "Turns unresolved choices into concrete defaults during implementation."
+    },
+    {
+      "id": "practical-closer",
+      "nickname": "Practical closer",
+      "description": "Keeps measured consequences separate from accepted limits and follow-ups."
+    }
+  ],
+  "models": [
+    {
+      "model": "gpt-6.1-sol",
+      "family": "sol",
+      "aliases": [
+        "sol"
+      ],
+      "archetype": "contract-cartographer",
+      "status": "provisional",
+      "observations": [
+        "Evidence is task-conditioned and observational. Declined scope proposals do not establish factual error."
+      ],
+      "strengths": [
+        {
+          "pattern": "Challenges tests that constrain obsolete behavior rather than establish the intended result.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-26-15-01a1c7c8-9d69-76f2-bb32-49ce6f309321.jsonl:99"
+          ]
+        },
+        {
+          "pattern": "Checks regression guards through the public entry point.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/07/rollout-2026-11-07T00-48-30-01a1b4fa-fb67-7d32-a0c1-e54a2942fcd7.jsonl:140"
+          ]
+        },
+        {
+          "pattern": "Reproduces boundary failures before proposing an arithmetic fix.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/11/rollout-2026-11-11T02-22-25-01a1c9ea-6bce-79d2-a20e-cb1fd35a348e.jsonl:217"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "May propose stronger generic verification when the actual change lacks the problematic pattern. This binding-aware scanner request was declined as a follow-up.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/07/rollout-2026-11-07T00-48-30-01a1b4fa-fb67-7d32-a0c1-e54a2942fcd7.jsonl:140"
+          ]
+        },
+        {
+          "pattern": "May favor rejection semantics over owner-selected repair semantics. This proposal was declined after the owner contract was checked.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-38-43-01a1c7d4-0719-76b3-b34b-80fc739ba6e3.jsonl:185"
+          ]
+        },
+        {
+          "pattern": "May treat an incomplete visual track as the full lifecycle: one material off-by-one claim was rejected after native capture established N+1 frames and explained the missing first arc frame.",
+          "status": "single-instance-counterevidence",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-26-15-01a1c7c8-9d69-76f2-bb32-49ce6f309321.jsonl:99",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/l48.ledger.json:51",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/turret-start-report.md:41"
+          ]
+        }
+      ],
+      "mask": [
+        "Tie each requested semantic change to the agreed contract; state alternatives as questions before requiring them.",
+        "For hypothetical cases, say whether the pattern exists in the reviewed change and whether stronger generality is in scope.",
+        "Before changing semantics from a partial trace, check whether it covers the full lifecycle and seek independent evidence for missing boundaries."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-opus-5-5",
+      "family": "opus",
+      "aliases": [
+        "opus"
+      ],
+      "archetype": "copy-mechanic",
+      "status": "provisional",
+      "observations": [
+        "Many low-severity comments concern claim accuracy and peripheral cleanup; the corpus does not measure overall precision."
+      ],
+      "strengths": [
+        {
+          "pattern": "Repairs stale source pointers and comments after refactors.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-edge/883e50fb-2b20-4e87-80c9-aaa79fe33797/subagents/agent-a76efd1e008f3d33c.jsonl:248",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-fauxx/c09158c0-e00c-45f6-ba16-c5c5287c54f4/subagents/agent-a40ea6a09bd6b3a4c.jsonl:278"
+          ]
+        },
+        {
+          "pattern": "Compares the named proof or comment with what its test actually checks.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-polara-port/262194c7-6be1-4594-afc3-81e9159d736b/subagents/agent-aebde07e548690072.jsonl:262",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-fauxx/c09158c0-e00c-45f6-ba16-c5c5287c54f4/subagents/agent-a40ea6a09bd6b3a4c.jsonl:278"
+          ]
+        },
+        {
+          "pattern": "Identifies unused public APIs.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/fauxx.research/seeding-review.ledger.json:243"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "May spend optional review attention on small per-job costs that the change accepts. The caching concern was deferred as a known limit.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:63"
+          ]
+        },
+        {
+          "pattern": "May enumerate barely visible or inherent visual limitations beyond the selected fix. These were deferred, without establishing that the observations were false.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:77",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:91"
+          ]
+        },
+        {
+          "pattern": "A source-path diagnosis can overlook an existing assignment: one no-windowId nit was explicitly refuted by the implementer. This is one instance, not an error-rate estimate.",
+          "status": "single-instance-refuted-by-implementer",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini--t3-scratch-2026-11-14-dfb87aa5-381d-4bd4-8213-26b6d36a53d5-761d2c85/21882e8f-c615-4494-be3e-b13d8d9d0bb1.jsonl:286",
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:24"
+          ]
+        }
+      ],
+      "mask": [
+        "Group optional comment and cleanup nits; identify the consequence before expanding review to untouched code.",
+        "Separate accepted design limits from defects requiring changes.",
+        "Preserve serious correctness and security findings; this profile never lowers their priority."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-opus-4-8",
+      "family": "opus",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-sonnet-5-5",
+      "family": "sonnet",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Reviewer behavior unknown. The owner observation and historical ambiguity choices belong to the separate implementation-role record."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-fable-5-1",
+      "family": "fable",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-fable-5-2",
+      "family": "fable",
+      "aliases": [],
+      "archetype": "practical-closer",
+      "status": "provisional",
+      "observations": [
+        "One attributed Fable5.2 review sequence confirms accepted nits, measured verification, and a stop recommendation. Recurrence is unknown."
+      ],
+      "strengths": [
+        {
+          "pattern": "Clarifies missing workflow triggers and the named user-question mechanism.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        },
+        {
+          "pattern": "Removes duplicate instructions when simplifying a router.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        },
+        {
+          "pattern": "Detects duplicate counting of copied findings and verifies the deduplication change.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [
+        "Separate measured consequences from accepted limits; give a clear stop recommendation when only optional work remains.",
+        "Do not treat approval or deferred work as evidence that every optional finding was correct.",
+        "Preserve serious correctness and security findings; this profile never lowers their priority."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "t3_evidence": "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16",
+        "effort": "high",
+        "provider": "claudeAgent",
+        "unit": "One review sequence; not three independent recurring patterns."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-haiku-5-5",
+      "family": "haiku",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "family": "terra",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "gpt-6-luna",
+      "family": "luna",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "gpt-6-astra",
+      "family": "astra",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched."
+      },
+      "role": "reviewer",
+      "scope": "exact"
+    },
+    {
+      "model": "claude-sonnet-5-5",
+      "family": "sonnet",
+      "aliases": [],
+      "archetype": "assumption-setter",
+      "status": "provisional",
+      "observations": [
+        "Owner observation, not measured history: Sonnet overengineers under ambiguity and rarely asks the orchestrator.",
+        "Historical implementer examples choose defaults and pin tests before asking; one report says 188 tests, about 80 above target. These do not establish the added cases were unnecessary.",
+        "Counterexample: an implementer stopped over flawed tests and requested permission before modifying them.",
+        "Historical examples do not expose a five-minute timing contract or explicit later approval. Current guidance permits provisional work and asks for a five-minute work-grounded check-in."
+      ],
+      "strengths": [
+        {
+          "pattern": "Documents chosen defaults and open gaps in the handoff.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/4040da30-784a-4938-9da0-740c1f6a9d52/subagents/agent-a4f09f228907d0a0a.jsonl:99",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-ad49a6856b3eed0b2.jsonl:343",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-a98fae096885608eb.jsonl:349"
+          ]
+        },
+        {
+          "pattern": "Uses independent checks and mutation controls when testing contracts.",
+          "status": "self-reported-observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-ad49a6856b3eed0b2.jsonl:343",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-a98fae096885608eb.jsonl:349"
+          ]
+        },
+        {
+          "pattern": "Stops over flawed tests and asks before changing them in at least one case.",
+          "status": "single-instance",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-edge/1459dd51-29c2-40f9-961b-cf43d25f3139/subagents/agent-a12544e7f06852e92.jsonl:266"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Encodes provisional defaults in tests before consultation in observed tasks. Risk arises if unsupported assumptions spread beyond the work-grounded check-in; early provisional choices alone are not a failure.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/4040da30-784a-4938-9da0-740c1f6a9d52/subagents/agent-a4f09f228907d0a0a.jsonl:99",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-ad49a6856b3eed0b2.jsonl:343",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-a98fae096885608eb.jsonl:349"
+          ]
+        },
+        {
+          "pattern": "Expands test scope past a requested target. One report says 188 tests, about 80 above target; necessity was not adjudicated.",
+          "status": "scope-risk-unadjudicated",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-ad49a6856b3eed0b2.jsonl:343"
+          ]
+        },
+        {
+          "pattern": "Unknown: the owner says Sonnet rarely asks the orchestrator, but this pass does not measure that frequency.",
+          "status": "owner-observation-only",
+          "evidence": []
+        }
+      ],
+      "mask": [
+        "At the five-minute work-grounded check-in, show unresolved choices and any defaults already encoded; obtain direction before those choices spread.",
+        "At check-in, explain extra cases before multiplying fixtures further.",
+        "Continue independent work while asking, and preserve serious correctness and security findings."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "implementation",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "implementer_evidence": [
+          "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/4040da30-784a-4938-9da0-740c1f6a9d52/subagents/agent-a4f09f228907d0a0a.jsonl:99",
+          "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-ad49a6856b3eed0b2.jsonl:343",
+          "/home/mini/.claude/projects/-home-mini-Documents-repos-phoe-nix/9cd0dd82-4669-4407-a7a0-a80b9b446432/subagents/agent-a98fae096885608eb.jsonl:349",
+          "/home/mini/.claude/projects/-home-mini-Documents-repos-edge/1459dd51-29c2-40f9-961b-cf43d25f3139/subagents/agent-a12544e7f06852e92.jsonl:266"
+        ]
+      },
+      "role": "implementation",
+      "scope": "exact"
+    },
+    {
+      "model": "family:sol",
+      "family": "sol",
+      "aliases": [],
+      "archetype": "contract-cartographer",
+      "status": "provisional",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Evidence is task-conditioned and observational. Declined scope proposals do not establish factual error."
+      ],
+      "strengths": [
+        {
+          "pattern": "Challenges tests that constrain obsolete behavior rather than establish the intended result.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-26-15-01a1c7c8-9d69-76f2-bb32-49ce6f309321.jsonl:99"
+          ]
+        },
+        {
+          "pattern": "Checks regression guards through the public entry point.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/07/rollout-2026-11-07T00-48-30-01a1b4fa-fb67-7d32-a0c1-e54a2942fcd7.jsonl:140"
+          ]
+        },
+        {
+          "pattern": "Reproduces boundary failures before proposing an arithmetic fix.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/11/rollout-2026-11-11T02-22-25-01a1c9ea-6bce-79d2-a20e-cb1fd35a348e.jsonl:217"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "May propose stronger generic verification when the actual change lacks the problematic pattern. This binding-aware scanner request was declined as a follow-up.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/07/rollout-2026-11-07T00-48-30-01a1b4fa-fb67-7d32-a0c1-e54a2942fcd7.jsonl:140"
+          ]
+        },
+        {
+          "pattern": "May favor rejection semantics over owner-selected repair semantics. This proposal was declined after the owner contract was checked.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-38-43-01a1c7d4-0719-76b3-b34b-80fc739ba6e3.jsonl:185"
+          ]
+        },
+        {
+          "pattern": "May treat an incomplete visual track as the full lifecycle: one material off-by-one claim was rejected after native capture established N+1 frames and explained the missing first arc frame.",
+          "status": "single-instance-counterevidence",
+          "evidence": [
+            "/home/mini/.codex/sessions/2026/11/10/rollout-2026-11-10T16-26-15-01a1c7c8-9d69-76f2-bb32-49ce6f309321.jsonl:99",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/l48.ledger.json:51",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/turret-start-report.md:41"
+          ]
+        }
+      ],
+      "mask": [
+        "Tie each requested semantic change to the agreed contract; state alternatives as questions before requiring them.",
+        "For hypothetical cases, say whether the pattern exists in the reviewed change and whether stronger generality is in scope.",
+        "Before changing semantics from a partial trace, check whether it covers the full lifecycle and seek independent evidence for missing boundaries."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "gpt-6.1-sol"
+        ],
+        "profile_supported_by": [
+          "gpt-6.1-sol"
+        ]
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:opus",
+      "family": "opus",
+      "aliases": [],
+      "archetype": "copy-mechanic",
+      "status": "provisional",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Many low-severity comments concern claim accuracy and peripheral cleanup; the corpus does not measure overall precision."
+      ],
+      "strengths": [
+        {
+          "pattern": "Repairs stale source pointers and comments after refactors.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-edge/883e50fb-2b20-4e87-80c9-aaa79fe33797/subagents/agent-a76efd1e008f3d33c.jsonl:248",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-fauxx/c09158c0-e00c-45f6-ba16-c5c5287c54f4/subagents/agent-a40ea6a09bd6b3a4c.jsonl:278"
+          ]
+        },
+        {
+          "pattern": "Compares the named proof or comment with what its test actually checks.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-polara-port/262194c7-6be1-4594-afc3-81e9159d736b/subagents/agent-aebde07e548690072.jsonl:262",
+            "/home/mini/.claude/projects/-home-mini-Documents-repos-fauxx/c09158c0-e00c-45f6-ba16-c5c5287c54f4/subagents/agent-a40ea6a09bd6b3a4c.jsonl:278"
+          ]
+        },
+        {
+          "pattern": "Identifies unused public APIs.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/fauxx.research/seeding-review.ledger.json:243"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "May spend optional review attention on small per-job costs that the change accepts. The caching concern was deferred as a known limit.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:63"
+          ]
+        },
+        {
+          "pattern": "May enumerate barely visible or inherent visual limitations beyond the selected fix. These were deferred, without establishing that the observations were false.",
+          "status": "scope-disagreement",
+          "evidence": [
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:77",
+            "/home/mini/Documents/repos/polara-port.research/build-loop/clouds.ledger.json:91"
+          ]
+        },
+        {
+          "pattern": "A source-path diagnosis can overlook an existing assignment: one no-windowId nit was explicitly refuted by the implementer. This is one instance, not an error-rate estimate.",
+          "status": "single-instance-refuted-by-implementer",
+          "evidence": [
+            "/home/mini/.claude/projects/-home-mini--t3-scratch-2026-11-14-dfb87aa5-381d-4bd4-8213-26b6d36a53d5-761d2c85/21882e8f-c615-4494-be3e-b13d8d9d0bb1.jsonl:286",
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:24"
+          ]
+        }
+      ],
+      "mask": [
+        "Group optional comment and cleanup nits; identify the consequence before expanding review to untouched code.",
+        "Separate accepted design limits from defects requiring changes.",
+        "Preserve serious correctness and security findings; this profile never lowers their priority."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "claude-opus-5-5",
+          "claude-opus-4-8"
+        ],
+        "profile_supported_by": [
+          "claude-opus-5-5"
+        ]
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:sonnet",
+      "family": "sonnet",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Reviewer behavior unknown. The owner observation and historical ambiguity choices belong to the separate implementation-role record."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "claude-sonnet-5-5"
+        ],
+        "profile_supported_by": []
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:fable",
+      "family": "fable",
+      "aliases": [],
+      "archetype": "practical-closer",
+      "status": "provisional",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "One attributed Fable5.2 review sequence confirms accepted nits, measured verification, and a stop recommendation. Recurrence is unknown."
+      ],
+      "strengths": [
+        {
+          "pattern": "Clarifies missing workflow triggers and the named user-question mechanism.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        },
+        {
+          "pattern": "Removes duplicate instructions when simplifying a router.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        },
+        {
+          "pattern": "Detects duplicate counting of copied findings and verifies the deduplication change.",
+          "status": "single-sequence-accepted",
+          "evidence": [
+            "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [
+        "Separate measured consequences from accepted limits; give a clear stop recommendation when only optional work remains.",
+        "Do not treat approval or deferred work as evidence that every optional finding was correct.",
+        "Preserve serious correctness and security findings; this profile never lowers their priority."
+      ],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "t3_evidence": "/home/mini/Documents/repos/phoe-nix.research/review-behavior/t3/evidence.jsonl:16",
+        "effort": "high",
+        "provider": "claudeAgent",
+        "unit": "One review sequence; not three independent recurring patterns.",
+        "identified_versions": [
+          "claude-fable-5-1",
+          "claude-fable-5-2"
+        ],
+        "profile_supported_by": [
+          "claude-fable-5-2"
+        ]
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:haiku",
+      "family": "haiku",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "claude-haiku-5-5"
+        ],
+        "profile_supported_by": []
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:terra",
+      "family": "terra",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "gpt-5.6-terra"
+        ],
+        "profile_supported_by": []
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:luna",
+      "family": "luna",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "gpt-6-luna"
+        ],
+        "profile_supported_by": []
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    },
+    {
+      "model": "family:astra",
+      "family": "astra",
+      "aliases": [],
+      "archetype": null,
+      "status": "unknown",
+      "observations": [
+        "Explicit aggregate of listed observed versions; do not apply automatically to sparse or new versions.",
+        "Observed in local native history; history presence alone does not establish reviewer behavior."
+      ],
+      "strengths": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "pattern": "Unknown: insufficient attributed reviewer evidence.",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "mask": [],
+      "sample": {
+        "inventory": "native/inventory.json",
+        "role": "reviewer",
+        "window": "2026-10-17/2026-11-16",
+        "selection": "Original review statements; exact-text deduplication; ledger disposition when uniquely matched.",
+        "identified_versions": [
+          "gpt-6-astra"
+        ],
+        "profile_supported_by": []
+      },
+      "scope": "aggregate",
+      "role": "reviewer"
+    }
+  ],
+  "cautions": [
+    "Behavior masks are uncalibrated proposals, not model capability ratings.",
+    "Never suppress serious correctness, data-loss, or security concerns based on an archetype.",
+    "Declined and deferred findings are not necessarily incorrect.",
+    "Exact model mappings and explicit family aggregates are observational snapshots dated 2026-11-16."
+  ]
+}

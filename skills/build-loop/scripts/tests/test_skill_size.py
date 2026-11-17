@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 SKILL_DIR = Path(__file__).resolve().parents[2]
-SKILL_WORDS = 2700
+SKILL_WORDS = 1800
 REFERENCE_WORDS = 1700
 
 

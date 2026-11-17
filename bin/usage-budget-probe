@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+"""usage-budget-probe <ClaudeCode|Codex> [--window 5h|weekly].
+
+Reads `uw status --json`. Without --window, pct_left/on_credits retain the
+all-window minimum headroom / any-exceeded meaning. windows adds uw's original
+window descriptors, duration, headroom, credits and unmodified reset timestamps.
+With --window, all output describes only that duration; name/resets_at identify
+its tightest entry. An absent window is unavailable, never inferred.
+Exits 3 with `unavailable: <reason>` on stderr and empty stdout for missing
+windows, invalid data, uw failures or a failed latest adapter attempt.
+"""
+import argparse
+import datetime
+from decimal import Decimal
+import json
+import math
+import re
+import subprocess
+import sys
+
+
+def timestamp(text):
+    """An RFC3339 instant as (UTC second, exact fraction), or None when absent.
+
+    CLAIM(budget-timestamps): unequal fractional widths and nanoseconds retain their
+    ordering [spec R7; test_provider_that_failed_before_but_whose_latest_attempt_succeeded_is_available].
+    """
+    if not text:
+        return None
+    match = re.fullmatch(r"(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)(\.\d+)?(Z|[+-]\d\d:\d\d)", text)
+    if not match:
+        raise ValueError(f"invalid adapter timestamp: {text}")
+    second = datetime.datetime.fromisoformat(match[1] + match[3].replace("Z", "+00:00"))
+    # ↳ CLAIM(budget-timestamps)
+    return second, Decimal(match[2] or "0")
+
+
+def window_detail(window):
+    """Keep uw's descriptor; only 300/10080-minute Rolling windows get CLI aliases.
+
+    CLAIM(budget-windows): names follow durations, independent of list order
+    [uw-core::WindowKind; test_selection_follows_duration_in_either_order_and_scopes_credits].
+    """
+    descriptor = window["window"]
+    kind, = descriptor
+    minutes = None
+    if kind == "Rolling":
+        minutes = descriptor[kind]["minutes"]
+        if isinstance(minutes, bool) or not isinstance(minutes, int) or minutes <= 0:
+            raise ValueError("invalid window duration")
+        # ↳ CLAIM(budget-windows)
+        name = {300: "5h", 10080: "weekly"}.get(minutes, f"{minutes}m")
+    else:
+        name = f"{kind}:{descriptor[kind]}"
+    return {"name": name, "minutes": minutes, "window": descriptor,
+            "pct_left": 100 - window["pct"], "on_credits": window.get("exceeded", False),
+            "resets_at": window.get("resets_at")}
+
+
+def budget(document, provider, window_name=None):
+    """Return one provider's current budget, or raise ValueError with an unavailable reason.
+
+    Mates with `uw status --json`: usage and provider_status are independent lists,
+    both selected by provider name. Other-provider objects are ignored [spec D1/R7].
+    """
+    # A restarted daemon can leave a stale entry beside the fresh one: the latest attempt decides.
+    entries = [entry for entry in document.get("provider_status", []) if entry.get("provider") == provider]
+    status = max(entries, key=lambda entry: (1, timestamp(entry.get("last_attempt_at"))) if entry.get("last_attempt_at") else (0,), default=None)
+    if status is None:
+        raise ValueError(f"{provider} adapter status absent")
+    error = status.get("last_error")
+    if error is not None:
+        success = timestamp(status.get("last_success_at"))
+        attempt = timestamp(status.get("last_attempt_at"))
+        if success is None or attempt is None or success < attempt:
+            raise ValueError(f"{provider}: {error}")
+    windows = [window for usage in document.get("usage", []) if usage.get("provider") == provider
+               for window in usage.get("windows", [])]
+    if not windows:
+        if window_name is not None:
+            raise ValueError(f"{provider}: no such window: {window_name} (no windows reported)")
+        raise ValueError(f"{provider} absent or has no windows")
+    pcts = [window["pct"] for window in windows]
+    if any(isinstance(pct, bool) or not isinstance(pct, (int, float)) or not math.isfinite(pct) for pct in pcts):
+        raise ValueError(f"{provider} has invalid window percentages")
+    details = [window_detail(window) for window in windows]
+    if window_name is not None:
+        details = [detail for detail in details if detail["name"] == window_name]
+        if not details:
+            raise ValueError(f"{provider}: no such window: {window_name}")
+    tightest = min(details, key=lambda detail: detail["pct_left"])
+    result = {"pct_left": tightest["pct_left"],
+              "on_credits": any(detail["on_credits"] for detail in details), "windows": details}
+    if window_name is not None:
+        result.update(name=window_name, resets_at=tightest["resets_at"])
+    return result
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("provider", choices=("ClaudeCode", "Codex"))
+    parser.add_argument("--window", choices=("5h", "weekly"), help="report only this duration; absent windows exit 3")
+    args = parser.parse_args()
+    try:
+        reply = subprocess.run(["uw", "status", "--json"], capture_output=True, text=True, timeout=30)
+        if reply.returncode:
+            raise ValueError(f"uw exited {reply.returncode}: {reply.stderr.strip() or 'status failed'}")
+        result = budget(json.loads(reply.stdout), args.provider, args.window)
+    except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError, AttributeError) as error:
+        print(f"unavailable: {error}", file=sys.stderr)
+        return 3
+    print(json.dumps(result))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

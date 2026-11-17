@@ -1,0 +1,111 @@
+# build-loop reference: scope, pilots, estimates, fast iteration (§1, §2, §4, §8–9)
+
+Source: edge "live guides r2" (2026-11-13) and "no-spinners" (2026-11-15).
+
+## The scope question (§1)
+
+Ask the owner which kind of change this is:
+
+- **Pilot**: try it on a few cases, gather data, then decide.
+- **Structural fix**: change how the thing works everywhere.
+- **Hardening**: strengthen the structural design before an upstream PR or project release.
+
+**Default: pilot.** Owner: "The answer is typically launch things as pilots first, because then we're
+able to gather more data and that data is able to inform implementations that are correct the first
+time." Ask inline with that default and keep working (§1a). A bug fix is not a pilot; skip the
+question when the kind is obvious.
+
+## Pilot rules
+
+- **Scored, agreed before starting (owner, 2026-11-15).** Agree the feature's scored concerns and
+  bars with the owner, typically four: data safety (`durability`), correctness (`error-paths`), the
+  feature goal (`legibility` for UX, `performance` for layout shift), maintainability (`architecture`).
+  Record exactly those concerns at init, for example `init --pilot --bar durability=9 --bar wiring=7
+  --bars-agreed "<owner quote or note>"`. Concern names come from `bars.md`.
+  Without an agreement, touched concerns default to 6, except durability at 7. If the pilot writes
+  stored data, changes schema or migrations, or sends notifications or other outward messages,
+  pass `--touches-data`: durability
+  defaults to 9 and is included automatically. `durable-state`/`migration` categories also select it.
+  Init prints the default applied. Pilots never record or constrain a region's shape/stage in
+  `bars.json`. Structural and later stages keep the normal shape × stage bars.
+- **Review schedule.** Round 1: Sol or Opus, never the author. Round 2: Fable, including ARGUE,
+  STEP-BACK, NIT-CULL and FIX-KEPT; later rounds keep the normal caps. Every named concern must
+  meet its bar, and the owner must approve the pilot build. Record `review-ledger -l L owner-ok
+  "<quote>"`; without it the ledger refuses CHECKPOINT and STOP-AGREED.
+- **Hardening list.** Use the existing `HARDENING-STASH`, not a second list. Review briefs send
+  findings outside the agreed concerns, or not needed for the current bars, there. Do not fix them
+  this round. Typical items: pixel/frame tests and sweeps, stricter measurement, micro-performance,
+  screen readers, translations of changing copy, maintainability tidy-ups.
+- **Tests cover the pilot's own cases only.** No sweeps over every item, no catalogue-wide guards,
+  until the owner decides to go structural. Size check: pilot test code stays under about twice the
+  expected change. Over that, cut tests before writing more.
+- **No full test runs (owner, 2026-11-15).** The pilot stage runs targeted tests and gates for what
+  it touches. Full runs belong to the structural and hardening stages.
+- **One red round.** The spec review (§4a) may run alongside green, not before it. Its findings go to
+  the first fix round.
+- **Ship iteration builds early.** An iteration build, preview or screenshot set goes to the owner as soon as the
+  targeted tests pass. The pilot's scored review (§6) follows the owner's feedback.
+- **Opt-in.** Put pilot behaviour behind a flag or a per-item field, so the pilot build changes only
+  the pilot's cases.
+- **Own branch, kept as a reference (owner, 2026-11-15).** Keep the pilot branch as a reference.
+  Start the structural stage fresh from the base on a new branch, carrying over only the code,
+  tests and evidence the owner endorsed. Pilot tests encode the pilot design; rebuilding avoids
+  spending the structural round undoing it.
+- **End with evidence** for the owner's decision: before/after shots, counts, what broke.
+
+Structural and hardening stages use the normal bars and review schedule (§4–§6).
+
+## Stages and what to test (§1, §3)
+
+The work stages are pilot → structural → hardening:
+
+- **Pilot**: a few cases, opt-in; tests cover the pilot's own cases only (above).
+- **Structural**: the owner says go wide. One design check per fix; looser on edge cases.
+- **Hardening**: before an upstream PR opens or goes ready, or a project release, review the
+  hardening stash at normal bars. Add symptom tests, catalogue sweeps, pixel/frame tests, edge cases.
+
+Before a structural round lands on an integration branch the owner runs: the structural review
+at normal bars, Fable at round 3, no extra triage. Before an upstream PR or a project release: hardening.
+
+**Test the design, not the symptom, until hardening.** When a fix rules a bug out by construction,
+one assertion that the construction is in place is the test. Symptom tests (frame stepping, pixel
+sampling, timing, sweeps over every item) are hardening work.
+
+**30-minute flag.** An implementer that spends more than 30 minutes on one problem (the same failing
+test or symptom across 3 or more runs) flags it to the orchestrator in its report and keeps working on
+the rest. The orchestrator cuts it (defers it to hardening) or asks the owner. Put this rule in every
+implementer brief, next to: "You may use vigil, but never orchestrator mode (`orchestrator: true` /
+`--orchestrator`); that is only for the main session that talks with the user."
+
+## Estimates (§2)
+
+- Estimate from `TIMINGS.md` (or the project's equivalent) and count the runs: iterations × round trip,
+  plus builds. State the per-iteration cost ("~10 min per ephemeral compute run, 4–6 runs").
+- An iteration build's estimate holds no review rounds. Give the review loop its own line.
+- Owner deadline: plan to it. Time-box the implementer, ship what is green at the box, list the rest.
+
+## Faster iteration (§8–9)
+
+- **Many runs on ephemeral compute:** keep a checkout in one ephemeral compute sandbox for the
+  stage, so repeated runs do not upload the whole worktree. Upload once for a one-off run.
+- **Batch checks** into one run (analyze, codegen, tests). While iterating, run the targeted files only.
+- **Warm build:** start an iteration build on the base while the implementer works, so the final build
+  recompiles only the change.
+- **Shard on one ephemeral compute sandbox:** split independent test files across processes in
+  that sandbox. Keep files sharing mutable fixture state together. Give each shard its own copy of
+  the checkout (separate build and compiler caches, unique temp and database paths), stagger the
+  starts and put each under a timeout. Shards sharing one directory corrupted incremental compiler
+  caches and collided on database names; a killed test run can leave a cache half-written, so clear
+  it before rerunning.
+- **Failing files only while iterating:** rerun failing files on ephemeral compute; run the stage's
+  full gate once at the end. The pilot stage keeps its targeted scope.
+- **Keep working during a run:** run checks on ephemeral compute in the background and fix the
+  next independent failure while they run.
+- **No parallel ephemeral compute sandboxes** unless the owner sets a deadline (owner, 2026-11-15).
+  A second sandbox increases the stage's compute spend.
+
+## Handoffs under a time box (B1)
+
+Under an owner deadline, the red author may continue into green in the same run (no re-reading), unless
+its budget is low. B1 alternation resumes at the fix rounds. R2 is unchanged: no reviewer reviews code
+it wrote.

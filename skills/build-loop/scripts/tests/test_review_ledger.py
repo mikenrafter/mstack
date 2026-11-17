@@ -25,7 +25,7 @@ UM = "one agent calls it, one request at a time; input comes from the same user"
 class Ledger:
     """Drives the CLI against a temp ledger, as an agent would."""
 
-    def __init__(self, test, bar=8, extra=()):
+    def __init__(self, test, bar=8, extra=(), schema=None):
         self.dir = tempfile.TemporaryDirectory()
         test.addCleanup(self.dir.cleanup)
         self.path = str(Path(self.dir.name) / "ledger.json")
@@ -34,6 +34,15 @@ class Ledger:
             bar_args += ["--category", "test"]  # testability is 8 at explore-first prototype; the default `logic` is 9
         model = [] if any(x in extra for x in ("--threat-model", "--project-kind")) else ["--usage-model", UM]
         self.run("init", "--repo", "r", "--base", "base0", *bar_args, "--intent", "fix x", *model, *extra)
+        # why: this suite exercises the v1 schedule; v2 (schema 2) tests live in test_review_ledger_v2.py (spec R1).
+        self.set_schema(schema)
+
+    def set_schema(self, schema):
+        data = json.loads(Path(self.path).read_text())
+        data.pop("schema", None)
+        if schema is not None:
+            data["schema"] = schema
+        Path(self.path).write_text(json.dumps(data, indent=1) + "\n")
 
     def run(self, *args):
         out = io.StringIO()

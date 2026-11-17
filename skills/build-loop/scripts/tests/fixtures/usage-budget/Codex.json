@@ -1,0 +1,29 @@
+{
+  "provider_status": [
+    {
+      "provider": "Codex",
+      "last_error": null,
+      "last_attempt_at": "2026-11-15T04:00:00Z",
+      "last_success_at": "2026-11-15T04:00:00Z"
+    }
+  ],
+  "usage": [
+    {
+      "provider": "Codex",
+      "account": null,
+      "plan": "fixture",
+      "windows": [
+        {
+          "window": {
+            "Rolling": {
+              "minutes": 10080
+            }
+          },
+          "pct": 16,
+          "exceeded": false,
+          "resets_at": "2026-11-21T07:17:04Z"
+        }
+      ]
+    }
+  ]
+}

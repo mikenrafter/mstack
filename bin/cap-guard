@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+"""W49 PreToolUse pilot: warn about the Claude cap; block only by owner opt-in."""
+import importlib.machinery
+import importlib.util
+import json
+import os
+from pathlib import Path
+import signal
+import stat
+import subprocess
+import sys
+
+
+def load_checker():
+    path = os.environ.get("CAP_GUARD_CHECKER") or (
+        Path(__file__).resolve().parent.parent / "skills/build-loop/scripts/transcript-check")
+    loader = importlib.machinery.SourceFileLoader("cap_guard_transcript_check", str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    checker = importlib.util.module_from_spec(spec)
+    loader.exec_module(checker)
+    return checker
+
+
+def cap_limits():
+    """Vigil owns expiry and overrides; an unavailable CLI means the default 1/1."""
+    try:
+        result = subprocess.run(["vigil", "cap"], capture_output=True, text=True,
+                                check=True, timeout=0.5)
+        limits = json.loads(result.stdout)
+        if any(type(limits[key]) is not int or limits[key] < 1 for key in ("work", "review")):
+            raise ValueError("invalid cap")
+        return limits
+    except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError):
+        return {"work": 1, "review": 1}
+
+
+def scan_timeout(signum, frame):
+    raise TimeoutError("transcript scan exceeded 3 seconds")
+
+
+def unfinished(checker, payload, reviewer):
+    path = payload["transcript_path"]
+    info = os.stat(path)
+    if not stat.S_ISREG(info.st_mode) or info.st_size > 80 * 1024 * 1024:
+        return []
+    previous = signal.signal(signal.SIGALRM, scan_timeout)
+    signal.setitimer(signal.ITIMER_REAL, 3)
+    try:
+        events = checker.read_events(path)
+        scanned = checker.scan(events)
+        checker.resolve_ends(scanned)
+        now = (events[-1][0] + 1, 0) if events else (1, 0)
+        # PreToolUse may already have its own tool_use in the transcript.
+        # It has not launched yet and cannot consume its own slot.
+        pending = payload.get("tool_use_id")
+        return [launch for launch in scanned["launches"]
+                if not launch.voided and launch.tool_use_id != pending
+                and launch.provider == "claude" and launch.reviewer == reviewer
+                and launch.pos < now < launch.end]
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous)
+
+
+def advice(payload):
+    checker = load_checker()
+    provider, reviewer, _ = checker.classify(payload["tool_name"], payload["tool_input"])
+    if provider != "claude":
+        return None
+    live = unfinished(checker, payload, reviewer)
+    limits = cap_limits()
+    limit = limits["review" if reviewer else "work"]
+    if len(live) < limit:
+        return None
+    who = "Claude reviewer" if reviewer else "working Claude agent"
+    rule = "One Claude reviewer" if reviewer else "One working Claude agent"
+    flags = f"--work {limits['work']} --review N" if reviewer else "--work N"
+    labels = "; ".join(repr(launch.label) for launch in live)
+    text = (f"cap-guard: {len(live)} {who}(s) unfinished (cap {limit}): {labels}. "
+            f"{rule} at a time (build-loop §2); wait for one to finish, or the owner raises it "
+            f"with `vigil cap set {flags} --until T`.")
+    output = {"hookEventName": "PreToolUse", "additionalContext": text}
+    mode = Path.home() / ".config/build-loop/cap-guard-mode"
+    try:
+        block = mode.read_text().strip() == "block"
+    except (OSError, ValueError):  # missing or unreadable: warn mode
+        block = False
+    if block:
+        output.update(permissionDecision="deny", permissionDecisionReason=text)
+    return {"hookSpecificOutput": output}
+
+
+def main():
+    try:
+        output = advice(json.load(sys.stdin))
+        if output is not None:
+            print(json.dumps(output))
+    except Exception:
+        pass  # G4: a broken guard must never stop work, or emit partial advice.
+
+
+if __name__ == "__main__":
+    main()

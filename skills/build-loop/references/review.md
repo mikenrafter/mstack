@@ -1,13 +1,12 @@
 # build-loop reference: review rounds (§6a–§6d)
 
-Read this before review round 1. SKILL.md §6 has the tier table and short
-rules; this file has the full rules, briefs and ledger.
+Read before round 1. SKILL.md §6 has the tier table; this file covers rules,
+briefs and ledger.
 
 ## Ledger script
 
-`scripts/review-ledger` keeps the ledger as JSON, parses each reply, closes
-repeats, applies the caps below, and prints the next brief. Keep the ledger in
-the project's research dir or `/tmp`, never in the repo.
+`scripts/review-ledger` stores JSON rounds and findings, parses replies, closes
+repeats, applies caps and prints briefs. Keep ledgers outside the repo.
 
 ```sh
 RL=<skill dir>/scripts/review-ledger; LED=/tmp/<change>.ledger.json
@@ -15,16 +14,22 @@ $RL -l $LED init --repo <abs path> --base <sha> --intent "..." --checks "..." \
     --threat-model "<FILE|TEXT: Reach, Untrusted, Holds lines>" | --project-kind <kind> \
     [--shape <shape> | <declared facts>] [--stage prototype|beta|production] [--category logic]
 $RL -l $LED brief > brief.txt          # send to the reviewer
-$RL -l $LED round --tier 1 --reviewer sol --sha <reviewed sha> --reply reply.txt
+$RL -l $LED round --tier 1 --reviewer sol --author sonnet --sha <reviewed sha> --reply reply.txt
 $RL -l $LED outcome S3 fixed|disagree|declined|pre-existing --evidence "file:line ..."
-$RL -l $LED next                       # ROUND | CHECKPOINT | STEP-BACK | STOP-AGREED | STOP-STUCK
+$RL -l $LED next                       # ROUND | ARGUE | CHECKPOINT | NIT-CULL | STEP-BACK | FIX-KEPT | STOP-*
 $RL -l $LED checkpoint                 # after you answered §6c
+$RL -l $LED owner-ok "<quote>"          # owner's pilot-build thumbs-up
 $RL -l $LED new-approach               # after a step-back changed the approach
 $RL -l $LED status                     # rounds, findings, next step (for the hand-off)
 $RL -l $LED stash                      # nit stash (from the checkpoint); hardening stash (once opened)
 $RL -l $LED hardening [--from <ledger>]  # open the hardening phase (new rounds, full brief)
 $RL -l $LED threat-model --confirm     # the owner confirmed an inferred threat model
 ```
+
+Argument minimums and focus: `dialogue.md`.
+
+Who reviews which round, `--author`, `argue`, `cull`: `review-v2.md`. The text
+below is the legacy (no `schema`) schedule where it names Sol rounds.
 
 `next` is advice from the counts. You still verify every `needed for bar: yes`
 finding against the source, and your own concerns still block.
@@ -45,9 +50,7 @@ a 9; a PR with one finding can be a 6, and that one matters more.
   meets its own bar. Rules in `references/bars.md`.
 - Every finding says `needed for bar: yes|no` (would the score reach its bar
   with this one left as is?) and may name its `[concern: x]`. Only `yes` findings must be fixed in this PR.
-  `no` findings are fixed only when the fix is trivially right and inside the
-  diff, never in a commit of their own; otherwise decline in one line or
-  list as follow-up.
+  `no` findings go to the feature's `HARDENING-STASH`; do not fix them this round.
 - A score is the reviewer's claim, not a pass. You still check every `yes`
   finding against the source, and your own concerns still block.
 
@@ -56,7 +59,7 @@ a 9; a PR with one finding can be a 6, and that one matters more.
 - **Round 1** reviews the whole diff from the recorded base.
 - **Round 2 on: diff-only.** Commit before each round and record the
   reviewed SHA. Later rounds see `git diff <last-reviewed-sha>`, the ledger,
-  and only the still-open ids. Not the whole diff again.
+  and only the still-open ids.
 - **No repeats.** The reviewer gets the ledger and must not re-raise a
   resolved or declined id without new evidence; a repeat is closed unactioned.
 - **Flag the class.** Each finding names its class and lists every instance
@@ -68,26 +71,26 @@ a 9; a PR with one finding can be a 6, and that one matters more.
   threat model (who does what, how often); a security finding needs an attacker
   it includes. Without one it goes under `HARDENING-STASH:`. While a blocker or
   should is open, nits go under `NIT-STASH:`. The brief hides both. Hardening
-  opens only in its own phase (stage rise, or `review-ledger hardening`).
+  opens in its own phase (`review-ledger hardening`), at normal bars, before an
+  upstream PR opens/goes ready or a project release. Owner-run integration branches
+  need only structural review, Fable at round 3, no extra triage.
 - **Cap and step back.** Tier 1 has at most 3 rounds. If round 3 is still
   below the bar, do not run a fourth on the same approach. Ask the reviewer for
   one step-back reply instead: is the approach wrong, is there a smaller
   design, should the PR split? Bring it to the user with your view if it
   changes scope. A changed approach starts over at round 1 (hard cap: 5 tier-1
   rounds per phase). The user can always ask for more.
-- **Stop early** when a round reaches the bar. Declined nits and comment, doc
-  or format-only fixes need no new round.
-- One reviewer at a time. It must not start subagents or reviewers.
+- **Stop early** at the bar. Declined nits and comment, doc or format-only fixes need no new round.
+- One reviewer at a time, no subagents.
 
 **Do not edit scoped files while a round runs.** Wait for the reply. Do not
-poll or start a second reviewer. A timeout, error or no reply is NOT
-approval: on failure, cancel, verify it stopped, restart with the ledger.
+poll or start a second reviewer. A timeout or error is NOT
+approval: cancel, verify it stopped, restart with the ledger.
 
 **Ledger.** One row per finding: id, round, class, severity, needed-for-bar,
 outcome (fixed / disagree / declined / pre-existing), evidence. Plus one row
-per round: reviewer, reviewed SHA, score. Record reviewer model and effort
-only if the tool exposes them. Never guess usage. Never hardcode a model ID in
-a skill, prompt template or report; say "<latest Sol model>".
+per round: reviewer, reviewed SHA, score. Record reviewer model and effort if exposed. Never hardcode a model ID in a skill, prompt
+template or report; say "<latest Sol model>".
 
 **Brief (round 1, either tier).** `review-ledger brief` prints it: review-only
 rules, repo, base, intent, bar with shape and stage, per-concern bars, the threat
@@ -111,7 +114,7 @@ HARDENING-STASH:
 **Later rounds.** Send the round-1 brief, the ledger, `git diff
 <last-reviewed-sha>`, and the open ids. Tell the reviewer: mark each open id
 `resolved` or `still open: <reason>`; raise new findings only on the new diff
-or with new evidence; do not repeat ledger items.
+or with new evidence.
 
 **Tier 2 brief.** The round-1 brief plus the full ledger with outcomes, and:
 "Tier 1 reached <score>. Do not re-raise ledger items. Look for what tier 1
