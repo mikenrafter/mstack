@@ -57,7 +57,7 @@ Use ordinary Markdown list items beginning with exactly one visible label: `- Ex
 Structured metadata is optional for guidance. An eligible requirement also needs one trailing JSON comment named `residual-review-v1`. This uses the existing `serde_json` dependency and avoids introducing a general YAML parser. For example, the following is an illustrative fixture, not a statement about residual's own contributor policy:
 
 ```markdown
-- Explicit requirement: Keep regression tests with the behavior they establish. [Guide](CONTRIBUTING.md#tests).
+- Explicit requirement: Keep regression tests with the behavior they establish. Guide (external project guide; not included).
   <!-- residual-review-v1 {"id":"tests-with-behavior","project":"github:example/project","reviewer":"maintainer","scope":{"kind":"repository"},"checked":"2026-11-10","sources":[{"href":"CONTRIBUTING.md#tests","kind":"guide","dated":null,"sha256":"<complete-file-digest>"}]} -->
 - Owner observation: The owner reports a warning range around 6,000 to 8,000 changed lines. This is guidance.
 - Uncertain inference: Smaller concern-specific changes may receive quicker review. No size ceiling is established.

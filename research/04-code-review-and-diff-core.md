@@ -15,7 +15,7 @@ Researched on 2026-11-10. Grades follow [BRIEF.md, inspected 2026-11-10](BRIEF.m
 
 I inspected `/home/mini/Documents/repos/diff-core`, including `residual/research`, `docs`, and `eval`, and `/home/mini/Documents/repos/residual-cli`, including `research` and `docs`. Both contain directory skeletons but zero files, including their `.git` trees. Git reports that neither is a repository. No README, design, evaluation corpus, or implementation could be read. This is a stronger local limitation than merely missing the latest rewrite. The [brief](BRIEF.md) also identifies offline void as the location of newer drafts and transcripts. I cannot say which recommendations already exist there.
 
-Available context consists of your requested direction, the [local skill collection](../../../scout-modules/agent-integration/skills/), and the developing [moldable-development companion](03-moldable-development.md), all inspected on 2026-11-10. The recommendations below specify proposed contracts, not changes to verified existing interfaces.
+Available context consists of your requested direction, the [local skill collection](../skills/), and the developing [moldable-development companion](03-moldable-development.md), all inspected on 2026-11-10. The recommendations below specify proposed contracts, not changes to verified existing interfaces.
 
 ### Keep the denominators separate
 
@@ -182,15 +182,15 @@ Use one primary review by default, then escalate for uncertain findings or chang
 
 The local procedures below are **C for their inspectable workflow, D for effectiveness that has not been measured here**.
 
-Your [build-loop skill and review reference, inspected 2026-11-10](../../../scout-modules/agent-integration/skills/build-loop/references/review.md) already define stable finding IDs, scored bars, incremental review, scope control, a ledger, and capped rounds. They use sequential tiers and an explicit stopping policy. Browne's council uses three providers in parallel and satisfaction-based repetition. Keep your bounded ledger while testing whether provider diversity earns its cost. Neither procedure currently supplies controlled evidence of its local benefit.
+Your [build-loop skill and review reference, inspected 2026-11-10](../skills/build-loop/references/review.md) already define stable finding IDs, scored bars, incremental review, scope control, a ledger, and capped rounds. They use sequential tiers and an explicit stopping policy. Browne's council uses three providers in parallel and satisfaction-based repetition. Keep your bounded ledger while testing whether provider diversity earns its cost. Neither procedure currently supplies controlled evidence of its local benefit.
 
-Your [question-everything skill, inspected 2026-11-10](../../../scout-modules/agent-integration/skills/question-everything/SKILL.md) moves clarification, lifecycle analysis, reuse, and spec review before implementation. That gives the story layer a source of original intent. Import those decisions with provenance instead of reconstructing all rationale from the final diff.
+Your [question-everything skill, inspected 2026-11-10](../skills/question-everything/SKILL.md) moves clarification, lifecycle analysis, reuse, and spec review before implementation. That gives the story layer a source of original intent. Import those decisions with provenance instead of reconstructing all rationale from the final diff.
 
-Your [technical-excellence skill, inspected 2026-11-10](../../../scout-modules/agent-integration/skills/technical-excellence/SKILL.md) explicitly asks for deep modules, information hiding, rich interfaces, claims, types, and threat models. These are richer criteria than a generic bug-comment list. Preserve them as inspectable questions and evidence links; their presence in a skill does not validate automatic scoring.
+Your [technical-excellence skill, inspected 2026-11-10](../skills/technical-excellence/SKILL.md) explicitly asks for deep modules, information hiding, rich interfaces, claims, types, and threat models. These are richer criteria than a generic bug-comment list. Preserve them as inspectable questions and evidence links; their presence in a skill does not validate automatic scoring.
 
-Your [test-quality skill, inspected 2026-11-10](../../../scout-modules/agent-integration/skills/test-quality/SKILL.md) emphasizes independent oracles, mutation checks, and tests that state why they exist. Use those distinctions in the claim map. A green test badge alone hides whether a test proves the story's claim.
+Your [test-quality skill, inspected 2026-11-10](../skills/test-quality/SKILL.md) emphasizes independent oracles, mutation checks, and tests that state why they exist. Use those distinctions in the claim map. A green test badge alone hides whether a test proves the story's claim.
 
-Your [bot-triage reference, inspected 2026-11-10](../../../scout-modules/agent-integration/skills/build-loop/references/bots.md) separates bugs, edges, taste, wrong findings, and pre-existing issues. Reuse that outcome vocabulary and preserve reasons. **C as a concrete local procedure; D for unmeasured effectiveness.** Your reports can then measure disagreement and attention cost without equating every declined suggestion with a false positive.
+Your [bot-triage reference, inspected 2026-11-10](../skills/build-loop/references/bots.md) separates bugs, edges, taste, wrong findings, and pre-existing issues. Reuse that outcome vocabulary and preserve reasons. **C as a concrete local procedure; D for unmeasured effectiveness.** Your reports can then measure disagreement and attention cost without equating every declined suggestion with a false positive.
 
 ## Candidate actions
 

@@ -293,15 +293,15 @@ Measure the whole cost, including extraction, failed queries, repair, and source
 
 These comparisons use repository skills inspected on 2026-11-10. The skills are local instructions, not evidence that the workflow produces particular outcomes.
 
-Your [question-everything](../../../scout-modules/agent-integration/skills/question-everything/SKILL.md) already makes questions, missing states, and explicit unknowns part of design. Moldable practice suggests preserving executable ways to answer those questions. The prototype should carry its questions into descriptors and expose partial, refused, and stale states.
+Your [question-everything](../skills/question-everything/SKILL.md) already makes questions, missing states, and explicit unknowns part of design. Moldable practice suggests preserving executable ways to answer those questions. The prototype should carry its questions into descriptors and expose partial, refused, and stale states.
 
-Your [technical-excellence](../../../scout-modules/agent-integration/skills/technical-excellence/SKILL.md) connects claims to sources and proof through stable IDs. Make those IDs navigable in views, with independent evidence behind them. This provides more structure than an automatically narrated graph whose assertions cannot be traced.
+Your [technical-excellence](../skills/technical-excellence/SKILL.md) connects claims to sources and proof through stable IDs. Make those IDs navigable in views, with independent evidence behind them. This provides more structure than an automatically narrated graph whose assertions cannot be traced.
 
-Your [test-quality](../../../scout-modules/agent-integration/skills/test-quality/SKILL.md) requires independent expectations and mutation checks. That addresses a weakness of exploratory examples: assertions can accidentally bless observed behavior. Preserve your standard when adding inspectable outputs. A generated view and its extractor cannot serve as each other's only oracle.
+Your [test-quality](../skills/test-quality/SKILL.md) requires independent expectations and mutation checks. That addresses a weakness of exploratory examples: assertions can accidentally bless observed behavior. Preserve your standard when adding inspectable outputs. A generated view and its extractor cannot serve as each other's only oracle.
 
-Your [rg-implement](../../../scout-modules/agent-integration/skills/rg-implement/SKILL.md) and [build-loop](../../../scout-modules/agent-integration/skills/build-loop/SKILL.md) specify red tests and verification gates. Example-driven exploration can precede a settled assertion; that differs from the prescribed red-first sequence. Keep exploration explicitly marked as discovery, then run your existing gates once the claim is defined. Views can support reviewers between phases, but they do not establish that those gates are unnecessary.
+Your [rg-implement](../skills/rg-implement/SKILL.md) and [build-loop](../skills/build-loop/SKILL.md) specify red tests and verification gates. Example-driven exploration can precede a settled assertion; that differs from the prescribed red-first sequence. Keep exploration explicitly marked as discovery, then run your existing gates once the claim is defined. Views can support reviewers between phases, but they do not establish that those gates are unnecessary.
 
-Your [tea](../../../scout-modules/agent-integration/skills/tea/SKILL.md) already preserves otherwise-lost pipeline input. A moldable wrapper could link a command, captured bytes, parsed records, and the question that caused the analysis. Reuse that capture instead of rerunning an expensive operation. Your [host rules](../../../AGENTS.md) also favor bounded segments: Nix views must respect host-specific evaluation and resource limits.
+Your tea (private source; not included) already preserves otherwise-lost pipeline input. A moldable wrapper could link a command, captured bytes, parsed records, and the question that caused the analysis. Reuse that capture instead of rerunning an expensive operation. Your host rules (private evidence; not included) also favor bounded segments: Nix views must respect host-specific evaluation and resource limits.
 
 ## Candidate actions
 
@@ -339,7 +339,7 @@ Dates below are publication dates where available. "Undated" means the source ex
 - [React DevTools for agents][reactagents], experimental documentation, undated.
 - [Effect v3 type model][effect] and [expected errors][effecterrors], undated, version-specific documentation.
 - [Cargo metadata][cargo], [rustdoc-types][rustdoctypes], and [docs.rs JSON][rustdocjson], undated. The last source states JSON hosting began 2025-05-23.
-- Local [brief](BRIEF.md), [AGENTS.md](../../../AGENTS.md), and skills linked above, inspected 2026-11-10. Requested sibling project files were unavailable.
+- Local [brief](BRIEF.md), AGENTS.md (private evidence; not included), and skills linked above, inspected 2026-11-10. Requested sibling project files were unavailable.
 
 [inspector]: https://scg.unibe.ch/archive/papers/Chis15a-MoldableInspector.pdf
 [exemplifying]: https://scg.unibe.ch/archive/papers/Chis16b-ExemplifyingMoldableDevelopment.pdf

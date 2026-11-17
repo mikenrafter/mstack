@@ -128,16 +128,16 @@ main { min-width: 0; padding-block: 2.5rem 5rem; padding-left: max(16px, env(saf
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
 <script>
 const SECTIONS = [
-  { id: "s00", file: "md/00-index.md", no: "00", title: "Start here", group: "Overview" },
-  { id: "s01", file: "md/01-research-literature.md", no: "01", title: "What the research shows", group: "Agentic practice" },
-  { id: "s02", file: "md/02-practitioners.md", no: "02", title: "Practitioners and their data", group: "Agentic practice" },
-  { id: "s06", file: "md/06-usage-claude.md", no: "06", title: "Your Claude Code usage", group: "Your data" },
-  { id: "s07", file: "md/07-usage-codex.md", no: "07", title: "Your Codex usage", group: "Your data" },
-  { id: "s03", file: "md/03-moldable-development.md", no: "03", title: "Moldable development and a view spec", group: "Tooling" },
-  { id: "s04", file: "md/04-code-review-and-diff-core.md", no: "04", title: "AI code review and diff-core", group: "Tooling" },
-  { id: "s05", file: "md/05-classic-engineering.md", no: "05", title: "Classic engineering texts", group: "Craft and career" },
-  { id: "s08", file: "md/08-career-communication.md", no: "08", title: "Communication and career", group: "Craft and career" },
-  { id: "s09", file: "md/09-cross-check.md", no: "09", title: "Cross-check and corrections", group: "Verification" },
+  { id: "s00", file: "../00-index.md", no: "00", title: "Start here", group: "Overview" },
+  { id: "s01", file: "../01-research-literature.md", no: "01", title: "What the research shows", group: "Agentic practice" },
+  { id: "s02", file: "../02-practitioners.md", no: "02", title: "Practitioners and their data", group: "Agentic practice" },
+  { id: "s06", file: "../06-usage-claude.md", no: "06", title: "Your Claude Code usage", group: "Your data" },
+  { id: "s07", file: "../07-usage-codex.md", no: "07", title: "Your Codex usage", group: "Your data" },
+  { id: "s03", file: "../03-moldable-development.md", no: "03", title: "Moldable development and a view spec", group: "Tooling" },
+  { id: "s04", file: "../04-code-review-and-diff-core.md", no: "04", title: "AI code review and diff-core", group: "Tooling" },
+  { id: "s05", file: "../05-classic-engineering.md", no: "05", title: "Classic engineering texts", group: "Craft and career" },
+  { id: "s08", file: "../08-career-communication.md", no: "08", title: "Communication and career", group: "Craft and career" },
+  { id: "s09", file: "../09-cross-check.md", no: "09", title: "Cross-check and corrections", group: "Verification" },
 ];
 const nav = document.getElementById("nav"), sel = document.getElementById("section-select");
 let lastGroup = null;

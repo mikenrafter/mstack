@@ -1,51 +1,71 @@
-<!-- DRAFT: the first five paragraphs below (the ethos) were drafted by an agent from the owner's decisions in research/PLAN.md. They await the owner's edit. Delete this comment when they are final. -->
 # mstack
+
+Skills, helper scripts and research from my work with coding agents. Start with a skill you need, or read the [research index](research/00-index.md) for the evidence and its limits.
+
+This first release publishes the workflow snapshot collected on 2026-11-12. It includes 13 skills and two Python helper scripts. The skills encode my own tools, hosts and preferences; adapt those assumptions before using them. The workflow continues to change, and this snapshot is behind the versions I currently run.
+
+## How I approach agent work
 
 People say agent work is more art than science. I read that as science nobody has worked out yet, which makes it a list of open questions and a reason to keep measuring. This repo holds what I have so far: the skills I run coding agents with, and the research I did to see where my habits match published evidence and where they have none. Every claim in the research carries a grade from A, a controlled study, to D, opinion. The research index says outright that no result in it measures my escaped defects, production impact or learning.
 
 A review bar fixed for the whole life of a project does damage. One of my tools spent eight review rounds on concurrency races that no real user would hit for a long time, while it was still a prototype. So the bars here follow the project. Early on they run high on whether the thing fits its purpose, on architecture that is expensive to change later, on security boundaries and on test quality, and low on concurrency hardening, performance and polish. Once the project has users and stored data, the curve flips. Maturity is judged per region of the code, and I can override what the tool computes.
 
-I test practices against things that really happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. Security gets a written threat model for each project, covering who can reach it, what strangers can feed it and what it holds, and findings are weighed against that model. Two agents sending the same request in the same millisecond goes on a list for the hardening phase.
+I want to test practices against things that really happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. Security gets a written threat model for each project, covering who can reach it, what strangers can feed it and what it holds, and findings are weighed against that model. Two agents sending the same request in the same millisecond goes on a list for the hardening phase.
 
 Views of code should produce insight. A component earns its place by answering a question about the code that the reader would otherwise guess at, and decoration gets cut. The record of a decision keeps its dead ends, because the paths I dropped explain the one I took. I want views to make tests, invariants and their coverage visible, so that a wrong change looks wrong. paneweft, linked below, is where I try this, starting from the moldable development ideas in Glamorous Toolkit.
 
-I also work under two limits, money and my own attention. Keepalive ticks alone drove about a quarter of my estimated Claude spend in the data I measured, so I run one working subagent at a time, push heavy builds to cloud sandboxes, and plan to move work to another model provider when a usage window runs low. For attention, the build loop is meant to teach me in short lessons at phase boundaries, and a pull request ends with an agent asking me ten questions, so I can keep up with code I did not type. Nothing reaches outside this machine without my approval. No issues, forks, pull requests or posts go out on an agent's own initiative, and this repo stays local until I say otherwise.
+I also work under two limits, money and my own attention. Keepalive ticks alone drove about a quarter of my estimated Claude spend in the data I measured, so I run one working subagent at a time, push heavy builds to cloud sandboxes, and plan to move work to another model provider when a usage window runs low. For attention, I want short lessons at build-loop phase boundaries and ten questions before a pull request ships, so I can keep up with code I did not type. Those teaching steps remain planned work. Agents need my approval before opening issues, forks, pull requests or posts.
 
-## For agents
+## Try a skill
 
-This repo is the home for the owner's agentic workflow: skills, the research behind them, and the plan that tracks what is next. Read this section, then the skill that matches your task.
+Clone the repository, then ask your coding agent to read the relevant `SKILL.md` and its referenced files:
 
-### Layout
+```sh
+git clone https://github.com/mikenrafter/mstack.git
+cd mstack
+```
 
-- `skills/` holds 13 skills in the [agentskills.io](https://agentskills.io) format, one directory each with a `SKILL.md`. `skills/build-loop/` also has `scripts/` (`review-ledger`, `bot-triage`) and their tests.
-- `research/` holds the numbered research docs (`00-index.md` first), `PLAN.md` (the workstream table with owner decisions), `BRIEF.md` (conventions the research followed), and `15-bars-by-maturity-spec.md`. `research/site/index.html` is a rendered dossier of the same material.
-- `related.md` lists the neighbouring repos.
+| If you need to… | Start with |
+|---|---|
+| Question a feature before building it | [question-everything](skills/question-everything/SKILL.md) |
+| Assess whether tests prove useful behavior | [test-quality](skills/test-quality/SKILL.md) |
+| Review interfaces, naming and design | [technical-excellence](skills/technical-excellence/SKILL.md) |
+| Run a phased implementation and review | [build-loop](skills/build-loop/SKILL.md) |
+| Write plainly | [plain-writing](skills/plain-writing/SKILL.md) and [unslop](skills/unslop/SKILL.md) |
 
-### How the skills are installed today
+Copy an entire skill directory if you install it into your agent's skill directory. `build-loop` needs its `references/` and `scripts/` subdirectories. Referenced companion skills must also be available. Installation paths and tool names vary by agent.
 
-These are copies. [phoe-nix](https://github.com/mikenrafter/phoe-nix) keeps the originals in `scout-modules/agent-integration/skills/` and installs them into each agent CLI (Claude Code, Codex and others) through kasetto (KST). Until the owner says otherwise, edit the phoe-nix copy and treat this repo as a mirror. A change made only here will not reach any agent.
+`build-loop` assumes specific model roles and T3 Code orchestration tools. `boat`, `low-ram-hosts`, `vigil`, `manual-keepalive` and `uw-agent` describe my own environment. The `boat-run` wrapper, qex executable, NixOS installation hooks and usagewindow service are not bundled. Reading a skill does not install those tools.
 
-### The main workflow
+## Helper scripts
 
-Use `build-loop` for any multi-phase feature. An orchestrator writes the spec and red tests, a cheaper implementer writes the code, a scored review loop fixes findings, and one fresh pass reviews the stable result. The companions are `question-everything` (interrogate the spec before code), `technical-excellence` (design and code standards), `test-quality` (what a test is worth) and `vigil` (stay alive while work runs; `manual-keepalive` is the backup). `rg-implement` is the smaller single-model red/green variant. After any context compaction, reread `build-loop` and `vigil` before doing anything else.
+The build-loop scripts use Python 3 and its standard library. Git is needed for ledger operations on repositories; live bot triage also needs an authenticated GitHub CLI (`gh`). `review-ledger` maintains review state and briefs; `bot-triage` tracks review-bot findings. Inspect their commands with:
 
-`low-ram-hosts` and `boat` cover where heavy work runs. `uw-agent` covers compaction and resume against a usage limit. `plain-writing` and `unslop` apply to all prose you write.
+```sh
+python3 skills/build-loop/scripts/review-ledger --help
+python3 skills/build-loop/scripts/bot-triage --help
+python3 -I -m unittest discover -s skills/build-loop/scripts/tests
+```
 
-Run the build-loop script tests with `python3 -I -m unittest discover -s skills/build-loop/scripts/tests`. They were copied together with the scripts; confirm they pass here before relying on them.
+The initial publication passed all 158 helper-script tests. These tests check the scripts, not whether the workflow improves software outcomes.
 
-### Rules of conduct
+## Research and open work
 
-- Do not open issues, forks, pull requests, discussions or any other outreach without the owner's explicit approval (`skills/no-unsolicited-upstream`). A draft in chat is fine.
-- This repo is local only. Do not push it or create a remote.
-- Write plainly. Load `plain-writing` and `unslop` before writing prose a person will read.
-- Keep private data out. Readwise highlights, third-party transcripts, session logs and handoff notes were left out on purpose and stay in phoe-nix.
-- Research docs follow `research/BRIEF.md`: cite sources with dates, grade evidence A to D, mark anything unverified.
-- Future research directions are filed under `research/`. Open ones are listed in `research/PLAN.md` (W40, veil against jj for landing many agent changes, has its first write-up in `research/16-veil-vs-jj.md`).
+[research/00-index.md](research/00-index.md) starts the literature review and analysis of my own agent usage. Evidence is graded A through D, from controlled studies to opinion. My usage analysis covers one person on one host; it does not establish reductions in escaped defects or improvements in learning. Raw transcripts, private usage artifacts and Readwise material are excluded. Citations to those artifacts are marked as private evidence unavailable in this release.
 
-### Not included
+[RELEASE.md](RELEASE.md) separates publication checks from the open research questions. [research/PLAN.md](research/PLAN.md) preserves the dated workstream plan, including work in other repositories. Its queued items are not promises for this release. [Related projects](related.md) lists the neighboring tools.
 
-The research docs link to `data/` (usage analysis scripts and session extracts) and to the Readwise-derived upskilling material. Those links are dead here on purpose.
+`research/site/index.html` is an optional dossier reader for sections 00–09. It fetches sibling Markdown files and external rendering libraries, so it needs HTTP hosting and network access. The Markdown files are the primary reading path.
 
-### License
+## For agents and contributors
 
-None yet. The owner decides. Until then, treat the contents as all rights reserved and do not redistribute them.
+- Treat this repository as a dated publication snapshot. The live originals are maintained in `scout-modules/agent-integration/skills/` in my private phoe-nix repository. Edits here do not update my installed agents. Moving the canonical source and creating a repeatable export remain open work.
+- Read the matching skill and its companions before applying a workflow. User instructions and available tools determine what can actually run.
+- Do not open issues, forks, pull requests, discussions or other outreach without the owner's explicit request. See [no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md).
+- Keep transcripts, credentials, personal highlights and session handoffs out of this repository.
+- For research, follow [BRIEF.md](research/BRIEF.md): date sources, grade evidence and mark unverified claims.
+- Keep changes focused and report the checks actually run. Run the helper-script tests when changing those scripts.
+
+## License
+
+[MIT](LICENSE), copyright 2026 Tyler Slaughter. The license covers original material in this repository. Cited publications and third-party material retain their own rights.

@@ -121,7 +121,7 @@ Gate the whole instrumentation impl or module with `cfg(feature = "paneweft")`. 
 
 ### TypeScript declarations
 
-TypeScript interfaces disappear at runtime. Use an explicit `defineType<T>()` token with a stable type ID and source reference. `inspect(value, TypeToken)` works for plain records without modifying their shape or guessing their type from property names. A class can implement `Inspectable` through a symbol method, `[paneweftViews](context)`, returning the same registered definitions. A future `@view` decorator is syntax sugar over those definitions, not a separate discovery system. Standard and legacy TypeScript decorators differ; the first SDK should avoid imposing either on a project. [TypeScript 5.0 decorator documentation, undated, accessed 2026-11-11](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html).
+TypeScript interfaces disappear at runtime. Use an explicit `defineType<T>()` token with a stable type ID and source reference. `inspect(value, TypeToken)` works for plain records without modifying their shape or guessing their type from property names. A class can implement `Inspectable` through a symbol method, ``paneweftViews``, returning the same registered definitions. A future `@view` decorator is syntax sugar over those definitions, not a separate discovery system. Standard and legacy TypeScript decorators differ; the first SDK should avoid imposing either on a project. [TypeScript 5.0 decorator documentation, undated, accessed 2026-11-11](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html).
 
 ContainMarks already has `ContainerMappingRecord` with the three fields below. This proposed sibling module, `src/mappings/containerMappings.paneweft.ts`, is imported only by tests and an optional development entry point. It needs no Firefox process or API mocks to present an existing record.
 
@@ -361,7 +361,7 @@ Use expected values derived from the question and a small reviewed fixture. Do n
 
 Keep reviewed structure goldens for a few representative browser and text renderings. Verify selected fields, target identity, empty/partial/error states, and keyboard navigation. Normalize only capture timestamps and opaque IDs in goldens, preserving their relationships. Custom renderer tests assert labels and the actual `open_object` message for an item. The host checks text and browser selection against one literal captured graph.
 
-During review, perform a few focused mutations: drop an event, merge duplicate keys, swap mapping fields, or remove the manifest import. The relevant test must fail. Record the mutation and failing test in the verification report, then revert the mutation. These checks fit the owner's [test-quality](../../../scout-modules/agent-integration/skills/test-quality/SKILL.md) and [technical-excellence](../../../scout-modules/agent-integration/skills/technical-excellence/SKILL.md) requirements for independent expectations and cited claims.
+During review, perform a few focused mutations: drop an event, merge duplicate keys, swap mapping fields, or remove the manifest import. The relevant test must fail. Record the mutation and failing test in the verification report, then revert the mutation. These checks fit the owner's [test-quality](../skills/test-quality/SKILL.md) and [technical-excellence](../skills/technical-excellence/SKILL.md) requirements for independent expectations and cited claims.
 
 ### The agent skill to ship
 
@@ -402,7 +402,7 @@ actual provenance. Never replace a broken existing SDK view with hand-written
 observed results. Repair the view or report its failure.
 ```
 
-When the owner uses [build-loop](../../../scout-modules/agent-integration/skills/build-loop/SKILL.md), include the question, type IDs, IV claims, and independent output tests in its spec/red review. Implement in bounded phases, verify between them, then include source diff, collection evidence, text/browser results, stale checks, and stripping evidence in code review. Apply its normal tiered review and ledger rules. A beautiful view is not a reason to waive the assertion-based red gate. This design task does not start that implementation workflow or its agents.
+When the owner uses [build-loop](../skills/build-loop/SKILL.md), include the question, type IDs, IV claims, and independent output tests in its spec/red review. Implement in bounded phases, verify between them, then include source diff, collection evidence, text/browser results, stale checks, and stripping evidence in code review. Apply its normal tiered review and ledger rules. A beautiful view is not a reason to waive the assertion-based red gate. This design task does not start that implementation workflow or its agents.
 
 ### Exactly when JSON is the fallback
 
