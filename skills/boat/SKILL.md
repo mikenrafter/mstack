@@ -75,9 +75,32 @@ example `| python3 -c 'import json,sys; d=json.loads(sys.stdin.readline()); prin
   `holdsCreatorLogins` in `info` shows whether account logins are on it; a
   sandbox made with `--no-env` has none.
 - **Costs.** Stop a sandbox when the work is done. Create one only when the
-  task needs it; never delete one unless the user asks. Sandboxes owned by
-  another project or session are theirs: check (`boat exec <id> -- ps`) before
-  touching one, and never stop one that is busy.
+  task needs it. Delete stopped sandboxes you created once nothing needs them,
+  so they don't pile up. Sandboxes owned by another project or session are
+  theirs: check (`boat exec <id> -- ps`) before touching one, and never stop
+  one that is busy.
+
+## Disk, starts and credit (owner, 2026-11-18)
+
+- **40 GB cap.** When a sandbox's used disk passes 40 GB, start a fresh one
+  from a small saved snapshot and stop the old one. Never save a snapshot over
+  40 GB: a 49 GB saved snapshot stopped hydrating (stuck in phase `sysdelta`,
+  even `echo` timed out), while a 3 GB one was ready in ~10 s. Keep saved
+  snapshots to what runs need: toolchains and package caches, not build
+  output, run directories or checkouts.
+- **Starts.** New sandboxes use the daily start budget (`boat billing status`:
+  `limits.starts.day`). While under 50% of it is used, start fresh sandboxes
+  freely and don't spend effort cleaning inside them. From 50% on, reuse your
+  sandboxes and clean inside them after each run (old run directories,
+  finished build output, temp databases, logs already downloaded), harder past
+  ~25 GB used. Always keep at least 50 starts in reserve for the day; reuse or
+  wait rather than go below it.
+- **Credit after the plan runs out.** When the plan's included hours are used
+  up, starts draw from the prepaid pack or wallet: check `creditBalanceHours`
+  and `canStart` in `boat billing status` before calling Boat empty. Plan-hours
+  counters alone undercount.
+- **Sign-in.** `boat login` starts a new browser sign-in and signs the CLI out
+  until it completes. Never run it from an agent; ask the user.
 
 ## Spend: cheap by default, fast under a deadline
 
