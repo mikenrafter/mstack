@@ -86,7 +86,8 @@ Do this first, in order:
 
 0. **Scope.** Ask: a pilot (a few cases, gather data, then decide), a
    structural fix, or hardening? Default: pilot; ask inline and
-   keep working (§1a). A pilot gets its own branch and stays a reference; the
+   keep working (§1a). A pilot gets its own `pilot/<topic>` branch and stays a
+   reference (pilots may share a branch on request); the
    structural round starts fresh. Pilot rules: `references/scoping.md`. Until hardening,
    test the design, not the symptom; every implementer brief carries the 30-minute flag and "never vigil orchestrator mode".
 1. **Simpler alternative.** Does a simpler way exist (do less, reuse, change

@@ -51,6 +51,12 @@ question when the kind is obvious.
   Start the structural stage fresh from the base on a new branch, carrying over only the code,
   tests and evidence the owner endorsed. Pilot tests encode the pilot design; rebuilding avoids
   spending the structural round undoing it.
+- **Shared pilot branch, on request (owner, 2026-11-18).** Several pilots may share one branch
+  (`pilot/<a>+<b>`) to reuse pieces both need; two day-timeline adjustments piloted separately
+  duplicated one shared timeline change. Not the default: when two or more pilots are still being
+  evaluated, or are requested around the same time, and they overlap, ask the owner inline
+  (default: separate branches) before starting. Each pilot on a shared branch keeps its own
+  opt-in, its own red tests and its own report section.
 - **End with evidence** for the owner's decision: before/after shots, counts, what broke.
 
 Structural and hardening stages use the normal bars and review schedule (§4–§6).
