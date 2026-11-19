@@ -47,10 +47,18 @@ def advice(tokens, session_id):
         "after a PR lands, or between review rounds. First make sure every decision and "
         "open question is in a file or the ledger, not only in this conversation. "
         "Running subagents and peers are unaffected by compaction. "
-        f"Then run `uw-agent compact ask {session_id} --reason \"<boundary "
-        "and what comes next>\"`. If you are mid-step, finish the step first. Hooks re-load "
-        "standing rules after compaction; reread the skills you were using."
+        f"{how_to_compact(session_id)} If you are mid-step, finish the step first. Hooks "
+        "re-load standing rules after compaction; reread the skills you were using."
     )
+
+
+def how_to_compact(session_id):
+    thread = os.environ.get("T3CODE_THREAD_ID")
+    if thread:
+        return (f"Then send `/compact next: <what comes next>` to your own thread with "
+                f"`t3_thread_send` (threadId {thread}, mode queue) and end the turn.")
+    return (f"Then run `uw-agent compact ask {session_id} --reason \"<boundary "
+            "and what comes next>\"`.")
 
 
 def main():

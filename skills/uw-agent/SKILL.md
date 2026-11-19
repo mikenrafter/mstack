@@ -24,14 +24,27 @@ are active and you cannot tell which is yours, ask the user.
 
 ## Compact
 
+In T3 Code, compact yourself natively: send `/compact` to your own thread with
+the T3 tool `t3_thread_send`, `mode: "queue"`. Your thread id is in
+`$T3CODE_THREAD_ID`. Text after the command steers the summary:
+`/compact next: <first step after the boundary>`. The command runs as soon as
+your turn ends, so end the turn after sending it.
+
+Outside T3 Code, ask usagewindow instead. Delivery waits for its next policy
+pass, so expect a delay:
+
 ```sh
 uw-agent compact ask <session-id> --reason "context at 80%, finishing the migration next"
 uw-agent compact status <session-id>
 ```
 
-This queues a compaction request. When it completes you see a status message
-like `compacted from X to Y tokens` (see the usagewindow-status skill). Do not
-claim it happened before that message arrives.
+Either way, do not claim the compaction happened until you see it: a
+`/compact` record in your context, or a status message like
+`compacted from X to Y tokens` (see the usagewindow-status skill).
+
+usagewindow still compacts sessions that sit idle: at five sixths of the
+cache TTL it reads from your transcript (50 minutes on a 1 hour cache), so a
+long idle session is summarised before its cache expires.
 
 ## Resume later
 

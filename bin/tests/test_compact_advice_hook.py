@@ -20,6 +20,7 @@ class CompactAdvice(unittest.TestCase):
         self.dir = tempfile.TemporaryDirectory()
         self.root = Path(self.dir.name)
         self.env = dict(os.environ, XDG_STATE_HOME=str(self.root / "state"))
+        self.env.pop("T3CODE_THREAD_ID", None)
 
     def tearDown(self):
         self.dir.cleanup()
@@ -42,6 +43,15 @@ class CompactAdvice(unittest.TestCase):
         self.assertIn("uw-agent compact ask s1", first)
         self.assertEqual(self.run_hook([line("assistant", 560_000)]), "")
         self.assertIn("about 610k", self.run_hook([line("assistant", 610_000)]))
+
+    def test_inside_t3_advises_the_native_self_message(self):
+        # WHY: in T3 Code `/compact` sent to the session's own thread runs at the
+        # end of the turn; the usagewindow queue waits for a policy pass.
+        # catches: advice still naming uw-agent when a thread id is known.
+        self.env["T3CODE_THREAD_ID"] = "thread-9"
+        out = self.run_hook([line("assistant", 520_000)])
+        self.assertIn("t3_thread_send` (threadId thread-9", out)
+        self.assertNotIn("uw-agent", out)
 
     def test_subagent_messages_do_not_count(self):
         # WHY: CLAIM(context-size); a sidechain's large context is not the main session's.
