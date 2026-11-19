@@ -1,0 +1,6 @@
+{
+  "limit": 4000,
+  "history": [
+    {"date": "2026-11-18", "limit": 4000, "by": "owner", "reason": "starting limit"}
+  ]
+}

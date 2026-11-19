@@ -69,6 +69,19 @@ transitions; generate random command sequences; apply to model and real
 system; assert observable state agrees after every step, and that illegal
 transitions are refused. Include crash/rollback and retry commands.
 
+### Conditional and leads-to properties
+A property shaped *when X, then Y* passes for free when X never happens; so
+does *when X, eventually Y*. Give each one a witness:
+- a test that drives the system into X through the production entry point,
+  with shipped defaults, and asserts it got there;
+- for generated runs, a check that the generator reaches X: Hypothesis
+  `find(strategy, reaches_x)`, QuickCheck `cover` with `checkCoverage`, or a
+  counter asserted above zero (proptest has no built-in).
+For *eventually*, end each generated trace with a bounded drain (tick or run
+until idle) before checking. The `# catches:` mutation breaks Y; if the
+property stays green, suspect X before the assertion. (Hillel Wayne,
+2026-02-11; research/20.)
+
 ### Oracles
 Expected values come from something independent of the code under test:
 - a slow, obviously-correct reference implementation;
@@ -129,6 +142,10 @@ a literal's length asserted on the literal; a test of a pasted copy; a
 mirrored formula. Mode 1 and 5 below, with fixes. For tautology, the
 tool is the "revert the fix" mutation.
 
+For an implication, also ask: *can the premise be true?* For a property of a
+predicate, ask whether it restates the predicate's definition (`P ⇒ P ∨ Q`);
+if so, assert the rule the predicate protects on the system's state instead.
+
 ## 6. The mutation check that catches most failure modes
 
 Mentally (or actually) mutate the code under test and see if the test fails:
@@ -140,6 +157,10 @@ Mentally (or actually) mutate the code under test and see if the test fails:
 4. Run it under `TZ=UTC` and under a DST zone. Different result, or a skip?
    Host-dependent.
 5. Remove the fixture file. Skip with no CI failure? It never runs in CI.
+6. Make X unreachable (delete the transition into it, set the limit to 0,
+   empty the trigger set). The *when X* properties stay green, as expected;
+   the witness must go red. Nothing red? The suite cannot tell a system that
+   handles X from one that never reaches it.
 
 Before calling a suite done, do 1 for at least the tests whose names claim a
 bug.
@@ -242,6 +263,16 @@ when the hand value is 49.14; RMSSD up to 500 ms; one-sided bounds with no
 upper limit; `closeTo(50, 8)` where the formula gives exactly 50 at z=0, so
 weights and signs go untested. Fix: tolerance sized to numeric error, not to
 "looks reasonable."
+
+**Vacuous antecedent.** A property checks *when X, then Y*
+(`if state == RETRY: assert ...`, `prop_assume!(x)`, a filtered strategy) and
+X never occurs: the generator never makes the triggering input, the test
+builds the object with non-shipped settings, or a refactor removed the only
+path into X. It stays green with Y broken. Hillel Wayne's example: "a worker
+in Retry eventually leaves Retry" holds for any worker that never retries.
+Detect: break Y; still green means X never fired. Fix: a witness that
+reaches X through production with shipped defaults, plus a generator check
+(§3).
 
 ## 9. Domain checks worth adding wherever they apply
 

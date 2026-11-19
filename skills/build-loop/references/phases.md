@@ -34,6 +34,8 @@ Verify the red gate yourself:
 - each test states its WHY, and CLAIM ids where a claim is proved;
 - each test carries `# catches:` naming a plausible wrong implementation it
   fails; none nameable means likely tautology (`test-quality`).
+- a test of the form *when X, then Y* names its witness:
+  `# reaches: <test that drives the system into X>`.
 
 Commit red.
 

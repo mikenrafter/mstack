@@ -1,0 +1,93 @@
+#!/usr/bin/env -S python3 -I
+"""PR size limit with a stack-plan exception and an override log.
+
+CLAIM(size-count): the size is added + deleted lines from `git diff --numstat
+ <base>...HEAD`, skipping binary files and the EXCLUDED patterns
+ [test_pr_size]. Exit codes: 0 within limit or stacked, 1 over limit, 2 usage
+ or git error.
+"""
+import argparse
+from datetime import datetime, timedelta, timezone
+import fnmatch
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+SKILL = Path(__file__).resolve().parent.parent
+LOG = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "pr-stacks" / "overrides.jsonl"
+EXCLUDED = ["*.lock", "*-lock.json", "*-lock.yaml", "flake.lock", "Cargo.lock", "go.sum",
+            "*.snap", "*.min.js", "*.generated.*", "*/generated/*", "*.pb.go", "*_pb2.py"]
+
+
+def limit():
+    return json.loads((SKILL / "limit.json").read_text())["limit"]
+
+
+def changed_lines(base):
+    out = subprocess.run(["git", "diff", "--numstat", f"{base}...HEAD"],
+                         capture_output=True, text=True)
+    if out.returncode != 0:
+        sys.exit(f"pr-size: {out.stderr.strip()}")
+    total = 0
+    for row in out.stdout.splitlines():
+        added, deleted, path = row.split("\t", 2)
+        if added == "-" or any(fnmatch.fnmatch(path, pattern) for pattern in EXCLUDED):
+            continue
+        total += int(added) + int(deleted)
+    return total
+
+
+def has_stack_plan(paths):
+    return any("## Stack" in Path(p).read_text() for p in paths if Path(p).exists())
+
+
+def check(args):
+    size, cap = changed_lines(args.base), limit()
+    stacked = has_stack_plan(args.plan or [])
+    verdict = "ok" if size <= cap else ("stacked" if stacked else "over")
+    print(f"{size} changed lines, limit {cap}: {verdict}")
+    return 1 if verdict == "over" else 0
+
+
+def override(args):
+    LOG.parent.mkdir(parents=True, exist_ok=True)
+    branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                            capture_output=True, text=True).stdout.strip()
+    entry = {"at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+             "repo": os.getcwd(), "branch": branch, "reason": args.reason}
+    with LOG.open("a") as handle:
+        handle.write(json.dumps(entry) + "\n")
+    print("override recorded")
+    return 0
+
+
+def report(args):
+    cutoff = datetime.now(timezone.utc) - timedelta(days=args.days)
+    rows = []
+    if LOG.exists():
+        for line in LOG.read_text().splitlines():
+            entry = json.loads(line)
+            if datetime.fromisoformat(entry["at"]) >= cutoff:
+                rows.append(entry)
+    print(f"PR size limit {limit()}; {len(rows)} override(s) in the last {args.days} days")
+    for entry in rows:
+        print(f"  {entry['at'][:10]} {Path(entry['repo']).name} {entry['branch']}: {entry['reason']}")
+    return 0
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = parser.add_subparsers(dest="command", required=True)
+    run = sub.add_parser("check")
+    run.add_argument("--base", default="origin/main")
+    run.add_argument("--plan", action="append", help="spec or PR body file that may hold a ## Stack section")
+    sub.add_parser("override").add_argument("--reason", required=True)
+    sub.add_parser("report").add_argument("--days", type=int, default=30)
+    args = parser.parse_args()
+    sys.exit({"check": check, "override": override, "report": report}[args.command](args))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,80 @@
+#!/usr/bin/env -S python3 -I
+"""UserPromptSubmit/PostToolUse hook: tell a large session to pick its own
+moment to compact, instead of waiting for auto-compact to cut mid-step.
+
+Silent below the threshold (COMPACT_ADVICE_AT, default 500000 tokens). Above
+it, speaks once per 100k-token band per session, so the advice repeats as the
+context keeps growing but does not nag on every tool call. Fails open: any
+error prints nothing and exits 0.
+
+CLAIM(context-size): the context of a turn is input + cache-creation +
+ cache-read tokens of the last main-thread assistant message; sidechain
+ (subagent) messages are excluded [test_compact_advice_hook].
+"""
+import json
+import os
+from pathlib import Path
+import sys
+
+THRESHOLD = int(os.environ.get("COMPACT_ADVICE_AT", "500000"))
+BAND = 100_000
+TAIL_BYTES = 2_000_000
+STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "compact-advice"
+
+
+def context_tokens(transcript):
+    with open(transcript, "rb") as handle:
+        handle.seek(max(0, os.path.getsize(transcript) - TAIL_BYTES))
+        lines = handle.read().splitlines()
+    for raw in reversed(lines):
+        try:
+            entry = json.loads(raw)
+        except ValueError:
+            continue  # the first line of the tail is usually cut
+        usage = entry.get("message", {}).get("usage") if isinstance(entry.get("message"), dict) else None
+        if entry.get("type") == "assistant" and not entry.get("isSidechain") and usage:
+            # ↳ CLAIM(context-size)
+            return (usage.get("input_tokens", 0) + usage.get("cache_creation_input_tokens", 0)
+                    + usage.get("cache_read_input_tokens", 0))
+    return 0
+
+
+def advice(tokens, session_id):
+    return (
+        f"Context is at about {tokens // 1000}k tokens. Choose your own compaction point "
+        "rather than letting auto-compact cut in mid-step. Compact at the next phase "
+        "boundary: the end of a grill, once the spec, stack plan and tickets are written, "
+        "after a PR lands, or between review rounds. First make sure every decision and "
+        "open question is in a file or the ledger, not only in this conversation. "
+        "Running subagents and peers are unaffected by compaction. "
+        f"Then run `uw-agent compact ask {session_id} --reason \"<boundary "
+        "and what comes next>\"`. If you are mid-step, finish the step first. Hooks re-load "
+        "standing rules after compaction; reread the skills you were using."
+    )
+
+
+def main():
+    try:
+        payload = json.load(sys.stdin)
+        event = payload.get("hook_event_name", "UserPromptSubmit")
+        session_id = payload.get("session_id", "")
+        transcript = payload.get("transcript_path")
+        if not (transcript and session_id and os.path.exists(transcript)):
+            return
+        tokens = context_tokens(transcript)
+        if tokens < THRESHOLD:
+            return
+        band = tokens // BAND
+        marker = STATE / session_id
+        if marker.exists() and marker.read_text().strip() == str(band):
+            return
+        STATE.mkdir(parents=True, exist_ok=True)
+        marker.write_text(str(band))
+        print(json.dumps({"hookSpecificOutput": {
+            "hookEventName": event, "additionalContext": advice(tokens, session_id)}}))
+    except Exception:
+        return
+
+
+if __name__ == "__main__":
+    main()

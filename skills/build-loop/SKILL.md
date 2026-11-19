@@ -26,7 +26,8 @@ This file is a router; detail lives in `references/`. Section numbers are stable
 |---|---|
 | `technical-excellence` | Before design or code, and when judging a finding. |
 | `test-quality` | Before red, when tests come back, when a fix touches a test. |
-| `question-everything` | Before a spec and before green (§4a). |
+| `question-everything` | The grill (§1b), before green (§4a). |
+| `pr-stacks`, `retro` | Stack plan (§1b), each PR (§11); retro after a stack merges. |
 | `vigil` | As soon as work is in flight (§10); `manual-keepalive` only if vigil fails. |
 | `qex`, `low-ram-hosts` | Before any heavy job (§8–9). |
 
@@ -90,17 +91,13 @@ Do this first, in order:
    reference (pilots may share a branch on request); the
    structural round starts fresh. Pilot rules: `references/scoping.md`. Until hardening,
    test the design, not the symptom; every implementer brief carries the 30-minute flag and "never vigil orchestrator mode".
-1. **Simpler alternative.** Does a simpler way exist (do less, reuse, change
-   the requirement)?
-2. **Desires.** Their first-order desire (what they asked for), second-order
-   desire (why), and threat model (who can reach it, untrusted inputs, what it holds).
-3. **Debate Socratically.** Question assumptions and offer counter-cases and
-   cheaper options. Then write the agreed intent in 1-2 sentences: the review
-   brief's Intent.
+1–3. **Simpler alternative, desires and threat model, debate**; write the
+   agreed intent in 1-2 sentences (the review brief's Intent).
+4. **Front sequence (§1b)**: grill → prototype or mockup → pilot → spec and
+   stack plan → compaction point; then §3–§6 per stack PR.
 
-Skip only for a fix whose intent is already unambiguous. If the user may be
-away, take the sensible default and log it (§1a). Poorly scoped work: ask for
-more detail first (`question-everything`).
+Steps 1–4: `references/front.md`. Skip only for a fix whose intent is already
+unambiguous; if the user is away, take the sensible default and log it (§1a).
 
 ## 1a. Owner contact and decisions
 
@@ -152,14 +149,10 @@ bots get triaged (§6e). **Read `references/review.md` and
 
 Stages: pilot → structural → hardening. Pilots use agreed bars, round-2 Fable and owner approval; see `scoping.md`. Integration branches the owner runs need structural review; upstream PRs and project releases need hardening.
 
-Rounds 1–2 use Sol or Opus, excluding authors. Round 3 uses Fable, then a
-step-back if needed. Rounds 4–5 follow the documented pivot schedule; stop
+Round 3 (Fable) adds a step-back if needed. Rounds 4–5 follow the documented pivot schedule; stop
 stuck after five. Each round completes its argument minimum before advancing.
-The pilot schedule, score bars, checkpoint, cull and final-fix rules remain in
-`references/review-v2.md`.
 
-Tier 2 is a fresh Opus pass, or Fable if Opus wrote code. After a passing
-Fable round there is no tier 2. A ledger without `schema: 2` keeps the legacy
+After a passing Fable round there is no tier 2. A ledger without `schema: 2` keeps the legacy
 schedule. Run Sol per §7; run Opus as a subagent (`model: opus`) with the
 review-only brief and no history. In `references/`: **6a** replies carry
 `SCORE[concern]: n/10` against bars; only `needed for bar: yes` blocks; **6b** full diff in round 1, then diff-only
@@ -199,7 +192,14 @@ command; a wait on CI, a bot or a usage reset; queued work; or the user asked
 
 Long jobs and low budget: `references/budget.md` §10.
 
+## 10a. Compaction is your call
+
+Compact yourself at a phase boundary, never mid-step: `references/front.md` §10a.
+
 ## 11. Ship
+
+Before each PR: `pr-stacks` §3–§5 (size check, door lines, teach-back).
+A one-way door waits for the owner's review.
 
 Push only if the user asked to push, ship or update the PR; never during the
 loop. Outward actions (PRs, comments, upstream pushes) need approval; show the

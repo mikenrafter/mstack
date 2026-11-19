@@ -45,8 +45,20 @@ question when the kind is obvious.
   the first fix round.
 - **Ship iteration builds early.** An iteration build, preview or screenshot set goes to the owner as soon as the
   targeted tests pass. The pilot's scored review (§6) follows the owner's feedback.
-- **Opt-in.** Put pilot behaviour behind a flag or a per-item field, so the pilot build changes only
-  the pilot's cases.
+- **Feature flag, always.** Put pilot behaviour behind a flag (or a per-item field), so the pilot
+  build changes only the pilot's cases and turning it off is a two-way door. Choose where the
+  flag lives from what kind of feature it is:
+  - *user-facing behaviour in an app*: a setting the owner can toggle inside the product (a
+    debug or labs screen), so the pilot can be compared on and off on a real device;
+  - *services, daemons, CLIs*: an environment variable or config key read at start-up, with the
+    flag's state logged on boot;
+  - *changes that alter what gets built* (new dependencies, codegen, schema, native code): a
+    build-time flag (a Cargo feature, a Gradle property, a Nix option), off by default;
+  - *data shape changes*: a flag that gates writes, with reads accepting both shapes until the
+    structural round.
+  Name the flag in the pilot report, say how to flip it, and say what happens to data written
+  while it was on. The structural round decides whether the flag stays, becomes a setting, or
+  goes.
 - **Own branch, kept as a reference (owner, 2026-11-15).** Keep the pilot branch as a reference.
   Start the structural stage fresh from the base on a new branch, carrying over only the code,
   tests and evidence the owner endorsed. Pilot tests encode the pilot design; rebuilding avoids

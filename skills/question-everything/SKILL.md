@@ -22,6 +22,11 @@ in reviewed code. Spend questions early.
 | `build-loop` | The feature is multi-phase; this skill is its pre-green gate (build-loop §4a). |
 | `technical-excellence` | Shaping interfaces, invariants and types while you question the spec. |
 | `test-quality` | Judging whether the red tests prove the spec. |
+| `pr-stacks` | Writing the stack plan at the end of the grill (§6). |
+
+This interview is the **grill**: questions before code, for alignment. It is
+not the **teach-back**, the per-PR questions that keep the owner
+understanding the code (`pr-stacks` §4).
 
 ## 1. Interview the designer
 
@@ -29,7 +34,20 @@ The user is the designer. Get high-fidelity detail before anyone writes code.
 Push back: an answer that leaves a state, edge or failure undefined is not an
 answer yet.
 
-Ask, with a proposed default for each, so the user can answer in a word:
+**Format.** Ask in rounds. Each round asks every question whose
+prerequisites are settled, numbered, each with your recommended answer, so
+the user can answer in a word. Find facts yourself (grep, read, or a fresh
+subagent); never ask the user what the code can tell you. Decisions are the
+user's. At a crux the user may say "one at a time"; go one question per
+message until they widen it again.
+
+**When a round comes back all "yes".** Your defaults on that topic are right.
+Move on: look for what has not been explored yet (other states, edges,
+lifecycle paths, neighbouring features, the stack plan) and raise the most
+important of those. Say what you are moving to. The grill ends only when the
+user says so.
+
+Cover, with a proposed default for each:
 1. **States.** Every state the thing can be in, including empty, unknown,
    partial, stale, refused, failed. What does the user see in each?
 2. **Edges.** Time (midnight, time zones, DST, nights that cross dates),
@@ -50,6 +68,42 @@ Ask, with a proposed default for each, so the user can answer in a word:
 
 If the user is away, take the safe default, log it, and raise it later
 (build-loop §1a). Never block.
+
+## 1a. Language and decisions
+
+Name things while you grill; the names become the data model.
+
+- **Glossary.** Check every new term against the project lexicon
+  (`technical-excellence` §4). Refuse a term that collides with a framework
+  word (component, scene, model, service) or an existing entry; qualify it
+  instead ("diagram component"). Record words to avoid with each entry.
+- **Scenario test every new or contested term.** Write five to seven real
+  sentences about the feature using each candidate, in a table, with a
+  column for "is this how the owner talks". Pick the name that reads true in
+  every sentence. This is the strongest naming check we have; run it
+  whenever a lexicon gains a term, not only when names compete.
+- **Avoid lists.** Record the confusing near-synonyms for each term in the
+  lexicon (residual's lexicon where the project uses residual).
+- **ADRs.** Have a strong opinion about when a decision deserves one: it is
+  hard to reverse, surprising without context, and the result of a real
+  trade-off; all three must hold. When you see one, propose it in the grill
+  with the draft's gist (context, options, why this one, what would change
+  it) and say why it qualifies. Write it once the user confirms. Every ADR
+  must be defensible from its own text. Store it in
+  the project's ADR store (residual if the project uses it, else
+  `docs/adr/NNNN-slug.md`). Read existing ADRs before proposing to change
+  anything they cover.
+
+## 1b. Prototype or mockup
+
+When an answer depends on how something looks or feels, or on behaviour
+nobody can predict, stop asking and build. Two or three throwaway variants,
+started in the background (Sol or Codex where the Claude agent cap is full,
+build-loop §2) while the grill continues. Mockups go to the owner through
+`html_preview`. Prototype code lives on `prototype/<topic>`, is never merged,
+and is reimplemented under tests. A bad variant teaches as much as a good
+one. If the open question is whether the approach works on real cases, that is
+a pilot (build-loop `references/scoping.md`), not a prototype.
 
 ## 2. Ask yourself the same questions
 
@@ -99,3 +153,18 @@ Findings here save whole code-review rounds later.
 - defaults are discovered in reports instead of decided in the spec.
 
 When you see these, pause the loop and come back here.
+
+## 6. End of the grill
+
+The grill ends when the list of open questions is empty or the user says so.
+Before anything else, write down:
+
+1. the intent, in one or two sentences;
+2. glossary changes and any ADRs the user approved;
+3. the spec, with states, edges, invariants and test seams;
+4. the stack plan with door labels (`pr-stacks` §2), one ticket per line.
+
+Every decision must now live in a file. This is the best moment to compact:
+nothing important exists only in the conversation. If the session is large,
+compact yourself (`uw-agent compact ask <session-id> --reason "grill done;
+next: <first ticket>"`) and reread this skill and build-loop after.

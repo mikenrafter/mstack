@@ -62,6 +62,13 @@ ack(token);
 - Ids are short, unique, stable. Unprovable "claims" are opinions: label them
   as such or delete them. A comment with no source is a rumor.
 
+Comments that are not claims or interface contracts are smells
+(`comment-audit`). Never write a note from your session into a comment
+("added for ticket 4", "now uses X", "as requested"); that belongs in the
+commit message. A comment that excuses a workaround in our own code marks
+code to reshape, not explain. A decision's why that spans modules goes in an
+ADR, and the site carries `ADR-NNNN`.
+
 ## 3. Deep modules
 
 Prefer a simple interface over a substantial implementation. Few entry
@@ -73,7 +80,9 @@ call order. Hide the complexity; do not spread it across callers.
 
 Keep a project lexicon (a glossary doc: term, meaning, where it lives). Name
 code in correspondence with it. Add a term to the glossary when you coin one;
-do not use two words for one concept.
+do not use two words for one concept. Where the project uses residual, its
+lexicon is the source; how terms are tested and which near-synonyms to avoid
+belong to the lexicon, not here (`question-everything` §1a).
 
 Outside any convention:
 

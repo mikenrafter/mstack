@@ -1,0 +1,246 @@
+#!/usr/bin/env -S python3 -I
+"""Collect new videos, posts and repo changes from a list of engineers.
+
+Reads research/practice-watch/sources.toml, polls each source, and writes the
+items it has not seen before to an inbox file that the practice-watch skill
+turns into a digest. Feed contents are untrusted data: they are parsed and
+stored, never executed.
+
+CLAIM(seen-once): an item id is reported by at most one successful fetch;
+ the seen set is saved only after the inbox file is written [fetch()].
+Exit codes: 0 ok (some sources may have failed, listed in the inbox), 2 bad
+arguments or sources file.
+"""
+import argparse
+import hashlib
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tomllib
+import urllib.request
+import xml.etree.ElementTree as ET
+
+REPO = Path(__file__).resolve().parent.parent
+SOURCES = REPO / "research" / "practice-watch" / "sources.toml"
+INBOX = REPO / "research" / "practice-watch" / "inbox"
+STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "practice-watch"
+ATOM = "{http://www.w3.org/2005/Atom}"
+USER_AGENT = "practice-watch/1 (+personal feed reader)"
+
+
+def http_get(url, timeout=30):
+    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read()
+
+
+def text_of(element, *paths):
+    for path in paths:
+        found = element.find(path)
+        if found is not None:
+            return (found.text or found.get("href") or "").strip()
+    return ""
+
+
+def iso_utc(stamp):
+    """ISO 8601 or RFC 822 timestamp -> 'YYYY-MM-DDTHH:MM:SSZ'; '' if unparseable."""
+    try:
+        moment = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        try:
+            moment = parsedate_to_datetime(stamp)
+        except (TypeError, ValueError):
+            return ""
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def parse_feed(body):
+    """Return [{id, title, url, published}] from RSS 2.0 or Atom."""
+    root = ET.fromstring(body)
+    items = []
+    for entry in root.iter(f"{ATOM}entry"):
+        link = entry.find(f"{ATOM}link[@rel='alternate']")
+        if link is None:
+            link = entry.find(f"{ATOM}link")
+        items.append({
+            "id": text_of(entry, f"{ATOM}id") or (link.get("href") if link is not None else ""),
+            "title": text_of(entry, f"{ATOM}title"),
+            "url": link.get("href") if link is not None else "",
+            "published": iso_utc(text_of(entry, f"{ATOM}published", f"{ATOM}updated")),
+        })
+    for entry in root.iter("item"):
+        items.append({
+            "id": text_of(entry, "guid", "link"),
+            "title": text_of(entry, "title"),
+            "url": text_of(entry, "link"),
+            "published": iso_utc(text_of(entry, "pubDate")),
+        })
+    return [item for item in items if item["id"]]
+
+
+def poll_feed(source):
+    return [dict(item, kind=source["kind"]) for item in parse_feed(http_get(source["url"]))]
+
+
+def poll_page(source, page_hashes):
+    """A page with no feed: report it once each time its content hash changes.
+
+    The first sighting only records the hash, so adding a page is quiet.
+    """
+    digest = hashlib.sha256(http_get(source["url"])).hexdigest()
+    previous = page_hashes.get(source["url"])
+    page_hashes[source["url"]] = digest
+    if previous in (None, digest):
+        return []
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    return [{"id": f"{source['url']}#{digest[:16]}", "title": "Page changed",
+             "url": source["url"], "published": now, "kind": "page"}]
+
+
+def gh_json(*args):
+    result = subprocess.run(["gh", "api", *args], capture_output=True, text=True, timeout=60)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "gh api failed")
+    return json.loads(result.stdout)
+
+
+def poll_github_repo(source, since):
+    """Default-branch commits and pull requests touched since the cutoff.
+
+    Pull requests matter: Pocock's newest skill lived only on an open PR.
+    """
+    repo, path = source["url"], source.get("path")
+    query = f"repos/{repo}/commits?per_page=50&since={since}" + (f"&path={path}" if path else "")
+    items = [{
+        "id": f"{repo}@{commit['sha']}",
+        "title": commit["commit"]["message"].split("\n")[0],
+        "url": commit["html_url"],
+        "published": commit["commit"]["committer"]["date"],
+        "kind": "commit",
+    } for commit in gh_json(query)]
+    for pr in gh_json(f"repos/{repo}/pulls?state=all&sort=updated&direction=desc&per_page=30"):
+        if pr["updated_at"] < since:
+            break
+        items.append({
+            # Updated PRs resurface under a new id so later pushes are seen.
+            "id": f"{repo}#{pr['number']}@{pr['updated_at']}",
+            "title": f"PR #{pr['number']} [{pr['state']}{', merged' if pr.get('merged_at') else ''}]: {pr['title']}",
+            "url": pr["html_url"],
+            "published": pr["updated_at"],
+            "kind": "pull_request",
+        })
+    return items
+
+
+def fetch_captions(video_url, out_dir):
+    """Save English captions next to the inbox; return the path or None."""
+    yt_dlp = shutil.which("yt-dlp")
+    command = [yt_dlp] if yt_dlp else ["nix", "run", "nixpkgs#yt-dlp", "--"]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    result = subprocess.run(
+        [*command, "--no-update", "--quiet", "--no-warnings", "--skip-download",
+         "--write-auto-subs", "--write-subs", "--sub-langs", "en", "--sub-format", "vtt",
+         "-o", str(out_dir / "%(id)s.%(ext)s"), video_url],
+        capture_output=True, text=True, timeout=300)
+    found = sorted(out_dir.glob(f"{video_url.rsplit('=', 1)[-1]}*.vtt"))
+    return str(found[0]) if result.returncode == 0 and found else None
+
+
+def save_to_reader(item, person):
+    tags = json.dumps(["practice-watch", f"pw-{person['slug']}"])
+    subprocess.run(["readwise", "reader-create-document", "--url", item["url"],
+                    "--tags", tags, "--location", "later"],
+                   capture_output=True, text=True, timeout=60)
+
+
+def load_sources():
+    try:
+        return tomllib.loads(SOURCES.read_text())["person"]
+    except (OSError, KeyError, tomllib.TOMLDecodeError) as error:
+        sys.exit(f"practice-watch: cannot read {SOURCES}: {error}")
+
+
+def fetch(args):
+    people = load_sources()
+    seen_path = STATE / "seen.json"
+    seen = set(json.loads(seen_path.read_text())) if seen_path.exists() else set()
+    hashes_path = STATE / "page-hashes.json"
+    page_hashes = json.loads(hashes_path.read_text()) if hashes_path.exists() else {}
+    since = (datetime.now(timezone.utc) - timedelta(days=args.days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    captions_dir = STATE / "captions" / today
+    new, failures = [], []
+    for person in people:
+        if args.person and person["slug"] not in args.person:
+            continue
+        if not person.get("enabled", True):
+            continue
+        for source in person.get("sources", []):
+            kind = source["kind"]
+            if kind == "social":
+                continue
+            try:
+                if kind == "github_repo":
+                    items = poll_github_repo(source, since)
+                elif kind == "page":
+                    items = poll_page(source, page_hashes)
+                else:
+                    items = poll_feed(source)
+            except Exception as error:  # one dead feed must not stop the run
+                failures.append({"person": person["slug"], "url": source["url"], "error": str(error)[:300]})
+                continue
+            excluded = source.get("exclude", [])
+            included = source.get("include", [])
+            for item in items:
+                if any(text in item["title"] for text in excluded):
+                    continue
+                if included and not any(text.lower() in item["title"].lower() for text in included):
+                    continue
+                if item["id"] in seen or (item["published"] and item["published"] < since):
+                    continue
+                item["person"] = person["slug"]
+                if kind == "youtube" and args.captions:
+                    item["captions"] = fetch_captions(item["url"], captions_dir)
+                new.append(item)
+    record = {"fetched": today, "since": since, "items": new, "failures": failures}
+    if args.dry_run:
+        json.dump(record, sys.stdout, indent=2)
+        print()
+        return
+    INBOX.mkdir(parents=True, exist_ok=True)
+    out = INBOX / f"{today}.json"
+    out.write_text(json.dumps(record, indent=2) + "\n")
+    # ↳ CLAIM(seen-once)
+    STATE.mkdir(parents=True, exist_ok=True)
+    seen_path.write_text(json.dumps(sorted(seen | {item["id"] for item in new})))
+    hashes_path.write_text(json.dumps(page_hashes, indent=2))
+    if args.to_reader:
+        by_slug = {person["slug"]: person for person in people}
+        for item in new:
+            if item["kind"] in ("youtube", "feed"):
+                save_to_reader(item, by_slug[item["person"]])
+    print(f"{len(new)} new items, {len(failures)} failed sources -> {out}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = parser.add_subparsers(dest="command", required=True)
+    run = sub.add_parser("fetch", help="poll every source and write new items to the inbox")
+    run.add_argument("--days", type=int, default=14, help="ignore items older than this (default 14)")
+    run.add_argument("--person", action="append", help="only this slug (repeatable)")
+    run.add_argument("--captions", action="store_true", help="download YouTube captions for new videos")
+    run.add_argument("--to-reader", action="store_true", help="save new videos and posts to Readwise Reader, tagged practice-watch")
+    run.add_argument("--dry-run", action="store_true", help="print the inbox record; save nothing")
+    args = parser.parse_args()
+    fetch(args)
+
+
+if __name__ == "__main__":
+    main()

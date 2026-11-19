@@ -1,0 +1,181 @@
+#!/usr/bin/env -S python3 -I
+"""Keep an agent's loaded skills current.
+
+Hook for three events (one script, the event comes from the payload):
+- PostToolUse and UserPromptSubmit: if a skill this session loaded has changed
+  on disk since it was loaded, say which files changed and ask for a reread.
+  Once per change. Edits the session made itself (Edit/Write/NotebookEdit on
+  a file inside the skill) update the baseline silently.
+- SessionStart with source=compact: list every skill the session had loaded,
+  so the agent rereads them; a compaction summary keeps the task but drops
+  the skills' rules.
+
+A skill counts as loaded when the transcript shows the Skill tool's "Base
+directory for this skill: <dir>" message, or a Read or Bash call on
+<dir>/SKILL.md. Each loaded skill is watched in its loaded directory and, if
+it exists, in the mstack source (MSTACK_SKILLS, default
+~/Documents/repos/mstack/skills/<name>), where edits land before a rebuild
+installs them. Fails open: any error prints nothing and exits 0.
+
+CLAIM(baseline-at-load): a change is reported when a watched *.md file's
+ content differs from the session's baseline; the baseline is the content at
+ first sighting, except that a file modified after the load's transcript
+ timestamp is reported at first sighting too [test_skill_watch_hook].
+"""
+from datetime import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import sys
+
+STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "skill-watch"
+MSTACK_SKILLS = Path(os.environ.get("MSTACK_SKILLS", Path.home() / "Documents" / "repos" / "mstack" / "skills"))
+BASE_DIR = re.compile(r"Base directory for this skill: (\S+)")
+SKILL_MD = re.compile(r"((?:~|\$HOME|\$\{HOME\})?[^\s'\"`=]*?skills/[^/\s'\"`]+)/SKILL\.md")
+SELF_EDIT_TOOLS = {"Edit", "Write", "NotebookEdit", "MultiEdit"}
+
+
+def epoch(stamp):
+    try:
+        return datetime.fromisoformat(stamp.replace("Z", "+00:00")).timestamp()
+    except (AttributeError, ValueError):
+        return 0.0
+
+
+def resolve(raw, cwd):
+    """Expand ~ and $HOME; resolve a relative path against the entry's cwd."""
+    path = re.sub(r"^(~|\$HOME|\$\{HOME\})", str(Path.home()), raw)
+    if not path.startswith("/"):
+        if not cwd:
+            return None
+        path = os.path.join(cwd, path)
+    return os.path.normpath(path)
+
+
+def loads_in(entry):
+    """Skill directories this transcript entry shows being loaded."""
+    if entry.get("isSidechain"):
+        return []
+    message = entry.get("message")
+    if not isinstance(message, dict):
+        return []
+    content = message.get("content")
+    blocks = content if isinstance(content, list) else [{"type": "text", "text": content or ""}]
+    found = []
+    for block in blocks:
+        if not isinstance(block, dict):
+            continue
+        if entry.get("type") == "user" and block.get("type") == "text":
+            found += BASE_DIR.findall(block.get("text", ""))
+        if entry.get("type") == "assistant" and block.get("type") == "tool_use":
+            tool_input = block.get("input") or {}
+            if block.get("name") == "Read":
+                found += SKILL_MD.findall(str(tool_input.get("file_path", "")))
+            elif block.get("name") == "Bash":
+                found += SKILL_MD.findall(str(tool_input.get("command", "")))
+    resolved = (resolve(raw, entry.get("cwd")) for raw in found)
+    return [path for path in resolved if path]
+
+
+def watched_dirs(skill_dir):
+    dirs = [Path(skill_dir)]
+    source = MSTACK_SKILLS / Path(skill_dir).name
+    if source.is_dir() and source.resolve() != Path(skill_dir).resolve():
+        dirs.append(source)
+    return dirs
+
+
+def snapshot(directory):
+    """{relative path: [mtime, sha256]} for every *.md file in a skill."""
+    files = {}
+    for path in sorted(Path(directory).rglob("*.md")):
+        try:
+            files[str(path.relative_to(directory))] = [
+                path.stat().st_mtime, hashlib.sha256(path.read_bytes()).hexdigest()]
+        except OSError:
+            continue
+    return files
+
+
+def scan(transcript, state):
+    """Read new transcript lines; record skills on first load."""
+    with open(transcript, "rb") as handle:
+        handle.seek(state.get("offset", 0))
+        chunk = handle.read()
+    end = chunk.rfind(b"\n") + 1
+    state["offset"] = state.get("offset", 0) + end
+    for raw in chunk[:end].splitlines():
+        try:
+            entry = json.loads(raw)
+        except ValueError:
+            continue
+        for skill_dir in loads_in(entry):
+            skill_dir = skill_dir.rstrip("/")
+            if skill_dir not in state["skills"] and Path(skill_dir).is_dir():
+                state["skills"][skill_dir] = {"loaded_at": epoch(entry.get("timestamp")), "dirs": {}}
+
+
+def changes(state, self_edited):
+    """Compare each watched directory with its baseline; return report lines."""
+    report = []
+    for skill_dir, record in state["skills"].items():
+        for directory in watched_dirs(skill_dir):
+            key = str(directory)
+            now = snapshot(directory)
+            before = record["dirs"].get(key)
+            if before is None:
+                # ↳ CLAIM(baseline-at-load)
+                changed = [name for name, (mtime, _) in now.items() if mtime > record["loaded_at"] > 0]
+            else:
+                changed = [name for name in now if before.get(name, [0, None])[1] != now[name][1]]
+                changed += [name for name in before if name not in now]
+            record["dirs"][key] = now
+            if self_edited and any(str(directory / name) in self_edited for name in changed):
+                continue
+            if changed:
+                where = "installed copy" if directory == Path(skill_dir) else "mstack source (not yet installed)"
+                report.append(f"- {Path(skill_dir).name} ({where}, {directory}): {', '.join(sorted(changed))}")
+    return report
+
+
+def respond(event, text):
+    print(json.dumps({"hookSpecificOutput": {"hookEventName": event, "additionalContext": text}}))
+
+
+def main():
+    try:
+        payload = json.load(sys.stdin)
+        event = payload.get("hook_event_name", "")
+        session_id, transcript = payload.get("session_id"), payload.get("transcript_path")
+        if not (session_id and transcript and os.path.exists(transcript)):
+            return
+        state_path = STATE / f"{session_id}.json"
+        state = json.loads(state_path.read_text()) if state_path.exists() else {"skills": {}}
+        scan(transcript, state)
+        if event == "SessionStart":
+            if payload.get("source") == "compact" and state["skills"]:
+                names = ", ".join(f"{Path(d).name} ({d}/SKILL.md)" for d in state["skills"])
+                respond(event, "Before compaction this session loaded these skills: " + names
+                        + ". The summary keeps the task but not their rules. Reread each one you "
+                        "still need before your next step, along with the reference file for the step you are on.")
+        else:
+            edited = set()
+            tool_input = payload.get("tool_input") or {}
+            if payload.get("tool_name") in SELF_EDIT_TOOLS:
+                edited.add(str(tool_input.get("file_path") or tool_input.get("notebook_path") or ""))
+            report = changes(state, edited)
+            if report:
+                respond(event, "Skills you loaded earlier changed on disk since you read them:\n"
+                        + "\n".join(report) + "\nReread the changed files before relying on those "
+                        "skills again. A change in the mstack source applies once the owner installs it; "
+                        "follow it now only if the owner asked for the new behaviour.")
+        STATE.mkdir(parents=True, exist_ok=True)
+        state_path.write_text(json.dumps(state))
+    except Exception:
+        return
+
+
+if __name__ == "__main__":
+    main()

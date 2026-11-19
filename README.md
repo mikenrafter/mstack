@@ -32,6 +32,12 @@ cd mstack
 | Review interfaces, naming and design | [technical-excellence](skills/technical-excellence/SKILL.md) |
 | Run a phased implementation and review | [build-loop](skills/build-loop/SKILL.md) |
 | Write plainly | [plain-writing](skills/plain-writing/SKILL.md) and [unslop](skills/unslop/SKILL.md) |
+| Split work into small PRs labelled by how hard they are to revert | [pr-stacks](skills/pr-stacks/SKILL.md) |
+| Turn repeated review findings into checks | [retro](skills/retro/SKILL.md) |
+| Cut comments that hide problems, keep the ones that carry facts | [comment-audit](skills/comment-audit/SKILL.md) |
+| Track what other engineers publish about their practice | [practice-watch](skills/practice-watch/SKILL.md) |
+| Write or audit a README | [readme](skills/readme/SKILL.md) |
+| Add a rule that only gets stricter, or roll out a new tool | [ratchets](skills/ratchets/SKILL.md) |
 
 Copy an entire skill directory if you install it into your agent's skill directory. `build-loop` needs its `references/` and `scripts/` subdirectories. Referenced companion skills must also be available. Installation paths and tool names vary by agent.
 

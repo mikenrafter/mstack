@@ -1,0 +1,144 @@
+# Engineers whose practice the owner borrows from. Read by bin/practice-watch.
+# Sources checked 2026-11-18 (feeds fetched and parsed, repos via gh api).
+# kind: youtube | feed (RSS/Atom) | page (non-feed HTML, change detected by hash)
+#       | github_repo (url = "owner/repo", optional path) | social (note only)
+# exclude = ["text"] drops items whose title contains any listed text;
+# include = ["text"] keeps only titles containing one (case-insensitive).
+# enabled = false keeps a person on file without polling them.
+
+[[person]]
+name = "John Ousterhout"
+slug = "ousterhout"
+why = "A Philosophy of Software Design: deep modules, strategic programming, comments as interface design"
+sources = [
+  { kind = "page", url = "https://web.stanford.edu/~ouster/cgi-bin/aposd.php", notes = "Book page; last updated 2025-02-26" },
+  { kind = "github_repo", url = "johnousterhout/aposd-vs-clean-code", notes = "Comment debate with Uncle Bob; static since 2025-04" },
+  { kind = "social", url = "https://groups.google.com/g/software-design-book", notes = "His replies land here; no working RSS" },
+]
+
+[[person]]
+name = "Matt Pocock"
+slug = "mattpocock"
+why = "mattpocock/skills: grilling, glossary, ADRs, retro, door-labelled PRs"
+sources = [
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCswG6FSbgZjbWtdf_hMLaow" },
+  { kind = "feed", url = "https://www.aihero.dev/rss.xml", exclude = ["| AI Coding Dictionary"], notes = "Whole site; items unsorted" },
+  { kind = "github_repo", url = "mattpocock/skills", notes = "PRs matter: new skills sit on open PRs first" },
+  { kind = "github_repo", url = "mattpocock/sandcastle", notes = "Deterministic AFK orchestration" },
+]
+
+[[person]]
+name = "Theo Browne"
+slug = "theo"
+why = "tstack (council, sol-loop); high-volume commentary on AI tooling"
+sources = [
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCbRP3c757lWg9M-U7TyEkXA", notes = "Main channel; mostly news, filter hard" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCuJ0a6mGprfuF0CTp04rGjQ", notes = "Theo Throwaways; sporadic" },
+  { kind = "github_repo", url = "t3dotgg/tstack" },
+]
+
+[[person]]
+name = "Lauren Tan (poteto)"
+slug = "poteto"
+why = "pstack / poteto-mode at Cursor: comment-sicko, verification skills, decision trail"
+sources = [
+  { kind = "github_repo", url = "cursor/plugins", path = "pstack" },
+  { kind = "github_repo", url = "poteto/verification-skill-example" },
+  { kind = "social", url = "https://x.com/potetotes", notes = "Handle unverified" },
+]
+
+[[person]]
+name = "Robert C. Martin (Uncle Bob)"
+slug = "unclebob"
+why = "2026 work is agent quality gates: ub-mode (based on pstack), mutation testing, CRAP scores"
+sources = [
+  { kind = "github_repo", url = "unclebob/ub-mode" },
+  { kind = "github_repo", url = "unclebob/mutator" },
+  { kind = "github_repo", url = "unclebob/crapper" },
+  { kind = "github_repo", url = "unclebob/agnesse", notes = "FitNesse fork for agents; new" },
+  { kind = "social", url = "https://x.com/unclebobmartin", notes = "His main 2026 outlet; blog dead since 2023" },
+]
+
+[[person]]
+name = "Barry M. O'Reilly"
+slug = "barry-oreilly"
+why = "Residuality theory (stressors, attractors, residues); residual implements it. Not the Lean Enterprise author"
+sources = [
+  { kind = "page", url = "https://www.blacktulip.se/", notes = "His company, Black Tulip Technology" },
+  { kind = "feed", url = "https://www.blacktulip.se/news?format=rss", notes = "Very low volume" },
+  { kind = "page", url = "https://leanpub.com/residuality", notes = "Residues book updates" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCTdw38Cw6jcm0atBPA39a0Q", include = ["O'Reilly", "Residu"], notes = "NDC Conferences; no channel of his own" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC3PGn-hQdbtRiqxZK9XBGqQ", include = ["O'Reilly", "Residu"], notes = "DDD Europe" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCs_tLP3AiwYKwdUHpltJPuA", include = ["O'Reilly", "Residu"], notes = "GOTO Conferences" },
+  { kind = "social", url = "https://www.linkedin.com/in/barry-o-reilly-b924657/", notes = "His main outlet; not pollable" },
+]
+
+[[person]]
+name = "Kent Beck"
+slug = "kentbeck"
+why = "Tidy First? (structure and behaviour changes apart), augmented coding, ToolSeeds"
+sources = [
+  { kind = "feed", url = "https://tidyfirst.substack.com/feed", notes = "Newsletter being renamed (2026-10-28); URL may move" },
+  { kind = "github_repo", url = "KentBeck/ToolSeeds" },
+]
+
+[[person]]
+name = "Dex Horthy"
+slug = "dexhorthy"
+why = "Context engineering, research-plan-implement, smart zone; Pocock's PR skill credits him"
+sources = [
+  { kind = "github_repo", url = "humanlayer/skills", notes = "HumanLayer joined Factory 2026-11-04; may move" },
+  { kind = "github_repo", url = "humanlayer/humanlayer", path = ".claude" },
+  { kind = "github_repo", url = "ai-that-works/ai-that-works", notes = "Weekly episode notes and code" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCt9WqM6o0y5YGqQm1nffFWQ", notes = "Boundary channel; hosts AI That Works" },
+]
+
+[[person]]
+name = "Armin Ronacher"
+slug = "mitsuhiko"
+why = "Agentic coding essays and experiments, Rust and Python tooling, monthly State of Agentic Coding"
+sources = [
+  { kind = "feed", url = "https://lucumr.pocoo.org/feed.atom" },
+  { kind = "youtube", url = "https://www.youtube.com/feeds/videos.xml?channel_id=UC-mexo-76-J1MlQM8NkWCYw" },
+  { kind = "github_repo", url = "mitsuhiko/agent-stuff" },
+]
+
+
+[[person]]
+name = "Tudor Gîrba"
+slug = "girba"
+why = "Moldable development, Glamorous Toolkit; closest to paneweft. Code daily, writing rare"
+sources = [
+  { kind = "feed", url = "https://medium.com/feed/feenk" },
+  { kind = "github_repo", url = "feenkcom/gt4llm" },
+]
+
+[[person]]
+name = "Hillel Wayne"
+slug = "hillelwayne"
+why = "Formal methods and specification; occasional LLM pieces"
+sources = [
+  { kind = "feed", url = "https://buttondown.com/hillelwayne/rss" },
+  { kind = "feed", url = "https://www.hillelwayne.com/index.xml" },
+]
+
+# On file, not polled. Turn on by setting enabled = true.
+
+[[person]]
+name = "Mitchell Hashimoto"
+slug = "mitchellh"
+enabled = false
+why = "Ghostty AI policy, vouch contributor gate; practice posts are rare"
+sources = [
+  { kind = "feed", url = "https://mitchellh.com/feed.xml" },
+  { kind = "github_repo", url = "mitchellh/vouch" },
+]
+
+[[person]]
+name = "Simon Willison"
+slug = "simonw"
+enabled = false
+why = "Daily agentic engineering notes; already in Reader, so only the narrow tag feed would add anything"
+sources = [
+  { kind = "feed", url = "https://simonwillison.net/tags/agentic-engineering.atom" },
+]
