@@ -1,0 +1,682 @@
+{
+  "status": "synthetic-assumption-stress-test-only",
+  "seed": 20261117,
+  "protocol_sha256": "b80681f5630d1ee8e1baa8ce701463d13c7d52eaa4431dc31e7d713bfd11e103",
+  "script_sha256": "db6d88334b22ef207739969dc924deff1b54c92f8f518d549bc13ffc24044713",
+  "results": [
+    {
+      "size": 40,
+      "regime": "independent",
+      "trials": 10000,
+      "seed_hex": "ba6ccfedf04e0321",
+      "trial_stream_sha256": "83e462f1f7fd104fdb0ab54bdf9aa99df8128e6f180c029e34f5b5ec0d5ba895",
+      "mean_actual_unseen": 9.9615,
+      "theoretical_mean_actual_unseen": 10.0,
+      "mean_naive_estimated_unseen": 10.016393820323984,
+      "mean_error": 0.054893820323982864,
+      "mean_error_monte_carlo_standard_error": 0.06816475443482481,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.1733,
+      "fraction_zero_estimate_with_unseen": 0.0,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          21,
+          13,
+          9,
+          15,
+          4.8
+        ],
+        [
+          21,
+          30,
+          16,
+          5,
+          4.117647058823529
+        ],
+        [
+          23,
+          20,
+          13,
+          10,
+          5.0
+        ],
+        [
+          20,
+          22,
+          10,
+          8,
+          10.909090909090908
+        ],
+        [
+          24,
+          18,
+          11,
+          9,
+          7.583333333333333
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": true,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 40,
+      "regime": "unequal-abilities",
+      "trials": 10000,
+      "seed_hex": "86f9312974090083",
+      "trial_stream_sha256": "dac37e6def76a979cb642a774ac5d2ac3c5064655b2b1549b0d1954582fb71bd",
+      "mean_actual_unseen": 7.5013,
+      "theoretical_mean_actual_unseen": 7.5,
+      "mean_naive_estimated_unseen": 7.464449431344799,
+      "mean_error": -0.03685056865520101,
+      "mean_error_monte_carlo_standard_error": 0.07047452341419938,
+      "actual_nonzero_trials": 9999,
+      "fraction_under_half_actual_given_nonzero": 0.2883288328832883,
+      "fraction_zero_estimate_with_unseen": 0.0789,
+      "fraction_zero_overlap": 0.0003,
+      "first_five_trials": [
+        [
+          12,
+          32,
+          8,
+          4,
+          10.666666666666666
+        ],
+        [
+          6,
+          26,
+          5,
+          13,
+          3.5
+        ],
+        [
+          9,
+          29,
+          7,
+          9,
+          5.5
+        ],
+        [
+          10,
+          26,
+          9,
+          13,
+          1.7
+        ],
+        [
+          9,
+          28,
+          7,
+          10,
+          5.25
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": true,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 40,
+      "regime": "shared-difficulty",
+      "trials": 10000,
+      "seed_hex": "1790fd2c2b667e7f",
+      "trial_stream_sha256": "0a97ebd1eeb3f8ef22a69cd5baf0e1ec8a548f5e4f21a5fdb28af783cb23ab36",
+      "mean_actual_unseen": 16.4221,
+      "theoretical_mean_actual_unseen": 16.4,
+      "mean_naive_estimated_unseen": 0.7613540240894222,
+      "mean_error": -15.660745975910578,
+      "mean_error_monte_carlo_standard_error": 0.022030035432359027,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.9999,
+      "fraction_zero_estimate_with_unseen": 0.0514,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          20,
+          22,
+          19,
+          17,
+          0.15
+        ],
+        [
+          21,
+          18,
+          16,
+          17,
+          0.5882352941176471
+        ],
+        [
+          20,
+          19,
+          17,
+          18,
+          0.3333333333333333
+        ],
+        [
+          21,
+          21,
+          16,
+          14,
+          1.4705882352941178
+        ],
+        [
+          18,
+          19,
+          15,
+          18,
+          0.75
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 40,
+      "regime": "common-blind-spot",
+      "trials": 10000,
+      "seed_hex": "459b8f44b9b09dcb",
+      "trial_stream_sha256": "73cf611cd113a635b9c522a21c6bba89b35a9c140754c60d73723490558d8610",
+      "mean_actual_unseen": 20.8033,
+      "theoretical_mean_actual_unseen": 20.8,
+      "mean_naive_estimated_unseen": 0.7965591614899549,
+      "mean_error": -20.006740838510044,
+      "mean_error_monte_carlo_standard_error": 0.01142499416337616,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 1.0,
+      "fraction_zero_estimate_with_unseen": 0.0585,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          11,
+          16,
+          10,
+          23,
+          0.5454545454545454
+        ],
+        [
+          16,
+          17,
+          13,
+          20,
+          0.8571428571428571
+        ],
+        [
+          12,
+          18,
+          10,
+          20,
+          1.4545454545454546
+        ],
+        [
+          16,
+          15,
+          13,
+          22,
+          0.42857142857142855
+        ],
+        [
+          17,
+          16,
+          14,
+          21,
+          0.4
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 40,
+      "regime": "dependent-reports",
+      "trials": 10000,
+      "seed_hex": "a31d8b6478ee3b36",
+      "trial_stream_sha256": "ee639c2cc54e2aaf88abb93eae2cc91b0d7afc9aa8f778cc3ee2c0d4a6dc067f",
+      "mean_actual_unseen": 17.4967,
+      "theoretical_mean_actual_unseen": 17.5,
+      "mean_naive_estimated_unseen": 0.35620823498335163,
+      "mean_error": -17.140491765016648,
+      "mean_error_monte_carlo_standard_error": 0.03221326126991507,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 1.0,
+      "fraction_zero_estimate_with_unseen": 0.15,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          21,
+          22,
+          20,
+          17,
+          0.09523809523809523
+        ],
+        [
+          21,
+          24,
+          21,
+          16,
+          0.0
+        ],
+        [
+          23,
+          21,
+          19,
+          15,
+          0.4
+        ],
+        [
+          18,
+          19,
+          16,
+          19,
+          0.35294117647058826
+        ],
+        [
+          16,
+          14,
+          14,
+          24,
+          0.0
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": false
+    },
+    {
+      "size": 40,
+      "regime": "changed-snapshot",
+      "trials": 10000,
+      "seed_hex": "1365d2c8b4871eb3",
+      "trial_stream_sha256": "9fa911616956eeeb84691edd5ec97431b11ad0e2456d8aeb0e89cfb78c18a538",
+      "mean_actual_unseen": 14.9949,
+      "theoretical_mean_actual_unseen": 15.0,
+      "mean_naive_estimated_unseen": 295.1889,
+      "mean_error": 280.194,
+      "mean_error_monte_carlo_standard_error": 0.6048016988315186,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.0,
+      "fraction_zero_estimate_with_unseen": 0.0,
+      "fraction_zero_overlap": 1.0,
+      "first_five_trials": [
+        [
+          17,
+          18,
+          0,
+          15,
+          306.0
+        ],
+        [
+          17,
+          18,
+          0,
+          15,
+          306.0
+        ],
+        [
+          22,
+          17,
+          0,
+          11,
+          374.0
+        ],
+        [
+          19,
+          14,
+          0,
+          17,
+          266.0
+        ],
+        [
+          23,
+          12,
+          0,
+          15,
+          276.0
+        ]
+      ],
+      "closed_population": false,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 100,
+      "regime": "independent",
+      "trials": 10000,
+      "seed_hex": "ca9ad4a8de8466bb",
+      "trial_stream_sha256": "a363e294dd330d86b580c59259253bd522ec88dfee579a2c182cab874e02b298",
+      "mean_actual_unseen": 25.0447,
+      "theoretical_mean_actual_unseen": 25.0,
+      "mean_naive_estimated_unseen": 24.98593449004033,
+      "mean_error": -0.05876550995967002,
+      "mean_error_monte_carlo_standard_error": 0.10370755828606817,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.0505,
+      "fraction_zero_estimate_with_unseen": 0.0,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          50,
+          50,
+          27,
+          27,
+          18.892857142857142
+        ],
+        [
+          53,
+          51,
+          30,
+          26,
+          15.580645161290322
+        ],
+        [
+          48,
+          52,
+          27,
+          27,
+          18.75
+        ],
+        [
+          51,
+          45,
+          20,
+          24,
+          36.904761904761905
+        ],
+        [
+          49,
+          51,
+          22,
+          22,
+          34.04347826086956
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": true,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 100,
+      "regime": "unequal-abilities",
+      "trials": 10000,
+      "seed_hex": "7242aed3166b750e",
+      "trial_stream_sha256": "ff8023827343749f41b50cf8655a0e70b4ba2ba72d37f4fbc2898d25d89f3654",
+      "mean_actual_unseen": 18.7111,
+      "theoretical_mean_actual_unseen": 18.75,
+      "mean_naive_estimated_unseen": 18.632366419359286,
+      "mean_error": -0.07873358064071465,
+      "mean_error_monte_carlo_standard_error": 0.10216519272782122,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.1415,
+      "fraction_zero_estimate_with_unseen": 0.002,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          29,
+          81,
+          21,
+          11,
+          21.818181818181817
+        ],
+        [
+          19,
+          83,
+          16,
+          14,
+          11.823529411764707
+        ],
+        [
+          25,
+          78,
+          18,
+          15,
+          22.105263157894736
+        ],
+        [
+          20,
+          68,
+          11,
+          23,
+          42.75
+        ],
+        [
+          21,
+          76,
+          19,
+          22,
+          5.7
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": true,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 100,
+      "regime": "shared-difficulty",
+      "trials": 10000,
+      "seed_hex": "6dde9a7de2e92c7c",
+      "trial_stream_sha256": "a3ef46b3e586bc3be55e83607f9886cdd1e3c8a8d7051ca9b75e0d471abac41c",
+      "mean_actual_unseen": 40.9748,
+      "theoretical_mean_actual_unseen": 41.0,
+      "mean_naive_estimated_unseen": 1.9632307694582039,
+      "mean_error": -39.011569230541795,
+      "mean_error_monte_carlo_standard_error": 0.03485982216031059,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 1.0,
+      "fraction_zero_estimate_with_unseen": 0.0001,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          53,
+          55,
+          43,
+          35,
+          2.727272727272727
+        ],
+        [
+          55,
+          51,
+          44,
+          38,
+          1.711111111111111
+        ],
+        [
+          44,
+          52,
+          37,
+          41,
+          2.763157894736842
+        ],
+        [
+          53,
+          51,
+          43,
+          39,
+          1.8181818181818181
+        ],
+        [
+          49,
+          51,
+          42,
+          42,
+          1.4651162790697674
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 100,
+      "regime": "common-blind-spot",
+      "trials": 10000,
+      "seed_hex": "912f37894c225484",
+      "trial_stream_sha256": "015ccd90eb039b14f13153b0482ec4e005bc766be6be47fbd4e5b762aab8a7a3",
+      "mean_actual_unseen": 51.9941,
+      "theoretical_mean_actual_unseen": 52.0,
+      "mean_naive_estimated_unseen": 1.9910892628655517,
+      "mean_error": -50.003010737134446,
+      "mean_error_monte_carlo_standard_error": 0.017734030937214963,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 1.0,
+      "fraction_zero_estimate_with_unseen": 0.0005,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          36,
+          38,
+          26,
+          52,
+          4.444444444444445
+        ],
+        [
+          41,
+          39,
+          32,
+          52,
+          1.9090909090909092
+        ],
+        [
+          37,
+          39,
+          30,
+          54,
+          2.032258064516129
+        ],
+        [
+          36,
+          44,
+          31,
+          51,
+          2.03125
+        ],
+        [
+          36,
+          42,
+          29,
+          51,
+          3.033333333333333
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    },
+    {
+      "size": 100,
+      "regime": "dependent-reports",
+      "trials": 10000,
+      "seed_hex": "0a6e9d25f39b0af7",
+      "trial_stream_sha256": "936621bf4fb1bb11289781e2a3f115011bf3bb7e1a3fb468187b54729eddacdb",
+      "mean_actual_unseen": 43.707,
+      "theoretical_mean_actual_unseen": 43.75,
+      "mean_naive_estimated_unseen": 0.8952752389830645,
+      "mean_error": -42.81172476101693,
+      "mean_error_monte_carlo_standard_error": 0.050703914030412515,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 1.0,
+      "fraction_zero_estimate_with_unseen": 0.0037,
+      "fraction_zero_overlap": 0.0,
+      "first_five_trials": [
+        [
+          52,
+          51,
+          48,
+          45,
+          0.24489795918367346
+        ],
+        [
+          60,
+          55,
+          53,
+          38,
+          0.25925925925925924
+        ],
+        [
+          55,
+          58,
+          49,
+          36,
+          1.08
+        ],
+        [
+          62,
+          53,
+          51,
+          36,
+          0.4230769230769231
+        ],
+        [
+          55,
+          52,
+          47,
+          40,
+          0.8333333333333334
+        ]
+      ],
+      "closed_population": true,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": false
+    },
+    {
+      "size": 100,
+      "regime": "changed-snapshot",
+      "trials": 10000,
+      "seed_hex": "18441403bb5e762e",
+      "trial_stream_sha256": "696efa34ca8741734b183a8c17cbb32ec521494927771f092dbe7dbc13a620c9",
+      "mean_actual_unseen": 30.0023,
+      "theoretical_mean_actual_unseen": 30.0,
+      "mean_naive_estimated_unseen": 1489.8156,
+      "mean_error": 1459.8133,
+      "mean_error_monte_carlo_standard_error": 2.012460196852447,
+      "actual_nonzero_trials": 10000,
+      "fraction_under_half_actual_given_nonzero": 0.0,
+      "fraction_zero_estimate_with_unseen": 0.0,
+      "fraction_zero_overlap": 1.0,
+      "first_five_trials": [
+        [
+          48,
+          31,
+          0,
+          31,
+          1488.0
+        ],
+        [
+          44,
+          32,
+          0,
+          34,
+          1408.0
+        ],
+        [
+          46,
+          31,
+          0,
+          33,
+          1426.0
+        ],
+        [
+          45,
+          30,
+          0,
+          35,
+          1350.0
+        ],
+        [
+          49,
+          28,
+          0,
+          33,
+          1372.0
+        ]
+      ],
+      "closed_population": false,
+      "homogeneous_defect_capture": false,
+      "independent_reports_given_fixed_defect": true
+    }
+  ],
+  "live_review_policy": null,
+  "empirical_code_review_gain_established": false
+}

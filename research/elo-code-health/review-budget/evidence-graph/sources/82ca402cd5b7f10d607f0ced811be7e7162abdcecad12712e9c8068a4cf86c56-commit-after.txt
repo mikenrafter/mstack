@@ -1,0 +1,13 @@
+d89c0e7b750786a84ef8bf9a468967707333a9eb
+3fa003c852bef303ffe48c788093c2659d677870
+2026-11-11T22:17:56-07:00
+jobs: a finish belongs to the stage's qex job; cancel is recorded before a stopped export is decided (T5, T6)
+
+finish returns without writing when its qex job is not the job of the stage on disk
+(qexId), so a cancel holding the export's job cannot finalize the run from it. finishExport
+re-reads cancel.json under the lease and ends the job cancelled instead of submitting the
+run. cancel writes cancel.json before deciding a stopped job, and when its finish steps
+aside because the job moved to the run stage it cancels the run's qex job.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+

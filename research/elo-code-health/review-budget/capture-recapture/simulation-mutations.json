@@ -1,0 +1,14 @@
+[
+  {
+    "name": "union-instead-of-overlap",
+    "caught": true
+  },
+  {
+    "name": "omit-already-observed-subtraction",
+    "caught": true
+  },
+  {
+    "name": "forget-introduced-defects",
+    "caught": true
+  }
+]

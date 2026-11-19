@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "ignore-reviewed-object",
+    "test": "test_mismatched_reviewed_commit_is_unknown_even_if_claimed_verified",
+    "caught_by_assertion": true
+  },
+  {
+    "mutation": "erase-source-read-confinement",
+    "test": "test_symlink_and_outside_root_are_rejected",
+    "caught_by_assertion": true
+  },
+  {
+    "mutation": "required-gate-as-extra-review",
+    "test": "test_required_gate_cannot_become_optional",
+    "caught_by_assertion": true
+  }
+]

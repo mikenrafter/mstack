@@ -1,0 +1,128 @@
+[
+  {
+    "group_id": "edge.research/guides/pr1",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 8/10, bar 8.0, nothing blocking",
+    "final_sha": "9ec5bd6d"
+  },
+  {
+    "group_id": "edge.research/sol/db-split",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "bf1ab03e"
+  },
+  {
+    "group_id": "edge.research/sol/graphs/graphs",
+    "action": "UNKNOWN",
+    "reason": "'findings'",
+    "final_sha": "79d6ef33"
+  },
+  {
+    "group_id": "fauxx.research/appkind-review",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "ec5dc3b"
+  },
+  {
+    "group_id": "fauxx.research/fauxx-implementation",
+    "action": "STEP-BACK",
+    "reason": "3 rounds below the bar on this approach: ask for a step-back reply, then decide with the user",
+    "final_sha": "96efb88"
+  },
+  {
+    "group_id": "fauxx.research/location-review",
+    "action": "STEP-BACK",
+    "reason": "3 rounds below the bar on this approach: ask for a step-back reply, then decide with the user",
+    "final_sha": "ae383be"
+  },
+  {
+    "group_id": "fauxx.research/optout-review",
+    "action": "ROUND",
+    "reason": "tier 1 round 2 (diff-only since 070bebf)",
+    "final_sha": "070bebf"
+  },
+  {
+    "group_id": "fauxx.research/phases-review",
+    "action": "STOP-STUCK",
+    "reason": "tier 2 re-review used; show both sides to the user",
+    "final_sha": "03b053c"
+  },
+  {
+    "group_id": "fauxx.research/seeding-review",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "c8d0ffc"
+  },
+  {
+    "group_id": "paneweft.research/review",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "0ffcc4c"
+  },
+  {
+    "group_id": "paneweft.research/v1/review",
+    "action": "STOP-STUCK",
+    "reason": "tier 2 re-review used; show both sides to the user",
+    "final_sha": "3fa003c"
+  },
+  {
+    "group_id": "phoe-nix.research/vigil-auto-interval",
+    "action": "ROUND",
+    "reason": "tier 1 round 2 (diff-only since 98214777)",
+    "final_sha": "98214777"
+  },
+  {
+    "group_id": "phoe-nix.research/vigil-disk-full",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "51a167c"
+  },
+  {
+    "group_id": "phoe-nix.research/w46-vigil",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 8/10, bar 8, nothing blocking",
+    "final_sha": "018c71c1"
+  },
+  {
+    "group_id": "phoe-nix.research/w47-router",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 8/10, bar 8, nothing blocking",
+    "final_sha": "018c71c1"
+  },
+  {
+    "group_id": "phoe-nix.research/w49",
+    "action": "ROUND",
+    "reason": "tier 2 round 1 (full diff, fresh Fable); reviewer: fable",
+    "final_sha": "4b397f97"
+  },
+  {
+    "group_id": "polara-port.research/build-loop/clouds",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 8/10, bar 8.0, nothing blocking",
+    "final_sha": "2a75237"
+  },
+  {
+    "group_id": "polara-port.research/build-loop/l48",
+    "action": "ROUND",
+    "reason": "tier 2 re-review (diff-only since 4ed088b)",
+    "final_sha": "4ed088b"
+  },
+  {
+    "group_id": "polara-port.research/build-loop/modes/credits",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 8/10, bar 8.0, nothing blocking",
+    "final_sha": "b75b617"
+  },
+  {
+    "group_id": "polara-port.research/build-loop/modes/modes",
+    "action": "STOP-AGREED",
+    "reason": "tier 2 at 9/10, bar 9.0, nothing blocking",
+    "final_sha": "59d6cdd"
+  },
+  {
+    "group_id": "residual-cli.research/reviewer-notes",
+    "action": "ROUND",
+    "reason": "tier 2 re-review (diff-only since 03581cb)",
+    "final_sha": "03581cb"
+  }
+]

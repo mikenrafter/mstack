@@ -1,0 +1,155 @@
+{
+  "scope": "Cross-artifact byte integrity only; not scientific validity or source authentication.",
+  "checks": [
+    {
+      "record": "models/accepted-results.json",
+      "field": "input_sha256",
+      "target": "corpus/rounds.jsonl",
+      "expected": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "actual": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "passed": true
+    },
+    {
+      "record": "models/accepted-grid-results.json",
+      "field": "input_sha256",
+      "target": "corpus/rounds.jsonl",
+      "expected": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "actual": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "passed": true
+    },
+    {
+      "record": "models/accepted-results.json",
+      "field": "protocol_sha256",
+      "target": "models/PROTOCOL.md",
+      "expected": "2a1ece3b44c346403112c899bc85b1ab6b0908017ac58d7bcc51afc7aed69447",
+      "actual": "2a1ece3b44c346403112c899bc85b1ab6b0908017ac58d7bcc51afc7aed69447",
+      "passed": true
+    },
+    {
+      "record": "models/external-results.json",
+      "field": "external_sha256",
+      "target": "external-corpus/rounds.jsonl",
+      "expected": "9436791a0d035bd1013c52aac0463f5d9009521c38ad06bacacd50c19ec6907b",
+      "actual": "9436791a0d035bd1013c52aac0463f5d9009521c38ad06bacacd50c19ec6907b",
+      "passed": true
+    },
+    {
+      "record": "models/external-results.json",
+      "field": "training_sha256",
+      "target": "models/structured-training.jsonl",
+      "expected": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "actual": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+      "passed": true
+    },
+    {
+      "record": "models/external-results.json",
+      "field": "locked_settings_sha256",
+      "target": "models/external-locked-settings.json",
+      "expected": "aabff8b8618d3f5435662008e0a7bc33de56be90afaa1eff257f9ee89b7fe1b7",
+      "actual": "aabff8b8618d3f5435662008e0a7bc33de56be90afaa1eff257f9ee89b7fe1b7",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/empirical-results.json",
+      "field": "source_sha256",
+      "target": "capture-recapture/sources/umd-total.cc",
+      "expected": "696c9397d1213da986db451ab83c369e328e46d6d22afd9091c2ea066faffbcd",
+      "actual": "696c9397d1213da986db451ab83c369e328e46d6d22afd9091c2ea066faffbcd",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/empirical-results.json",
+      "field": "parser_sha256",
+      "target": "capture-recapture/empirical.py",
+      "expected": "6e45272bd73e0cf7828bb928b22418f62dc5dc89a8ee8d9c7eb6a4e02d98cc80",
+      "actual": "6e45272bd73e0cf7828bb928b22418f62dc5dc89a8ee8d9c7eb6a4e02d98cc80",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/empirical-results.json",
+      "field": "protocol_sha256",
+      "target": "capture-recapture/EMPIRICAL-PROTOCOL.md",
+      "expected": "72b5385f30eddfcfd94d7fac2a8c40565925593f5f6ab8d6202016a74755dfb2",
+      "actual": "72b5385f30eddfcfd94d7fac2a8c40565925593f5f6ab8d6202016a74755dfb2",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/empirical-results.json",
+      "field": "amendment_sha256",
+      "target": "capture-recapture/EMPIRICAL-AMENDMENT.md",
+      "expected": "ad9081ad737ab2b8e986623dc12d095bf04d4ba8d7ef471120e2db74791e5730",
+      "actual": "ad9081ad737ab2b8e986623dc12d095bf04d4ba8d7ef471120e2db74791e5730",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/empirical-results.json",
+      "field": "manual_oracle_sha256",
+      "target": "capture-recapture/MANUAL-ORACLE.md",
+      "expected": "a7079e2b603867d7b0b7011190bfb0459b902635f693f7dfb9e74980381ade05",
+      "actual": "a7079e2b603867d7b0b7011190bfb0459b902635f693f7dfb9e74980381ade05",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/coverage-results.json",
+      "field": "normalized_sha256",
+      "target": "capture-recapture/normalized-matrices.json",
+      "expected": "b8b5cea1c423e88c4e65363eed3c7b37abc07750c2ae8b009003c8da85239dec",
+      "actual": "b8b5cea1c423e88c4e65363eed3c7b37abc07750c2ae8b009003c8da85239dec",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/coverage-results.json",
+      "field": "protocol_sha256",
+      "target": "capture-recapture/COVERAGE-PROTOCOL.md",
+      "expected": "fc1ae45c55136daf4b9189af9210c698b0fbbec8e8f9f0dfbbd67d066066df9a",
+      "actual": "fc1ae45c55136daf4b9189af9210c698b0fbbec8e8f9f0dfbbd67d066066df9a",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/simulation-results.json",
+      "field": "script_sha256",
+      "target": "capture-recapture/simulate.py",
+      "expected": "db6d88334b22ef207739969dc924deff1b54c92f8f518d549bc13ffc24044713",
+      "actual": "db6d88334b22ef207739969dc924deff1b54c92f8f518d549bc13ffc24044713",
+      "passed": true
+    },
+    {
+      "record": "capture-recapture/simulation-results.json",
+      "field": "protocol_sha256",
+      "target": "capture-recapture/SIMULATION-PROTOCOL.md",
+      "expected": "b80681f5630d1ee8e1baa8ce701463d13c7d52eaa4431dc31e7d713bfd11e103",
+      "actual": "b80681f5630d1ee8e1baa8ce701463d13c7d52eaa4431dc31e7d713bfd11e103",
+      "passed": true
+    },
+    {
+      "record": "evidence-graph/cli-checks.json",
+      "field": "bundle_sha256",
+      "target": "evidence-graph/paneweft.bundle.json",
+      "expected": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+      "actual": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+      "passed": true
+    },
+    {
+      "record": "evidence-graph/checks.json",
+      "field": "bundle_sha256",
+      "target": "evidence-graph/paneweft.bundle.json",
+      "expected": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+      "actual": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+      "passed": true
+    },
+    {
+      "record": "advisory-prototype/smoke-records/observation-3329b5b6982026312359dca4bc85e90ecd8cb04af8b0706511b31c6d72848b46.json",
+      "field": "collector_sha256",
+      "target": "advisory-prototype/collector.py",
+      "expected": "32224f39659bb8663c226e4ad1de99fc39856fcfad2ceeecce381b710b43b2a2",
+      "actual": "32224f39659bb8663c226e4ad1de99fc39856fcfad2ceeecce381b710b43b2a2",
+      "passed": true
+    },
+    {
+      "record": "evidence-graph/cli-checks.json",
+      "check": "roundtrip-and-honest-freshness",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

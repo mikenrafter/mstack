@@ -1,0 +1,1954 @@
+{
+  "source_url": "https://www.cs.umd.edu/projects/SoftEng/ESEG/manual/pbr_package/docs/total.cc",
+  "source_sha256": "696c9397d1213da986db451ab83c369e328e46d6d22afd9091c2ea066faffbcd",
+  "source_program_executed": false,
+  "cross_cohort_inspector_crosswalk": "unknown",
+  "matrices": [
+    {
+      "matrix": "atm_nov",
+      "artifact": "atm",
+      "cohort": "nov",
+      "declared_inspectors": 12,
+      "reference_defects": 29,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 34,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "nov",
+          "participant_group": "nov:1",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            3,
+            4,
+            5,
+            8,
+            13,
+            18,
+            21,
+            25
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "nov",
+          "participant_group": "nov:2",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            4,
+            8,
+            11,
+            16,
+            17,
+            21,
+            27
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "nov",
+          "participant_group": "nov:3",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            3
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "nov",
+          "participant_group": "nov:4",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            11,
+            16,
+            19
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "nov",
+          "participant_group": "nov:6",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            2,
+            3,
+            5,
+            8,
+            12,
+            25
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "nov",
+          "participant_group": "nov:7",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            3,
+            4,
+            5,
+            8,
+            10,
+            16,
+            17,
+            19,
+            20,
+            21,
+            23,
+            24,
+            28
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "nov",
+          "participant_group": "nov:8",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            7,
+            16,
+            17,
+            19,
+            23,
+            24,
+            27
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "nov",
+          "participant_group": "nov:9",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            4,
+            5,
+            8,
+            11,
+            15,
+            21,
+            22,
+            23,
+            25,
+            27
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "nov",
+          "participant_group": "nov:11",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            2,
+            4,
+            7,
+            11,
+            16,
+            19,
+            27,
+            29
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "nov",
+          "participant_group": "nov:12",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            4,
+            7,
+            11,
+            24,
+            25,
+            27
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "nov",
+          "participant_group": "nov:13",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            11,
+            28,
+            29
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "nov",
+          "participant_group": "nov:14",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            4,
+            5,
+            11,
+            16,
+            19,
+            20,
+            23,
+            29
+          ],
+          "padding_columns": 4
+        }
+      ]
+    },
+    {
+      "matrix": "atm_jun",
+      "artifact": "atm",
+      "cohort": "jun",
+      "declared_inspectors": 14,
+      "reference_defects": 29,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 54,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "jun",
+          "participant_group": "jun:1",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            11,
+            16,
+            19
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "jun",
+          "participant_group": "jun:2",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            16,
+            19
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "jun",
+          "participant_group": "jun:3",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            6,
+            10,
+            11,
+            16,
+            17,
+            19,
+            20
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "jun",
+          "participant_group": "jun:4",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            4,
+            7,
+            16,
+            17,
+            19,
+            20,
+            28
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 5,
+          "cohort": "jun",
+          "participant_group": "jun:5",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9,
+            11,
+            15,
+            17,
+            18,
+            20,
+            23,
+            26
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "jun",
+          "participant_group": "jun:6",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            4,
+            7,
+            8,
+            11,
+            12,
+            15,
+            16,
+            23,
+            27,
+            29
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "jun",
+          "participant_group": "jun:7",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            4,
+            5,
+            6,
+            16,
+            17,
+            18,
+            26,
+            29
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "jun",
+          "participant_group": "jun:8",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            8,
+            11,
+            16,
+            18
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "jun",
+          "participant_group": "jun:9",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            6,
+            19,
+            27,
+            28
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 10,
+          "cohort": "jun",
+          "participant_group": "jun:10",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            3,
+            4,
+            5,
+            7,
+            9,
+            15
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "jun",
+          "participant_group": "jun:11",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            2,
+            3,
+            4,
+            6,
+            8,
+            11,
+            16,
+            17,
+            27
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "jun",
+          "participant_group": "jun:12",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            3,
+            4,
+            7,
+            10,
+            16,
+            19,
+            26,
+            29
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "jun",
+          "participant_group": "jun:13",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            2,
+            4,
+            7,
+            8,
+            10,
+            15,
+            16,
+            18,
+            24
+          ],
+          "padding_columns": 4
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "jun",
+          "participant_group": "jun:14",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            4,
+            5,
+            7,
+            10,
+            11,
+            23,
+            29
+          ],
+          "padding_columns": 4
+        }
+      ]
+    },
+    {
+      "matrix": "pg_nov",
+      "artifact": "pg",
+      "cohort": "nov",
+      "declared_inspectors": 12,
+      "reference_defects": 27,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 91,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "nov",
+          "participant_group": "nov:1",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            11,
+            14
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "nov",
+          "participant_group": "nov:2",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            10
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "nov",
+          "participant_group": "nov:3",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            5,
+            16,
+            19
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "nov",
+          "participant_group": "nov:4",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            5,
+            6,
+            9,
+            11,
+            26
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "nov",
+          "participant_group": "nov:6",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            14,
+            15,
+            19,
+            26
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "nov",
+          "participant_group": "nov:7",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            4,
+            7,
+            8,
+            12,
+            14,
+            15,
+            26
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "nov",
+          "participant_group": "nov:8",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            2,
+            4,
+            13
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "nov",
+          "participant_group": "nov:9",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            6,
+            9,
+            10,
+            15,
+            19,
+            24
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "nov",
+          "participant_group": "nov:11",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            4,
+            10,
+            11,
+            19
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "nov",
+          "participant_group": "nov:12",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            5,
+            6,
+            9,
+            11,
+            13,
+            14,
+            18
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "nov",
+          "participant_group": "nov:13",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            2,
+            3,
+            6,
+            9,
+            15,
+            20
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "nov",
+          "participant_group": "nov:14",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            5,
+            7,
+            10,
+            11,
+            13,
+            17,
+            23
+          ],
+          "padding_columns": 6
+        }
+      ]
+    },
+    {
+      "matrix": "pg_jun",
+      "artifact": "pg",
+      "cohort": "jun",
+      "declared_inspectors": 14,
+      "reference_defects": 27,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 111,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "anomalies": [
+        "Known source-header anomaly: 29 printed labels, PG_JUN_ERR declares 27; amendment permits only this exact source hash."
+      ],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "jun",
+          "participant_group": "jun:1",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            6,
+            9,
+            10,
+            11,
+            13
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "jun",
+          "participant_group": "jun:2",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            2,
+            10,
+            14,
+            15,
+            19
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "jun",
+          "participant_group": "jun:3",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            3,
+            5,
+            6,
+            9,
+            10,
+            12,
+            14,
+            18,
+            27
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "jun",
+          "participant_group": "jun:4",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            3,
+            5,
+            6,
+            9,
+            12,
+            18
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 5,
+          "cohort": "jun",
+          "participant_group": "jun:5",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            17,
+            18,
+            21,
+            25
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "jun",
+          "participant_group": "jun:6",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            4,
+            9,
+            14,
+            15,
+            20,
+            21,
+            22,
+            26
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "jun",
+          "participant_group": "jun:7",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            4,
+            5,
+            7,
+            9,
+            11,
+            13,
+            15,
+            16,
+            17,
+            18,
+            21,
+            27
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "jun",
+          "participant_group": "jun:8",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            2,
+            5,
+            8,
+            9,
+            10,
+            14,
+            15,
+            16
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "jun",
+          "participant_group": "jun:9",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            3,
+            5,
+            6,
+            9,
+            11,
+            17
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 10,
+          "cohort": "jun",
+          "participant_group": "jun:10",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            5,
+            11,
+            12,
+            15
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "jun",
+          "participant_group": "jun:11",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            14,
+            15,
+            22
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "jun",
+          "participant_group": "jun:12",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            5,
+            7,
+            9,
+            11,
+            13,
+            15,
+            26
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "jun",
+          "participant_group": "jun:13",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1,
+            4,
+            7,
+            9,
+            11,
+            12,
+            14,
+            15,
+            18,
+            19
+          ],
+          "padding_columns": 6
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "jun",
+          "participant_group": "jun:14",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            3,
+            5,
+            6,
+            8,
+            11,
+            14,
+            16,
+            17,
+            22,
+            23,
+            26
+          ],
+          "padding_columns": 6
+        }
+      ]
+    },
+    {
+      "matrix": "a_nov",
+      "artifact": "a",
+      "cohort": "nov",
+      "declared_inspectors": 12,
+      "reference_defects": 18,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 148,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "nov",
+          "participant_group": "nov:1",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            15
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "nov",
+          "participant_group": "nov:2",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "nov",
+          "participant_group": "nov:3",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            12
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "nov",
+          "participant_group": "nov:4",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "nov",
+          "participant_group": "nov:6",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            2,
+            4,
+            11,
+            13,
+            14
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "nov",
+          "participant_group": "nov:7",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            4,
+            5
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "nov",
+          "participant_group": "nov:8",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            4,
+            8
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "nov",
+          "participant_group": "nov:9",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            4
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "nov",
+          "participant_group": "nov:11",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            4,
+            14
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "nov",
+          "participant_group": "nov:12",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "nov",
+          "participant_group": "nov:13",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            6
+          ],
+          "padding_columns": 15
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "nov",
+          "participant_group": "nov:14",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3,
+            4
+          ],
+          "padding_columns": 15
+        }
+      ]
+    },
+    {
+      "matrix": "a_jun",
+      "artifact": "a",
+      "cohort": "jun",
+      "declared_inspectors": 13,
+      "reference_defects": 15,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 168,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "jun",
+          "participant_group": "jun:1",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            3,
+            5,
+            6,
+            13
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "jun",
+          "participant_group": "jun:2",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            4,
+            6
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "jun",
+          "participant_group": "jun:3",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "jun",
+          "participant_group": "jun:4",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1,
+            3,
+            6,
+            7,
+            8,
+            9,
+            11
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 5,
+          "cohort": "jun",
+          "participant_group": "jun:5",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            4,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            14
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "jun",
+          "participant_group": "jun:6",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            5,
+            6,
+            7,
+            8,
+            9,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "jun",
+          "participant_group": "jun:7",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            10,
+            11
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "jun",
+          "participant_group": "jun:8",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3,
+            5,
+            6,
+            7,
+            8,
+            11
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "jun",
+          "participant_group": "jun:9",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 10,
+          "cohort": "jun",
+          "participant_group": "jun:10",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            10,
+            11,
+            13
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "jun",
+          "participant_group": "jun:11",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            2,
+            3,
+            6,
+            7,
+            9,
+            10,
+            11,
+            13,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "jun",
+          "participant_group": "jun:12",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "jun",
+          "participant_group": "jun:13",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        }
+      ]
+    },
+    {
+      "matrix": "b_nov",
+      "artifact": "b",
+      "cohort": "nov",
+      "declared_inspectors": 12,
+      "reference_defects": 15,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 204,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "nov",
+          "participant_group": "nov:1",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "nov",
+          "participant_group": "nov:2",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            11,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "nov",
+          "participant_group": "nov:3",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            4
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "nov",
+          "participant_group": "nov:4",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1,
+            3
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "nov",
+          "participant_group": "nov:6",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            4,
+            10,
+            11,
+            12,
+            14
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "nov",
+          "participant_group": "nov:7",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            11
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "nov",
+          "participant_group": "nov:8",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "nov",
+          "participant_group": "nov:9",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "nov",
+          "participant_group": "nov:11",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            3,
+            4,
+            8
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "nov",
+          "participant_group": "nov:12",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "nov",
+          "participant_group": "nov:13",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 14,
+          "cohort": "nov",
+          "participant_group": "nov:14",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            3,
+            9,
+            11,
+            15
+          ],
+          "padding_columns": 18
+        }
+      ]
+    },
+    {
+      "matrix": "b_jun",
+      "artifact": "b",
+      "cohort": "jun",
+      "declared_inspectors": 13,
+      "reference_defects": 15,
+      "reference_truth": "study reference faults, not exhaustive natural defects",
+      "source_initializer_line": 224,
+      "header_tokens": [
+        "ID",
+        "P",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "anomalies": [],
+      "inspectors": [
+        {
+          "inspector_id": 1,
+          "cohort": "jun",
+          "participant_group": "jun:1",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            14
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 2,
+          "cohort": "jun",
+          "participant_group": "jun:2",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            11
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 3,
+          "cohort": "jun",
+          "participant_group": "jun:3",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            8
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 4,
+          "cohort": "jun",
+          "participant_group": "jun:4",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            5,
+            6,
+            7,
+            11,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 5,
+          "cohort": "jun",
+          "participant_group": "jun:5",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 6,
+          "cohort": "jun",
+          "participant_group": "jun:6",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            5,
+            6,
+            7,
+            9,
+            11,
+            12,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 7,
+          "cohort": "jun",
+          "participant_group": "jun:7",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            11,
+            12,
+            14
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 8,
+          "cohort": "jun",
+          "participant_group": "jun:8",
+          "perspective": 2,
+          "perspective_label": "tester",
+          "detections": [
+            1,
+            2,
+            4,
+            5,
+            7
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 9,
+          "cohort": "jun",
+          "participant_group": "jun:9",
+          "perspective": 3,
+          "perspective_label": "user",
+          "detections": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 10,
+          "cohort": "jun",
+          "participant_group": "jun:10",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            2,
+            7,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 11,
+          "cohort": "jun",
+          "participant_group": "jun:11",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            2,
+            7
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 12,
+          "cohort": "jun",
+          "participant_group": "jun:12",
+          "perspective": 0,
+          "perspective_label": "usual NASA technique",
+          "detections": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        },
+        {
+          "inspector_id": 13,
+          "cohort": "jun",
+          "participant_group": "jun:13",
+          "perspective": 1,
+          "perspective_label": "designer",
+          "detections": [
+            1,
+            3,
+            4,
+            5,
+            7,
+            8,
+            9,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "padding_columns": 18
+        }
+      ]
+    }
+  ]
+}

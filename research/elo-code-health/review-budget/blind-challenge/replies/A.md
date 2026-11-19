@@ -1,0 +1,13 @@
+# Historical snapshot A review
+
+No material correctness finding established in the inspected scope. This is a source-only review of a historical snapshot, not a claim about the current product.
+
+I inspected `src/v1/jobs.ts`, primarily submission, export-to-run advancement, lease ownership, terminal import, status following, and cancellation. I also read the production helpers `src/v1/durable.ts`, `src/core/write-lock.ts`, and `src/v1/qex.ts`, and located cancellation handling in `src/v1/adapters.ts`. I did not inspect tests or execute code.
+
+The main candidate interleaving was a cancellation arriving after `finishExport` reads `cancel.json` at line 618 and before it publishes the run decision at line 619. `afterFinish` at lines 702-705 and `submitOnce` at lines 347-383 do not recheck that file, so the run can be submitted after the cancellation request is recorded. However, the marker is not itself an externally acknowledged successful cancellation. The cancelling call waits for the lease in `finishWithin` at lines 682-698, follows a changed run queue-job ID at lines 938-940, and returns `cancelled` only for an actual cancelled terminal collection at lines 942-943 and 675-676. It may instead return `cancel-too-late` or `indeterminate`. This interleaving therefore does not establish advancement after an accepted cancellation.
+
+A caller holding a completed export's queue record cannot finish the current run with that record. `finish` compares the persisted `qexId` with the stopped record's ID at line 638 before interpreting the current stage. The cancellation loop then follows the new run ID. This also protects the interval in which the run has been decided but its queue ID is still null, although cancellation may return `indeterminate` in that interval.
+
+One boundary remains uncertain. `cancel` at line 897 returns `cancel-too-late` for any live `importing` lease, including export finalization before the example run starts. `finishExport` at lines 616-618 separately permits a cancellation already in flight to stop that transition. The inspected interface does not specify whether cancellation must remain available throughout export finalization, so I did not promote this conservative rejection boundary to a material finding. If that availability is required, line 897 needs a stage-aware rule.
+
+Evidence limits: these conclusions follow from static control flow and lock/file publication behavior. They do not prove all possible schedules, queue implementation behavior, or filesystem failure recovery. The observed late-marker submission window merits validation if the contract defines acceptance at durable request recording rather than at the returned cancellation outcome.

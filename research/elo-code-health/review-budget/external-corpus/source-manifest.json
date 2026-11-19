@@ -1,0 +1,261 @@
+{
+  "family": "/home/mini/Documents/repos/edge.research/wake-pr/review-*.md",
+  "selected_utc": "2026-11-17T07:20:51.913944+00:00",
+  "sources": [
+    {
+      "bytes": 2651,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r1-findings.md",
+      "sha256": "e1883e168e4239209c21c87eb35fbd2843f5aa24257f7fc56b94255afa0e1bfd"
+    },
+    {
+      "bytes": 1777,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r1.md",
+      "sha256": "58bbf66eed5fe18e4146566d9d3f8650a76ae901a156be9d3626c199f06913b3"
+    },
+    {
+      "bytes": 2686,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r2-findings.md",
+      "sha256": "e8b7cef662316bcc21e003cd73f7dbca4888197b5e76d2896f6ceba794aba488"
+    },
+    {
+      "bytes": 1798,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r2.md",
+      "sha256": "cc0d45585900eeb3cb4e9635585b8dd6f6b373b00d8a7b2916b0b07991703ff5"
+    },
+    {
+      "bytes": 1693,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r3-findings.md",
+      "sha256": "6117b1e8fa7b6c159a2d8b0f422b6230a11f01e2d7dd7b3f1135f9469a2ff12a"
+    },
+    {
+      "bytes": 1226,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r3.md",
+      "sha256": "731c74900e831e95afe306b4fa6e09d43ffc16344747d7de0f80e09df57cf54e"
+    },
+    {
+      "bytes": 928,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r4-findings.md",
+      "sha256": "a5ad02556b7290530e1eb82e13975b6c4bc00cb44345434e4ac62b7f9165ba57"
+    },
+    {
+      "bytes": 1100,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r4.md",
+      "sha256": "f484fad9a6cad82d677ea488755931c3d31aa03560f3cc3bfb3e207ff163ebb6"
+    },
+    {
+      "bytes": 345,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r5-findings.md",
+      "sha256": "f8c035abdd5c9b105a14c8fb5212508f0748e6a8333eef306568c89c4b494c36"
+    },
+    {
+      "bytes": 991,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-cls1-r5.md",
+      "sha256": "40251b66ddf0d5bf20d8b86f2cabc9e3038c3d846ecbada38a62a481e69cd17f"
+    },
+    {
+      "bytes": 9805,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-harness-spec-r1-findings.md",
+      "sha256": "49aa24a32477bc08d4b048605893092637d8d40125d1631f0edd7ab191fd2b7c"
+    },
+    {
+      "bytes": 8399,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-harness-spec-r2-findings.md",
+      "sha256": "c3840c46b8c9108972ecb1fa038cb137020aabad090daf8f89935f4fcac6e761"
+    },
+    {
+      "bytes": 2557,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r1-findings.md",
+      "sha256": "c656196bea44928cdcb34d9b120f96485242548b57da59d085cb6b21609d6e2b"
+    },
+    {
+      "bytes": 2099,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r1.md",
+      "sha256": "1fd520d8b5a69873c2a5445f7bc39e11fd78f13ba768db4518cc3af064a5dab7"
+    },
+    {
+      "bytes": 1540,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r2-findings.md",
+      "sha256": "3c40db1508b0b9cedb332d48658af6a1ee5a11c2285cc7f82c4abae1b551bb2e"
+    },
+    {
+      "bytes": 1093,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r2.md",
+      "sha256": "0ff2d0d5eb5202afc6af26075ff8b2f054220bb54af409efd8e3e24f37aa562e"
+    },
+    {
+      "bytes": 884,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r3-findings.md",
+      "sha256": "c45ec4abc81ff0e195e1df6cd02b477a50743f6ad45a8019c0f5bcae0cac422f"
+    },
+    {
+      "bytes": 871,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-code-r3.md",
+      "sha256": "820818a2c9a42fa118718e7b9b22c99f11ab9b40eb72a9944490f0219f604fd7"
+    },
+    {
+      "bytes": 2300,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-repin-r1-findings.md",
+      "sha256": "712da64a40366c4898f8d86fde351cceb5c604a921107ca15650ad4b207de534"
+    },
+    {
+      "bytes": 684,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-hmm-repin-r2-findings.md",
+      "sha256": "cbeffb672c0e54ef9417f71eb83ddd067a02397b1126b62e86ccd3542a526842"
+    },
+    {
+      "bytes": 1379,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r1-findings.md",
+      "sha256": "a564bb3ce3e0aea240c10708c09206c3493ba8749eb517934e548af021faeea2"
+    },
+    {
+      "bytes": 1798,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r1.md",
+      "sha256": "99302f14d5a18d2e6cb25cbc36ca6f32b2b84ac179e4ad64e7bb9eff6c303be9"
+    },
+    {
+      "bytes": 1895,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r2-findings.md",
+      "sha256": "5903ecacafd411555de12006cca44a4309b192554945b106e9aa4b11543190a6"
+    },
+    {
+      "bytes": 1209,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r2.md",
+      "sha256": "16982e7ac31d53180fa0b9c398ee9772149d20343762af9207d4dd4148cc0cac"
+    },
+    {
+      "bytes": 1442,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r3-findings.md",
+      "sha256": "cb11e1e7f128c0c0dedd7c295c63fa930abf24fde6b9e14bfa704716765978ca"
+    },
+    {
+      "bytes": 1312,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r3.md",
+      "sha256": "3c1cddc5feaf600d95d037e317854f62679d5838c0ef878fb8d0fc6c5c6bc912"
+    },
+    {
+      "bytes": 1365,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r4-findings.md",
+      "sha256": "e11e10b4e74c0ce1f65aa958bc9b2ae03e0008b3479b3f92c010d2e4e4f49f80"
+    },
+    {
+      "bytes": 1568,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r4.md",
+      "sha256": "4a7c37912ceb2bdb3f99fb10623e7ba59577ee443806b80334f8bc54eb1d910c"
+    },
+    {
+      "bytes": 533,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r5-findings.md",
+      "sha256": "cbe66bbda425ebd650c45e2e23e96db082e5980f0f38e10e137feac2ffda918b"
+    },
+    {
+      "bytes": 1459,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-p8a-r5.md",
+      "sha256": "083a0774d8db87b163851332ee243a37eefdfbe281a9e4c1bbb089be592de01b"
+    },
+    {
+      "bytes": 1405,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-ledger.md",
+      "sha256": "b44f9975e06b488804c0526481dec775ad4706b930bc4dbc0c6b620d25b93bb6"
+    },
+    {
+      "bytes": 4114,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r1-findings.md",
+      "sha256": "b94799682695b2676e6b6c9cca9397715714ced10e406621f7927cf6cb6c43a2"
+    },
+    {
+      "bytes": 1339,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r1.md",
+      "sha256": "b31f47ae954db754902e99b72ce100b0cf1f264434c6ead03d15fbfcd0b80549"
+    },
+    {
+      "bytes": 6080,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r2-findings.md",
+      "sha256": "190a50993485239ffe3d230f157d19be127553a4f4fb1ab075b01767953e9b07"
+    },
+    {
+      "bytes": 1544,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r2.md",
+      "sha256": "07a6f71a3390c16b20226e3bb04c6e8113c849389e9ee97750f5b33a017a1a27"
+    },
+    {
+      "bytes": 5036,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r3-findings.md",
+      "sha256": "981bbe9e1e02b5e6a0c5bc024a4aa7e5eac222dc8d8cc49bd2c900044710e540"
+    },
+    {
+      "bytes": 1511,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r3.md",
+      "sha256": "1253ca3e38b1b8e38892b4369f0153e9299cbdd2de7b506440d089a1116e4c7d"
+    },
+    {
+      "bytes": 2784,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r4-findings.md",
+      "sha256": "cb5e022e979f8241ceac38bc633e6770143c7317c894bdcc39a8ecd50d5446f6"
+    },
+    {
+      "bytes": 1255,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r4.md",
+      "sha256": "577322d767d60279580e18776b0d11da136401bea95d61c46dafc8ffc4eff42f"
+    },
+    {
+      "bytes": 704,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r5-findings.md",
+      "sha256": "9689f3a17de071ee00fd0d233f7656d2e25f4f5d2ae381d8583f48dd65259d4d"
+    },
+    {
+      "bytes": 1281,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r5.md",
+      "sha256": "9d29dc731d18472faf3fa1f1ebd3f718ac6db172e1ef543c94649955e408f436"
+    },
+    {
+      "bytes": 883,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-ledger.md",
+      "sha256": "71ec85fb7368394c291cd1ab755e80730b4cd962d16b76b9b2340b3aac83f7df"
+    },
+    {
+      "bytes": 12434,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r1-findings.md",
+      "sha256": "01510b0fda60bd5ca929d65c69d8ff5a5856df112c8114e78fc6dbbe61f971d8"
+    },
+    {
+      "bytes": 7479,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r2-findings.md",
+      "sha256": "e8b708cc910f3836105062149200ea0b93ac1ce0a2cb57e13fd679fd01c4e136"
+    },
+    {
+      "bytes": 2340,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r2.md",
+      "sha256": "08f454ed4d9cab8d7a74073f1ace5198d01c879090d3d35a389a92dda3c72835"
+    },
+    {
+      "bytes": 5689,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r3-findings.md",
+      "sha256": "24fc7a76eef01919bac101c2bdc0634871724109ad69f569ed29358b16c952db"
+    },
+    {
+      "bytes": 2042,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r3.md",
+      "sha256": "8413bb58d1c931ba008779684c5a755516110b3b1a699c171ee33146a5562e04"
+    },
+    {
+      "bytes": 2761,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r4-findings.md",
+      "sha256": "f019cec84f704c28a63e31b4b35647e36977a55094c1d27fa9c21c72636d8e92"
+    },
+    {
+      "bytes": 2022,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r4.md",
+      "sha256": "90f83f958fffe016a2d4d065ab8483bc6ef32b182f9ccd3876bffdaea7badfd3"
+    },
+    {
+      "bytes": 906,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r5-findings.md",
+      "sha256": "694f959425898f4187132bbfd04b8a3ebc9c13cdf0eae8ee84cdf3e1371bed50"
+    },
+    {
+      "bytes": 1170,
+      "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r5.md",
+      "sha256": "b570fc318a9ca58f5f73f96ed3c1ae25fb6a1b76130c9ca3677cac4935f23e3f"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "reference-population-from-observed-union",
+    "test": "test_metadata_excluded_and_padding_not_a_reference_population",
+    "caught_by_assertion": true
+  },
+  {
+    "mutation": "ignore-nonzero-padding",
+    "test": "test_width_nonbinary_padding_duplicate_and_perspective_refuse",
+    "caught_by_assertion": true
+  },
+  {
+    "mutation": "confuse-total-with-remaining",
+    "test": "test_chapman_hand_oracle_keeps_total_and_remaining_separate",
+    "caught_by_assertion": true
+  }
+]

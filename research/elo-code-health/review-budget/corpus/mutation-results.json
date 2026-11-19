@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "future_round_feature_leak",
+    "detected": true,
+    "failed_tests": 1
+  },
+  {
+    "mutation": "missing_findings_become_zero",
+    "detected": true,
+    "failed_tests": 1
+  },
+  {
+    "mutation": "repeat_discoveries_every_round",
+    "detected": true,
+    "failed_tests": 1
+  }
+]

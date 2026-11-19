@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "reverse_outcome",
+    "detected": true,
+    "failed_tests": 3
+  },
+  {
+    "mutation": "remove_normalization",
+    "detected": true,
+    "failed_tests": 2
+  },
+  {
+    "mutation": "drop_counter_update",
+    "detected": true,
+    "failed_tests": 4
+  }
+]

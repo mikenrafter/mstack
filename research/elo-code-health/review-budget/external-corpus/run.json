@@ -1,0 +1,25 @@
+{
+  "completed_utc": "2026-11-17T07:27:27.994538+00:00",
+  "jobs": {
+    "extract": "55a0c72a-6fef-4c0c-adc3-4a33b208f364",
+    "manifest": "2a9e0d0e-c77e-4545-86ed-bd2dfdf313ff",
+    "mutations": "4ab04215-ad92-4e18-8aa3-3ec94d8f3f5b",
+    "tests": "4f2ef9c1-9884-4a91-8b82-387145217e0c"
+  },
+  "mutations_detected": 3,
+  "sha256": {
+    "PROTOCOL.md": "aeed3a7022e444743363aa9e5f4ce82e36cc28cbd1a9cb031c4435540f9ea112",
+    "README.md": "3da95793716df5c8e6683376a764be31e2e02176b2f4e0c744382e2069a6a61f",
+    "check_mutations.py": "273d12cb465aa556ba08d684869422a468350064b0a7931f5b6a6979145b021f",
+    "extract.py": "792532ea353d4224fa2ea1b18e4b5bec70fd712030966396d4f2d1996605917b",
+    "findings.jsonl": "f4dd7bc3b9dfa34d09b4f084366fde61a2c8b286e74008d6002a85f6ef5a328d",
+    "inventory.jsonl": "26031f80aa3f137aae4cb2712c924ab9aa402d54563f061a80810327b753195e",
+    "mapping.jsonl": "32bc7457608e4359e464678c8580e6525ab3b10feca1c1317ceae2f3892fdfbe",
+    "mutation-results.json": "ae4ec874194b2b539b6bd648a412f9ae7467f969f009b65a74399f401156df3c",
+    "rounds.jsonl": "9436791a0d035bd1013c52aac0463f5d9009521c38ad06bacacd50c19ec6907b",
+    "source-manifest.json": "25abd5b9414c93525efe2b8199043da87ae86d8684eb9a147939b8079854821f",
+    "summary.json": "03e66beb1fdb472a88d1a0337ef7eaaeccaaa693a84567b41a4d5bfe619d573e",
+    "test_extract.py": "5ba251b609169772294e3383774922980388d65010cf1e41256e8425af3ebab0"
+  },
+  "tests_passed": 8
+}

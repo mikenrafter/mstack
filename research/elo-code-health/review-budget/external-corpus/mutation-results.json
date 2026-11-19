@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "lose_should_findings",
+    "detected": true,
+    "failed_tests": 2
+  },
+  {
+    "mutation": "approval_becomes_negative",
+    "detected": true,
+    "failed_tests": 2
+  },
+  {
+    "mutation": "ignore_scope_shift",
+    "detected": true,
+    "failed_tests": 1
+  }
+]

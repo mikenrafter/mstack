@@ -1,0 +1,30 @@
+{
+  "started_at_utc": "2026-11-17T08:21:50.315470+00:00",
+  "collector_sha256": "32224f39659bb8663c226e4ad1de99fc39856fcfad2ceeecce381b710b43b2a2",
+  "input_hashes": {
+    "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/corpus/source-manifest.json": "f9c8c2882b5e969850674c86f035f178cec5fb3d0737c9e97348b80aeb36af0b",
+    "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/corpus/groups.jsonl": "9af9a2a110980b317c731ab85e5f7be5fa26c9d543b01bff33973228b51cc36f",
+    "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/snapshot-features.jsonl": "d8ac9bee540c25e43ef38d75302a3ed8d47df4d1a1baa67320ebd62d84db55da",
+    "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/advisory-prototype/batch-smoke/PROTOCOL.md": "8f3f1c60b31758eaf071f37c254ea448e0c1bb877f818a77f80c45eb104ee246"
+  },
+  "source_root": "/home/mini/Documents/repos",
+  "purpose": "historical-object-only integration smoke; not training labels",
+  "finished_at_utc": "2026-11-17T08:21:51.588461+00:00",
+  "groups": 21,
+  "capture_attempted": 21,
+  "statuses": {
+    "insufficient-evidence": 19,
+    "cap-reached-escalate": 1,
+    "required-review-still-pending": 1
+  },
+  "collector_unchanged": true,
+  "input_files_unchanged": true,
+  "execution_all_disabled": true,
+  "outcomes_all_unobserved": true,
+  "reason_counts": {
+    "unsupported-ledger-schema": 18,
+    "No supported trigger; this does not recommend stopping or prove defect absence.": 1,
+    "Declared review channel has exhausted its cap; no optional slot is inferred.": 1,
+    "tier 2 round 1 (full diff, fresh Fable); reviewer: fable": 1
+  }
+}

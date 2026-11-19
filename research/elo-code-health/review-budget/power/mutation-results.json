@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "ignore trigger false positives",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "relax the fixed significance threshold",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "treat correlated projects as independent",
+    "caught": true,
+    "errors": 0
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "notice": "Synthetic serialization examples only. Repeated hexadecimal values stand in for captured hashes. No actual policy capture or review is represented.",
+  "input": {
+    "version": 0,
+    "observation_id": "synthetic-change-17-snapshot-1",
+    "captured_at": "2026-11-17T08:00:00Z",
+    "change": {
+      "project": "edge-example",
+      "group_id": "synthetic-change-17",
+      "ledger_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "head_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "dirty_patch_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "current_snapshot_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    "policy": {
+      "script_sha256": "7a3d78806ee6750cfa9efa04cee06610e3b0315f29b723f6a232b61903ab5920",
+      "command_argv": ["/registered/build-loop/scripts/review-ledger", "-l", "/registered/research/synthetic.ledger.json", "next"],
+      "ledger_schema": "2",
+      "step": "STOP-AGREED",
+      "stdout": "STOP-AGREED: tier 2 at 9/10, bar 9, nothing blocking\n",
+      "capture_verified": true,
+      "phase": 0,
+      "tier1_rounds": 2,
+      "tier2_rounds": 1
+    },
+    "coverage": {
+      "state": "exact-reviewed",
+      "reviewed_snapshot_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "verification_ref": null
+    },
+    "fix_facts": [{
+      "category": "cancellation",
+      "fix_revision": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "diff_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "source_ref": "registered:synthetic/fix-report#cancellation-transition",
+      "accepted": true
+    }],
+    "allocation": {"state": "unresolved", "channel": null, "owner_record_ref": null}
+  },
+  "output": {
+    "version": 0,
+    "observation_id": "synthetic-change-17-snapshot-1",
+    "status": "additional-review-recommended",
+    "execution_allowed": false,
+    "boundary_observed": true,
+    "canonical_step": "STOP-AGREED",
+    "basis": "fixed-conservative-rule",
+    "reasons": [
+      "The captured canonical policy reports its required gates complete on this covered snapshot.",
+      "An accepted fix changed cancellation behavior. An independent interleaving inspection is a conservative owner-action candidate.",
+      "No generic optional-review slot exists. A valid channel and allocation remain unresolved."
+    ],
+    "evidence_refs": ["registered:synthetic/fix-report#cancellation-transition"],
+    "unknowns": ["Whether another inspection would find a material problem.", "Which authorized review channel could accept an additional inspection within caps."],
+    "suggested_focus": ["Cancellation racing with terminal completion and stage transitions."],
+    "outcome": "unobserved"
+  },
+  "other_output_examples": [
+    {
+      "version": 0, "observation_id": "synthetic-required-1",
+      "status": "required-review-still-pending", "execution_allowed": false,
+      "boundary_observed": false, "canonical_step": "ROUND", "basis": "canonical-policy",
+      "reasons": ["Canonical ROUND requests the already-required fresh tier-2 review. This is not an optional-review recommendation."],
+      "evidence_refs": ["registered:synthetic/required-gate-capture"], "unknowns": [], "suggested_focus": [], "outcome": "unobserved"
+    },
+    {
+      "version": 0, "observation_id": "synthetic-stuck-1",
+      "status": "cap-reached-escalate", "execution_allowed": false,
+      "boundary_observed": false, "canonical_step": "STOP-STUCK", "basis": "canonical-policy",
+      "reasons": ["Canonical policy reports the tier-2 re-review has been used. Show the unresolved sides to the owner; do not increase the cap."],
+      "evidence_refs": ["registered:synthetic/stuck-gate-capture"], "unknowns": [], "suggested_focus": [], "outcome": "unobserved"
+    },
+    {
+      "version": 0, "observation_id": "synthetic-stale-1",
+      "status": "insufficient-evidence", "execution_allowed": false,
+      "boundary_observed": false, "canonical_step": "STOP-AGREED", "basis": "snapshot-integrity",
+      "reasons": ["stale-review-coverage: code changed after the passing review. Route the changed snapshot to canonical workflow handling before considering an optional boundary."],
+      "evidence_refs": ["registered:synthetic/snapshot-difference"],
+      "unknowns": ["Whether the current snapshot has satisfied the required review coverage."], "suggested_focus": [], "outcome": "unobserved"
+    }
+  ]
+}

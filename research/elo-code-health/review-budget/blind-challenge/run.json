@@ -1,0 +1,18 @@
+{
+  "checks": [
+    {
+      "label": "A",
+      "source_unchanged": true,
+      "report_sha256": "e92ad2eb55c62e6c90d7bc4c331371dd5adc430b84c037aea2e5f674042058c3"
+    },
+    {
+      "label": "B",
+      "source_unchanged": true,
+      "report_sha256": "270a0c47107555006eb5c9b6e0f97d2c765f803f58a6d2e6673622e8384ee64b"
+    }
+  ],
+  "temporary_archives_removed": true,
+  "source_programs_executed": false,
+  "statistical_calibration_eligible": false,
+  "post_followup_independence": "invalidated by shared parent hypothesis"
+}

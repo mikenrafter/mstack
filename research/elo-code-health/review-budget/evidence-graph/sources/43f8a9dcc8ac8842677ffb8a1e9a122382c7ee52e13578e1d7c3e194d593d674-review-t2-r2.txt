@@ -1,0 +1,7 @@
+SCORE: 7/10 (fixing T5 with an interleaving test raises it to 9)
+VERDICT: CHANGES
+T1 resolved
+T2 resolved
+T3 resolved
+T4 resolved
+T5 [should] [needed for bar: yes] [class: ordering-stale-write] src/v1/jobs.ts:631, src/v1/jobs.ts:898, src/v1/jobs.ts:924 finish never checks that its qexJob is the job of the stage on disk (state.qexId). Cancel holding the export's qexId can, after a waiting status advanced to stage run and submitted the run, finalize the run from the stopped export job (empty staging → terminal failed) while the real run keeps going uncancelled. Also finishExport never re-reads cancel.json, so a cancel written after status read it still submits the run. Fix: under the lease, finish returns without writing when qexJob.id !== state.qexId; finishExport re-reads cancel.json and ends cancelled; when cancel's finishWithin returns non-terminal at stage run, re-read state and cancel the run's qexId (or indeterminate). Red test for the interleaving.

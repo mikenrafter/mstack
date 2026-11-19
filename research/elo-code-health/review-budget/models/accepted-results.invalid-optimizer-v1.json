@@ -1,0 +1,2319 @@
+{
+  "input_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+  "inventory": {
+    "eligible_rows": 39,
+    "excluded": {
+      "first_or_invalid_ordinal": 21,
+      "unknown_label": 15
+    },
+    "groups": 16,
+    "label": "documented_accepted_consequential_discovery",
+    "negative_rows": 9,
+    "positive_rows": 30,
+    "projects": 6
+  },
+  "loco": {
+    "always_continue": {
+      "captured_positives": 30.0,
+      "expected_reviews": 39.0,
+      "missed_positives": 0.0,
+      "recall": 1.0
+    },
+    "best_simple_descriptive": "pooled",
+    "folds": [
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "edge.research/sol/db-split",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "edge.research/sol/db-split"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/appkind-review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/appkind-review"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/fauxx-implementation",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/fauxx-implementation"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/location-review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/location-review"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/phases-review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/phases-review"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/seeding-review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/seeding-review"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft.research/review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "paneweft.research/review"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft.research/v1/review",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "paneweft.research/v1/review"
+        ],
+        "test_rows": 5,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/vigil-disk-full",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "phoe-nix.research/vigil-disk-full"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w46-vigil",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "phoe-nix.research/w46-vigil"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w47-router",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "phoe-nix.research/w47-router"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w49",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "phoe-nix.research/w49"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/l48",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "polara-port.research/build-loop/l48"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/modes/credits",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "polara-port.research/build-loop/modes/credits"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/modes/modes",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "polara-port.research/build-loop/modes/modes"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "residual-cli.research/reviewer-notes",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "residual-cli.research/reviewer-notes"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ]
+      }
+    ],
+    "metrics": {
+      "anchored_elo": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.19268964196712754,
+        "change_average_brier": 0.21625753582650922,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.00029110470658652576,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0005852259020711804,
+          -1.417746432556667e-06
+        ],
+        "relative_brier_improvement": -0.0015130297284553648
+      },
+      "elo_seed_17": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.1925280088689583,
+        "change_average_brier": 0.21622686971051,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0001294716084172809,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0006966550386298529,
+          0.00036735141512291497
+        ],
+        "relative_brier_improvement": -0.0006729344737270734
+      },
+      "elo_seed_41": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.19265412432553505,
+        "change_average_brier": 0.21624908535155532,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0002555870649940395,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0007001415752328973,
+          9.954270518572512e-05
+        ],
+        "relative_brier_improvement": -0.0013284251982016383
+      },
+      "elo_seed_97": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.19289258791701502,
+        "change_average_brier": 0.2163019219863986,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0004940506564740099,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0010288267095374776,
+          3.701321188941207e-05
+        ],
+        "relative_brier_improvement": -0.0025678503771833752
+      },
+      "lag_bucket": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.2102237615702259,
+        "change_average_brier": 0.24186933508339978,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.01782522430968489,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0347779576429892,
+          -0.0018505701496523523
+        ],
+        "relative_brier_improvement": -0.09264740035703307
+      },
+      "logistic": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.1944178855339812,
+        "change_average_brier": 0.2195188818087651,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0020193482734401913,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.008176650077373811,
+          0.003169591188098578
+        ],
+        "relative_brier_improvement": -0.010495652940986986
+      },
+      "pooled": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.192398537260541,
+        "change_average_brier": 0.2159303517890444,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": 0.0,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          0.0,
+          0.0
+        ],
+        "relative_brier_improvement": 0.0
+      }
+    },
+    "partition": "group",
+    "predictions": [
+      {
+        "group": "edge.research/sol/db-split",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7751272634807392,
+          "elo_seed_17": 0.7751110907983504,
+          "elo_seed_41": 0.7750902761272207,
+          "elo_seed_97": 0.7751804235166466,
+          "lag_bucket": 0.82,
+          "logistic": 0.7959202532458424,
+          "pooled": 0.775
+        },
+        "project": "edge"
+      },
+      {
+        "group": "fauxx.research/appkind-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7491987560849339,
+          "elo_seed_17": 0.7495434942026904,
+          "elo_seed_41": 0.7479993411093976,
+          "elo_seed_97": 0.7500534329427136,
+          "lag_bucket": 0.6666666666666666,
+          "logistic": 0.7636152196720511,
+          "pooled": 0.75
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7436729983788114,
+          "elo_seed_17": 0.745405727358659,
+          "elo_seed_41": 0.7435878803375178,
+          "elo_seed_97": 0.7420253874402577,
+          "lag_bucket": 0.7483974358974359,
+          "logistic": 0.7529024690510167,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.744410407895595,
+          "elo_seed_17": 0.745529793187597,
+          "elo_seed_41": 0.7448377743093741,
+          "elo_seed_97": 0.7428636561898139,
+          "lag_bucket": 0.774928774928775,
+          "logistic": 0.7553726619573676,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7433560442591537,
+          "elo_seed_17": 0.7449461634204206,
+          "elo_seed_41": 0.7435137753390864,
+          "elo_seed_97": 0.7416081940179542,
+          "lag_bucket": 0.7483974358974359,
+          "logistic": 0.7519385410730972,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7441034970301228,
+          "elo_seed_17": 0.7452765088727156,
+          "elo_seed_41": 0.7445456109991986,
+          "elo_seed_97": 0.7424883712184545,
+          "lag_bucket": 0.774928774928775,
+          "logistic": 0.7550713099081674,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7300259773761825,
+          "elo_seed_17": 0.7315704112750445,
+          "elo_seed_41": 0.7301798342089804,
+          "elo_seed_97": 0.7283276866445225,
+          "lag_bucket": 0.7449324324324325,
+          "logistic": 0.7390567904322028,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7305182336834591,
+          "elo_seed_17": 0.7316356907464775,
+          "elo_seed_41": 0.7308794305557592,
+          "elo_seed_97": 0.7290395797481407,
+          "lag_bucket": 0.7687687687687688,
+          "logistic": 0.7421397011937624,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7314465794798508,
+          "elo_seed_17": 0.7312873995134704,
+          "elo_seed_41": 0.7315736313970499,
+          "elo_seed_97": 0.7314787075290319,
+          "lag_bucket": 0.8648648648648649,
+          "logistic": 0.7470370447314124,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7277269389101351,
+          "elo_seed_17": 0.7302783125707886,
+          "elo_seed_41": 0.7277678832400873,
+          "elo_seed_97": 0.7251346209195291,
+          "lag_bucket": 0.6860706860706861,
+          "logistic": 0.7435825932771855,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7370566081651835,
+          "elo_seed_17": 0.7389009430593156,
+          "elo_seed_41": 0.7370953186662982,
+          "elo_seed_97": 0.7351735627699365,
+          "lag_bucket": 0.7467105263157895,
+          "logistic": 0.7477396317328777,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7382545547456397,
+          "elo_seed_17": 0.7380637002816682,
+          "elo_seed_41": 0.7385723102027022,
+          "elo_seed_97": 0.7381276537525486,
+          "lag_bucket": 0.849624060150376,
+          "logistic": 0.7512507356319388,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7382545547456397,
+          "elo_seed_17": 0.7380637002816682,
+          "elo_seed_41": 0.7385723102027022,
+          "elo_seed_97": 0.7381276537525486,
+          "lag_bucket": 0.849624060150376,
+          "logistic": 0.7512507356319388,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7563520467396453,
+          "elo_seed_17": 0.7581168066107968,
+          "elo_seed_41": 0.7562130191254659,
+          "elo_seed_97": 0.7547263144826735,
+          "lag_bucket": 0.7516891891891893,
+          "logistic": 0.766875687384351,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7562084810345312,
+          "elo_seed_17": 0.7585074424808821,
+          "elo_seed_41": 0.7571005283615155,
+          "elo_seed_97": 0.7530174722611959,
+          "lag_bucket": 0.7522522522522523,
+          "logistic": 0.7755536181387056,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7582038997480743,
+          "elo_seed_17": 0.7581758411610304,
+          "elo_seed_41": 0.7581904486896305,
+          "elo_seed_97": 0.7582454093935621,
+          "lag_bucket": 0.8783783783783784,
+          "logistic": 0.7762848233007706,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 6,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7562084810345312,
+          "elo_seed_17": 0.7585074424808821,
+          "elo_seed_41": 0.7571005283615155,
+          "elo_seed_97": 0.7530174722611959,
+          "lag_bucket": 0.7522522522522523,
+          "logistic": 0.7755536181387056,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7229003434805717,
+          "elo_seed_17": 0.7243353612061637,
+          "elo_seed_41": 0.7230546319711905,
+          "elo_seed_97": 0.7213110372643611,
+          "lag_bucket": 0.7430555555555556,
+          "logistic": 0.730710230008887,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7232419403842408,
+          "elo_seed_17": 0.724249771681097,
+          "elo_seed_41": 0.7237978137991306,
+          "elo_seed_97": 0.721678235672495,
+          "lag_bucket": 0.7654320987654322,
+          "logistic": 0.7334873976863134,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7193826800299264,
+          "elo_seed_17": 0.7210707737492364,
+          "elo_seed_41": 0.7198784200378596,
+          "elo_seed_97": 0.7171988463026834,
+          "lag_bucket": 0.6262626262626263,
+          "logistic": 0.7323376359042894,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7193826800299264,
+          "elo_seed_17": 0.7210707737492364,
+          "elo_seed_41": 0.7198784200378596,
+          "elo_seed_97": 0.7171988463026834,
+          "lag_bucket": 0.6262626262626263,
+          "logistic": 0.7323376359042894,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7193826800299264,
+          "elo_seed_17": 0.7210707737492364,
+          "elo_seed_41": 0.7198784200378596,
+          "elo_seed_97": 0.7171988463026834,
+          "lag_bucket": 0.6262626262626263,
+          "logistic": 0.733723234925929,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7825781394790637,
+          "elo_seed_17": 0.7844248595907687,
+          "elo_seed_41": 0.78244522655054,
+          "elo_seed_97": 0.7808643322958824,
+          "lag_bucket": 0.7584459459459459,
+          "logistic": 0.7959443727141439,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7858690363676146,
+          "elo_seed_17": 0.7862041287821808,
+          "elo_seed_41": 0.7860341170741756,
+          "elo_seed_97": 0.7853688632464872,
+          "lag_bucket": 0.9039039039039038,
+          "logistic": 0.8043043987060381,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7849919516239142,
+          "elo_seed_17": 0.7850004044282904,
+          "elo_seed_41": 0.785173750159681,
+          "elo_seed_97": 0.7848017002837712,
+          "lag_bucket": 0.8918918918918919,
+          "logistic": 0.8009205194937075,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 5,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7831751081935843,
+          "elo_seed_17": 0.7848499976271435,
+          "elo_seed_41": 0.7830784319406676,
+          "elo_seed_97": 0.7815968950129416,
+          "lag_bucket": 0.7796257796257796,
+          "logistic": 0.8034698364254841,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7962893852137104,
+          "elo_seed_17": 0.7966784623867367,
+          "elo_seed_41": 0.7985836448238571,
+          "elo_seed_97": 0.7936060484305372,
+          "lag_bucket": 0.8237179487179487,
+          "logistic": 0.8083252562201138,
+          "pooled": 0.7948717948717948
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7955014397976795,
+          "elo_seed_17": 0.795496322926343,
+          "elo_seed_41": 0.7952197239772513,
+          "elo_seed_97": 0.7957882724894446,
+          "lag_bucket": 0.8632478632478632,
+          "logistic": 0.8175913010219759,
+          "pooled": 0.7948717948717948
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7908136376224452,
+          "elo_seed_17": 0.7912165978827339,
+          "elo_seed_41": 0.7894316559789962,
+          "elo_seed_97": 0.7917926590056052,
+          "lag_bucket": 0.8223684210526316,
+          "logistic": 0.8047670088066269,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7888420307041265,
+          "elo_seed_17": 0.7894725909710822,
+          "elo_seed_41": 0.7876637496506821,
+          "elo_seed_97": 0.7893897514906149,
+          "lag_bucket": 0.6929824561403509,
+          "logistic": 0.8015552663032689,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 4,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7888092193987745,
+          "elo_seed_17": 0.7903603139422485,
+          "elo_seed_41": 0.7881604089404202,
+          "elo_seed_97": 0.7879069353136547,
+          "lag_bucket": 0.7813765182186235,
+          "logistic": 0.8090787747829582,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w49",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7759868593285039,
+          "elo_seed_17": 0.7783750651014333,
+          "elo_seed_41": 0.7754519738244606,
+          "elo_seed_97": 0.7741335390596175,
+          "lag_bucket": 0.81875,
+          "logistic": 0.7889187652473839,
+          "pooled": 0.775
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7437001375894575,
+          "elo_seed_17": 0.7455612499890285,
+          "elo_seed_41": 0.7435137753390864,
+          "elo_seed_97": 0.7420253874402577,
+          "lag_bucket": 0.7483974358974359,
+          "logistic": 0.7527258045562553,
+          "pooled": 0.7435897435897436
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7443400143042876,
+          "elo_seed_17": 0.7456107757238503,
+          "elo_seed_41": 0.7445456109991986,
+          "elo_seed_97": 0.7428636561898139,
+          "lag_bucket": 0.774928774928775,
+          "logistic": 0.7553792410288693,
+          "pooled": 0.7435897435897436
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/credits",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7495295901639558,
+          "elo_seed_17": 0.7493496061304711,
+          "elo_seed_41": 0.7497116249389578,
+          "elo_seed_97": 0.7495275394224388,
+          "lag_bucket": 0.6,
+          "logistic": 0.7611041362573518,
+          "pooled": 0.75
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7371095850136758,
+          "elo_seed_17": 0.7390598736047929,
+          "elo_seed_41": 0.7370953186662982,
+          "elo_seed_97": 0.7351735627699365,
+          "lag_bucket": 0.7467105263157895,
+          "logistic": 0.7464036933375574,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7345629782490147,
+          "elo_seed_17": 0.7375237898252733,
+          "elo_seed_41": 0.7347397895920328,
+          "elo_seed_97": 0.7314253553297382,
+          "lag_bucket": 0.662280701754386,
+          "logistic": 0.7501120676997948,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7345629782490147,
+          "elo_seed_17": 0.7375237898252733,
+          "elo_seed_41": 0.7347397895920328,
+          "elo_seed_97": 0.7314253553297382,
+          "lag_bucket": 0.662280701754386,
+          "logistic": 0.7502401938560302,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "residual-cli.research/reviewer-notes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7497491020273412,
+          "elo_seed_17": 0.751590959461809,
+          "elo_seed_41": 0.74969223865845,
+          "elo_seed_97": 0.7479641079617648,
+          "lag_bucket": 0.75,
+          "logistic": 0.7591739478526478,
+          "pooled": 0.75
+        },
+        "project": "residual-cli"
+      }
+    ],
+    "random_allocation80": {
+      "captured_positives": 24.000000000000004,
+      "expected_reviews": 31.200000000000003,
+      "missed_positives": 5.9999999999999964,
+      "recall": 0.8000000000000002
+    }
+  },
+  "project_holdout": {
+    "always_continue": {
+      "captured_positives": 30.0,
+      "expected_reviews": 39.0,
+      "missed_positives": 0.0,
+      "recall": 1.0
+    },
+    "best_simple_descriptive": "pooled",
+    "folds": [
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "edge",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "edge.research/sol/db-split"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review"
+        ],
+        "test_rows": 12,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "paneweft.research/review",
+          "paneweft.research/v1/review"
+        ],
+        "test_rows": 9,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          64,
+          "fixed"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49"
+        ],
+        "test_rows": 10,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ],
+        "test_rows": 6,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "elo_config": [
+          8,
+          "decay"
+        ],
+        "fallback": {
+          "anchored_elo": false,
+          "elo_seed_17": false,
+          "elo_seed_41": false,
+          "elo_seed_97": false,
+          "lag_bucket": false,
+          "logistic": false,
+          "pooled": false
+        },
+        "held": "residual-cli",
+        "logistic_penalty": 1.0,
+        "test_groups": [
+          "residual-cli.research/reviewer-notes"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ]
+      }
+    ],
+    "metrics": {
+      "anchored_elo": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.24487121882029697,
+        "change_average_brier": 0.27577692214359,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.002101437100537229,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.004838262075691287,
+          -0.00017249892134504633
+        ],
+        "relative_brier_improvement": -0.008656090085227386
+      },
+      "elo_seed_17": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.2443465494448759,
+        "change_average_brier": 0.27531678632763035,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0015767677251161683,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.0043809432777064975,
+          0.0003885421797844119
+        ],
+        "relative_brier_improvement": -0.006494909349699475
+      },
+      "elo_seed_41": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.2449141555821862,
+        "change_average_brier": 0.2758365230027846,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.0021443738624264685,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.004902143356975296,
+          -0.00019292814991457897
+        ],
+        "relative_brier_improvement": -0.008832952137765719
+      },
+      "elo_seed_97": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.2453573407561246,
+        "change_average_brier": 0.2761810611609937,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.002587559036364845,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.00517849259370859,
+          -0.00074036064685603
+        ],
+        "relative_brier_improvement": -0.010658488952104354
+      },
+      "lag_bucket": {
+        "allocation80": {
+          "captured_positives": 23.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 6.799999999999997,
+          "recall": 0.7733333333333334
+        },
+        "brier": 0.25373622203565865,
+        "change_average_brier": 0.29666429555718804,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.010966440315898912,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.030669938957820327,
+          0.005629506114839745
+        ],
+        "relative_brier_improvement": -0.045172180154439384
+      },
+      "logistic": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.24828357017452463,
+        "change_average_brier": 0.28052357584965365,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": -0.005513788454764884,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          -0.015720979758957136,
+          0.0030692518215015285
+        ],
+        "relative_brier_improvement": -0.022712004829042943
+      },
+      "pooled": {
+        "allocation80": {
+          "captured_positives": 22.200000000000003,
+          "expected_reviews": 31.200000000000003,
+          "missed_positives": 7.799999999999997,
+          "recall": 0.7400000000000001
+        },
+        "brier": 0.24276978171975974,
+        "change_average_brier": 0.2725847390148765,
+        "fallback_test_rows": 0,
+        "improvement_vs_best_simple": 0.0,
+        "meaningful_by_numeric_gates": false,
+        "paired_group_bootstrap95": [
+          0.0,
+          0.0
+        ],
+        "relative_brier_improvement": 0.0
+      }
+    },
+    "partition": "project",
+    "predictions": [
+      {
+        "group": "edge.research/sol/db-split",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7751272634807392,
+          "elo_seed_17": 0.7751110907983504,
+          "elo_seed_41": 0.7750902761272207,
+          "elo_seed_97": 0.7751804235166466,
+          "lag_bucket": 0.82,
+          "logistic": 0.7959202532458424,
+          "pooled": 0.775
+        },
+        "project": "edge"
+      },
+      {
+        "group": "fauxx.research/appkind-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6544432538312384,
+          "elo_seed_17": 0.6546072816889708,
+          "elo_seed_41": 0.6532681857450301,
+          "elo_seed_97": 0.6554542940597141,
+          "lag_bucket": 0.603448275862069,
+          "logistic": 0.6634957232100889,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6554473937569538,
+          "elo_seed_17": 0.6563867085136759,
+          "elo_seed_41": 0.6558525589417014,
+          "elo_seed_97": 0.6541029138154844,
+          "lag_bucket": 0.663129973474801,
+          "logistic": 0.6635954135740153,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.65515154310336,
+          "elo_seed_17": 0.6562802774303115,
+          "elo_seed_41": 0.655416750918124,
+          "elo_seed_97": 0.6537576009616445,
+          "lag_bucket": 0.6600985221674877,
+          "logistic": 0.6634500882303886,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6554473937569538,
+          "elo_seed_17": 0.6563867085136759,
+          "elo_seed_41": 0.6558525589417014,
+          "elo_seed_97": 0.6541029138154844,
+          "lag_bucket": 0.663129973474801,
+          "logistic": 0.6636341821053031,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.65515154310336,
+          "elo_seed_17": 0.6562802774303115,
+          "elo_seed_41": 0.655416750918124,
+          "elo_seed_97": 0.6537576009616445,
+          "lag_bucket": 0.6600985221674877,
+          "logistic": 0.6634694768987305,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6554473937569538,
+          "elo_seed_17": 0.6563867085136759,
+          "elo_seed_41": 0.6558525589417014,
+          "elo_seed_97": 0.6541029138154844,
+          "lag_bucket": 0.663129973474801,
+          "logistic": 0.6636341821053031,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.65515154310336,
+          "elo_seed_17": 0.6562802774303115,
+          "elo_seed_41": 0.655416750918124,
+          "elo_seed_97": 0.6537576009616445,
+          "lag_bucket": 0.6600985221674877,
+          "logistic": 0.6634694768987305,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6565076879839015,
+          "elo_seed_17": 0.6562496102900689,
+          "elo_seed_41": 0.6567170912649881,
+          "elo_seed_97": 0.6565563623966475,
+          "lag_bucket": 0.7701149425287356,
+          "logistic": 0.6711999676924701,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6552034850887498,
+          "elo_seed_17": 0.6587992937188437,
+          "elo_seed_41": 0.6549577829925304,
+          "elo_seed_97": 0.6518533785548752,
+          "lag_bucket": 0.663129973474801,
+          "logistic": 0.6711548596887101,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6554473937569538,
+          "elo_seed_17": 0.6563867085136759,
+          "elo_seed_41": 0.6558525589417014,
+          "elo_seed_97": 0.6541029138154844,
+          "lag_bucket": 0.663129973474801,
+          "logistic": 0.6636051059133863,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6565076879839015,
+          "elo_seed_17": 0.6562496102900689,
+          "elo_seed_41": 0.6567170912649881,
+          "elo_seed_97": 0.6565563623966475,
+          "lag_bucket": 0.7701149425287356,
+          "logistic": 0.6711808036712373,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.6565076879839015,
+          "elo_seed_17": 0.6562496102900689,
+          "elo_seed_41": 0.6567170912649881,
+          "elo_seed_97": 0.6565563623966475,
+          "lag_bucket": 0.7701149425287356,
+          "logistic": 0.6711808036712373,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7188671681547283,
+          "elo_seed_17": 0.7202446874682044,
+          "elo_seed_41": 0.7189273980794338,
+          "elo_seed_97": 0.7174294189165465,
+          "lag_bucket": 0.725,
+          "logistic": 0.7264385695664642,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7172321243469488,
+          "elo_seed_17": 0.7185937232005981,
+          "elo_seed_41": 0.7183178622052957,
+          "elo_seed_97": 0.7147847876349528,
+          "lag_bucket": 0.6527777777777778,
+          "logistic": 0.7359143887056582,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7206763579549116,
+          "elo_seed_17": 0.7207717375439849,
+          "elo_seed_41": 0.7206179327201147,
+          "elo_seed_97": 0.720639403600635,
+          "lag_bucket": 0.859375,
+          "logistic": 0.7413506169724613,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 6,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.7172321243469488,
+          "elo_seed_17": 0.7185937232005981,
+          "elo_seed_41": 0.7183178622052957,
+          "elo_seed_97": 0.7147847876349528,
+          "lag_bucket": 0.6527777777777778,
+          "logistic": 0.7359143887056582,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7188671681547283,
+          "elo_seed_17": 0.7202446874682044,
+          "elo_seed_41": 0.7189273980794338,
+          "elo_seed_97": 0.7174294189165465,
+          "lag_bucket": 0.725,
+          "logistic": 0.7274327986402286,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7199480677823121,
+          "elo_seed_17": 0.7208509348787892,
+          "elo_seed_41": 0.7207147362839945,
+          "elo_seed_97": 0.7182785321841527,
+          "lag_bucket": 0.7638888888888888,
+          "logistic": 0.7323774912553203,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7172321243469488,
+          "elo_seed_17": 0.7185937232005981,
+          "elo_seed_41": 0.7183178622052957,
+          "elo_seed_97": 0.7147847876349528,
+          "lag_bucket": 0.6527777777777778,
+          "logistic": 0.7320023703894429,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7172321243469488,
+          "elo_seed_17": 0.7185937232005981,
+          "elo_seed_41": 0.7183178622052957,
+          "elo_seed_97": 0.7147847876349528,
+          "lag_bucket": 0.6527777777777778,
+          "logistic": 0.7320023703894429,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7172321243469488,
+          "elo_seed_17": 0.7185937232005981,
+          "elo_seed_41": 0.7183178622052957,
+          "elo_seed_97": 0.7147847876349528,
+          "lag_bucket": 0.6527777777777778,
+          "logistic": 0.7339629638181997,
+          "pooled": 0.71875
+        },
+        "project": "paneweft"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.9186064871640397,
+          "elo_seed_17": 0.9186064871640396,
+          "elo_seed_41": 0.9186064871640396,
+          "elo_seed_97": 0.9186064871640396,
+          "lag_bucket": 0.9702233250620348,
+          "logistic": 0.9314352978299505,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9108321433818003,
+          "elo_seed_17": 0.9108321433818003,
+          "elo_seed_41": 0.9108321433818003,
+          "elo_seed_97": 0.9108321433818003,
+          "lag_bucket": 0.956989247311828,
+          "logistic": 0.9334626226763519,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.9080513644373621,
+          "elo_seed_17": 0.9080513644373622,
+          "elo_seed_41": 0.9080513644373622,
+          "elo_seed_97": 0.9080513644373622,
+          "lag_bucket": 0.9516129032258065,
+          "logistic": 0.928063005296374,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 5,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9000594840213223,
+          "elo_seed_17": 0.8992092581431107,
+          "elo_seed_41": 0.9012368035733519,
+          "elo_seed_97": 0.8997323903475041,
+          "lag_bucket": 0.8844086021505376,
+          "logistic": 0.9312856183521123,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9186064871640397,
+          "elo_seed_17": 0.9186064871640396,
+          "elo_seed_41": 0.9186064871640396,
+          "elo_seed_97": 0.9186064871640396,
+          "lag_bucket": 0.9702233250620348,
+          "logistic": 0.9314352978299505,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9038401859779128,
+          "elo_seed_17": 0.9038401859779128,
+          "elo_seed_41": 0.9038401859779128,
+          "elo_seed_97": 0.9038401859779128,
+          "lag_bucket": 0.9225806451612903,
+          "logistic": 0.9300147206811269,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9186064871640397,
+          "elo_seed_17": 0.9186064871640396,
+          "elo_seed_41": 0.9186064871640396,
+          "elo_seed_97": 0.9186064871640396,
+          "lag_bucket": 0.9702233250620348,
+          "logistic": 0.9314352978299505,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.9038401859779128,
+          "elo_seed_17": 0.9038401859779128,
+          "elo_seed_41": 0.9038401859779128,
+          "elo_seed_97": 0.9038401859779128,
+          "lag_bucket": 0.9225806451612903,
+          "logistic": 0.9300147206811269,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 4,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9000594840213223,
+          "elo_seed_17": 0.8992092581431107,
+          "elo_seed_41": 0.9012368035733519,
+          "elo_seed_97": 0.8997323903475041,
+          "lag_bucket": 0.8844086021505376,
+          "logistic": 0.9319130263156927,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "phoe-nix.research/w49",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "anchored_elo": 0.9186064871640397,
+          "elo_seed_17": 0.9186064871640396,
+          "elo_seed_41": 0.9186064871640396,
+          "elo_seed_97": 0.9186064871640396,
+          "lag_bucket": 0.9702233250620348,
+          "logistic": 0.9314352978299505,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix"
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7147130084835384,
+          "elo_seed_17": 0.7166499774181059,
+          "elo_seed_41": 0.7144531090371892,
+          "elo_seed_97": 0.7130359389953201,
+          "lag_bucket": 0.7238095238095238,
+          "logistic": 0.7219031337703743,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7154762368034485,
+          "elo_seed_17": 0.7167796864498407,
+          "elo_seed_41": 0.7156608716842338,
+          "elo_seed_97": 0.7139881522762709,
+          "lag_bucket": 0.761904761904762,
+          "logistic": 0.7270383497848468,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/credits",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7137695583276861,
+          "elo_seed_17": 0.7136120476170222,
+          "elo_seed_41": 0.7139494698529365,
+          "elo_seed_97": 0.7137471575130998,
+          "lag_bucket": 0.5714285714285714,
+          "logistic": 0.7269738280864644,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7147130084835384,
+          "elo_seed_17": 0.7166499774181059,
+          "elo_seed_41": 0.7144531090371892,
+          "elo_seed_97": 0.7130359389953201,
+          "lag_bucket": 0.7238095238095238,
+          "logistic": 0.7219031337703743,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.712234949634924,
+          "elo_seed_17": 0.7152215967793047,
+          "elo_seed_41": 0.7123713179223243,
+          "elo_seed_97": 0.7091119342031428,
+          "lag_bucket": 0.6547619047619048,
+          "logistic": 0.7290145029937384,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.712234949634924,
+          "elo_seed_17": 0.7152215967793047,
+          "elo_seed_41": 0.7123713179223243,
+          "elo_seed_97": 0.7091119342031428,
+          "lag_bucket": 0.6547619047619048,
+          "logistic": 0.729087053197982,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port"
+      },
+      {
+        "group": "residual-cli.research/reviewer-notes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "anchored_elo": 0.7497491020273412,
+          "elo_seed_17": 0.751590959461809,
+          "elo_seed_41": 0.74969223865845,
+          "elo_seed_97": 0.7479641079617648,
+          "lag_bucket": 0.75,
+          "logistic": 0.7591739478526478,
+          "pooled": 0.75
+        },
+        "project": "residual-cli"
+      }
+    ],
+    "random_allocation80": {
+      "captured_positives": 24.000000000000004,
+      "expected_reviews": 31.200000000000003,
+      "missed_positives": 5.9999999999999964,
+      "recall": 0.8000000000000002
+    }
+  },
+  "protocol_sha256": "1a4b08435c689095346477b1fc9a7e850686b4415b9b6bfd61c01c566b8ea7cb",
+  "status": "exploratory-proxy-forecast"
+}

@@ -1,0 +1,377 @@
+{
+  "definitions": [
+    {
+      "component": "list",
+      "dataRole": "activity",
+      "entityKind": "research/code-health",
+      "id": "health-activity-v1",
+      "priority": 10,
+      "requires": [],
+      "title": "Recent source activity"
+    }
+  ],
+  "entities": [
+    {
+      "dataRoles": [
+        "activity"
+      ],
+      "id": "code-health",
+      "kind": "research/code-health",
+      "label": "Edge recent source activity",
+      "relations": [],
+      "repository": "edge",
+      "snapshotId": "edge-health-cd64eaa89948"
+    }
+  ],
+  "schemaVersion": "paneweft.bundle/1",
+  "views": [
+    {
+      "completeness": {
+        "gaps": [
+          {
+            "id": "scope",
+            "question": "What quality risks are absent from this view?",
+            "reason": "Only activity and weak fix labels; no confirmed defects or scenario outcomes."
+          }
+        ],
+        "status": "partial"
+      },
+      "component": "list",
+      "data": {
+        "columns": [
+          {
+            "format": "text",
+            "key": "path",
+            "title": "Source file"
+          },
+          {
+            "format": "number",
+            "key": "touches",
+            "title": "Changes"
+          },
+          {
+            "format": "number",
+            "key": "fixes",
+            "title": "Fix-title touches"
+          }
+        ],
+        "order": {
+          "direction": "desc",
+          "key": "touches"
+        },
+        "rows": [
+          {
+            "cells": {
+              "fixes": 5,
+              "path": "lib/data/db.dart",
+              "touches": 19
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-0",
+            "label": "lib/data/db.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 2,
+              "path": "lib/state/app_state.dart",
+              "touches": 13
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-1",
+            "label": "lib/state/app_state.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 5,
+              "path": "lib/compute/derivation_engine.dart",
+              "touches": 12
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-2",
+            "label": "lib/compute/derivation_engine.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 5,
+              "path": "lib/data/local_repository_impl.dart",
+              "touches": 9
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-3",
+            "label": "lib/data/local_repository_impl.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 1,
+              "path": "lib/app.dart",
+              "touches": 7
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-4",
+            "label": "lib/app.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 4,
+              "path": "lib/ui2/screens/sleep_detail.dart",
+              "touches": 7
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-5",
+            "label": "lib/ui2/screens/sleep_detail.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 3,
+              "path": "lib/ble/ble_engine.dart",
+              "touches": 6
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-6",
+            "label": "lib/ble/ble_engine.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 3,
+              "path": "lib/ble/ble_state.dart",
+              "touches": 6
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-7",
+            "label": "lib/ble/ble_state.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 0,
+              "path": "lib/data/backup_extras.dart",
+              "touches": 6
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-8",
+            "label": "lib/data/backup_extras.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 2,
+              "path": "lib/ui2/screens/home_screen.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-9",
+            "label": "lib/ui2/screens/home_screen.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 2,
+              "path": "lib/state/sync_controller.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-10",
+            "label": "lib/state/sync_controller.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 1,
+              "path": "lib/ui2/onboarding/pairing.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-11",
+            "label": "lib/ui2/onboarding/pairing.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 3,
+              "path": "lib/health/health_export.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-12",
+            "label": "lib/health/health_export.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 0,
+              "path": "lib/ui2/pairing/device_picker.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-13",
+            "label": "lib/ui2/pairing/device_picker.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 1,
+              "path": "lib/ui2/profile/gallery.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-14",
+            "label": "lib/ui2/profile/gallery.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 0,
+              "path": "lib/ui2/screens/workout_screen.dart",
+              "touches": 5
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-15",
+            "label": "lib/ui2/screens/workout_screen.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 1,
+              "path": "lib/support/issue_report.dart",
+              "touches": 4
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-16",
+            "label": "lib/support/issue_report.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 2,
+              "path": "lib/ui2/screens/health_screen.dart",
+              "touches": 4
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-17",
+            "label": "lib/ui2/screens/health_screen.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 2,
+              "path": "lib/ui2/screens/metric_detail.dart",
+              "touches": 4
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-18",
+            "label": "lib/ui2/screens/metric_detail.dart",
+            "provenance": "parsed"
+          },
+          {
+            "cells": {
+              "fixes": 0,
+              "path": "lib/data/recent_slice.dart",
+              "touches": 4
+            },
+            "evidence": [
+              "activity-evidence"
+            ],
+            "id": "file-19",
+            "label": "lib/data/recent_slice.dart",
+            "provenance": "parsed"
+          }
+        ]
+      },
+      "entity": {
+        "id": "code-health",
+        "kind": "research/code-health",
+        "repository": "edge"
+      },
+      "freshness": {
+        "repositories": [
+          {
+            "dirty": false,
+            "files": {},
+            "gitRev": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+            "id": "edge",
+            "root": "/home/mini/Documents/repos/edge"
+          }
+        ]
+      },
+      "generatedAt": "2026-11-17T06:48:06.189183Z",
+      "id": "health-activity",
+      "links": [],
+      "question": "Which files changed most in the last 100 mainline commits?",
+      "schemaVersion": "paneweft.view/1",
+      "scope": {
+        "excludes": [
+          "tests",
+          "generated"
+        ],
+        "limits": [
+          "Last 100 first-parent commits at the pinned revision; top 20 current source files."
+        ],
+        "repositories": [
+          "edge"
+        ],
+        "roots": [
+          "/home/mini/Documents/repos/edge"
+        ]
+      },
+      "snapshotId": "edge-health-cd64eaa89948",
+      "sources": [
+        {
+          "capturedAt": "2026-11-17T06:48:06.189183Z",
+          "id": "activity-evidence",
+          "kind": "file",
+          "method": "Git first-parent numstat; title-derived weak labels.",
+          "path": "research/elo-code-health/current-hotspots.json",
+          "repository": "mstack",
+          "sha256": "0e702de74c3638ae4a5ce2c2fac419d510009d632d99bfc953386550e8bca547"
+        }
+      ],
+      "title": "Recent source activity",
+      "viewDefinitionId": "health-activity-v1"
+    }
+  ]
+}

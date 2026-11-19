@@ -1,0 +1,23 @@
+{
+  "captured_source_hashes_match": true,
+  "completed_utc": "2026-11-17T08:04:22.075479+00:00",
+  "current_bundle_cli_validation": "Pending parent rerun; existing cli-checks.json still describes archived old bundle until rerun.",
+  "generation_job": "8811be6a-67fc-4fd1-84c3-87c3ecf65c0d",
+  "previous_generation_job": "30ae4eb8-691b-4bf9-bc9d-fefbdaf647da",
+  "regeneration_reason": "Empty freshness checks previously yielded vacuous fresh; expected historical fingerprint now requires unverified absent registration.",
+  "scope": "One verified historical causal case, three related scenarios",
+  "sha256": {
+    "README.md": "71f795e9c6417854542062b868c75a9b8431ca582098a039fca12561a533b41e",
+    "check_cli.py": "baf432bc8226228adf2706b1e2f1c663133eb9186f527aa4dbdbe0dad7fbf28a",
+    "checks.json": "a04b61cd5c7d46e18a2b962f0791ce2ae07a72ea688c6e3d95cd914516bdb1b7",
+    "cli-checks.empty-freshness-v1.json": "9c38ae78111ef4c0f25f9bd102d604048bb5737dfbddea7add6dcda4f672b409",
+    "cli-checks.json": "9c38ae78111ef4c0f25f9bd102d604048bb5737dfbddea7add6dcda4f672b409",
+    "cli.qex": "87aa207b0c04e62dc196b9f7d683b27af58806187ef595836e099c7440f2e95a",
+    "evidence-manifest.json": "a124e9a3dbd9c7c522f3ec8f989087817e4afd7e6510ce68b1c6dfdcdfb27450",
+    "generate.py": "6620a35c3937dec9ed326971086d67abde46622afce2fd47414391ff3b671c77",
+    "paneweft.bundle.json": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+    "residual-proposal.json": "f66f044b2dd6ecf9a5b8374091b7b3118097fd48213487131bcc1f9a1179d963",
+    "scenarios.json": "bb5eb9367b210e4d4851e4e40a534fe16192e13c5d4f2c725885febcaa5bd04d"
+  },
+  "source_hash_verification_job": "51ca9274-421a-4b11-a12d-53f702993eaf"
+}

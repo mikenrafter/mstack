@@ -1,0 +1,45 @@
+{
+  "censoring": "absence of a later review is unknown yield, never a negative",
+  "documented_accepted_labels": {
+    "False": 9,
+    "None": 20,
+    "True": 46
+  },
+  "documented_reported_labels": {
+    "False": 9,
+    "None": 15,
+    "True": 51
+  },
+  "extractor_sha256": "5f22d560e9c0c746506625bda78c69a209be94e4ba3a2a773b2888a76016b645",
+  "final_statuses": {
+    "declined": 13,
+    "disagree": 1,
+    "fixed": 101,
+    "open": 26,
+    "pre-existing": 3,
+    "resolved": 106,
+    "unknown": 14
+  },
+  "finding_entities": 264,
+  "finding_severities": {
+    "blocker": 27,
+    "nit": 99,
+    "should": 138
+  },
+  "observed_rounds": 75,
+  "parser_errors": [],
+  "project_groups": {
+    "edge": 3,
+    "fauxx": 6,
+    "paneweft": 2,
+    "phoe-nix": 5,
+    "polara-port": 4,
+    "residual-cli": 1
+  },
+  "rounds_missing_findings": 12,
+  "sampling": "available local saved research artifacts; not all reviews",
+  "source_candidates": 444,
+  "structured_groups": 21,
+  "supplemental_findings": 24,
+  "supplemental_verified_rounds": 13
+}

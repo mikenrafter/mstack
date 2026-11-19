@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "erase missing snapshot indicators",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "remove source churn cap",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "ignore snapshot identity fields",
+    "caught": true,
+    "errors": 0
+  }
+]

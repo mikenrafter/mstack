@@ -1,0 +1,93 @@
+{
+  "retrieved_date_utc": "2026-11-17",
+  "source_url": "https://www.cs.umd.edu/projects/SoftEng/ESEG/manual/pbr_package/docs/total.cc",
+  "discovery_page": "https://www.cs.umd.edu/projects/SoftEng/ESEG/manual/pbr_package/node57.html",
+  "local_file": "umd-total.cc",
+  "sha256": "696c9397d1213da986db451ab83c369e328e46d6d22afd9091c2ea066faffbcd",
+  "preservation": "Unchanged downloaded bytes; never compiled or executed.",
+  "format": {
+    "language": "C++ source embedding flat array initializers",
+    "row_width": 35,
+    "column_0": "participant ID",
+    "column_1": "reading perspective/technique",
+    "columns_2_onward": "reference_fault_count binary incidence values, followed by zero padding to width 35",
+    "perspective_codes": {
+      "0": "usual/NASA reading",
+      "1": "designer",
+      "2": "tester",
+      "3": "user",
+      "4": "synthetic poseur code used in permutation routines; not an original assigned perspective"
+    }
+  },
+  "arrays": [
+    {
+      "array": "atm_nov",
+      "participant_rows": 12,
+      "reference_fault_count": 29,
+      "cohort": "November 1994",
+      "padding_columns": 4
+    },
+    {
+      "array": "atm_jun",
+      "participant_rows": 14,
+      "reference_fault_count": 29,
+      "cohort": "June 1995",
+      "padding_columns": 4
+    },
+    {
+      "array": "pg_nov",
+      "participant_rows": 12,
+      "reference_fault_count": 27,
+      "cohort": "November 1994",
+      "padding_columns": 6
+    },
+    {
+      "array": "pg_jun",
+      "participant_rows": 14,
+      "reference_fault_count": 27,
+      "cohort": "June 1995",
+      "padding_columns": 6
+    },
+    {
+      "array": "a_nov",
+      "participant_rows": 12,
+      "reference_fault_count": 18,
+      "cohort": "November 1994",
+      "padding_columns": 15
+    },
+    {
+      "array": "a_jun",
+      "participant_rows": 13,
+      "reference_fault_count": 15,
+      "cohort": "June 1995",
+      "padding_columns": 18
+    },
+    {
+      "array": "b_nov",
+      "participant_rows": 12,
+      "reference_fault_count": 15,
+      "cohort": "November 1994",
+      "padding_columns": 18
+    },
+    {
+      "array": "b_jun",
+      "participant_rows": 13,
+      "reference_fault_count": 15,
+      "cohort": "June 1995",
+      "padding_columns": 18
+    }
+  ],
+  "sampling_cautions": [
+    "Participant IDs recur across artifact arrays within cohort; these are repeated participants, not independent new people.",
+    "Cross-cohort person identity or crosswalk is not verified.",
+    "Reference-fault identities are artifact/version-specific; do not align column indices across matrices.",
+    "Document revisions occurred between replications; A has different stated reference counts across cohorts.",
+    "Reference counts represent known study faults, seeded or reintroduced according to final CR evaluation, not verified exhaustive natural-defect totals.",
+    "Exact downloadable matrix version versus final published re-marked study analyses is not independently established.",
+    "Defect descriptions, severity and individual fault provenance are not provided by this source."
+  ],
+  "supporting_sources": [
+    "https://www.cs.umd.edu/~mvz/handouts/emp_pbr.pdf",
+    "https://www.researchgate.net/publication/3188084_A_comprehensive_evaluation_of_capture-recapture_models_for_estimating_software_defect_content"
+  ]
+}

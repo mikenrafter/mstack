@@ -1,0 +1,529 @@
+{
+  "definitions": [
+    {
+      "component": "graph",
+      "dataRole": "history",
+      "entityKind": "research/review-case",
+      "id": "case-history-graph",
+      "priority": 10,
+      "requires": [],
+      "title": "Historical evidence"
+    }
+  ],
+  "entities": [
+    {
+      "dataRoles": [
+        "history"
+      ],
+      "id": "cancellation-history",
+      "kind": "research/review-case",
+      "label": "Pinned Paneweft cancellation history",
+      "relations": [],
+      "repository": "paneweft",
+      "snapshotId": "paneweft-case-3fa003c-d89c0e7"
+    }
+  ],
+  "schemaVersion": "paneweft.bundle/1",
+  "views": [
+    {
+      "completeness": {
+        "gaps": [
+          {
+            "id": "current-tree",
+            "question": "Does the current checkout contain a defect?",
+            "reason": "Not assessed. This bug is fixed at historical d89c0e7. The supplied fingerprint is an expected historical snapshot, not an observation of current files; an unregistered session must report unverified."
+          },
+          {
+            "id": "interop",
+            "question": "Does this prove real runner interoperability?",
+            "reason": "No. Production service, filesystem and lease paths ran with fake Qex/Cargo peers."
+          },
+          {
+            "id": "architecture",
+            "question": "Does rerouting improve architecture or review allocation?",
+            "reason": "Not measured. Proposed mappings and review focus are hypotheses only."
+          }
+        ],
+        "status": "partial"
+      },
+      "component": "graph",
+      "data": {
+        "edges": [
+          {
+            "evidence": [
+              "first-fix-report",
+              "commit-before"
+            ],
+            "from": "t4",
+            "id": "t4-fixed-by",
+            "label": "reported fixed by",
+            "provenance": "read",
+            "relation": "reported fixed by",
+            "to": "export-first"
+          },
+          {
+            "basis": [
+              "export-first",
+              "case",
+              "replay-results",
+              "fix-diff"
+            ],
+            "evidence": [
+              "audit",
+              "next-review",
+              "fix-diff"
+            ],
+            "from": "export-first",
+            "id": "new-exposure",
+            "label": "supported fix-induced interaction",
+            "provenance": "inferred",
+            "reason": "Export-first creates the stage transition implicated by T5; adjacent revision and same-test replay support this single historical case.",
+            "relation": "supported fix-induced interaction",
+            "to": "case"
+          },
+          {
+            "evidence": [
+              "replay-results"
+            ],
+            "from": "case",
+            "id": "case-fails",
+            "label": "reproduced at historical revision",
+            "provenance": "parsed",
+            "relation": "reproduced at historical revision",
+            "to": "before-tests"
+          },
+          {
+            "basis": [
+              "before-tests",
+              "fix",
+              "replay-results",
+              "fix-diff"
+            ],
+            "evidence": [
+              "replay-results",
+              "fix-diff"
+            ],
+            "from": "before-tests",
+            "id": "corrected-by",
+            "label": "corrected in adjacent commit",
+            "provenance": "inferred",
+            "reason": "d89c0e7 directly follows 3fa003c; production jobs.ts and regression tests are the only changed files; identical tests change from fail to pass.",
+            "relation": "corrected in adjacent commit",
+            "to": "fix"
+          },
+          {
+            "evidence": [
+              "replay-results"
+            ],
+            "from": "fix",
+            "id": "fix-passes",
+            "label": "same selected tests pass",
+            "provenance": "parsed",
+            "relation": "same selected tests pass",
+            "to": "after-tests"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "next-fix-report"
+            ],
+            "from": "case",
+            "id": "family-scenario-1",
+            "label": "one related scenario",
+            "provenance": "parsed",
+            "relation": "one related scenario",
+            "to": "scenario-1"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "next-fix-report"
+            ],
+            "from": "case",
+            "id": "family-scenario-2",
+            "label": "one related scenario",
+            "provenance": "parsed",
+            "relation": "one related scenario",
+            "to": "scenario-2"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "next-fix-report"
+            ],
+            "from": "case",
+            "id": "family-scenario-3",
+            "label": "one related scenario",
+            "provenance": "parsed",
+            "relation": "one related scenario",
+            "to": "scenario-3"
+          },
+          {
+            "basis": [
+              "case",
+              "fix"
+            ],
+            "evidence": [
+              "fix-diff",
+              "next-fix-report"
+            ],
+            "from": "case",
+            "id": "focus-from-case",
+            "label": "motivates a focused review",
+            "provenance": "inferred",
+            "reason": "The demonstrated interaction crosses export/run advancement, cancellation intent and lease-protected state. This supports a review question, not an architecture optimization.",
+            "relation": "motivates a focused review",
+            "to": "contract"
+          },
+          {
+            "basis": [
+              "contract",
+              "before-tests",
+              "after-tests"
+            ],
+            "evidence": [
+              "replay-results"
+            ],
+            "from": "contract",
+            "id": "propose-mapping",
+            "label": "proposed mapping only",
+            "provenance": "inferred",
+            "reason": "Outcomes can be attached to component candidates for later author review; this is not a registered force or defect probability.",
+            "relation": "proposed mapping only",
+            "to": "residual"
+          },
+          {
+            "basis": [
+              "contract"
+            ],
+            "evidence": [
+              "fix-diff"
+            ],
+            "from": "contract",
+            "id": "hypothesis-only",
+            "label": "unmeasured alternative",
+            "provenance": "inferred",
+            "reason": "Single-case evidence identifies a contract to examine; it does not establish a superior architecture.",
+            "relation": "unmeasured alternative",
+            "to": "rerouting"
+          }
+        ],
+        "layout": "layered",
+        "nodes": [
+          {
+            "evidence": [
+              "prior-review"
+            ],
+            "group": "Historical review",
+            "id": "t4",
+            "label": "T4: fresh-repository discovery requires an owner catalogue refresh",
+            "provenance": "read"
+          },
+          {
+            "evidence": [
+              "commit-before",
+              "jobs-before",
+              "first-fix-report"
+            ],
+            "group": "Historical source change",
+            "id": "export-first",
+            "label": "3fa003c: T4 fix introduces export-first staging",
+            "provenance": "read"
+          },
+          {
+            "evidence": [
+              "next-review",
+              "next-fix-report",
+              "audit"
+            ],
+            "group": "Defect family",
+            "id": "case",
+            "label": "One historical cancellation case: T5 plus related T6 scenario",
+            "provenance": "read"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "identical-tests"
+            ],
+            "group": "Saved independent replay",
+            "id": "before-tests",
+            "label": "At 3fa003c: identical three scenarios fail",
+            "provenance": "parsed"
+          },
+          {
+            "evidence": [
+              "commit-after",
+              "fix-diff",
+              "jobs-after"
+            ],
+            "group": "Historical source change",
+            "id": "fix",
+            "label": "d89c0e7: stage job-ID guard, cancellation recheck and current-stage cancel",
+            "provenance": "read"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "identical-tests"
+            ],
+            "group": "Saved independent replay",
+            "id": "after-tests",
+            "label": "At d89c0e7: identical three scenarios pass; historical bug fixed",
+            "provenance": "parsed"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "identical-tests"
+            ],
+            "group": "Related test scenario",
+            "id": "scenario-1",
+            "label": "T5: cancel holding stopped export must not finalize the newer run",
+            "provenance": "parsed"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "identical-tests"
+            ],
+            "group": "Related test scenario",
+            "id": "scenario-2",
+            "label": "T5: late cancel.json must prevent the next-stage submission",
+            "provenance": "parsed"
+          },
+          {
+            "evidence": [
+              "replay-results",
+              "identical-tests"
+            ],
+            "group": "Related test scenario",
+            "id": "scenario-3",
+            "label": "T6: stopped export not yet processed must record cancellation",
+            "provenance": "parsed"
+          },
+          {
+            "basis": [
+              "case",
+              "fix",
+              "fix-diff"
+            ],
+            "evidence": [
+              "fix-diff",
+              "next-fix-report"
+            ],
+            "group": "Proposed review focus",
+            "id": "contract",
+            "label": "Review focus: lifecycle and cancellation state ownership",
+            "provenance": "inferred",
+            "reason": "The demonstrated interaction crosses export/run advancement, cancellation intent and lease-protected state. This supports a review question, not an architecture optimization."
+          },
+          {
+            "basis": [
+              "contract",
+              "before-tests",
+              "after-tests"
+            ],
+            "evidence": [
+              "fix-diff",
+              "replay-results"
+            ],
+            "group": "Proposed integration",
+            "id": "residual",
+            "label": "Proposed component/outcome mapping; no Residual objects changed",
+            "provenance": "inferred",
+            "reason": "Candidate executable outcomes are grounded in the three tests; mapping has not been imported or approved as a Residual force."
+          },
+          {
+            "basis": [
+              "contract",
+              "case"
+            ],
+            "evidence": [
+              "fix-diff",
+              "next-fix-report"
+            ],
+            "group": "Unmeasured architecture hypothesis",
+            "id": "rerouting",
+            "label": "Hypothesis: inspect one stage-aware owner for cancellation decisions",
+            "provenance": "inferred",
+            "reason": "An alternative boundary might simplify stage ownership; no rerouting candidate has been implemented or compared."
+          }
+        ],
+        "paths": [
+          {
+            "edgeIds": [
+              "t4-fixed-by",
+              "new-exposure",
+              "case-fails",
+              "corrected-by",
+              "fix-passes"
+            ],
+            "id": "historical-case"
+          }
+        ]
+      },
+      "entity": {
+        "id": "cancellation-history",
+        "kind": "research/review-case",
+        "repository": "paneweft"
+      },
+      "freshness": {
+        "repositories": [
+          {
+            "dirty": false,
+            "files": {
+              "src/v1/jobs.test.ts": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91",
+              "src/v1/jobs.ts": "8ae885086aacbaffda917d65a89c25a5cfd7170ea8ff510dfe799710e4bcadf3"
+            },
+            "gitRev": "d89c0e7b750786a84ef8bf9a468967707333a9eb",
+            "id": "paneweft",
+            "root": "/home/mini/Documents/repos/paneweft"
+          }
+        ]
+      },
+      "generatedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "cancellation-evidence-graph",
+      "links": [],
+      "question": "How did one review fix create a new cancellation interaction, and what evidence shows the later fix works?",
+      "schemaVersion": "paneweft.view/1",
+      "scope": {
+        "excludes": [],
+        "limits": [
+          "One historical causal family; three related scenarios.",
+          "Pinned revisions only; no current checkout or live policy claim.",
+          "Saved independent replay used fake Qex and Cargo peers."
+        ],
+        "repositories": [
+          "paneweft",
+          "evidence"
+        ],
+        "roots": [
+          "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources"
+        ]
+      },
+      "snapshotId": "paneweft-case-3fa003c-d89c0e7",
+      "sources": [
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "replay-results",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/5b7324f80182db5cc5b4032851bbc2cf96969a394ab67987ad386109a378d5f8-cancellation-reproduction.json",
+          "repository": "evidence",
+          "sha256": "5b7324f80182db5cc5b4032851bbc2cf96969a394ab67987ad386109a378d5f8"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "replay-report",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/e20419bdb97d266a447c5e5b9c719c44a4974ccb6d326197dd3ce1f4a1196704-REPRODUCTION.md",
+          "repository": "evidence",
+          "sha256": "e20419bdb97d266a447c5e5b9c719c44a4974ccb6d326197dd3ce1f4a1196704"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "audit",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/102cd78d63a43330726b648eefd1ee9917b68597a8bb02c0598be5282232911e-EVIDENCE-AUDIT.md",
+          "repository": "evidence",
+          "sha256": "102cd78d63a43330726b648eefd1ee9917b68597a8bb02c0598be5282232911e"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "prior-review",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/438787cf6ee920b40ef0c189225dfc55d3b2913f7908631a00053468dd3cbe81-review-t2-r1.txt",
+          "repository": "evidence",
+          "sha256": "438787cf6ee920b40ef0c189225dfc55d3b2913f7908631a00053468dd3cbe81"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "next-review",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/43f8a9dcc8ac8842677ffb8a1e9a122382c7ee52e13578e1d7c3e194d593d674-review-t2-r2.txt",
+          "repository": "evidence",
+          "sha256": "43f8a9dcc8ac8842677ffb8a1e9a122382c7ee52e13578e1d7c3e194d593d674"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "first-fix-report",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/630ecf6881edae2bd5035c43466a2e75931945bd234670c260565b0b409a6534-fix-t2-r1-report.md",
+          "repository": "evidence",
+          "sha256": "630ecf6881edae2bd5035c43466a2e75931945bd234670c260565b0b409a6534"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "next-fix-report",
+          "kind": "file",
+          "method": "Exact saved evidence bytes, captured for this historical case; not current checkout freshness.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/a150cca80dc07847af6749c0438d1bdce7e4710d3f1a0c78e620f99e93d350cd-fix-t5-report.md",
+          "repository": "evidence",
+          "sha256": "a150cca80dc07847af6749c0438d1bdce7e4710d3f1a0c78e620f99e93d350cd"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "jobs-before",
+          "kind": "file",
+          "method": "Pinned Git blob; read-only capture.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/41a0f73459c584015247b036728bb9645c2fc4f15e5e638e463b4c6ce57caee8-jobs-before.ts",
+          "repository": "evidence",
+          "sha256": "41a0f73459c584015247b036728bb9645c2fc4f15e5e638e463b4c6ce57caee8"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "commit-before",
+          "kind": "file",
+          "method": "Commit metadata and message; a historical author assertion.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/e7276db91221ae013ce4bcecf8d981cbfc1ad0d1d4182aefd259887c31dd2daf-commit-before.txt",
+          "repository": "evidence",
+          "sha256": "e7276db91221ae013ce4bcecf8d981cbfc1ad0d1d4182aefd259887c31dd2daf"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "jobs-after",
+          "kind": "file",
+          "method": "Pinned Git blob; read-only capture.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/8ae885086aacbaffda917d65a89c25a5cfd7170ea8ff510dfe799710e4bcadf3-jobs-after.ts",
+          "repository": "evidence",
+          "sha256": "8ae885086aacbaffda917d65a89c25a5cfd7170ea8ff510dfe799710e4bcadf3"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "commit-after",
+          "kind": "file",
+          "method": "Commit metadata and message; a historical author assertion.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/82ca402cd5b7f10d607f0ced811be7e7162abdcecad12712e9c8068a4cf86c56-commit-after.txt",
+          "repository": "evidence",
+          "sha256": "82ca402cd5b7f10d607f0ced811be7e7162abdcecad12712e9c8068a4cf86c56"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "identical-tests",
+          "kind": "file",
+          "method": "Pinned test blob used identically in both saved replay runs.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91-jobs.test.ts",
+          "repository": "evidence",
+          "sha256": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91"
+        },
+        {
+          "capturedAt": "2026-11-17T08:04:21.846248Z",
+          "id": "fix-diff",
+          "kind": "file",
+          "method": "Exact adjacent revision diff; production jobs.ts plus regression tests.",
+          "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/79018959f4510dfa9fe782e40fbab986c6b87a301766afd4d403072c4cabac04-fix.diff",
+          "repository": "evidence",
+          "sha256": "79018959f4510dfa9fe782e40fbab986c6b87a301766afd4d403072c4cabac04"
+        }
+      ],
+      "title": "One historical cancellation case, from review to reproduced fix",
+      "viewDefinitionId": "case-history-graph"
+    }
+  ]
+}

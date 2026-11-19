@@ -1,0 +1,229 @@
+{
+  "scope": "Saved job-pointer resolutions; historical failures and superseded jobs retained. Not a claim that all jobs are final validation.",
+  "records": [
+    {
+      "pointer": "cancellation-replay.qex",
+      "id": "5dc97f8d-7aff-4e3d-b72c-3294a6a3b037",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "research/elo-code-health/review-budget/reproduce_cancellation.py"
+      ],
+      "usage": {
+        "cpu_secs": 13.082798,
+        "max_rss": 426442752
+      },
+      "cwd": "/home/mini/Documents/repos/mstack"
+    },
+    {
+      "pointer": "models/accepted-fit.qex",
+      "id": "0b6df563-b771-4857-be85-d7b695cc6108",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "research/elo-code-health/review-budget/models/forecast.py",
+        "research/elo-code-health/review-budget/models/structured-training.jsonl",
+        "--output",
+        "research/elo-code-health/review-budget/models/accepted-results.json"
+      ],
+      "usage": {
+        "cpu_secs": 17.637498,
+        "max_rss": 24313856
+      },
+      "cwd": "/home/mini/Documents/repos/mstack"
+    },
+    {
+      "pointer": "models/reported-fit.qex",
+      "id": "d89066af-5269-42d4-a4a6-40b79575eaa5",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "research/elo-code-health/review-budget/models/forecast.py",
+        "research/elo-code-health/review-budget/models/structured-training.jsonl",
+        "--label",
+        "documented_consequential_discovery",
+        "--output",
+        "research/elo-code-health/review-budget/models/reported-results.json"
+      ],
+      "usage": {
+        "cpu_secs": 18.925638,
+        "max_rss": 24313856
+      },
+      "cwd": "/home/mini/Documents/repos/mstack"
+    },
+    {
+      "pointer": "evidence-graph/cli.qex",
+      "id": "63566f5e-ea0f-42cb-aaba-033b3ecff92b",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "check_cli.py"
+      ],
+      "usage": {
+        "cpu_secs": 4.236529,
+        "max_rss": 241549312
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph"
+    },
+    {
+      "pointer": "missing-outcomes/test.qex",
+      "id": "80dccf7d-a340-46fd-bff2-08d969697acd",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "test_bounds.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.037442,
+        "max_rss": 23265280
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/missing-outcomes"
+    },
+    {
+      "pointer": "missing-outcomes/bounds.qex",
+      "id": "5f96dd2a-ab92-4bfd-8517-37a8967b87ff",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "bounds.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.920586,
+        "max_rss": 23724032
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/missing-outcomes"
+    },
+    {
+      "pointer": "missing-outcomes/mutations.qex",
+      "id": "9615f71e-9063-49f0-880c-7e751ffcc7cd",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "check_mutations.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.214903,
+        "max_rss": 23314432
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/missing-outcomes"
+    },
+    {
+      "pointer": "capture-recapture/test.qex",
+      "id": "fc7d45ac-5833-4ed8-8440-83b0e0b8fb53",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "test_simulate.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.045127,
+        "max_rss": 24363008
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "capture-recapture/simulation.qex",
+      "id": "a7775fa3-07ae-4069-9a45-61777ade5562",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "simulate.py"
+      ],
+      "usage": {
+        "cpu_secs": 2.357477,
+        "max_rss": 22134784
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "capture-recapture/mutations.qex",
+      "id": "1979dd25-4e15-4328-9609-db09d80377b9",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "check_mutations.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.211537,
+        "max_rss": 24379392
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "capture-recapture/coverage-test.qex",
+      "id": "20443b9c-5a07-4cf3-b386-09d91541d5a1",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "test_coverage.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.042747,
+        "max_rss": 24379392
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "capture-recapture/coverage.qex",
+      "id": "dccd5543-3ccf-4b8a-a09d-be6eacc684c1",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "coverage.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.045454,
+        "max_rss": 20561920
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "capture-recapture/coverage-mutations.qex",
+      "id": "bed5a66e-812e-4832-b000-4de657aa6fea",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python",
+        "check_coverage_mutations.py"
+      ],
+      "usage": {
+        "cpu_secs": 0.198191,
+        "max_rss": 24379392
+      },
+      "cwd": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/capture-recapture"
+    },
+    {
+      "pointer": "models/fix-shape/fit.qex",
+      "id": "619ab584-7fef-400d-83c9-5fe17190906a",
+      "state": "completed",
+      "exit_code": 0,
+      "command": [
+        "python3",
+        "research/elo-code-health/review-budget/models/fix-shape/diagnostic.py"
+      ],
+      "usage": {
+        "cpu_secs": 44.962566,
+        "max_rss": 23216128
+      },
+      "cwd": "/home/mini/Documents/repos/mstack"
+    }
+  ]
+}

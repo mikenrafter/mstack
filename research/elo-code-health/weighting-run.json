@@ -1,0 +1,19 @@
+{
+  "evaluation_status": "exploratory_reused_windows",
+  "jobs": {
+    "mutations": "3c20ab2d-72b5-4d6b-b850-c4de5ea219ef",
+    "replay": "64d96abc-d8ae-4866-be9a-24331f25b639",
+    "tests": "558d8869-e2c0-4b51-a955-64b8f49396f8"
+  },
+  "mutations_detected": 3,
+  "sha256": {
+    "WEIGHTING-PROTOCOL.md": "32e12abf40770f713f3e838832d9392641f824b09ab048d876ea31655826a6bf",
+    "WEIGHTING-RESULTS.md": "9233c5ab307e4316133e8d5b018cb0444ac1aa1f25ba134417944a7aff74ad97",
+    "check_weighting_mutations.py": "aa9dd157249d9513ea7d0b378f9134f08cf7eb6dee11f1aaaff33c354dd91428",
+    "test_weighting.py": "a8bffa7d0a6b2bac80d4a4f7d157fcef0bbce99ac1fd9f226bc9c3edff9f6c64",
+    "weighting-mutations.json": "743b4a0cb1c272a7c7a319471ccc376411b4471d23e6eb2eee1f8c32ac7a1162",
+    "weighting-results.json": "b6aafad53e53a4bca73f61fec662e082c2295fd1f482014e4025ada9fe40d9f4",
+    "weighting.py": "a74e9339196d5e8bc7578114db37b4f73a1115853c220f592a5c38747b99f4a3"
+  },
+  "tests_passed": 6
+}

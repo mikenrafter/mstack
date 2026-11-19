@@ -1,0 +1,33 @@
+{
+  "elo_config": [
+    8,
+    "decay"
+  ],
+  "excluded": {
+    "first_or_invalid_ordinal": 21,
+    "unknown_label": 12
+  },
+  "freeze_reason": "Select on structured corpus only before opening external prose-chain labels.",
+  "label": "documented_consequential_discovery",
+  "logistic_penalty": 1.0,
+  "training_groups": [
+    "edge.research/sol/db-split",
+    "fauxx.research/appkind-review",
+    "fauxx.research/fauxx-implementation",
+    "fauxx.research/location-review",
+    "fauxx.research/phases-review",
+    "fauxx.research/seeding-review",
+    "paneweft.research/review",
+    "paneweft.research/v1/review",
+    "phoe-nix.research/vigil-disk-full",
+    "phoe-nix.research/w46-vigil",
+    "phoe-nix.research/w47-router",
+    "phoe-nix.research/w49",
+    "polara-port.research/build-loop/l48",
+    "polara-port.research/build-loop/modes/credits",
+    "polara-port.research/build-loop/modes/modes",
+    "residual-cli.research/reviewer-notes"
+  ],
+  "training_rows": 42,
+  "training_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c"
+}

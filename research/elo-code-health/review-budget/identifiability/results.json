@@ -1,0 +1,437 @@
+{
+  "decision_cases": [
+    {
+      "avoided_defect_loss": {
+        "decimal": 20.0,
+        "exact": "20"
+      },
+      "decision": "review",
+      "defect_probability": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "finding_probability": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "fix_hazard_cost": {
+        "decimal": 2.0,
+        "exact": "2"
+      },
+      "information_state": "immediate_initial_screen",
+      "net_utility": {
+        "decimal": 13.0,
+        "exact": "13"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "synthetic": true,
+      "world": "A"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 20.0,
+        "exact": "20"
+      },
+      "decision": "review",
+      "defect_probability": {
+        "decimal": 0.8,
+        "exact": "4/5"
+      },
+      "finding_probability": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "fix_hazard_cost": {
+        "decimal": 2.0,
+        "exact": "2"
+      },
+      "information_state": "immediate_initial_screen",
+      "net_utility": {
+        "decimal": 13.0,
+        "exact": "13"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      },
+      "synthetic": true,
+      "world": "B"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 2.0,
+        "exact": "2"
+      },
+      "decision": "stop",
+      "defect_probability": {
+        "decimal": 0.02,
+        "exact": "1/50"
+      },
+      "finding_probability": {
+        "decimal": 0.02,
+        "exact": "1/50"
+      },
+      "fix_hazard_cost": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "information_state": "after_first_result_unobserved",
+      "net_utility": {
+        "decimal": -3.2,
+        "exact": "-16/5"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "synthetic": true,
+      "world": "A"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 15.5,
+        "exact": "31/2"
+      },
+      "decision": "review",
+      "defect_probability": {
+        "decimal": 0.62,
+        "exact": "31/50"
+      },
+      "finding_probability": {
+        "decimal": 0.155,
+        "exact": "31/200"
+      },
+      "fix_hazard_cost": {
+        "decimal": 1.55,
+        "exact": "31/20"
+      },
+      "information_state": "after_first_result_unobserved",
+      "net_utility": {
+        "decimal": 8.95,
+        "exact": "179/20"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      },
+      "synthetic": true,
+      "world": "B"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 10.0,
+        "exact": "10"
+      },
+      "decision": "review",
+      "defect_probability": {
+        "decimal": 0.1,
+        "exact": "1/10"
+      },
+      "finding_probability": {
+        "decimal": 0.1,
+        "exact": "1/10"
+      },
+      "fix_hazard_cost": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "information_state": "after_first_finding",
+      "net_utility": {
+        "decimal": 4.0,
+        "exact": "4"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "synthetic": true,
+      "world": "A"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 2.5,
+        "exact": "5/2"
+      },
+      "decision": "stop",
+      "defect_probability": {
+        "decimal": 0.1,
+        "exact": "1/10"
+      },
+      "finding_probability": {
+        "decimal": 0.025,
+        "exact": "1/40"
+      },
+      "fix_hazard_cost": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      },
+      "information_state": "after_first_finding",
+      "net_utility": {
+        "decimal": -2.75,
+        "exact": "-11/4"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      },
+      "synthetic": true,
+      "world": "B"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 0.0,
+        "exact": "0"
+      },
+      "decision": "stop",
+      "defect_probability": {
+        "decimal": 0.0,
+        "exact": "0"
+      },
+      "finding_probability": {
+        "decimal": 0.0,
+        "exact": "0"
+      },
+      "fix_hazard_cost": {
+        "decimal": 0.0,
+        "exact": "0"
+      },
+      "information_state": "after_first_no_finding",
+      "net_utility": {
+        "decimal": -5.0,
+        "exact": "-5"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "synthetic": true,
+      "world": "A"
+    },
+    {
+      "avoided_defect_loss": {
+        "decimal": 18.75,
+        "exact": "75/4"
+      },
+      "decision": "review",
+      "defect_probability": {
+        "decimal": 0.75,
+        "exact": "3/4"
+      },
+      "finding_probability": {
+        "decimal": 0.1875,
+        "exact": "3/16"
+      },
+      "fix_hazard_cost": {
+        "decimal": 1.875,
+        "exact": "15/8"
+      },
+      "information_state": "after_first_no_finding",
+      "net_utility": {
+        "decimal": 11.875,
+        "exact": "95/8"
+      },
+      "review_cost": {
+        "decimal": 5.0,
+        "exact": "5"
+      },
+      "sensitivity": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      },
+      "synthetic": true,
+      "world": "B"
+    }
+  ],
+  "finite_count_likelihoods": [
+    {
+      "findings": 0,
+      "synthetic": true,
+      "trials": 0,
+      "world_A": {
+        "decimal": 1.0,
+        "exact": "1"
+      },
+      "world_B": {
+        "decimal": 1.0,
+        "exact": "1"
+      }
+    },
+    {
+      "findings": 0,
+      "synthetic": true,
+      "trials": 1,
+      "world_A": {
+        "decimal": 0.8,
+        "exact": "4/5"
+      },
+      "world_B": {
+        "decimal": 0.8,
+        "exact": "4/5"
+      }
+    },
+    {
+      "findings": 1,
+      "synthetic": true,
+      "trials": 1,
+      "world_A": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "world_B": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      }
+    },
+    {
+      "findings": 2,
+      "synthetic": true,
+      "trials": 4,
+      "world_A": {
+        "decimal": 0.1536,
+        "exact": "96/625"
+      },
+      "world_B": {
+        "decimal": 0.1536,
+        "exact": "96/625"
+      }
+    },
+    {
+      "findings": 4,
+      "synthetic": true,
+      "trials": 20,
+      "world_A": {
+        "decimal": 0.21819940194610052,
+        "exact": "4161823309824/19073486328125"
+      },
+      "world_B": {
+        "decimal": 0.21819940194610052,
+        "exact": "4161823309824/19073486328125"
+      }
+    }
+  ],
+  "initial_screen_sequence": [
+    0,
+    1,
+    0,
+    0,
+    1
+  ],
+  "not_empirical_estimates": true,
+  "parameters": {
+    "conditional_fix_hazard": {
+      "decimal": 0.1,
+      "exact": "1/10"
+    },
+    "defect_loss": {
+      "decimal": 100.0,
+      "exact": "100"
+    },
+    "repair_success": {
+      "decimal": 1.0,
+      "exact": "1"
+    },
+    "review_cost": {
+      "decimal": 5.0,
+      "exact": "5"
+    }
+  },
+  "protocol_sha256": "1fef2bcf4a50f24b0dd0392bbfae987cfb6a13d49b84587bf9b234f3da5f7ede",
+  "rating_traces_identical_for_both_worlds": {
+    "K32_decay": [
+      1500.0,
+      1484.0,
+      1497.3890454348175,
+      1486.8025365266785,
+      1478.0068071034732,
+      1486.5125437559595
+    ],
+    "K32_fixed": [
+      1500.0,
+      1484.0,
+      1500.736306793522,
+      1484.7023986633528,
+      1469.4064243463295,
+      1486.811680445004
+    ],
+    "K64_fixed": [
+      1500.0,
+      1468.0,
+      1502.939003057951,
+      1470.6683173292167,
+      1441.3634651333618,
+      1478.713391518244
+    ],
+    "K8_fixed": [
+      1500.0,
+      1496.0,
+      1500.0460496672893,
+      1496.0455195009051,
+      1492.091045174243,
+      1496.1820846569306
+    ]
+  },
+  "synthetic": true,
+  "worlds": [
+    {
+      "initial_finding_probability": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "name": "A",
+      "prevalence": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "sensitivity": {
+        "decimal": 1.0,
+        "exact": "1"
+      }
+    },
+    {
+      "initial_finding_probability": {
+        "decimal": 0.2,
+        "exact": "1/5"
+      },
+      "name": "B",
+      "prevalence": {
+        "decimal": 0.8,
+        "exact": "4/5"
+      },
+      "sensitivity": {
+        "decimal": 0.25,
+        "exact": "1/4"
+      }
+    }
+  ]
+}

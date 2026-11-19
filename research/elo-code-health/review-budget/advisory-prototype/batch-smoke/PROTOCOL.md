@@ -1,0 +1,11 @@
+# Frozen real-corpus collector smoke
+
+Frozen 2026-11-17 before any batch collector CLI output. This checks integration and refusal coverage, not prediction or historical optional-review eligibility.
+
+Population: all 21 paths in the existing frozen structured-corpus source-manifest.json. Verify each live ledger's SHA-256 against that manifest. A changed or missing ledger is refused; do not update the manifest or substitute inputs. Use the established snapshot mapping: repository is /home/mini/Documents/repos/<project> from corpus/groups.jsonl and snapshots.py. Resolve the last listed review in the ledger's current phase (default phase zero, matching collector semantics) to a full Git commit ID. No HEAD substitution. Missing round/SHA/object is explicit unknown and no capture is attempted. Match selected source round to frozen snapshot-features.jsonl when possible; never borrow its outcome.
+
+For each eligible input run Python collector.py capture with --source-root /home/mini/Documents/repos, --ledger, --repo and the full --revision. No --fact or --store, outcome commands, builds, reviews, installs or model calls. Preserve exact stdout/stderr bytes, command, return code, timing, input hashes and resolved revision. Pin collector hash before the batch; if changed during capture, flag the run invalid rather than silently combining versions. Source repositories and ledgers are read only. No schema acceptance changes.
+
+Report every group, including all refusals, schema/reason/status counts, missing objects, and explicit input coverage denominators. Every parsed CLI output must keep execution_allowed false and outcome unobserved. Missing/unknown outcomes must never become negatives. The w49 frozen ledger is a predefined seam check: current-phase latest reviewed object should yield canonical ROUND and required-review-still-pending, consistent with the existing canonical smoke. Unexpected results remain reported, not repaired in this experiment.
+
+Records are historical-object-only captures collected now. Supplied final ledgers do not reconstruct authentic earlier boundaries, prove reviewer execution, or establish optional-review training labels. No utility/performance inference and no policy change follows from passing this smoke.

@@ -1,0 +1,391 @@
+{
+  "title": "HeyDeer internal review evaluation",
+  "publishedOn": "2026-09-19",
+  "snapshotAt": "2026-09-14T07:27:54.364Z",
+  "evaluationWindow": {
+    "start": "2026-09-05 08:03:54.815+00",
+    "end": "2026-09-14 03:54:20.755+00"
+  },
+  "sourceArchiveSha256": "1e8c264942f50b1520a7fe5a4a1c2c801fba026b83aaa2501ea846721e0221c7",
+  "scope": "Internal PR reviews across our development projects, including snaptale.com, using an internal version of HeyDeer.",
+  "runHistory": {
+    "queriedAt": "2026-09-19T03:17:40.067Z",
+    "attempts": 6132,
+    "succeeded": 5879,
+    "canceled": 189,
+    "failed": 63,
+    "running": 1,
+    "includesFailedCanceledAndRunning": true,
+    "countingUnit": "Recorded parent review attempts, including retries and different orchestration configurations; not unique PRs, completed independent tests, or Elo-rated rounds."
+  },
+  "archivedRounds": 1024,
+  "ratedRounds": 752,
+  "pairwiseComparisons": 1001,
+  "elo": {
+    "initial": 1200,
+    "k": 32,
+    "scale": 400,
+    "roundScore": "10 * effective + 5 * exclusive - falsePositive",
+    "tie": 0.5,
+    "update": "K * (actual - expected)",
+    "expected": "1 / (1 + 10 ** ((opponent - own) / 400))",
+    "scoreWeights": {
+      "effective": 10,
+      "exclusive": 5,
+      "falsePositive": -1
+    },
+    "actual": {
+      "win": 1,
+      "tie": 0.5,
+      "loss": 0
+    },
+    "roundUpdate": "old Elo + sum of K * (actual - expected) over eligible pairs in the round",
+    "updateTiming": "Every pair in a round uses the ratings from before that round; all pairwise changes are summed and applied together after the round.",
+    "roundOrder": "Ascending queuedAt, then taskKey, taskVersion, and runId using JavaScript localeCompare for string tie-breaks."
+  },
+  "methodology": {
+    "scope": "Organization review records only; private chat assessments are excluded.",
+    "deduplication": "Keep the latest recorded revision for each task_key, task_version, and run_id, ordered by recorded_at and then revision.",
+    "adjudication": "The lead reviewer supplies structured judgments and reasons. This is internal model-assisted adjudication, not independent human ground truth.",
+    "findingDefinitions": {
+      "effective": "An issue with verdict valid and disposition publish or fixed. Repeated, low-value, and unresolved findings receive no effective-finding credit.",
+      "exclusive": "An effective issue with exactly one recorded remote contributor and no independent discovery by the lead reviewer (self). Contributor counts use the full round, not just the two reviewers being compared.",
+      "falsePositive": "An issue explicitly assigned verdict false_positive. Missing feedback or an unpublished comment alone does not make a finding a false positive.",
+      "attribution": "Use reviewerTaskKeys when present; otherwise use the issue's provider sources."
+    },
+    "pairEligibility": [
+      "The review has been published (githubReviewId is not null).",
+      "The dispatched and final code revisions match (headSha equals dispatchedHeadSha).",
+      "Both reviewer configurations have a succeeded reviewer in the round.",
+      "The pair has at least one effective finding or false positive across its two reviewers; otherwise it is skipped."
+    ],
+    "pairOutcome": "Compare per-round scores: the higher score wins, and equal scores tie. Exclusive findings earn the bonus in addition to effective-finding credit.",
+    "baselineReviewMode": "Each baseline receives one review assignment. Single pass can include multiple tool calls and internal reasoning steps.",
+    "workflowReviewMode": "HeyDeer's deeper reviews use independent reviewers followed by a lead reviewer that verifies and deduplicates findings before publication. Not every review depth uses multiple reviewers."
+  },
+  "resultDefinitions": {
+    "archivedRounds": "Assessed organization review rounds after exclusions and revision deduplication, within evaluationWindow.",
+    "ratedRounds": "Archived rounds with at least one eligible pairwise comparison.",
+    "pairwiseComparisons": "Total eligible pairwise matches. One round may produce several matches.",
+    "ratings": "The full six-model comparison pool, sorted by unrounded Elo. Each row's rounds counts distinct rounds in which that model had an eligible match; comparisons counts its pairwise matches.",
+    "pairs": "Wins, ties, and losses are from the left reviewer's perspective. Zero-comparison pairs are retained and do not imply a direct matchup."
+  },
+  "articlePresentation": {
+    "path": "/research/code-review-evaluation",
+    "displayedModels": [
+      "gpt-5.6-sol",
+      "claude-opus-5",
+      "grok-4.6",
+      "claude-sonnet-5"
+    ],
+    "ratingDisplay": "The article shows selected configurations and rounds Elo to the nearest integer. All ratings are calculated using the full six-model pool in this download."
+  },
+  "ratings": [
+    {
+      "provider": "codex",
+      "model": "gpt-5.6-sol",
+      "elo": 1393.2810284912334,
+      "wins": 49,
+      "ties": 13,
+      "losses": 24,
+      "comparisons": 86,
+      "rounds": 86,
+      "name": "GPT-5.6 Sol",
+      "harness": "Codex"
+    },
+    {
+      "provider": "codex",
+      "model": "gpt-6-astra",
+      "elo": 1316.9972645100086,
+      "wins": 407,
+      "ties": 38,
+      "losses": 328,
+      "comparisons": 773,
+      "rounds": 666,
+      "name": "GPT-6 Astra",
+      "harness": "Codex"
+    },
+    {
+      "provider": "claude",
+      "model": "claude-opus-5",
+      "elo": 1243.6521020884654,
+      "wins": 343,
+      "ties": 34,
+      "losses": 325,
+      "comparisons": 702,
+      "rounds": 625,
+      "name": "Opus 5",
+      "harness": "Claude Code"
+    },
+    {
+      "provider": "codex",
+      "model": "gpt-5.6-luna",
+      "elo": 1220.864352127324,
+      "wins": 4,
+      "ties": 1,
+      "losses": 2,
+      "comparisons": 7,
+      "rounds": 3,
+      "name": "GPT-5.6 Luna",
+      "harness": "Codex"
+    },
+    {
+      "provider": "grok",
+      "model": "grok-4.6",
+      "elo": 1105.8994093307335,
+      "wins": 110,
+      "ties": 25,
+      "losses": 185,
+      "comparisons": 320,
+      "rounds": 206,
+      "name": "Grok 4.6",
+      "harness": "Grok Build"
+    },
+    {
+      "provider": "claude",
+      "model": "claude-sonnet-5",
+      "elo": 919.3058434522356,
+      "wins": 28,
+      "ties": 9,
+      "losses": 77,
+      "comparisons": 114,
+      "rounds": 62,
+      "name": "Sonnet 5",
+      "harness": "Claude Code"
+    }
+  ],
+  "pairs": [
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-6-astra"
+      },
+      "right": {
+        "provider": "grok",
+        "model": "grok-4.6"
+      },
+      "comparisons": 181,
+      "wins": 103,
+      "ties": 17,
+      "losses": 61
+    },
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-6-astra"
+      },
+      "right": {
+        "provider": "claude",
+        "model": "claude-opus-5"
+      },
+      "comparisons": 536,
+      "wins": 259,
+      "ties": 18,
+      "losses": 259
+    },
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-6-astra"
+      },
+      "right": {
+        "provider": "claude",
+        "model": "claude-sonnet-5"
+      },
+      "comparisons": 54,
+      "wins": 44,
+      "ties": 3,
+      "losses": 7
+    },
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-6-astra"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-luna"
+      },
+      "comparisons": 2,
+      "wins": 1,
+      "ties": 0,
+      "losses": 1
+    },
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-6-astra"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-sol"
+      },
+      "comparisons": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 0
+    },
+    {
+      "left": {
+        "provider": "grok",
+        "model": "grok-4.6"
+      },
+      "right": {
+        "provider": "claude",
+        "model": "claude-opus-5"
+      },
+      "comparisons": 79,
+      "wins": 17,
+      "ties": 3,
+      "losses": 59
+    },
+    {
+      "left": {
+        "provider": "grok",
+        "model": "grok-4.6"
+      },
+      "right": {
+        "provider": "claude",
+        "model": "claude-sonnet-5"
+      },
+      "comparisons": 58,
+      "wins": 32,
+      "ties": 5,
+      "losses": 21
+    },
+    {
+      "left": {
+        "provider": "grok",
+        "model": "grok-4.6"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-luna"
+      },
+      "comparisons": 2,
+      "wins": 0,
+      "ties": 0,
+      "losses": 2
+    },
+    {
+      "left": {
+        "provider": "grok",
+        "model": "grok-4.6"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-sol"
+      },
+      "comparisons": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 0
+    },
+    {
+      "left": {
+        "provider": "claude",
+        "model": "claude-opus-5"
+      },
+      "right": {
+        "provider": "claude",
+        "model": "claude-sonnet-5"
+      },
+      "comparisons": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 0
+    },
+    {
+      "left": {
+        "provider": "claude",
+        "model": "claude-opus-5"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-luna"
+      },
+      "comparisons": 1,
+      "wins": 1,
+      "ties": 0,
+      "losses": 0
+    },
+    {
+      "left": {
+        "provider": "claude",
+        "model": "claude-opus-5"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-sol"
+      },
+      "comparisons": 86,
+      "wins": 24,
+      "ties": 13,
+      "losses": 49
+    },
+    {
+      "left": {
+        "provider": "claude",
+        "model": "claude-sonnet-5"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-luna"
+      },
+      "comparisons": 2,
+      "wins": 0,
+      "ties": 1,
+      "losses": 1
+    },
+    {
+      "left": {
+        "provider": "claude",
+        "model": "claude-sonnet-5"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-sol"
+      },
+      "comparisons": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 0
+    },
+    {
+      "left": {
+        "provider": "codex",
+        "model": "gpt-5.6-luna"
+      },
+      "right": {
+        "provider": "codex",
+        "model": "gpt-5.6-sol"
+      },
+      "comparisons": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 0
+    }
+  ],
+  "systemRating": {
+    "name": "HeyDeer multi-round workflow",
+    "elo": null,
+    "reason": "The archive scores individual reviewers, not the final workflow as an independently judged entrant."
+  },
+  "limitations": [
+    "Retrospective internal evaluation; not a randomized or independently human-labeled benchmark.",
+    "Observed configurations, sample counts, review context and time windows differ.",
+    "A single review assignment can contain multiple tool calls or internal reasoning steps.",
+    "The full six-model comparison graph is retained; Grok 4.6 and Sol have no direct comparison in this archive.",
+    "No causal estimate of multi-round uplift or matched cost-effectiveness result is available.",
+    "Elo does not include price, latency, or token use; higher Elo does not establish better cost-effectiveness.",
+    "Judgments may inherit lead-reviewer biases. The archive does not label every possible bug and does not establish recall, universal accuracy, or statistical significance.",
+    "These are historical snapshot ratings, not current dashboard ratings. Public aggregates alone cannot reconstruct chronological Elo; replay requires the private archive. Underlying PRs, source code, and raw findings are not included."
+  ],
+  "collectionWindow": {
+    "start": "2026-03-19T03:17:40.067Z",
+    "end": "2026-09-19T03:17:40.067Z",
+    "months": 6,
+    "firstRecordedReviewAt": "2026-04-23T01:24:15.443Z",
+    "coverageNote": "Six-month lookback over available records; this does not imply six months of continuous observations or Elo-rated comparisons."
+  }
+}

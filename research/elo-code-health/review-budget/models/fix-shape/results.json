@@ -1,0 +1,2888 @@
+{
+  "group_independence_established": false,
+  "input_sha256": {
+    "protocol": "f7ca2b69fcb4730670af4690122db7996fe53fc632552aafff7ac1d63d3b963b",
+    "snapshot": "d8ac9bee540c25e43ef38d75302a3ed8d47df4d1a1baa67320ebd62d84db55da",
+    "training": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c"
+  },
+  "inventory": {
+    "excluded": {
+      "first_or_invalid_ordinal": 21,
+      "unknown_label": 15
+    },
+    "feature_missing_rows": 0,
+    "groups": 16,
+    "negatives": 9,
+    "positives": 30,
+    "projects": 6,
+    "rows": 39
+  },
+  "loco": {
+    "best_simple_descriptive": "pooled",
+    "folds": [
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "edge.research/sol/db-split",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "edge.research/sol/db-split"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/appkind-review",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/appkind-review"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/fauxx-implementation",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/fauxx-implementation"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/location-review",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/location-review"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/phases-review",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/phases-review"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx.research/seeding-review",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/seeding-review"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft.research/review",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "paneweft.research/review"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft.research/v1/review",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "paneweft.research/v1/review"
+        ],
+        "test_rows": 5,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/vigil-disk-full",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "phoe-nix.research/vigil-disk-full"
+        ],
+        "test_rows": 4,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w46-vigil",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "phoe-nix.research/w46-vigil"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w47-router",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "phoe-nix.research/w47-router"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix.research/w49",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "phoe-nix.research/w49"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/l48",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "polara-port.research/build-loop/l48"
+        ],
+        "test_rows": 2,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/modes/credits",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "polara-port.research/build-loop/modes/credits"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port.research/build-loop/modes/modes",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "polara-port.research/build-loop/modes/modes"
+        ],
+        "test_rows": 3,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "residual-cli.research/reviewer-notes",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "residual-cli.research/reviewer-notes"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ]
+      }
+    ],
+    "metrics": {
+      "augmented_logistic": {
+        "brier": 0.20165935199859936,
+        "change_average_brier": 0.2253070214951021,
+        "fallback_rows": 0,
+        "paired95_vs_each_simple": {
+          "lag_bucket": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.007901028409662753,
+                0.026121178387908055
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.007171348726701207,
+                0.027215457486945406
+              ]
+            }
+          },
+          "lag_logistic": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.01666701123618787,
+                -0.0017815182933397574
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.013015030982318812,
+                -0.0035462088618358665
+              ]
+            }
+          },
+          "pooled": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.019992555874273985,
+                -0.00011893561495784131
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.02378427505438126,
+                0.0005792482468699462
+              ]
+            }
+          }
+        },
+        "relative_improvement_vs_best_simple": -0.0481334986737326
+      },
+      "lag_bucket": {
+        "brier": 0.2102237615702259,
+        "change_average_brier": 0.24186933508339978,
+        "fallback_rows": 0
+      },
+      "lag_logistic": {
+        "brier": 0.19302288472525836,
+        "change_average_brier": 0.2179282367937669,
+        "fallback_rows": 0
+      },
+      "pooled": {
+        "brier": 0.192398537260541,
+        "change_average_brier": 0.2159303517890444,
+        "fallback_rows": 0
+      }
+    },
+    "partition": "group",
+    "records": [
+      {
+        "group": "edge.research/sol/db-split",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.7893138701216571,
+          "lag_bucket": 0.82,
+          "lag_logistic": 0.7901202157110199,
+          "pooled": 0.775
+        },
+        "project": "edge",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/appkind-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7627214091110653,
+          "lag_bucket": 0.6666666666666666,
+          "lag_logistic": 0.7631943798080245,
+          "pooled": 0.75
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.11927901868917345
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.11927901868917345
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7114641220083373,
+          "lag_bucket": 0.7483974358974359,
+          "lag_logistic": 0.7563279425075415,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.43704226186272344
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.43704226186272344
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7061091441681129,
+          "lag_bucket": 0.774928774928775,
+          "lag_logistic": 0.7565944652675568,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.4108587085028254
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.4108587085028254
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7559747145965575,
+          "lag_bucket": 0.7483974358974359,
+          "lag_logistic": 0.7562200882878696,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6887705887410047
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6887705887410047
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7567179518145967,
+          "lag_bucket": 0.774928774928775,
+          "lag_logistic": 0.7565581083945359,
+          "pooled": 0.7435897435897436
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8215490440976896
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.8215490440976896
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7423545397549804,
+          "lag_bucket": 0.7449324324324325,
+          "lag_logistic": 0.7424342868953407,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.695251686433414
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.695251686433414
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7426700139428036,
+          "lag_bucket": 0.7687687687687688,
+          "lag_logistic": 0.7427658036947903,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6094310242226425
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6094310242226425
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7439647115340572,
+          "lag_bucket": 0.8648648648648649,
+          "lag_logistic": 0.7433015146192786,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.64550883255523
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.64550883255523
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7425169299273551,
+          "lag_bucket": 0.6860706860706861,
+          "lag_logistic": 0.7429205278851327,
+          "pooled": 0.7297297297297297
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6753846637347866
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6753846637347866
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6946090695918782,
+          "lag_bucket": 0.7467105263157895,
+          "lag_logistic": 0.7497456457523034,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.5325776600243783
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.5325776600243783
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6815033400579328,
+          "lag_bucket": 0.849624060150376,
+          "lag_logistic": 0.7501226128042962,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7524388880292534,
+          "lag_bucket": 0.849624060150376,
+          "lag_logistic": 0.7501226128042962,
+          "pooled": 0.7368421052631579
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6066212293641242
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6066212293641242
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.8104313425619999,
+          "lag_bucket": 0.7516891891891893,
+          "lag_logistic": 0.7709209979037486,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7446511525531765
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7446511525531765
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.8322460922457351,
+          "lag_bucket": 0.7522522522522523,
+          "lag_logistic": 0.77183771948548,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.685673838589268
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.685673838589268
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.8017062137380117,
+          "lag_bucket": 0.8783783783783784,
+          "lag_logistic": 0.7719290840806787,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 6,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8377888576430338,
+          "lag_bucket": 0.7522522522522523,
+          "lag_logistic": 0.77183771948548,
+          "pooled": 0.7567567567567568
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6315779624197023
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6315779624197023
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.735652306863785,
+          "lag_bucket": 0.7430555555555556,
+          "lag_logistic": 0.7347794240806207,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8219974595692763
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.8219974595692763
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.735718096961061,
+          "lag_bucket": 0.7654320987654322,
+          "lag_logistic": 0.7350850918573211,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6830910237599893
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6830910237599893
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7358761838382981,
+          "lag_bucket": 0.6262626262626263,
+          "lag_logistic": 0.7349716993667648,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8143508004555347
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.8143508004555347
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7358203090271229,
+          "lag_bucket": 0.6262626262626263,
+          "lag_logistic": 0.7349716993667648,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7263061268127987
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7263061268127987
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7355136443556919,
+          "lag_bucket": 0.6262626262626263,
+          "lag_logistic": 0.735117655782753,
+          "pooled": 0.7222222222222222
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.5730577962542249
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.5730577962542249
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.8047167804459592,
+          "lag_bucket": 0.7584459459459459,
+          "lag_logistic": 0.799527345372481,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7294996641502484
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.7294996641502484
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8564793044790213,
+          "lag_bucket": 0.9039039039039038,
+          "lag_logistic": 0.8003973768004108,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7271133605813572
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.7271133605813572
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7884490293894272,
+          "lag_bucket": 0.8918918918918919,
+          "lag_logistic": 0.8000605949659125,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 5,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8330597628149125,
+          "lag_bucket": 0.7796257796257796,
+          "lag_logistic": 0.8003200652030195,
+          "pooled": 0.7837837837837838
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6296216492810512
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6296216492810512
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8100311638800749,
+          "lag_bucket": 0.8237179487179487,
+          "lag_logistic": 0.8104858242761429,
+          "pooled": 0.7948717948717948
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.4999945716493268
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.4999945716493268
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8112227947831748,
+          "lag_bucket": 0.8632478632478632,
+          "lag_logistic": 0.811470856086553,
+          "pooled": 0.7948717948717948
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.805255803852155,
+          "lag_bucket": 0.8223684210526316,
+          "lag_logistic": 0.8054185137658109,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6578538000535153
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6578538000535153
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.8041772319819741,
+          "lag_bucket": 0.6929824561403509,
+          "lag_logistic": 0.8050891423776813,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 4,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.8049515635055501,
+          "lag_bucket": 0.7813765182186235,
+          "lag_logistic": 0.8058709719787149,
+          "pooled": 0.7894736842105263
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w49",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.7885476274939406,
+          "lag_bucket": 0.81875,
+          "lag_logistic": 0.7893792783183459,
+          "pooled": 0.775
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7564712127948523,
+          "lag_bucket": 0.7483974358974359,
+          "lag_logistic": 0.7563042756616638,
+          "pooled": 0.7435897435897436
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.791005235172526
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.791005235172526
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7565500318816305,
+          "lag_bucket": 0.774928774928775,
+          "lag_logistic": 0.7565919908376858,
+          "pooled": 0.7435897435897436
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6460757917638118
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6460757917638118
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/credits",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7625217290653975,
+          "lag_bucket": 0.6,
+          "lag_logistic": 0.7629287357611301,
+          "pooled": 0.75
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.21127221625930695
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.21127221625930695
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7506297857028741,
+          "lag_bucket": 0.7467105263157895,
+          "lag_logistic": 0.7495954525701187,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7175931855402709
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7175931855402709
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7508832153168055,
+          "lag_bucket": 0.662280701754386,
+          "lag_logistic": 0.7499978907112339,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6446528036130723
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6446528036130723
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7508189824698506,
+          "lag_bucket": 0.662280701754386,
+          "lag_logistic": 0.7500132260664286,
+          "pooled": 0.7368421052631579
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6217778433396591
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6217778433396591
+          ]
+        }
+      },
+      {
+        "group": "residual-cli.research/reviewer-notes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7179245500918117,
+          "lag_bucket": 0.75,
+          "lag_logistic": 0.762711225759711,
+          "pooled": 0.75
+        },
+        "project": "residual-cli",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6245708575945118
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6245708575945118
+          ]
+        }
+      }
+    ],
+    "within_change_allocation80": {
+      "always_continue": {
+        "captured_positives": 30.0,
+        "expected_reviews": 39.0,
+        "missed_positives": 0.0
+      },
+      "augmented_logistic": {
+        "captured_positives": 23.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.999999999999998
+      },
+      "lag_bucket": {
+        "captured_positives": 23.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.999999999999998
+      },
+      "lag_logistic": {
+        "captured_positives": 23.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.999999999999998
+      },
+      "pooled": {
+        "captured_positives": 24.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 5.999999999999998
+      },
+      "random80": {
+        "captured_positives": 24.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 5.999999999999998
+      },
+      "source_churn_only": {
+        "captured_positives": 23.3,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.699999999999999
+      },
+      "stateful_then_churn": {
+        "captured_positives": 23.3,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.699999999999999
+      }
+    }
+  },
+  "meaningful_improvement_demonstrated": false,
+  "project_holdout": {
+    "best_simple_descriptive": "pooled",
+    "folds": [
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "edge",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "edge.research/sol/db-split"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "fauxx",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review"
+        ],
+        "test_rows": 12,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "paneweft",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "paneweft.research/review",
+          "paneweft.research/v1/review"
+        ],
+        "test_rows": 9,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "phoe-nix",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49"
+        ],
+        "test_rows": 10,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "polara-port",
+        "settings": {
+          "augmented_logistic": 10.0,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ],
+        "test_rows": 6,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "residual-cli.research/reviewer-notes"
+        ]
+      },
+      {
+        "fallbacks": {
+          "augmented_logistic": false,
+          "lag_bucket": false,
+          "lag_logistic": false,
+          "pooled": false
+        },
+        "held": "residual-cli",
+        "settings": {
+          "augmented_logistic": 0.1,
+          "lag_logistic": 10.0
+        },
+        "test_groups": [
+          "residual-cli.research/reviewer-notes"
+        ],
+        "test_rows": 1,
+        "training_groups": [
+          "edge.research/sol/db-split",
+          "fauxx.research/appkind-review",
+          "fauxx.research/fauxx-implementation",
+          "fauxx.research/location-review",
+          "fauxx.research/phases-review",
+          "fauxx.research/seeding-review",
+          "paneweft.research/review",
+          "paneweft.research/v1/review",
+          "phoe-nix.research/vigil-disk-full",
+          "phoe-nix.research/w46-vigil",
+          "phoe-nix.research/w47-router",
+          "phoe-nix.research/w49",
+          "polara-port.research/build-loop/l48",
+          "polara-port.research/build-loop/modes/credits",
+          "polara-port.research/build-loop/modes/modes"
+        ]
+      }
+    ],
+    "metrics": {
+      "augmented_logistic": {
+        "brier": 0.25838550415849637,
+        "change_average_brier": 0.29136095028015413,
+        "fallback_rows": 0,
+        "paired95_vs_each_simple": {
+          "lag_bucket": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.024594173831245174,
+                0.0162603912481669
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.03152638393579743,
+                0.02292656948069267
+              ]
+            }
+          },
+          "lag_logistic": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.022762453669021257,
+                -0.002724569233046237
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.02825745617345705,
+                0.0003547523019484846
+              ]
+            }
+          },
+          "pooled": {
+            "group": {
+              "clusters": 16,
+              "percentile95": [
+                -0.027216741452985103,
+                -0.005788930115435948
+              ]
+            },
+            "project": {
+              "clusters": 6,
+              "percentile95": [
+                -0.029510077804515953,
+                0.004084521377045896
+              ]
+            }
+          }
+        },
+        "relative_improvement_vs_best_simple": -0.06432317205261803
+      },
+      "lag_bucket": {
+        "brier": 0.25373622203565865,
+        "change_average_brier": 0.29666429555718804,
+        "fallback_rows": 0
+      },
+      "lag_logistic": {
+        "brier": 0.24682934843161725,
+        "change_average_brier": 0.2785446756952991,
+        "fallback_rows": 0
+      },
+      "pooled": {
+        "brier": 0.24276978171975974,
+        "change_average_brier": 0.2725847390148765,
+        "fallback_rows": 0
+      }
+    },
+    "partition": "project",
+    "records": [
+      {
+        "group": "edge.research/sol/db-split",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.7893138701216571,
+          "lag_bucket": 0.82,
+          "lag_logistic": 0.7901202157110199,
+          "pooled": 0.775
+        },
+        "project": "edge",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/appkind-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6425293117232171,
+          "lag_bucket": 0.603448275862069,
+          "lag_logistic": 0.6663294054777362,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.11927901868917345
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.11927901868917345
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.5961803460010522,
+          "lag_bucket": 0.663129973474801,
+          "lag_logistic": 0.6663306085440504,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.43704226186272344
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.43704226186272344
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/fauxx-implementation",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.5598163652800751,
+          "lag_bucket": 0.6600985221674877,
+          "lag_logistic": 0.6663289556095319,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.4108587085028254
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.4108587085028254
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.5888577892616217,
+          "lag_bucket": 0.663129973474801,
+          "lag_logistic": 0.6663310047143596,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6887705887410047
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6887705887410047
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/location-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6346862255267863,
+          "lag_bucket": 0.6600985221674877,
+          "lag_logistic": 0.6663291536952057,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8215490440976896
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.8215490440976896
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6127086218868065,
+          "lag_bucket": 0.663129973474801,
+          "lag_logistic": 0.6663310047143596,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.695251686433414
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.695251686433414
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6096445827858036,
+          "lag_bucket": 0.6600985221674877,
+          "lag_logistic": 0.6663291536952057,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6094310242226425
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6094310242226425
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7786376762543077,
+          "lag_bucket": 0.7701149425287356,
+          "lag_logistic": 0.6671468297419209,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.64550883255523
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.64550883255523
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/phases-review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.5908042417917494,
+          "lag_bucket": 0.663129973474801,
+          "lag_logistic": 0.6671463804252733,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6753846637347866
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6753846637347866
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.5622415802337947,
+          "lag_bucket": 0.663129973474801,
+          "lag_logistic": 0.6663307075866496,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.5325776600243783
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.5325776600243783
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6007037654185232,
+          "lag_bucket": 0.7701149425287356,
+          "lag_logistic": 0.6671466318991829,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "fauxx.research/seeding-review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.6639289154667138,
+          "lag_bucket": 0.7701149425287356,
+          "lag_logistic": 0.6671466318991829,
+          "pooled": 0.6551724137931034
+        },
+        "project": "fauxx",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6066212293641242
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6066212293641242
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7334051791153465,
+          "lag_bucket": 0.725,
+          "lag_logistic": 0.7325786974654297,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7446511525531765
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7446511525531765
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.734019642026466,
+          "lag_bucket": 0.6527777777777778,
+          "lag_logistic": 0.7335896828047546,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.685673838589268
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.685673838589268
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7338394890866874,
+          "lag_bucket": 0.859375,
+          "lag_logistic": 0.7342047133453306,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/review",
+        "ordinal": 6,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.7340841280274316,
+          "lag_bucket": 0.6527777777777778,
+          "lag_logistic": 0.7335896828047546,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6315779624197023
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6315779624197023
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.733762509480626,
+          "lag_bucket": 0.725,
+          "lag_logistic": 0.7326809418144934,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8219974595692763
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.8219974595692763
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7339967550981938,
+          "lag_bucket": 0.7638888888888888,
+          "lag_logistic": 0.7332134350208539,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6830910237599893
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6830910237599893
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7342865000476427,
+          "lag_bucket": 0.6527777777777778,
+          "lag_logistic": 0.7331814407847428,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.8143508004555347
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.8143508004555347
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7342240707421356,
+          "lag_bucket": 0.6527777777777778,
+          "lag_logistic": 0.7331814407847428,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7263061268127987
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7263061268127987
+          ]
+        }
+      },
+      {
+        "group": "paneweft.research/v1/review",
+        "ordinal": 6,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7338694756595399,
+          "lag_bucket": 0.6527777777777778,
+          "lag_logistic": 0.7333856115264712,
+          "pooled": 0.71875
+        },
+        "project": "paneweft",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.5730577962542249
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.5730577962542249
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.9289415903374479,
+          "lag_bucket": 0.9702233250620348,
+          "lag_logistic": 0.9290870293249271,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7294996641502484
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.7294996641502484
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9291535464707367,
+          "lag_bucket": 0.956989247311828,
+          "lag_logistic": 0.9292970662464398,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7271133605813572
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.7271133605813572
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.9284659808756154,
+          "lag_bucket": 0.9516129032258065,
+          "lag_logistic": 0.928733583786354,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/vigil-disk-full",
+        "ordinal": 5,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9288908016743257,
+          "lag_bucket": 0.8844086021505376,
+          "lag_logistic": 0.9290713322071711,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6296216492810512
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6296216492810512
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9287609044784354,
+          "lag_bucket": 0.9702233250620348,
+          "lag_logistic": 0.9290870293249271,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.4999945716493268
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.4999945716493268
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w46-vigil",
+        "ordinal": 3,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9286769974144738,
+          "lag_bucket": 0.9225806451612903,
+          "lag_logistic": 0.9289282895173641,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9288455281236964,
+          "lag_bucket": 0.9702233250620348,
+          "lag_logistic": 0.9290870293249271,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6578538000535153
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6578538000535153
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.9284751823168974,
+          "lag_bucket": 0.9225806451612903,
+          "lag_logistic": 0.9289282895173641,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w47-router",
+        "ordinal": 4,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.928681579873585,
+          "lag_bucket": 0.8844086021505376,
+          "lag_logistic": 0.9291352418847986,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "phoe-nix.research/w49",
+        "ordinal": 2,
+        "outcome": 0,
+        "predictions": {
+          "augmented_logistic": 0.9286389921421588,
+          "lag_bucket": 0.9702233250620348,
+          "lag_logistic": 0.9290870293249271,
+          "pooled": 0.9032258064516129
+        },
+        "project": "phoe-nix",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.0
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.0
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7269162611380925,
+          "lag_bucket": 0.7238095238095238,
+          "lag_logistic": 0.7266789869979237,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.791005235172526
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.791005235172526
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/l48",
+        "ordinal": 3,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7272125772757007,
+          "lag_bucket": 0.761904761904762,
+          "lag_logistic": 0.727231600729307,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6460757917638118
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6460757917638118
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/credits",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7267853072414283,
+          "lag_bucket": 0.5714285714285714,
+          "lag_logistic": 0.7272404382014562,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.21127221625930695
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.21127221625930695
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7278606361386113,
+          "lag_bucket": 0.7238095238095238,
+          "lag_logistic": 0.7266789869979237,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.7175931855402709
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.7175931855402709
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 4,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.728456052642658,
+          "lag_bucket": 0.6547619047619048,
+          "lag_logistic": 0.7274479052609358,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6446528036130723
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6446528036130723
+          ]
+        }
+      },
+      {
+        "group": "polara-port.research/build-loop/modes/modes",
+        "ordinal": 5,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7283739396294627,
+          "lag_bucket": 0.6547619047619048,
+          "lag_logistic": 0.7274584360928469,
+          "pooled": 0.7142857142857143
+        },
+        "project": "polara-port",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6217778433396591
+          ],
+          "stateful_then_churn": [
+            true,
+            1.0,
+            true,
+            0.6217778433396591
+          ]
+        }
+      },
+      {
+        "group": "residual-cli.research/reviewer-notes",
+        "ordinal": 2,
+        "outcome": 1,
+        "predictions": {
+          "augmented_logistic": 0.7179245500918117,
+          "lag_bucket": 0.75,
+          "lag_logistic": 0.762711225759711,
+          "pooled": 0.75
+        },
+        "project": "residual-cli",
+        "ranks": {
+          "source_churn_only": [
+            true,
+            0.6245708575945118
+          ],
+          "stateful_then_churn": [
+            true,
+            0.0,
+            true,
+            0.6245708575945118
+          ]
+        }
+      }
+    ],
+    "within_change_allocation80": {
+      "always_continue": {
+        "captured_positives": 30.0,
+        "expected_reviews": 39.0,
+        "missed_positives": 0.0
+      },
+      "augmented_logistic": {
+        "captured_positives": 23.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.999999999999998
+      },
+      "lag_bucket": {
+        "captured_positives": 24.800000000000008,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 5.199999999999999
+      },
+      "lag_logistic": {
+        "captured_positives": 23.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.999999999999998
+      },
+      "pooled": {
+        "captured_positives": 24.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 5.999999999999998
+      },
+      "random80": {
+        "captured_positives": 24.000000000000004,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 5.999999999999998
+      },
+      "source_churn_only": {
+        "captured_positives": 23.3,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.699999999999999
+      },
+      "stateful_then_churn": {
+        "captured_positives": 23.3,
+        "expected_reviews": 31.200000000000006,
+        "missed_positives": 6.699999999999999
+      }
+    }
+  },
+  "status": "posthoc-exploratory-only"
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "mutation": "future_leakage",
+    "killed": true,
+    "exit_code": 1,
+    "failing_tests": [
+      "FAIL: test_future_labels_cannot_change_frozen_training_scores (test_replay.ReplayTests.test_future_labels_cannot_change_frozen_training_scores)"
+    ]
+  },
+  {
+    "mutation": "reversed_elo_update",
+    "killed": true,
+    "exit_code": 1,
+    "failing_tests": [
+      "FAIL: test_elo_win_has_correct_direction_and_zero_sum (test_replay.ReplayTests.test_elo_win_has_correct_direction_and_zero_sum)"
+    ]
+  },
+  {
+    "mutation": "overselect_ties",
+    "killed": true,
+    "exit_code": 1,
+    "failing_tests": [
+      "FAIL: test_constant_control_matches_budget_including_tied_boundary (test_replay.ReplayTests.test_constant_control_matches_budget_including_tied_boundary)",
+      "FAIL: test_fractional_ties_do_not_reward_filename_order (test_replay.ReplayTests.test_fractional_ties_do_not_reward_filename_order)"
+    ]
+  }
+]

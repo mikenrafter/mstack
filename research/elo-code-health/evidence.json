@@ -1,0 +1,2859 @@
+{
+  "hypotheses": [
+    {
+      "candidate_change": "Evaluate one typed retained-window decision shared by pruning and derive entry paths.",
+      "components": [
+        "lib/data/db.dart",
+        "lib/compute/derivation_engine.dart",
+        "lib/data/local_repository_impl.dart"
+      ],
+      "evidence_commit": "c11f5cbac942969a410764e86d1a13bdd39a8651",
+      "held_out_cases": [
+        "DST transition",
+        "forced sleep window crossing the prune boundary",
+        "failed prune transaction",
+        "older cursor supplied after a newer cursor",
+        "algorithm-version rederive after pruning"
+      ],
+      "id": "retention-preserves-complete-night",
+      "limits": [
+        "No validated force mapping or architectural change has been applied.",
+        "A lower file count or dependency count alone is not a successful outcome."
+      ],
+      "measurements": [
+        "outcome pass/fail with independent fixtures",
+        "files requiring edits for a new retention rule",
+        "duplicated decisions across entry paths",
+        "behavior regressions in held-out cases"
+      ],
+      "outcomes": [
+        "A previously complete night is not overwritten from incomplete retained input.",
+        "Deleted rows and the prune cursor commit atomically.",
+        "The prune cursor never decreases.",
+        "Every derive entry path observes the same completeness decision."
+      ],
+      "project": "edge",
+      "revision": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+      "status": "proposed-not-executed",
+      "stressor": "Retention removes the leading portion of an overnight derive window before a later rederive."
+    }
+  ],
+  "observations": {
+    "architecture": {
+      "diff-core": {
+        "excluded_broad_commits": 4,
+        "pairs": [
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "0b11a79c685559a827a09c4f2b13e0bc973da0b8"
+            ],
+            "direct_import": null,
+            "jaccard": 0.34615384615384615,
+            "left": "crates/diffcore-tauri/src/commands.rs",
+            "left_touches": 15,
+            "p_left_given_right": 0.45,
+            "p_right_given_left": 0.6,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 9
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249"
+            ],
+            "direct_import": null,
+            "jaccard": 0.5333333333333333,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.5333333333333333,
+            "p_right_given_left": 1.0,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 8
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "74961b281a8f8c3477b6e67423d7dd38156c61b7",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249"
+            ],
+            "direct_import": null,
+            "jaccard": 0.38095238095238093,
+            "left": "crates/diffcore-tauri/src/main.rs",
+            "left_touches": 9,
+            "p_left_given_right": 0.4,
+            "p_right_given_left": 0.8888888888888888,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 8
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "9a03f0edfc85c36fb8aa64bc67ae6b4cf6482021"
+            ],
+            "direct_import": null,
+            "jaccard": 0.3333333333333333,
+            "left": "crates/diffcore-core/src/config.rs",
+            "left_touches": 5,
+            "p_left_given_right": 0.3333333333333333,
+            "p_right_given_left": 1.0,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 5
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "e8976cc4ba0dc18133c895bed18ad56bba0b9fe8",
+              "e3193c043a356a7bb878f691e3309255be583713"
+            ],
+            "direct_import": null,
+            "jaccard": 0.29411764705882354,
+            "left": "crates/diffcore-core/src/llm/mod.rs",
+            "left_touches": 7,
+            "p_left_given_right": 0.3333333333333333,
+            "p_right_given_left": 0.7142857142857143,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 5
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "9a03f0edfc85c36fb8aa64bc67ae6b4cf6482021"
+            ],
+            "direct_import": null,
+            "jaccard": 0.4444444444444444,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.8,
+            "p_right_given_left": 0.5,
+            "right": "crates/diffcore-core/src/config.rs",
+            "right_touches": 5,
+            "support": 4
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "6f766f5f1c7cf693236e44400e465148c61c9a34",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37"
+            ],
+            "direct_import": null,
+            "jaccard": 0.4444444444444444,
+            "left": "crates/diffcore-core/src/lib.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.4444444444444444,
+            "p_right_given_left": 1.0,
+            "right": "crates/diffcore-tauri/src/main.rs",
+            "right_touches": 9,
+            "support": 4
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "e8976cc4ba0dc18133c895bed18ad56bba0b9fe8",
+              "e3193c043a356a7bb878f691e3309255be583713"
+            ],
+            "direct_import": null,
+            "jaccard": 0.36363636363636365,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.5714285714285714,
+            "p_right_given_left": 0.5,
+            "right": "crates/diffcore-core/src/llm/mod.rs",
+            "right_touches": 7,
+            "support": 4
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "6f766f5f1c7cf693236e44400e465148c61c9a34"
+            ],
+            "direct_import": null,
+            "jaccard": 0.3076923076923077,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.4444444444444444,
+            "p_right_given_left": 0.5,
+            "right": "crates/diffcore-tauri/src/main.rs",
+            "right_touches": 9,
+            "support": 4
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "6f766f5f1c7cf693236e44400e465148c61c9a34",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37"
+            ],
+            "direct_import": null,
+            "jaccard": 0.26666666666666666,
+            "left": "crates/diffcore-core/src/lib.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.26666666666666666,
+            "p_right_given_left": 1.0,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 4
+          },
+          {
+            "commits": [
+              "0b11a79c685559a827a09c4f2b13e0bc973da0b8",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37"
+            ],
+            "direct_import": null,
+            "jaccard": 0.26666666666666666,
+            "left": "crates/diffcore-tauri/src/commands.rs",
+            "left_touches": 15,
+            "p_left_given_right": 1.0,
+            "p_right_given_left": 0.26666666666666666,
+            "right": "crates/diffcore-tauri/ui/src/mock.ts",
+            "right_touches": 4,
+            "support": 4
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37"
+            ],
+            "direct_import": null,
+            "jaccard": 0.19047619047619047,
+            "left": "crates/diffcore-core/src/config.rs",
+            "left_touches": 5,
+            "p_left_given_right": 0.2,
+            "p_right_given_left": 0.8,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 4
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "8096489f6627c3593bfa2c29f327923356efbd19",
+              "368a84727874e00724ba45147e2f575438e092ac"
+            ],
+            "direct_import": null,
+            "jaccard": 0.19047619047619047,
+            "left": "crates/diffcore-tauri/ui/src/App.tsx",
+            "left_touches": 20,
+            "p_left_given_right": 0.8,
+            "p_right_given_left": 0.2,
+            "right": "crates/diffcore-tauri/ui/src/components/DiffViewer.tsx",
+            "right_touches": 5,
+            "support": 4
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249"
+            ],
+            "direct_import": null,
+            "jaccard": 0.16666666666666666,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.2,
+            "p_right_given_left": 0.5,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 4
+          },
+          {
+            "commits": [
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.5,
+            "left": "crates/diffcore-core/src/config.rs",
+            "left_touches": 5,
+            "p_left_given_right": 0.75,
+            "p_right_given_left": 0.6,
+            "right": "crates/diffcore-tauri/ui/src/mock.ts",
+            "right_touches": 4,
+            "support": 3
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "e8976cc4ba0dc18133c895bed18ad56bba0b9fe8",
+              "e3193c043a356a7bb878f691e3309255be583713"
+            ],
+            "direct_import": null,
+            "jaccard": 0.375,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 1.0,
+            "p_right_given_left": 0.375,
+            "right": "crates/diffcore-core/src/llm/refinement.rs",
+            "right_touches": 3,
+            "support": 3
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "6f766f5f1c7cf693236e44400e465148c61c9a34",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37"
+            ],
+            "direct_import": null,
+            "jaccard": 0.3333333333333333,
+            "left": "crates/diffcore-cli/src/main.rs",
+            "left_touches": 8,
+            "p_left_given_right": 0.75,
+            "p_right_given_left": 0.375,
+            "right": "crates/diffcore-core/src/lib.rs",
+            "right_touches": 4,
+            "support": 3
+          },
+          {
+            "commits": [
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.3,
+            "left": "crates/diffcore-tauri/src/main.rs",
+            "left_touches": 9,
+            "p_left_given_right": 0.75,
+            "p_right_given_left": 0.3333333333333333,
+            "right": "crates/diffcore-tauri/ui/src/mock.ts",
+            "right_touches": 4,
+            "support": 3
+          },
+          {
+            "commits": [
+              "11e8a7b5fe39fd855ba0cbbfc38edb55fef50249",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.2727272727272727,
+            "left": "crates/diffcore-core/src/config.rs",
+            "left_touches": 5,
+            "p_left_given_right": 0.3333333333333333,
+            "p_right_given_left": 0.6,
+            "right": "crates/diffcore-tauri/src/main.rs",
+            "right_touches": 9,
+            "support": 3
+          },
+          {
+            "commits": [
+              "1e49a11361d3a658e594d3f27ba8818214dd5404",
+              "e8976cc4ba0dc18133c895bed18ad56bba0b9fe8",
+              "e3193c043a356a7bb878f691e3309255be583713"
+            ],
+            "direct_import": null,
+            "jaccard": 0.2,
+            "left": "crates/diffcore-core/src/llm/refinement.rs",
+            "left_touches": 3,
+            "p_left_given_right": 0.2,
+            "p_right_given_left": 1.0,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 3
+          },
+          {
+            "commits": [
+              "0b11a79c685559a827a09c4f2b13e0bc973da0b8",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.2,
+            "left": "crates/diffcore-tauri/src/commands.rs",
+            "left_touches": 15,
+            "p_left_given_right": 1.0,
+            "p_right_given_left": 0.2,
+            "right": "crates/diffcore-tauri/ui/src/types.ts",
+            "right_touches": 3,
+            "support": 3
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "9a03f0edfc85c36fb8aa64bc67ae6b4cf6482021",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.1875,
+            "left": "crates/diffcore-core/src/cache.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.2,
+            "p_right_given_left": 0.75,
+            "right": "crates/diffcore-tauri/src/commands.rs",
+            "right_touches": 15,
+            "support": 3
+          },
+          {
+            "commits": [
+              "d2eac5e32acc7ab0a8dd968474d8c49db3201824",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.14285714285714285,
+            "left": "crates/diffcore-core/src/lib.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.15,
+            "p_right_given_left": 0.75,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 3
+          },
+          {
+            "commits": [
+              "670dddc4974b42bc8d7ba42f51a50cc00838ead5",
+              "c7d56ca9996c86a55567faa1fa7a69ef4488cb78",
+              "55b45039f1bccca18f9f75117dd34eb0e4bba293"
+            ],
+            "direct_import": null,
+            "jaccard": 0.14285714285714285,
+            "left": "crates/diffcore-tauri/src/activity_stream.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.15,
+            "p_right_given_left": 0.75,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 3
+          },
+          {
+            "commits": [
+              "c7d56ca9996c86a55567faa1fa7a69ef4488cb78",
+              "851f3e0c7144147efd13c469fc8b69cf7e4bae37",
+              "1c8914d39cae3c4c20b7d8a320b88aacc3d04b80"
+            ],
+            "direct_import": null,
+            "jaccard": 0.14285714285714285,
+            "left": "crates/diffcore-tauri/src/web_server.rs",
+            "left_touches": 4,
+            "p_left_given_right": 0.15,
+            "p_right_given_left": 0.75,
+            "right": "crates/diffcore-tauri/ui/src/App.tsx",
+            "right_touches": 20,
+            "support": 3
+          }
+        ],
+        "resolved_import_edges": null,
+        "source_commits": 199,
+        "usable_commits": 195
+      },
+      "edge": {
+        "excluded_broad_commits": 12,
+        "pairs": [
+          {
+            "commits": [
+              "b369f1022ff4d1fb304953cd73fa1cb30fefe814",
+              "c11f5cbac942969a410764e86d1a13bdd39a8651",
+              "8246fefdc33d623b4a70246d81afb2a0ff13b3b5"
+            ],
+            "direct_import": true,
+            "jaccard": 0.2625,
+            "left": "lib/compute/derivation_engine.dart",
+            "left_touches": 50,
+            "p_left_given_right": 0.4117647058823529,
+            "p_right_given_left": 0.42,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 21
+          },
+          {
+            "commits": [
+              "e7752c6191ee8aac46490edefce9bc0cf05bb6f8",
+              "45965ef8d589800ffcf33456177636f12ba157ff",
+              "6fcca603b6c5248a15515c84c675d362eab577f3"
+            ],
+            "direct_import": true,
+            "jaccard": 0.22535211267605634,
+            "left": "lib/data/db.dart",
+            "left_touches": 51,
+            "p_left_given_right": 0.4444444444444444,
+            "p_right_given_left": 0.3137254901960784,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 16
+          },
+          {
+            "commits": [
+              "c239764538840a96cbe01a359fb956a6b0639053",
+              "c11f5cbac942969a410764e86d1a13bdd39a8651",
+              "8246fefdc33d623b4a70246d81afb2a0ff13b3b5"
+            ],
+            "direct_import": true,
+            "jaccard": 0.2459016393442623,
+            "left": "lib/compute/derivation_engine.dart",
+            "left_touches": 50,
+            "p_left_given_right": 0.5769230769230769,
+            "p_right_given_left": 0.3,
+            "right": "lib/data/local_repository_impl.dart",
+            "right_touches": 26,
+            "support": 15
+          },
+          {
+            "commits": [
+              "44bcd71a4c547c4cc26190728f6429931c39e279",
+              "84a24a65107528d81f1fcd4f65088c7a28bfc262",
+              "bf25ef5825179e2716e6f693a119d86b1b32f1e6"
+            ],
+            "direct_import": true,
+            "jaccard": 0.24324324324324326,
+            "left": "lib/state/app_state.dart",
+            "left_touches": 36,
+            "p_left_given_right": 0.9,
+            "p_right_given_left": 0.25,
+            "right": "lib/sync/background_sync.dart",
+            "right_touches": 10,
+            "support": 9
+          },
+          {
+            "commits": [
+              "769296b7327a530b76da78da42240da8d25eb623",
+              "f8f0bc08f489f835e0e5bfd1ef0f10b7366a5009",
+              "84aa089f74d72aeb802ce681be18a33ce18004bb"
+            ],
+            "direct_import": false,
+            "jaccard": 0.14285714285714285,
+            "left": "lib/compute/onehz_pipeline.dart",
+            "left_touches": 13,
+            "p_left_given_right": 0.1568627450980392,
+            "p_right_given_left": 0.6153846153846154,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 8
+          },
+          {
+            "commits": [
+              "45965ef8d589800ffcf33456177636f12ba157ff",
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "b5a4564e74533a50e5520935efda33eef2c0ff77"
+            ],
+            "direct_import": true,
+            "jaccard": 0.10256410256410256,
+            "left": "lib/compute/derivation_engine.dart",
+            "left_touches": 50,
+            "p_left_given_right": 0.2222222222222222,
+            "p_right_given_left": 0.16,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 8
+          },
+          {
+            "commits": [
+              "b598d6dab1d39983ed3ccd2f7a01034ed561fcfd",
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9"
+            ],
+            "direct_import": false,
+            "jaccard": 0.2,
+            "left": "lib/data/local_repository_impl.dart",
+            "left_touches": 26,
+            "p_left_given_right": 0.4375,
+            "p_right_given_left": 0.2692307692307692,
+            "right": "lib/ui2/screens/home_screen.dart",
+            "right_touches": 16,
+            "support": 7
+          },
+          {
+            "commits": [
+              "74ee4110589897e70efa0c64d756dda107b20323",
+              "44bcd71a4c547c4cc26190728f6429931c39e279",
+              "0a171e7416a456b36f4d77128d84a9bbcc8c9463"
+            ],
+            "direct_import": true,
+            "jaccard": 0.17073170731707318,
+            "left": "lib/ble/ble_state.dart",
+            "left_touches": 12,
+            "p_left_given_right": 0.19444444444444445,
+            "p_right_given_left": 0.5833333333333334,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 7
+          },
+          {
+            "commits": [
+              "42698a8c6e1af839808daf2016d49da09f60bcd9",
+              "e112be04aec65c6e47011c41018a55ca0efcbb4e",
+              "1140dac1508397ad9ccd2c36396b7209d30044c4"
+            ],
+            "direct_import": false,
+            "jaccard": 0.18181818181818182,
+            "left": "lib/data/local_repository_impl.dart",
+            "left_touches": 26,
+            "p_left_given_right": 0.46153846153846156,
+            "p_right_given_left": 0.23076923076923078,
+            "right": "lib/ui2/screens/health_screen.dart",
+            "right_touches": 13,
+            "support": 6
+          },
+          {
+            "commits": [
+              "720058498c9c57831a00ee1487802bfb174e364d",
+              "21d754375789f3735f94554ed8cf36f4419a78d3",
+              "1c432442105f890ec604e8634d5cf8ef26f45abc"
+            ],
+            "direct_import": true,
+            "jaccard": 0.11538461538461539,
+            "left": "lib/compute/substrate.dart",
+            "left_touches": 7,
+            "p_left_given_right": 0.11764705882352941,
+            "p_right_given_left": 0.8571428571428571,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 6
+          },
+          {
+            "commits": [
+              "ac15329cc5bf7b24992be25ceb59b84904f4acb8",
+              "fcef85a235ecaa04c0ce19e3a07093de3ba77ab0",
+              "6fcca603b6c5248a15515c84c675d362eab577f3"
+            ],
+            "direct_import": true,
+            "jaccard": 0.10909090909090909,
+            "left": "lib/data/db.dart",
+            "left_touches": 51,
+            "p_left_given_right": 0.6,
+            "p_right_given_left": 0.11764705882352941,
+            "right": "lib/ui2/screens/workout_screen.dart",
+            "right_touches": 10,
+            "support": 6
+          },
+          {
+            "commits": [
+              "08d2e407c7f956f462b779ee392b8cf94993d27e",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9",
+              "e112be04aec65c6e47011c41018a55ca0efcbb4e"
+            ],
+            "direct_import": false,
+            "jaccard": 0.10526315789473684,
+            "left": "lib/compute/derivation_engine.dart",
+            "left_touches": 50,
+            "p_left_given_right": 0.46153846153846156,
+            "p_right_given_left": 0.12,
+            "right": "lib/ui2/screens/health_screen.dart",
+            "right_touches": 13,
+            "support": 6
+          },
+          {
+            "commits": [
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "08d2e407c7f956f462b779ee392b8cf94993d27e",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9"
+            ],
+            "direct_import": false,
+            "jaccard": 0.1,
+            "left": "lib/compute/derivation_engine.dart",
+            "left_touches": 50,
+            "p_left_given_right": 0.375,
+            "p_right_given_left": 0.12,
+            "right": "lib/ui2/screens/home_screen.dart",
+            "right_touches": 16,
+            "support": 6
+          },
+          {
+            "commits": [
+              "64d86500d0dd3d37dc740b6373501eee48be1874",
+              "970737da402543249b2d2954bb2e951d0e32bf61",
+              "2d7949533155c66bf66a3fb18178ec51f3d4249e"
+            ],
+            "direct_import": false,
+            "jaccard": 0.09836065573770492,
+            "left": "lib/ble/ble_engine.dart",
+            "left_touches": 17,
+            "p_left_given_right": 0.12,
+            "p_right_given_left": 0.35294117647058826,
+            "right": "lib/compute/derivation_engine.dart",
+            "right_touches": 50,
+            "support": 6
+          },
+          {
+            "commits": [
+              "f8f0bc08f489f835e0e5bfd1ef0f10b7366a5009",
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9"
+            ],
+            "direct_import": true,
+            "jaccard": 0.09836065573770492,
+            "left": "lib/data/db.dart",
+            "left_touches": 51,
+            "p_left_given_right": 0.375,
+            "p_right_given_left": 0.11764705882352941,
+            "right": "lib/ui2/screens/home_screen.dart",
+            "right_touches": 16,
+            "support": 6
+          },
+          {
+            "commits": [
+              "8edc30f510e8d29b03b8b27092e41f1607841e71",
+              "23d4e0b867765ba29de54c5827a072561f7c5fab",
+              "9c191205ea20be4e8810a0a82c05a61a54a802fb"
+            ],
+            "direct_import": true,
+            "jaccard": 0.5555555555555556,
+            "left": "lib/ui2/pairing/device_picker.dart",
+            "left_touches": 7,
+            "p_left_given_right": 0.7142857142857143,
+            "p_right_given_left": 0.7142857142857143,
+            "right": "lib/ui2/profile/pair_sensor.dart",
+            "right_touches": 7,
+            "support": 5
+          },
+          {
+            "commits": [
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "57d0791dadfa9feaf047b9eb630e3806b24cc55d",
+              "80cbea23491566721efe19e8702352f69fb3f0d4"
+            ],
+            "direct_import": true,
+            "jaccard": 0.1282051282051282,
+            "left": "lib/state/app_state.dart",
+            "left_touches": 36,
+            "p_left_given_right": 0.625,
+            "p_right_given_left": 0.1388888888888889,
+            "right": "lib/ui2/profile/settings.dart",
+            "right_touches": 8,
+            "support": 5
+          },
+          {
+            "commits": [
+              "84a24a65107528d81f1fcd4f65088c7a28bfc262",
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "871d3267a0d2eca90341347300626d4a669ff6f6"
+            ],
+            "direct_import": true,
+            "jaccard": 0.125,
+            "left": "lib/app.dart",
+            "left_touches": 9,
+            "p_left_given_right": 0.1388888888888889,
+            "p_right_given_left": 0.5555555555555556,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 5
+          },
+          {
+            "commits": [
+              "74ee4110589897e70efa0c64d756dda107b20323",
+              "1eca7a8ba6dfe839f716e36776a789ddb8f44e33",
+              "1fb58d169c23c4182105292fc42e26b008ae1957"
+            ],
+            "direct_import": true,
+            "jaccard": 0.10416666666666667,
+            "left": "lib/ble/ble_engine.dart",
+            "left_touches": 17,
+            "p_left_given_right": 0.1388888888888889,
+            "p_right_given_left": 0.29411764705882354,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 5
+          },
+          {
+            "commits": [
+              "84aa089f74d72aeb802ce681be18a33ce18004bb",
+              "21d754375789f3735f94554ed8cf36f4419a78d3",
+              "1c432442105f890ec604e8634d5cf8ef26f45abc"
+            ],
+            "direct_import": false,
+            "jaccard": 0.09615384615384616,
+            "left": "lib/compute/derive_prepare.dart",
+            "left_touches": 6,
+            "p_left_given_right": 0.09803921568627451,
+            "p_right_given_left": 0.8333333333333334,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 5
+          },
+          {
+            "commits": [
+              "b369f1022ff4d1fb304953cd73fa1cb30fefe814",
+              "84aa089f74d72aeb802ce681be18a33ce18004bb",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9"
+            ],
+            "direct_import": false,
+            "jaccard": 0.09090909090909091,
+            "left": "lib/compute/crossday_pipeline.dart",
+            "left_touches": 9,
+            "p_left_given_right": 0.09803921568627451,
+            "p_right_given_left": 0.5555555555555556,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 5
+          },
+          {
+            "commits": [
+              "fcef85a235ecaa04c0ce19e3a07093de3ba77ab0",
+              "1c432442105f890ec604e8634d5cf8ef26f45abc",
+              "135ad95cddce2bb1cd0af091f28137ff2cc5e18e"
+            ],
+            "direct_import": false,
+            "jaccard": 0.08928571428571429,
+            "left": "lib/data/db.dart",
+            "left_touches": 51,
+            "p_left_given_right": 0.5,
+            "p_right_given_left": 0.09803921568627451,
+            "right": "lib/ui2/screens/sleep_detail.dart",
+            "right_touches": 10,
+            "support": 5
+          },
+          {
+            "commits": [
+              "45965ef8d589800ffcf33456177636f12ba157ff",
+              "6fcca603b6c5248a15515c84c675d362eab577f3",
+              "e112be04aec65c6e47011c41018a55ca0efcbb4e"
+            ],
+            "direct_import": true,
+            "jaccard": 0.08771929824561403,
+            "left": "lib/data/local_repository_impl.dart",
+            "left_touches": 26,
+            "p_left_given_right": 0.1388888888888889,
+            "p_right_given_left": 0.19230769230769232,
+            "right": "lib/state/app_state.dart",
+            "right_touches": 36,
+            "support": 5
+          },
+          {
+            "commits": [
+              "769296b7327a530b76da78da42240da8d25eb623",
+              "42698a8c6e1af839808daf2016d49da09f60bcd9",
+              "e112be04aec65c6e47011c41018a55ca0efcbb4e"
+            ],
+            "direct_import": true,
+            "jaccard": 0.0847457627118644,
+            "left": "lib/data/db.dart",
+            "left_touches": 51,
+            "p_left_given_right": 0.38461538461538464,
+            "p_right_given_left": 0.09803921568627451,
+            "right": "lib/ui2/screens/health_screen.dart",
+            "right_touches": 13,
+            "support": 5
+          },
+          {
+            "commits": [
+              "2d7949533155c66bf66a3fb18178ec51f3d4249e",
+              "1fb58d169c23c4182105292fc42e26b008ae1957",
+              "135ad95cddce2bb1cd0af091f28137ff2cc5e18e"
+            ],
+            "direct_import": true,
+            "jaccard": 0.07936507936507936,
+            "left": "lib/ble/ble_engine.dart",
+            "left_touches": 17,
+            "p_left_given_right": 0.09803921568627451,
+            "p_right_given_left": 0.29411764705882354,
+            "right": "lib/data/db.dart",
+            "right_touches": 51,
+            "support": 5
+          },
+          {
+            "commits": [
+              "44bcd71a4c547c4cc26190728f6429931c39e279",
+              "fa6d35d1076ac86c598144decf35256319a9d94d",
+              "2839d2d4dc3effb7b4d969adca77c3291d9df993"
+            ],
+            "direct_import": true,
+            "jaccard": 0.36363636363636365,
+            "left": "lib/state/alarm_schedule.dart",
+            "left_touches": 5,
+            "p_left_given_right": 0.4,
+            "p_right_given_left": 0.8,
+            "right": "lib/sync/background_sync.dart",
+            "right_touches": 10,
+            "support": 4
+          },
+          {
+            "commits": [
+              "74ee4110589897e70efa0c64d756dda107b20323",
+              "1eca7a8ba6dfe839f716e36776a789ddb8f44e33",
+              "3eb1036deba0ca1aba47aa318e94186c8df859d4"
+            ],
+            "direct_import": true,
+            "jaccard": 0.3076923076923077,
+            "left": "lib/ble/ble_state.dart",
+            "left_touches": 12,
+            "p_left_given_right": 0.8,
+            "p_right_given_left": 0.3333333333333333,
+            "right": "lib/sync/sync_policy.dart",
+            "right_touches": 5,
+            "support": 4
+          },
+          {
+            "commits": [
+              "2d7949533155c66bf66a3fb18178ec51f3d4249e",
+              "1fb58d169c23c4182105292fc42e26b008ae1957",
+              "69341a6e513bae91ce017bc378562ba80c9624f2"
+            ],
+            "direct_import": true,
+            "jaccard": 0.2222222222222222,
+            "left": "lib/ble/ble_engine.dart",
+            "left_touches": 17,
+            "p_left_given_right": 0.8,
+            "p_right_given_left": 0.23529411764705882,
+            "right": "lib/data/models.dart",
+            "right_touches": 5,
+            "support": 4
+          },
+          {
+            "commits": [
+              "74ee4110589897e70efa0c64d756dda107b20323",
+              "1eca7a8ba6dfe839f716e36776a789ddb8f44e33",
+              "3eb1036deba0ca1aba47aa318e94186c8df859d4"
+            ],
+            "direct_import": true,
+            "jaccard": 0.2222222222222222,
+            "left": "lib/ble/ble_engine.dart",
+            "left_touches": 17,
+            "p_left_given_right": 0.8,
+            "p_right_given_left": 0.23529411764705882,
+            "right": "lib/sync/sync_policy.dart",
+            "right_touches": 5,
+            "support": 4
+          },
+          {
+            "commits": [
+              "44bcd71a4c547c4cc26190728f6429931c39e279",
+              "1eca7a8ba6dfe839f716e36776a789ddb8f44e33",
+              "3eb1036deba0ca1aba47aa318e94186c8df859d4"
+            ],
+            "direct_import": true,
+            "jaccard": 0.2222222222222222,
+            "left": "lib/ble/ble_state.dart",
+            "left_touches": 12,
+            "p_left_given_right": 0.4,
+            "p_right_given_left": 0.3333333333333333,
+            "right": "lib/sync/background_sync.dart",
+            "right_touches": 10,
+            "support": 4
+          }
+        ],
+        "resolved_import_edges": 1902,
+        "source_commits": 200,
+        "usable_commits": 188
+      },
+      "openstrap-analytics": {
+        "excluded_broad_commits": 8,
+        "pairs": [
+          {
+            "commits": [
+              "5ed681f4bb6e7c21c93ce3f07ebd52c034bc4dac",
+              "bd95354389063971d1e339cdaac912801e5a61a8",
+              "d200ad5966ba2648bd5d74d143961866348fe9a9"
+            ],
+            "direct_import": null,
+            "jaccard": 0.17391304347826086,
+            "left": "lib/onehz.dart",
+            "left_touches": 13,
+            "p_left_given_right": 0.2857142857142857,
+            "p_right_given_left": 0.3076923076923077,
+            "right": "lib/src/onehz/sleep/sleep.dart",
+            "right_touches": 14,
+            "support": 4
+          },
+          {
+            "commits": [
+              "7105256b37ad61b49453a6b96543a2b80ea74487",
+              "6235b2d1bc8f45b9770f76fa6ba805ebac920b61",
+              "1884b7c15d2940d4ff7a2707dd658f6a2666f7de"
+            ],
+            "direct_import": null,
+            "jaccard": 0.2727272727272727,
+            "left": "lib/src/onehz/clinical/load_trimp.dart",
+            "left_touches": 10,
+            "p_left_given_right": 0.75,
+            "p_right_given_left": 0.3,
+            "right": "lib/src/onehz/workout/hr_zones.dart",
+            "right_touches": 4,
+            "support": 3
+          },
+          {
+            "commits": [
+              "bd95354389063971d1e339cdaac912801e5a61a8",
+              "068d4e71020d4bcac946b6159eaae31cb4fc5159",
+              "652f7a4ef67ea47293b4017f528aa9856dd7c878"
+            ],
+            "direct_import": null,
+            "jaccard": 0.21428571428571427,
+            "left": "lib/src/onehz/clinical/load_trimp.dart",
+            "left_touches": 10,
+            "p_left_given_right": 0.42857142857142855,
+            "p_right_given_left": 0.3,
+            "right": "lib/src/onehz/workout/calories.dart",
+            "right_touches": 7,
+            "support": 3
+          },
+          {
+            "commits": [
+              "5d421918b5111f0158ccdfd9fa7f99eda1fa87b4",
+              "d9362a66fbeac326d5d7d7b1fe27b28e41169a79",
+              "7105256b37ad61b49453a6b96543a2b80ea74487"
+            ],
+            "direct_import": null,
+            "jaccard": 0.2,
+            "left": "lib/src/onehz/sleep/cardio_stager.dart",
+            "left_touches": 11,
+            "p_left_given_right": 0.42857142857142855,
+            "p_right_given_left": 0.2727272727272727,
+            "right": "lib/src/onehz/util.dart",
+            "right_touches": 7,
+            "support": 3
+          },
+          {
+            "commits": [
+              "308c84bc15223537e2d2aa36ec7463f25e37b332",
+              "5ed681f4bb6e7c21c93ce3f07ebd52c034bc4dac",
+              "2ce2f9982bb38d6646e29ede49bfe7dc48d4c8df"
+            ],
+            "direct_import": null,
+            "jaccard": 0.17647058823529413,
+            "left": "lib/onehz.dart",
+            "left_touches": 13,
+            "p_left_given_right": 0.42857142857142855,
+            "p_right_given_left": 0.23076923076923078,
+            "right": "lib/src/onehz/util.dart",
+            "right_touches": 7,
+            "support": 3
+          },
+          {
+            "commits": [
+              "5ed681f4bb6e7c21c93ce3f07ebd52c034bc4dac",
+              "7105256b37ad61b49453a6b96543a2b80ea74487",
+              "2ce2f9982bb38d6646e29ede49bfe7dc48d4c8df"
+            ],
+            "direct_import": null,
+            "jaccard": 0.16666666666666666,
+            "left": "lib/src/onehz/sleep/sleep.dart",
+            "left_touches": 14,
+            "p_left_given_right": 0.42857142857142855,
+            "p_right_given_left": 0.21428571428571427,
+            "right": "lib/src/onehz/util.dart",
+            "right_touches": 7,
+            "support": 3
+          },
+          {
+            "commits": [
+              "41aa8539d8bb13e718fa7913e879ab6bd9639ca7",
+              "bd95354389063971d1e339cdaac912801e5a61a8",
+              "1884b7c15d2940d4ff7a2707dd658f6a2666f7de"
+            ],
+            "direct_import": null,
+            "jaccard": 0.15,
+            "left": "lib/onehz.dart",
+            "left_touches": 13,
+            "p_left_given_right": 0.3,
+            "p_right_given_left": 0.23076923076923078,
+            "right": "lib/src/onehz/clinical/load_trimp.dart",
+            "right_touches": 10,
+            "support": 3
+          }
+        ],
+        "resolved_import_edges": null,
+        "source_commits": 112,
+        "usable_commits": 104
+      },
+      "qex": {
+        "excluded_broad_commits": 2,
+        "pairs": [],
+        "resolved_import_edges": null,
+        "source_commits": 97,
+        "usable_commits": 95
+      }
+    },
+    "current_hotspots": [
+      {
+        "fix_touches": 5,
+        "path": "lib/data/db.dart",
+        "touches": 19
+      },
+      {
+        "fix_touches": 2,
+        "path": "lib/state/app_state.dart",
+        "touches": 13
+      },
+      {
+        "fix_touches": 5,
+        "path": "lib/compute/derivation_engine.dart",
+        "touches": 12
+      },
+      {
+        "fix_touches": 5,
+        "path": "lib/data/local_repository_impl.dart",
+        "touches": 9
+      },
+      {
+        "fix_touches": 1,
+        "path": "lib/app.dart",
+        "touches": 7
+      },
+      {
+        "fix_touches": 4,
+        "path": "lib/ui2/screens/sleep_detail.dart",
+        "touches": 7
+      },
+      {
+        "fix_touches": 3,
+        "path": "lib/ble/ble_engine.dart",
+        "touches": 6
+      },
+      {
+        "fix_touches": 3,
+        "path": "lib/ble/ble_state.dart",
+        "touches": 6
+      },
+      {
+        "fix_touches": 0,
+        "path": "lib/data/backup_extras.dart",
+        "touches": 6
+      },
+      {
+        "fix_touches": 2,
+        "path": "lib/ui2/screens/home_screen.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 2,
+        "path": "lib/state/sync_controller.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 1,
+        "path": "lib/ui2/onboarding/pairing.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 3,
+        "path": "lib/health/health_export.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 0,
+        "path": "lib/ui2/pairing/device_picker.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 1,
+        "path": "lib/ui2/profile/gallery.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 0,
+        "path": "lib/ui2/screens/workout_screen.dart",
+        "touches": 5
+      },
+      {
+        "fix_touches": 1,
+        "path": "lib/support/issue_report.dart",
+        "touches": 4
+      },
+      {
+        "fix_touches": 2,
+        "path": "lib/ui2/screens/health_screen.dart",
+        "touches": 4
+      },
+      {
+        "fix_touches": 2,
+        "path": "lib/ui2/screens/metric_detail.dart",
+        "touches": 4
+      },
+      {
+        "fix_touches": 0,
+        "path": "lib/data/recent_slice.dart",
+        "touches": 4
+      }
+    ],
+    "summary": [
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6746259486009806,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6430581732655639,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6768407641435787,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.40402757619738755,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.3915094339622642,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.2012692652602594,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_k16",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.4386792452830189,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_k64",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.37735849056603776,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_order0",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.4056603773584906,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_order1",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.39622641509433965,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_order2",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.3915094339622642,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_order3",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.39622641509433965,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_order4",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.39622641509433965,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "broad",
+        "eligible_fix_touches": 212,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.11320754716981132,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6845986351585455,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6395021478588051,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.6948217538381473,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.33399503722084367,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.41025641025641024,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 6,
+        "definition": "strict",
+        "eligible_fix_touches": 195,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "edge",
+        "recall": 0.20126223754095407,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5302930160828376,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5299379065641633,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5602612119466052,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.31624106230847804,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.352059925093633,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.20250288227816318,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_k16",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.3707865168539326,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_k64",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.3595505617977528,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_order0",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.35580524344569286,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_order1",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.35580524344569286,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_order2",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.35580524344569286,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_order3",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.352059925093633,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_order4",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.352059925093633,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "broad",
+        "eligible_fix_touches": 267,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.21348314606741572,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5386468668550277,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5297754820437932,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.5602612119466052,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.35584346097989755,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.36329588014981273,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 8,
+        "definition": "strict",
+        "eligible_fix_touches": 267,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "edge",
+        "recall": 0.20250288227816318,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.26805187150014737,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.26805187150014737,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.26023706896551724,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.1823607427055703,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.25862068965517243,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.20719148622410108,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_k16",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.20689655172413793,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_k64",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2413793103448276,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_order0",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.23275862068965517,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_order1",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.23275862068965517,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_order2",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2413793103448276,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_order3",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2413793103448276,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_order4",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.22413793103448276,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "broad",
+        "eligible_fix_touches": 116,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.1896551724137931,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2690866232532899,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2690866232532899,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.2769097222222222,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.1759453781512605,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.25,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 72,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "openstrap-analytics",
+        "recall": 0.20989546210501306,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2950354609929078,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2950354609929078,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.28368794326241137,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.21856866537717604,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2553191489361702,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2112676056338028,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_k16",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2978723404255319,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_k64",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2553191489361702,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_order0",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.3404255319148936,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_order1",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.3404255319148936,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_order2",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2978723404255319,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_order3",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.3191489361702128,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_order4",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.3404255319148936,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 47,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.3191489361702128,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2876432078559738,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2876432078559738,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.28368794326241137,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.20699088145896657,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.1702127659574468,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 47,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "openstrap-analytics",
+        "recall": 0.2112676056338028,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "fix_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 1.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "recent_fix_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 1.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "recent_touch_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 1.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "constant_control",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.2,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_k16",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_k64",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_order0",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_order1",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_order2",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_order3",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_order4",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "broad",
+        "eligible_fix_touches": 1,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "fix_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.2,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "recent_fix_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.2,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "recent_touch_count",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 1.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "elo",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.0,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 0,
+        "definition": "strict",
+        "eligible_fix_touches": 1,
+        "model": "constant_control",
+        "nonempty_windows": 1,
+        "project": "diff-core",
+        "recall": 0.2,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.3377777777777778,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.37509433962264155,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.4751515151515152,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.32476190476190475,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.3333333333333333,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.20582880289947766,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_k16",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.32,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_k64",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.29333333333333333,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_order0",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.28,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_order1",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.28,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_order2",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.29333333333333333,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_order3",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.28,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_order4",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.29333333333333333,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 20,
+        "definition": "broad",
+        "eligible_fix_touches": 75,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.12,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.256846126461648,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.256846126461648,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.4048027444253859,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.24284225537516457,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.11320754716981132,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 11,
+        "definition": "strict",
+        "eligible_fix_touches": 53,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "diff-core",
+        "recall": 0.20684120653347898,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.5817610062893083,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.5817610062893083,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.5849056603773585,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.11740041928721175,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.2137860529121701,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_k16",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_k64",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_order0",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1320754716981132,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_order1",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_order2",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1320754716981132,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_order3",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_order4",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1509433962264151,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "broad",
+        "eligible_fix_touches": 53,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.1320754716981132,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "fix_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.56,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "recent_fix_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.56,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "recent_touch_count",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.56,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.023333333333333334,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "elo",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.08,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 3,
+        "definition": "strict",
+        "eligible_fix_touches": 50,
+        "model": "constant_control",
+        "nonempty_windows": 3,
+        "project": "qex",
+        "recall": 0.2139816371395319,
+        "split": "development"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.4110169491525424,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.4110169491525424,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.423728813559322,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.0847457627118644,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.11864406779661017,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.21025183558635832,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_k16",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.13559322033898305,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_k64",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.13559322033898305,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_order0",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.11864406779661017,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_order1",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.11864406779661017,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_order2",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.11864406779661017,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_order3",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.13559322033898305,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_order4",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.13559322033898305,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "broad",
+        "eligible_fix_touches": 59,
+        "model": "elo_permuted_labels",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.05084745762711865,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "fix_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.4322033898305085,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "recent_fix_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.4322033898305085,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "recent_touch_count",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.423728813559322,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "smoothed_fix_rate",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.03389830508474576,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "elo",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.06779661016949153,
+        "split": "holdout"
+      },
+      {
+        "cold_start_touches": 1,
+        "definition": "strict",
+        "eligible_fix_touches": 59,
+        "model": "constant_control",
+        "nonempty_windows": 2,
+        "project": "qex",
+        "recall": 0.21025183558635832,
+        "split": "holdout"
+      }
+    ]
+  },
+  "revisions": [
+    {
+      "first_parent_commits": 637,
+      "fix_source_commits": 216,
+      "fix_title_commits": 245,
+      "newest": "2026-11-17",
+      "oldest": "2026-06-12",
+      "project": "edge",
+      "ref": "upstream/main",
+      "sha": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+      "shallow": "false",
+      "source_files": 384,
+      "source_touch_commits": 487
+    },
+    {
+      "first_parent_commits": 128,
+      "fix_source_commits": 44,
+      "fix_title_commits": 47,
+      "newest": "2026-11-16",
+      "oldest": "2026-06-12",
+      "project": "openstrap-analytics",
+      "ref": "upstream/main",
+      "sha": "a438df40b38a4586a52a68ab7e1c100fca111ccd",
+      "shallow": "false",
+      "source_files": 108,
+      "source_touch_commits": 112
+    },
+    {
+      "first_parent_commits": 422,
+      "fix_source_commits": 36,
+      "fix_title_commits": 68,
+      "newest": "2026-10-02",
+      "oldest": "2026-03-19",
+      "project": "diff-core",
+      "ref": "upstream/main",
+      "sha": "7b82ed829fe57b3e4ed36765a5c1b9fb5014f65c",
+      "shallow": "false",
+      "source_files": 70,
+      "source_touch_commits": 199
+    },
+    {
+      "first_parent_commits": 126,
+      "fix_source_commits": 44,
+      "fix_title_commits": 45,
+      "newest": "2026-11-14",
+      "oldest": "2026-08-06",
+      "project": "qex",
+      "ref": "HEAD",
+      "sha": "eeb5788947d6482c75a847185e9b6e29ee871906",
+      "shallow": "false",
+      "source_files": 41,
+      "source_touch_commits": 97
+    },
+    {
+      "first_parent_commits": 85,
+      "fix_source_commits": 6,
+      "fix_title_commits": 7,
+      "newest": "2026-11-11",
+      "oldest": "2026-08-11",
+      "project": "residual-cli",
+      "ref": "feat/reviewer-notes",
+      "sha": "6094b7dc686d409453cf0b23bcd6c033836ca8f6",
+      "shallow": "false",
+      "source_files": 73,
+      "source_touch_commits": 38
+    },
+    {
+      "first_parent_commits": 110,
+      "fix_source_commits": 1,
+      "fix_title_commits": 2,
+      "newest": "2026-11-12",
+      "oldest": "2026-11-11",
+      "project": "paneweft",
+      "ref": "main",
+      "sha": "2c7b9e2e1002e2352d8a3b117da0b0041b2f1f52",
+      "shallow": "false",
+      "source_files": 106,
+      "source_touch_commits": 61
+    }
+  ],
+  "schemaVersion": "code-health.evidence/1",
+  "uncertainty": [
+    "Commit titles are unadjudicated weak labels.",
+    "Cochange is association, including mixed sweeps.",
+    "Two holdout windows per repository; no significance claim.",
+    "Historical refs may be stale; source trees were never modified."
+  ]
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "omit count permutations",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "omit conditional normalization",
+    "caught": true,
+    "errors": 0
+  },
+  {
+    "mutation": "reward fix-induced hazard",
+    "caught": true,
+    "errors": 0
+  }
+]

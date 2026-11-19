@@ -1,0 +1,16 @@
+{
+  "observed": 75,
+  "unknown": 0,
+  "same_snapshot": 3,
+  "rows": 75,
+  "input_sha256": {
+    "groups.jsonl": "9af9a2a110980b317c731ab85e5f7be5fa26c9d543b01bff33973228b51cc36f",
+    "rounds.jsonl": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c"
+  },
+  "limitations": [
+    "Path names are coarse scope hints, not established concurrency/state defects.",
+    "Recorded reviewed revisions do not establish optional policy eligibility.",
+    "Inline tests share production file counts.",
+    "No wall-clock chronology is inferred from a filename or file mtime."
+  ]
+}

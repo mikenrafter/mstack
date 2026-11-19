@@ -1,0 +1,109 @@
+{
+  "capturedAt": "2026-11-17T08:04:21.846248Z",
+  "sources": [
+    {
+      "bytes": 175122,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "replay-results",
+      "origin": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/cancellation-reproduction.json",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/5b7324f80182db5cc5b4032851bbc2cf96969a394ab67987ad386109a378d5f8-cancellation-reproduction.json",
+      "sha256": "5b7324f80182db5cc5b4032851bbc2cf96969a394ab67987ad386109a378d5f8"
+    },
+    {
+      "bytes": 3868,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "replay-report",
+      "origin": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/REPRODUCTION.md",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/e20419bdb97d266a447c5e5b9c719c44a4974ccb6d326197dd3ce1f4a1196704-REPRODUCTION.md",
+      "sha256": "e20419bdb97d266a447c5e5b9c719c44a4974ccb6d326197dd3ce1f4a1196704"
+    },
+    {
+      "bytes": 12449,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "audit",
+      "origin": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/EVIDENCE-AUDIT.md",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/102cd78d63a43330726b648eefd1ee9917b68597a8bb02c0598be5282232911e-EVIDENCE-AUDIT.md",
+      "sha256": "102cd78d63a43330726b648eefd1ee9917b68597a8bb02c0598be5282232911e"
+    },
+    {
+      "bytes": 2402,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "prior-review",
+      "origin": "/home/mini/Documents/repos/paneweft.research/v1/review-t2-r1.txt",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/438787cf6ee920b40ef0c189225dfc55d3b2913f7908631a00053468dd3cbe81-review-t2-r1.txt",
+      "sha256": "438787cf6ee920b40ef0c189225dfc55d3b2913f7908631a00053468dd3cbe81"
+    },
+    {
+      "bytes": 971,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "next-review",
+      "origin": "/home/mini/Documents/repos/paneweft.research/v1/review-t2-r2.txt",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/43f8a9dcc8ac8842677ffb8a1e9a122382c7ee52e13578e1d7c3e194d593d674-review-t2-r2.txt",
+      "sha256": "43f8a9dcc8ac8842677ffb8a1e9a122382c7ee52e13578e1d7c3e194d593d674"
+    },
+    {
+      "bytes": 4966,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "first-fix-report",
+      "origin": "/home/mini/Documents/repos/paneweft.research/v1/fix-t2-r1-report.md",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/630ecf6881edae2bd5035c43466a2e75931945bd234670c260565b0b409a6534-fix-t2-r1-report.md",
+      "sha256": "630ecf6881edae2bd5035c43466a2e75931945bd234670c260565b0b409a6534"
+    },
+    {
+      "bytes": 3808,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "next-fix-report",
+      "origin": "/home/mini/Documents/repos/paneweft.research/v1/fix-t5-report.md",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/a150cca80dc07847af6749c0438d1bdce7e4710d3f1a0c78e620f99e93d350cd-fix-t5-report.md",
+      "sha256": "a150cca80dc07847af6749c0438d1bdce7e4710d3f1a0c78e620f99e93d350cd"
+    },
+    {
+      "bytes": 71825,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "jobs-before",
+      "origin": "git:/home/mini/Documents/repos/paneweft@3fa003c852bef303ffe48c788093c2659d677870:src/v1/jobs.ts",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/41a0f73459c584015247b036728bb9645c2fc4f15e5e638e463b4c6ce57caee8-jobs-before.ts",
+      "sha256": "41a0f73459c584015247b036728bb9645c2fc4f15e5e638e463b4c6ce57caee8"
+    },
+    {
+      "bytes": 1860,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "commit-before",
+      "origin": "git:/home/mini/Documents/repos/paneweft@3fa003c852bef303ffe48c788093c2659d677870",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/e7276db91221ae013ce4bcecf8d981cbfc1ad0d1d4182aefd259887c31dd2daf-commit-before.txt",
+      "sha256": "e7276db91221ae013ce4bcecf8d981cbfc1ad0d1d4182aefd259887c31dd2daf"
+    },
+    {
+      "bytes": 73278,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "jobs-after",
+      "origin": "git:/home/mini/Documents/repos/paneweft@d89c0e7b750786a84ef8bf9a468967707333a9eb:src/v1/jobs.ts",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/8ae885086aacbaffda917d65a89c25a5cfd7170ea8ff510dfe799710e4bcadf3-jobs-after.ts",
+      "sha256": "8ae885086aacbaffda917d65a89c25a5cfd7170ea8ff510dfe799710e4bcadf3"
+    },
+    {
+      "bytes": 708,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "commit-after",
+      "origin": "git:/home/mini/Documents/repos/paneweft@d89c0e7b750786a84ef8bf9a468967707333a9eb",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/82ca402cd5b7f10d607f0ced811be7e7162abdcecad12712e9c8068a4cf86c56-commit-after.txt",
+      "sha256": "82ca402cd5b7f10d607f0ced811be7e7162abdcecad12712e9c8068a4cf86c56"
+    },
+    {
+      "bytes": 74885,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "identical-tests",
+      "origin": "git:/home/mini/Documents/repos/paneweft@d89c0e7b750786a84ef8bf9a468967707333a9eb:src/v1/jobs.test.ts",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91-jobs.test.ts",
+      "sha256": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91"
+    },
+    {
+      "bytes": 13815,
+      "capturedAt": "2026-11-17T08:04:21.846248Z",
+      "id": "fix-diff",
+      "origin": "git:/home/mini/Documents/repos/paneweft:3fa003c852bef303ffe48c788093c2659d677870..d89c0e7b750786a84ef8bf9a468967707333a9eb",
+      "path": "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/evidence-graph/sources/79018959f4510dfa9fe782e40fbab986c6b87a301766afd4d403072c4cabac04-fix.diff",
+      "sha256": "79018959f4510dfa9fe782e40fbab986c6b87a301766afd4d403072c4cabac04"
+    }
+  ]
+}

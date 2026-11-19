@@ -1,0 +1,17 @@
+[
+  {
+    "name": "unknown-as-negative",
+    "caught": true,
+    "exit_code": 1
+  },
+  {
+    "name": "reverse-lower-extreme",
+    "caught": true,
+    "exit_code": 1
+  },
+  {
+    "name": "ignore-relative-gate",
+    "caught": true,
+    "exit_code": 1
+  }
+]

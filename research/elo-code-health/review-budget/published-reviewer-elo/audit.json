@@ -1,0 +1,162 @@
+{
+  "source_sha256": "dec1436f544fe0d179b18ee33f0a352bb78682ddcc800a352ae9d0874ad0c100",
+  "checks": {
+    "run_status_accounting": true,
+    "pair_comparison_accounting": true,
+    "rating_comparison_accounting": true,
+    "gpt-6-astra:grok-4.6:outcome_accounting": true,
+    "gpt-6-astra:claude-opus-5:outcome_accounting": true,
+    "gpt-6-astra:claude-sonnet-5:outcome_accounting": true,
+    "gpt-6-astra:gpt-5.6-luna:outcome_accounting": true,
+    "gpt-6-astra:gpt-5.6-sol:outcome_accounting": true,
+    "grok-4.6:claude-opus-5:outcome_accounting": true,
+    "grok-4.6:claude-sonnet-5:outcome_accounting": true,
+    "grok-4.6:gpt-5.6-luna:outcome_accounting": true,
+    "grok-4.6:gpt-5.6-sol:outcome_accounting": true,
+    "claude-opus-5:claude-sonnet-5:outcome_accounting": true,
+    "claude-opus-5:gpt-5.6-luna:outcome_accounting": true,
+    "claude-opus-5:gpt-5.6-sol:outcome_accounting": true,
+    "claude-sonnet-5:gpt-5.6-luna:outcome_accounting": true,
+    "claude-sonnet-5:gpt-5.6-sol:outcome_accounting": true,
+    "gpt-5.6-luna:gpt-5.6-sol:outcome_accounting": true,
+    "gpt-5.6-sol:comparisons:reconstructed": true,
+    "gpt-5.6-sol:wins:reconstructed": true,
+    "gpt-5.6-sol:ties:reconstructed": true,
+    "gpt-5.6-sol:losses:reconstructed": true,
+    "gpt-6-astra:comparisons:reconstructed": true,
+    "gpt-6-astra:wins:reconstructed": true,
+    "gpt-6-astra:ties:reconstructed": true,
+    "gpt-6-astra:losses:reconstructed": true,
+    "claude-opus-5:comparisons:reconstructed": true,
+    "claude-opus-5:wins:reconstructed": true,
+    "claude-opus-5:ties:reconstructed": true,
+    "claude-opus-5:losses:reconstructed": true,
+    "gpt-5.6-luna:comparisons:reconstructed": true,
+    "gpt-5.6-luna:wins:reconstructed": true,
+    "gpt-5.6-luna:ties:reconstructed": true,
+    "gpt-5.6-luna:losses:reconstructed": true,
+    "grok-4.6:comparisons:reconstructed": true,
+    "grok-4.6:wins:reconstructed": true,
+    "grok-4.6:ties:reconstructed": true,
+    "grok-4.6:losses:reconstructed": true,
+    "claude-sonnet-5:comparisons:reconstructed": true,
+    "claude-sonnet-5:wins:reconstructed": true,
+    "claude-sonnet-5:ties:reconstructed": true,
+    "claude-sonnet-5:losses:reconstructed": true,
+    "nonzero_graph_connected": true
+  },
+  "all_accounting_checks_pass": true,
+  "direct_opponents": {
+    "gpt-6-astra": [
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "gpt-5.6-luna",
+      "grok-4.6"
+    ],
+    "grok-4.6": [
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "gpt-5.6-luna",
+      "gpt-6-astra"
+    ],
+    "claude-opus-5": [
+      "gpt-5.6-luna",
+      "gpt-5.6-sol",
+      "gpt-6-astra",
+      "grok-4.6"
+    ],
+    "claude-sonnet-5": [
+      "gpt-5.6-luna",
+      "gpt-6-astra",
+      "grok-4.6"
+    ],
+    "gpt-5.6-luna": [
+      "claude-opus-5",
+      "claude-sonnet-5",
+      "gpt-6-astra",
+      "grok-4.6"
+    ],
+    "gpt-5.6-sol": [
+      "claude-opus-5"
+    ]
+  },
+  "pairs": [
+    {
+      "left": "gpt-6-astra",
+      "right": "grok-4.6",
+      "comparisons": 181,
+      "observed_point_share": 0.6160220994475138,
+      "constant_gap_from_point_share": 82.11602511762624
+    },
+    {
+      "left": "gpt-6-astra",
+      "right": "claude-opus-5",
+      "comparisons": 536,
+      "observed_point_share": 0.5,
+      "constant_gap_from_point_share": 0.0
+    },
+    {
+      "left": "gpt-6-astra",
+      "right": "claude-sonnet-5",
+      "comparisons": 54,
+      "observed_point_share": 0.8425925925925926,
+      "constant_gap_from_point_share": 291.4369883771279
+    },
+    {
+      "left": "gpt-6-astra",
+      "right": "gpt-5.6-luna",
+      "comparisons": 2,
+      "observed_point_share": 0.5,
+      "constant_gap_from_point_share": 0.0
+    },
+    {
+      "left": "grok-4.6",
+      "right": "claude-opus-5",
+      "comparisons": 79,
+      "observed_point_share": 0.23417721518987342,
+      "constant_gap_from_point_share": -205.83345849978204
+    },
+    {
+      "left": "grok-4.6",
+      "right": "claude-sonnet-5",
+      "comparisons": 58,
+      "observed_point_share": 0.5948275862068966,
+      "constant_gap_from_point_share": 66.70049312061515
+    },
+    {
+      "left": "grok-4.6",
+      "right": "gpt-5.6-luna",
+      "comparisons": 2,
+      "observed_point_share": 0.0,
+      "constant_gap_from_point_share": null
+    },
+    {
+      "left": "claude-opus-5",
+      "right": "gpt-5.6-luna",
+      "comparisons": 1,
+      "observed_point_share": 1.0,
+      "constant_gap_from_point_share": null
+    },
+    {
+      "left": "claude-opus-5",
+      "right": "gpt-5.6-sol",
+      "comparisons": 86,
+      "observed_point_share": 0.3546511627906977,
+      "constant_gap_from_point_share": -103.99725751035614
+    },
+    {
+      "left": "claude-sonnet-5",
+      "right": "gpt-5.6-luna",
+      "comparisons": 2,
+      "observed_point_share": 0.25,
+      "constant_gap_from_point_share": -190.84850188786498
+    }
+  ],
+  "chronological_k_replay_possible": false,
+  "limits": [
+    "Aggregates omit ordered rounds and individual findings.",
+    "Related pairs can share a review round and code change.",
+    "Observed relative point share is not defect-detection recall.",
+    "This audit does not establish optional review benefit."
+  ]
+}

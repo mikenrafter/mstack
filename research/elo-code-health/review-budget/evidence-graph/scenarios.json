@@ -1,0 +1,32 @@
+{
+  "after": "d89c0e7b750786a84ef8bf9a468967707333a9eb",
+  "before": "3fa003c852bef303ffe48c788093c2659d677870",
+  "causal_cases": 1,
+  "scenario_count": 3,
+  "scenarios": [
+    {
+      "after_status": "passed",
+      "before_status": "failed",
+      "id": "scenario-1",
+      "scenario_independence": "not_independent; one inspected causal family",
+      "test_full_name": "[T5] a finish belongs to the qex job of the stage on disk a cancel that saw the export stop cancels the run the status submitted, and never finalizes the run from the export job",
+      "test_sha256": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91"
+    },
+    {
+      "after_status": "passed",
+      "before_status": "failed",
+      "id": "scenario-2",
+      "scenario_independence": "not_independent; one inspected causal family",
+      "test_full_name": "[T5] a finish belongs to the qex job of the stage on disk a cancel written after the export finish read cancel.json still ends the job cancelled and submits no run",
+      "test_sha256": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91"
+    },
+    {
+      "after_status": "passed",
+      "before_status": "failed",
+      "id": "scenario-3",
+      "scenario_independence": "not_independent; one inspected causal family",
+      "test_full_name": "[T6] a cancel is recorded before a stopped export is decided cancel after the export stopped but before it was processed ends the job cancelled and runs nothing",
+      "test_sha256": "8f1083aaf7162e923310a9d55ee6e542ec3fcc15dd84da862eb1ccb602506b91"
+    }
+  ]
+}

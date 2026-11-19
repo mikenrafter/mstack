@@ -1,0 +1,743 @@
+{
+  "dependence_sensitivity": [
+    {
+      "design_effect": 1.0,
+      "enrolled": 60,
+      "mean_cluster_size": 20.0,
+      "projects": 3,
+      "synthetic": true,
+      "variance_equivalent_sample": 60.0,
+      "within_project_correlation": 0
+    },
+    {
+      "design_effect": 1.9500000000000002,
+      "enrolled": 60,
+      "mean_cluster_size": 20.0,
+      "projects": 3,
+      "synthetic": true,
+      "variance_equivalent_sample": 30.769230769230766,
+      "within_project_correlation": 0.05
+    },
+    {
+      "design_effect": 2.9000000000000004,
+      "enrolled": 60,
+      "mean_cluster_size": 20.0,
+      "projects": 3,
+      "synthetic": true,
+      "variance_equivalent_sample": 20.68965517241379,
+      "within_project_correlation": 0.1
+    },
+    {
+      "design_effect": 1.0,
+      "enrolled": 60,
+      "mean_cluster_size": 10.0,
+      "projects": 6,
+      "synthetic": true,
+      "variance_equivalent_sample": 60.0,
+      "within_project_correlation": 0
+    },
+    {
+      "design_effect": 1.45,
+      "enrolled": 60,
+      "mean_cluster_size": 10.0,
+      "projects": 6,
+      "synthetic": true,
+      "variance_equivalent_sample": 41.37931034482759,
+      "within_project_correlation": 0.05
+    },
+    {
+      "design_effect": 1.9,
+      "enrolled": 60,
+      "mean_cluster_size": 10.0,
+      "projects": 6,
+      "synthetic": true,
+      "variance_equivalent_sample": 31.578947368421055,
+      "within_project_correlation": 0.1
+    }
+  ],
+  "not_empirical_estimates": true,
+  "population_capture": [
+    {
+      "false_positive": 0.3,
+      "gain_vs_random": 0.0,
+      "negative_trigger_selection_probability": 0.7142857142857143,
+      "prevalence": 0.1,
+      "recall": 0.8,
+      "sensitivity": 0.3,
+      "synthetic": true,
+      "trigger": "null",
+      "trigger_share": 0.30000000000000004
+    },
+    {
+      "false_positive": 0.15,
+      "gain_vs_random": 0.11250000000000004,
+      "negative_trigger_selection_probability": 0.7500000000000001,
+      "prevalence": 0.1,
+      "recall": 0.9125000000000001,
+      "sensitivity": 0.65,
+      "synthetic": true,
+      "trigger": "moderate",
+      "trigger_share": 0.2
+    },
+    {
+      "false_positive": 0.1,
+      "gain_vs_random": 0.15180722891566267,
+      "negative_trigger_selection_probability": 0.7590361445783133,
+      "prevalence": 0.1,
+      "recall": 0.9518072289156627,
+      "sensitivity": 0.8,
+      "synthetic": true,
+      "trigger": "strong",
+      "trigger_share": 0.17000000000000004
+    },
+    {
+      "false_positive": 0.3,
+      "gain_vs_random": 0.0,
+      "negative_trigger_selection_probability": 0.7142857142857143,
+      "prevalence": 0.3,
+      "recall": 0.8,
+      "sensitivity": 0.3,
+      "synthetic": true,
+      "trigger": "null",
+      "trigger_share": 0.3
+    },
+    {
+      "false_positive": 0.15,
+      "gain_vs_random": 0.09999999999999998,
+      "negative_trigger_selection_probability": 0.7142857142857143,
+      "prevalence": 0.3,
+      "recall": 0.9,
+      "sensitivity": 0.65,
+      "synthetic": true,
+      "trigger": "moderate",
+      "trigger_share": 0.3
+    },
+    {
+      "false_positive": 0.1,
+      "gain_vs_random": 0.1420289855072464,
+      "negative_trigger_selection_probability": 0.710144927536232,
+      "prevalence": 0.3,
+      "recall": 0.9420289855072465,
+      "sensitivity": 0.8,
+      "synthetic": true,
+      "trigger": "strong",
+      "trigger_share": 0.31
+    },
+    {
+      "false_positive": 0.3,
+      "gain_vs_random": 0.0,
+      "negative_trigger_selection_probability": 0.7142857142857143,
+      "prevalence": 0.6,
+      "recall": 0.8,
+      "sensitivity": 0.3,
+      "synthetic": true,
+      "trigger": "null",
+      "trigger_share": 0.3
+    },
+    {
+      "false_positive": 0.15,
+      "gain_vs_random": 0.07272727272727275,
+      "negative_trigger_selection_probability": 0.6363636363636364,
+      "prevalence": 0.6,
+      "recall": 0.8727272727272728,
+      "sensitivity": 0.65,
+      "synthetic": true,
+      "trigger": "moderate",
+      "trigger_share": 0.45
+    },
+    {
+      "false_positive": 0.1,
+      "gain_vs_random": 0.1166666666666667,
+      "negative_trigger_selection_probability": 0.5833333333333334,
+      "prevalence": 0.6,
+      "recall": 0.9166666666666667,
+      "sensitivity": 0.8,
+      "synthetic": true,
+      "trigger": "strong",
+      "trigger_share": 0.52
+    }
+  ],
+  "positive_count_coverage": [
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_complete_outcomes": 40,
+      "expected_observed_positives": 4.0,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.005063053657834402,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_complete_outcomes": 36.0,
+      "expected_observed_positives": 3.6000000000000005,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.0023581426866051605,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_complete_outcomes": 60,
+      "expected_observed_positives": 6.0,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.07306551008369917,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_complete_outcomes": 54.0,
+      "expected_observed_positives": 5.4,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.04069267462020846,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_complete_outcomes": 120,
+      "expected_observed_positives": 12.0,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.7714083771661646,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_complete_outcomes": 108.0,
+      "expected_observed_positives": 10.8,
+      "prevalence": 0.1,
+      "probability_at_least10_observed_positives": 0.647010168730536,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_complete_outcomes": 40,
+      "expected_observed_positives": 12.0,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.8040745762228791,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_complete_outcomes": 36.0,
+      "expected_observed_positives": 10.8,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.6700720966474504,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_complete_outcomes": 60,
+      "expected_observed_positives": 18.0,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.9941288117574102,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_complete_outcomes": 54.0,
+      "expected_observed_positives": 16.200000000000003,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.9788703270361118,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_complete_outcomes": 120,
+      "expected_observed_positives": 36.0,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.9999999983894531,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_complete_outcomes": 108.0,
+      "expected_observed_positives": 32.400000000000006,
+      "prevalence": 0.3,
+      "probability_at_least10_observed_positives": 0.9999999318874417,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_complete_outcomes": 40,
+      "expected_observed_positives": 24.0,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 0.9999984464516313,
+      "probability_observed_negative": 0.9999999986632505,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_complete_outcomes": 36.0,
+      "expected_observed_positives": 21.6,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 0.9999512962488741,
+      "probability_observed_negative": 0.9999999823315293,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_complete_outcomes": 60,
+      "expected_observed_positives": 36.0,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 0.9999999999991478,
+      "probability_observed_negative": 0.9999999999999512,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_complete_outcomes": 54.0,
+      "expected_observed_positives": 32.400000000000006,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 0.9999999995737523,
+      "probability_observed_negative": 0.9999999999976514,
+      "synthetic": true
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_complete_outcomes": 120,
+      "expected_observed_positives": 72.0,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 1.0,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_complete_outcomes": 108.0,
+      "expected_observed_positives": 64.80000000000001,
+      "prevalence": 0.6,
+      "probability_at_least10_observed_positives": 1.0,
+      "probability_observed_negative": 1.0,
+      "synthetic": true
+    }
+  ],
+  "protocol_sha256": "1011c738f0675ffbfe6e6dedc6bce37fb34eefbab7f25db0ad80d19069ea4723",
+  "reference_power_limit": "Independent-positive Bernoulli capture model; not actual paired-bootstrap assay power or causal utility.",
+  "simplified_reference_power": [
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 3.2,
+      "expected_positives": 4.0,
+      "population_recall": 0.8,
+      "prevalence": 0.1,
+      "reference_power": 1.9948302744344383e-09,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 4.800000000000001,
+      "expected_positives": 6.0,
+      "population_recall": 0.8,
+      "prevalence": 0.1,
+      "reference_power": 1.186830577522391e-06,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 9.600000000000001,
+      "expected_positives": 12.0,
+      "population_recall": 0.8,
+      "prevalence": 0.1,
+      "reference_power": 0.0016050430684691696,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 3.6500000000000004,
+      "expected_positives": 4.0,
+      "population_recall": 0.9125000000000001,
+      "prevalence": 0.1,
+      "reference_power": 1.901132696544986e-08,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 5.4750000000000005,
+      "expected_positives": 6.0,
+      "population_recall": 0.9125000000000001,
+      "prevalence": 0.1,
+      "reference_power": 1.1528099693902465e-05,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 10.950000000000001,
+      "expected_positives": 12.0,
+      "population_recall": 0.9125000000000001,
+      "prevalence": 0.1,
+      "reference_power": 0.01706077899509717,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 3.807228915662651,
+      "expected_positives": 4.0,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 3.9182661673664376e-08,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_captured_positives": 3.426506024096386,
+      "expected_positives": 3.6,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 8.28734334957645e-09,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 5.710843373493976,
+      "expected_positives": 6.0,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 2.3922734299798337e-05,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_captured_positives": 5.139759036144579,
+      "expected_positives": 5.4,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 6.198692714351682e-06,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 11.421686746987952,
+      "expected_positives": 12.0,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 0.036608712644097,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_captured_positives": 10.279518072289157,
+      "expected_positives": 10.8,
+      "population_recall": 0.9518072289156627,
+      "prevalence": 0.1,
+      "reference_power": 0.016857388563936686,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 9.600000000000001,
+      "expected_positives": 12.0,
+      "population_recall": 0.8,
+      "prevalence": 0.3,
+      "reference_power": 0.0012029333358351498,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 14.4,
+      "expected_positives": 18.0,
+      "population_recall": 0.8,
+      "prevalence": 0.3,
+      "reference_power": 0.009011059033920762,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 28.8,
+      "expected_positives": 36.0,
+      "population_recall": 0.8,
+      "prevalence": 0.3,
+      "reference_power": 0.013866588319266298,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 10.8,
+      "expected_positives": 12.0,
+      "population_recall": 0.9,
+      "prevalence": 0.3,
+      "reference_power": 0.009678208983141666,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 16.2,
+      "expected_positives": 18.0,
+      "population_recall": 0.9,
+      "prevalence": 0.3,
+      "reference_power": 0.08617786977271755,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 32.4,
+      "expected_positives": 36.0,
+      "population_recall": 0.9,
+      "prevalence": 0.3,
+      "reference_power": 0.2604379428805991,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 11.304347826086957,
+      "expected_positives": 12.0,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.021798737150443438,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_captured_positives": 10.173913043478262,
+      "expected_positives": 10.8,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.00856321906952054,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 16.956521739130437,
+      "expected_positives": 18.0,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.20811286443901172,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_captured_positives": 15.260869565217392,
+      "expected_positives": 16.2,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.14757295746345614,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 33.913043478260875,
+      "expected_positives": 36.0,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.6044864267983596,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_captured_positives": 30.521739130434785,
+      "expected_positives": 32.4,
+      "population_recall": 0.9420289855072465,
+      "prevalence": 0.3,
+      "reference_power": 0.5337821622347843,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 19.200000000000003,
+      "expected_positives": 24.0,
+      "population_recall": 0.8,
+      "prevalence": 0.6,
+      "reference_power": 0.010657710758656602,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 28.8,
+      "expected_positives": 36.0,
+      "population_recall": 0.8,
+      "prevalence": 0.6,
+      "reference_power": 0.013872751009499328,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 57.6,
+      "expected_positives": 72.0,
+      "population_recall": 0.8,
+      "prevalence": 0.6,
+      "reference_power": 0.01279697690466407,
+      "synthetic": true,
+      "trigger": "null"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 20.945454545454545,
+      "expected_positives": 24.0,
+      "population_recall": 0.8727272727272728,
+      "prevalence": 0.6,
+      "reference_power": 0.0712027162328803,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 31.41818181818182,
+      "expected_positives": 36.0,
+      "population_recall": 0.8727272727272728,
+      "prevalence": 0.6,
+      "reference_power": 0.1302787659672979,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 62.83636363636364,
+      "expected_positives": 72.0,
+      "population_recall": 0.8727272727272728,
+      "prevalence": 0.6,
+      "reference_power": 0.25653737163555934,
+      "synthetic": true,
+      "trigger": "moderate"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 40,
+      "expected_captured_positives": 22.0,
+      "expected_positives": 24.0,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.19914832757639261,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 40,
+      "expected_captured_positives": 19.800000000000004,
+      "expected_positives": 21.6,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.1694074706176638,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 60,
+      "expected_captured_positives": 33.0,
+      "expected_positives": 36.0,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.3775011197189684,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 60,
+      "expected_captured_positives": 29.700000000000003,
+      "expected_positives": 32.4,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.3230162543510212,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 1,
+      "enrolled": 120,
+      "expected_captured_positives": 66.0,
+      "expected_positives": 72.0,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.7135167633788139,
+      "synthetic": true,
+      "trigger": "strong"
+    },
+    {
+      "coverage": 0.9,
+      "enrolled": 120,
+      "expected_captured_positives": 59.400000000000006,
+      "expected_positives": 64.8,
+      "population_recall": 0.9166666666666667,
+      "prevalence": 0.6,
+      "reference_power": 0.6871361731242949,
+      "synthetic": true,
+      "trigger": "strong"
+    }
+  ],
+  "synthetic": true
+}

@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/run/current-system/sw/bin/python",
+    "-I",
+    "/home/mini/.agents/skills/build-loop/scripts/review-ledger",
+    "-l",
+    "/home/mini/Documents/repos/mstack/research/elo-code-health/review-budget/advisory-prototype/batch-smoke/tmpllvgh54m/ledger.json",
+    "next"
+  ],
+  "temporary_copy_removed": true,
+  "started_at_utc": "2026-11-17T08:22:22.237957+00:00",
+  "finished_at_utc": "2026-11-17T08:22:22.284164+00:00",
+  "returncode": 0,
+  "policy_sha256": "7a3d78806ee6750cfa9efa04cee06610e3b0315f29b723f6a232b61903ab5920",
+  "ledger_sha256": "d5d74c2faeec8518f2e81dc4381054c6c32f5a557f944489eaf08345acd3f972",
+  "matches_collector_canonical_stdout": true,
+  "stdout_sha256": "b561ff6a1e18d92b512c90101db08377a50c43803936b1f8cf147737a22840f9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

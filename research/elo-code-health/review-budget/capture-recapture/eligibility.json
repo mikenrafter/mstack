@@ -1,0 +1,161 @@
+{
+  "audit_date": "2026-11-17",
+  "scope": "Existing75structured+23externalrounds; no estimation",
+  "review_rounds": 98,
+  "resolved_rounds": 98,
+  "unique_project_commit_combinations": 92,
+  "repeated_snapshot_clusters": 5,
+  "rounds_in_repeated_clusters": 11,
+  "unmatched_rounds": 87,
+  "candidate_pairs": 7,
+  "eligible_pairs": 0,
+  "ineligible_pairs": 6,
+  "unknown_pairs": 1,
+  "unknown_is_not_independent": true,
+  "estimator_fitted": false,
+  "pairs": [
+    {
+      "pair_id": "edge-guides-r2-r3",
+      "resolved_reviewed_sha": "9ec5bd6d7c05b869d8acc1d0e067e3df92e6009f",
+      "eligibility": "ineligible",
+      "reasons": [
+        "scope-mismatch",
+        "shared-prior-findings",
+        "repeat-suppression"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/edge.research/guides/pr1.ledger.json",
+          "sha256": "80ced3b26901a7acdb3dc57dc442e6e972d948557fc821f08bada64530b9ed55"
+        },
+        {
+          "path": "/home/mini/Documents/repos/edge.research/guides/pr1-brief-r2.txt",
+          "sha256": "4d4866319efc9c4755e7c1c15e7607e56175206cf485ba3b0ca4d7a7895d2ebd"
+        },
+        {
+          "path": "/home/mini/Documents/repos/edge.research/guides/pr1-brief-t2.txt",
+          "sha256": "8fad4e53eecd335c203bfe78998d9c873c82d25ac44e35a2e3f85d3c70b72164"
+        }
+      ]
+    },
+    {
+      "pair_id": "fauxx-seeding-r3-r4",
+      "resolved_reviewed_sha": "1ff4822f8a558a58e7e8a124ea33663c9656d97c",
+      "eligibility": "unknown",
+      "reasons": [
+        "original-prompts-and-full-replies-not-found",
+        "independence-not-established",
+        "complete-detection-sets-not-established"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/fauxx.research/seeding-review.ledger.json",
+          "sha256": "1afd4a1d9ad004089e95e0176074e94f6efa8b24d0b1f576f472e5d39af0f4f7"
+        },
+        {
+          "path": "/home/mini/Documents/repos/fauxx.research/seeding-handoff.md",
+          "sha256": "a1cb8273769fc4bcde3ec532ecd8b108e1176b5fb886218d8bef884d21f8353c"
+        }
+      ]
+    },
+    {
+      "pair_id": "w46-r2-r3",
+      "resolved_reviewed_sha": "018c71c1e05fda35315222e14148f7227d4702b5",
+      "eligibility": "ineligible",
+      "reasons": [
+        "scope-mismatch",
+        "shared-prior-findings",
+        "repeat-suppression"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w46-vigil.ledger.json",
+          "sha256": "fbead1c630e9cdb2baf5b4add1ae230c21883ca62ac5e75c5d007835c8e3cd77"
+        },
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w46-vigil.brief2.txt",
+          "sha256": "3b142cf3a7d697272e8a93f54f908f62a6941bd5eb52c751c3f9fec6dca3edd4"
+        },
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w46-vigil.brief-t2.txt",
+          "sha256": "64d34db3cab1d76c6c161ef2b8ad8cb79c2c7d5ed3d37c355a0fef8c8591db8b"
+        }
+      ]
+    },
+    {
+      "pair_id": "w46-r2-w47-r4",
+      "resolved_reviewed_sha": "018c71c1e05fda35315222e14148f7227d4702b5",
+      "eligibility": "ineligible",
+      "reasons": [
+        "different-path-contract-populations"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w46-vigil.brief2.txt",
+          "sha256": "3b142cf3a7d697272e8a93f54f908f62a6941bd5eb52c751c3f9fec6dca3edd4"
+        },
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w47-router.brief-t2b.txt",
+          "sha256": "63440b5732285a1dd321df6b05bc06959afb307a28c22a8eec87538edae8e9b3"
+        }
+      ]
+    },
+    {
+      "pair_id": "w46-r3-w47-r4",
+      "resolved_reviewed_sha": "018c71c1e05fda35315222e14148f7227d4702b5",
+      "eligibility": "ineligible",
+      "reasons": [
+        "different-path-contract-populations"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w46-vigil.brief-t2.txt",
+          "sha256": "64d34db3cab1d76c6c161ef2b8ad8cb79c2c7d5ed3d37c355a0fef8c8591db8b"
+        },
+        {
+          "path": "/home/mini/Documents/repos/phoe-nix.research/w47-router.brief-t2b.txt",
+          "sha256": "63440b5732285a1dd321df6b05bc06959afb307a28c22a8eec87538edae8e9b3"
+        }
+      ]
+    },
+    {
+      "pair_id": "t12-r4-t3-r3",
+      "resolved_reviewed_sha": "aeb1e36974c7d35ad4023095b7e327a8d7e7ca97",
+      "eligibility": "ineligible",
+      "reasons": [
+        "different-populations",
+        "prior-findings-and-fixes-supplied"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r4.md",
+          "sha256": "577322d767d60279580e18776b0d11da136401bea95d61c46dafc8ffc4eff42f"
+        },
+        {
+          "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r3.md",
+          "sha256": "8413bb58d1c931ba008779684c5a755516110b3b1a699c171ee33146a5562e04"
+        }
+      ]
+    },
+    {
+      "pair_id": "t12-r5-t3-r4",
+      "resolved_reviewed_sha": "0ae8fdc9b34eb3c274953dddb8cca94d7044992c",
+      "eligibility": "ineligible",
+      "reasons": [
+        "different-populations",
+        "prior-findings-and-fixes-supplied",
+        "budget-sensitive-threshold"
+      ],
+      "sources": [
+        {
+          "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t12-r5.md",
+          "sha256": "9d29dc731d18472faf3fa1f1ebd3f718ac6db172e1ef543c94649955e408f436"
+        },
+        {
+          "path": "/home/mini/Documents/repos/edge.research/wake-pr/review-t3-r4.md",
+          "sha256": "90f83f958fffe016a2d4d065ab8483bc6ef32b182f9ccd3876bffdaea7badfd3"
+        }
+      ]
+    }
+  ]
+}

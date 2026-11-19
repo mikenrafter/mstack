@@ -1,0 +1,43 @@
+{
+  "scenarios": [
+    {
+      "candidate_change": "Evaluate one typed retained-window decision shared by pruning and derive entry paths.",
+      "components": [
+        "lib/data/db.dart",
+        "lib/compute/derivation_engine.dart",
+        "lib/data/local_repository_impl.dart"
+      ],
+      "evidence_commit": "c11f5cbac942969a410764e86d1a13bdd39a8651",
+      "held_out_cases": [
+        "DST transition",
+        "forced sleep window crossing the prune boundary",
+        "failed prune transaction",
+        "older cursor supplied after a newer cursor",
+        "algorithm-version rederive after pruning"
+      ],
+      "id": "retention-preserves-complete-night",
+      "limits": [
+        "No validated force mapping or architectural change has been applied.",
+        "A lower file count or dependency count alone is not a successful outcome."
+      ],
+      "measurements": [
+        "outcome pass/fail with independent fixtures",
+        "files requiring edits for a new retention rule",
+        "duplicated decisions across entry paths",
+        "behavior regressions in held-out cases"
+      ],
+      "outcomes": [
+        "A previously complete night is not overwritten from incomplete retained input.",
+        "Deleted rows and the prune cursor commit atomically.",
+        "The prune cursor never decreases.",
+        "Every derive entry path observes the same completeness decision."
+      ],
+      "project": "edge",
+      "revision": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+      "status": "proposed-not-executed",
+      "stressor": "Retention removes the leading portion of an overnight derive window before a later rederive."
+    }
+  ],
+  "schemaVersion": "code-health.residual-draft/1",
+  "status": "draft-for-inspection"
+}

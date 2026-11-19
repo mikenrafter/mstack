@@ -1,0 +1,42 @@
+{
+  "accepted_labels": {
+    "False": 1,
+    "None": 4,
+    "True": 18
+  },
+  "evaluation_role": "external_replication_only_no_tuning",
+  "family_files": 51,
+  "findings": 113,
+  "groups": 5,
+  "later_raw_reported_labels": {
+    "False": 4,
+    "None": 1,
+    "True": 13
+  },
+  "later_reported_labels": {
+    "False": 1,
+    "None": 4,
+    "True": 13
+  },
+  "later_rounds": 18,
+  "reported_labels": {
+    "False": 1,
+    "None": 4,
+    "True": 18
+  },
+  "rounds": 23,
+  "severity_counts": {
+    "blocker": 25,
+    "consider": 8,
+    "nit": 9,
+    "should": 71
+  },
+  "used_files": 46,
+  "warnings": [
+    "Source-folder Edge differs from Analytics target for HMM-code.",
+    "Four Tracks groups share code and cannot be treated as independent.",
+    "Scores and tiers are missing; no numerical values are imputed in the corpus.",
+    "Final budgeted round prompts can alter reporting thresholds.",
+    "Report IDs distinguish entries, not independently adjudicated defect mechanisms."
+  ]
+}

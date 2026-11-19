@@ -1,0 +1,108 @@
+{
+  "files": [
+    {
+      "fix_touches": 5,
+      "path": "lib/data/db.dart",
+      "touches": 19
+    },
+    {
+      "fix_touches": 2,
+      "path": "lib/state/app_state.dart",
+      "touches": 13
+    },
+    {
+      "fix_touches": 5,
+      "path": "lib/compute/derivation_engine.dart",
+      "touches": 12
+    },
+    {
+      "fix_touches": 5,
+      "path": "lib/data/local_repository_impl.dart",
+      "touches": 9
+    },
+    {
+      "fix_touches": 1,
+      "path": "lib/app.dart",
+      "touches": 7
+    },
+    {
+      "fix_touches": 4,
+      "path": "lib/ui2/screens/sleep_detail.dart",
+      "touches": 7
+    },
+    {
+      "fix_touches": 3,
+      "path": "lib/ble/ble_engine.dart",
+      "touches": 6
+    },
+    {
+      "fix_touches": 3,
+      "path": "lib/ble/ble_state.dart",
+      "touches": 6
+    },
+    {
+      "fix_touches": 0,
+      "path": "lib/data/backup_extras.dart",
+      "touches": 6
+    },
+    {
+      "fix_touches": 2,
+      "path": "lib/ui2/screens/home_screen.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 2,
+      "path": "lib/state/sync_controller.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 1,
+      "path": "lib/ui2/onboarding/pairing.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 3,
+      "path": "lib/health/health_export.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 0,
+      "path": "lib/ui2/pairing/device_picker.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 1,
+      "path": "lib/ui2/profile/gallery.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 0,
+      "path": "lib/ui2/screens/workout_screen.dart",
+      "touches": 5
+    },
+    {
+      "fix_touches": 1,
+      "path": "lib/support/issue_report.dart",
+      "touches": 4
+    },
+    {
+      "fix_touches": 2,
+      "path": "lib/ui2/screens/health_screen.dart",
+      "touches": 4
+    },
+    {
+      "fix_touches": 2,
+      "path": "lib/ui2/screens/metric_detail.dart",
+      "touches": 4
+    },
+    {
+      "fix_touches": 0,
+      "path": "lib/data/recent_slice.dart",
+      "touches": 4
+    }
+  ],
+  "meaning": "observed activity, not predicted defect probability",
+  "project": "edge",
+  "revision": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+  "window": "last 100 first-parent commits"
+}

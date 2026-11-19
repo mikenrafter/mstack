@@ -1,0 +1,737 @@
+{
+  "baseline": "pooled",
+  "input_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+  "metrics": {
+    "K16_decay": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.19297388901187018,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.001160965322867776,
+        -1.473030824476751e-06
+      ]
+    },
+    "K16_fixed": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.19369380236457123,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.002569445283830128,
+        -3.149458745789549e-05
+      ]
+    },
+    "K32_decay": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.1935231525048437,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.0022778519402892263,
+        8.35277377338739e-06
+      ]
+    },
+    "K32_fixed": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.1949680573037604,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.004920640651383979,
+        -0.0002136489875275202
+      ]
+    },
+    "K64_decay": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.19455229669521498,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.004372869371645227,
+        4.715612866130393e-05
+      ]
+    },
+    "K64_fixed": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.1974624759916433,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.009161016748374206,
+        -0.0009544881370010272
+      ]
+    },
+    "K8_decay": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.19268964196712754,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.0005852259020711804,
+        -1.417746432556667e-06
+      ]
+    },
+    "K8_fixed": {
+      "allocation80": {
+        "captured_positives": 22.200000000000003,
+        "expected_reviews": 31.200000000000003,
+        "missed_positives": 7.799999999999997,
+        "recall": 0.7400000000000001
+      },
+      "brier": 0.1930489246326048,
+      "paired_group_bootstrap95_vs_best_simple": [
+        -0.0013187663682905548,
+        2.259182741745546e-06
+      ]
+    }
+  },
+  "predictions": [
+    {
+      "group": "edge.research/sol/db-split",
+      "ordinal": 2,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7752542473564777,
+        "K16_fixed": 0.7757186029341211,
+        "K32_decay": 0.775507375929095,
+        "K32_fixed": 0.7764289562885357,
+        "K64_decay": 0.7760102741469238,
+        "K64_fixed": 0.7778248833379463,
+        "K8_decay": 0.7751272634807392,
+        "K8_fixed": 0.7753603319765551,
+        "pooled": 0.775
+      }
+    },
+    {
+      "group": "fauxx.research/appkind-review",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7483891679326514,
+        "K16_fixed": 0.7471320406735722,
+        "K32_decay": 0.7467463645625879,
+        "K32_fixed": 0.7442925615802619,
+        "K64_decay": 0.7433767559575944,
+        "K64_fixed": 0.7387459613389341,
+        "K8_decay": 0.7491987560849339,
+        "K8_fixed": 0.748563203839368,
+        "pooled": 0.75
+      }
+    },
+    {
+      "group": "fauxx.research/fauxx-implementation",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.74379238225944,
+        "K16_fixed": 0.7438942424862445,
+        "K32_decay": 0.744133483793752,
+        "K32_fixed": 0.742943216406811,
+        "K64_decay": 0.7451665548616533,
+        "K64_fixed": 0.7380328122120886,
+        "K8_decay": 0.7436729983788114,
+        "K8_fixed": 0.7439135676900088,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "fauxx.research/fauxx-implementation",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7452058224073529,
+        "K16_fixed": 0.7461781101599461,
+        "K32_decay": 0.7467270323125819,
+        "K32_fixed": 0.7484671383760698,
+        "K64_decay": 0.7495298148891006,
+        "K64_fixed": 0.7522708066527862,
+        "K8_decay": 0.744410407895595,
+        "K8_fixed": 0.7449238125317442,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "fauxx.research/location-review",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7431824632467103,
+        "K16_fixed": 0.7441057019472642,
+        "K32_decay": 0.7430061211017879,
+        "K32_fixed": 0.7437180958214746,
+        "K64_decay": 0.7432560786672916,
+        "K64_fixed": 0.740641869755497,
+        "K8_decay": 0.7433560442591537,
+        "K8_fixed": 0.7439688382102574,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "fauxx.research/location-review",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7445994502064653,
+        "K16_fixed": 0.746232906582368,
+        "K32_decay": 0.7455425399904548,
+        "K32_fixed": 0.7486778379970803,
+        "K64_decay": 0.7472629413858806,
+        "K64_fixed": 0.753053205728821,
+        "K8_decay": 0.7441034970301228,
+        "K8_fixed": 0.7449377941942084,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7303663572338874,
+        "K16_fixed": 0.7322912114773731,
+        "K32_decay": 0.7311685521107679,
+        "K32_fixed": 0.7335186206604559,
+        "K64_decay": 0.7331731435320851,
+        "K64_fixed": 0.7327468120702472,
+        "K8_decay": 0.7300259773761825,
+        "K8_fixed": 0.7311926261033471,
+        "pooled": 0.7297297297297297
+      }
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7312881037003942,
+        "K16_fixed": 0.7331271958537097,
+        "K32_decay": 0.7327766740281544,
+        "K32_fixed": 0.7362521807747328,
+        "K64_decay": 0.7355792648424861,
+        "K64_fixed": 0.7417923838731618,
+        "K8_decay": 0.7305182336834591,
+        "K8_fixed": 0.7314646932092437,
+        "pooled": 0.7297297297297297
+      }
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 5,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7331290355985053,
+        "K16_fixed": 0.737737792441523,
+        "K32_decay": 0.7363935303216523,
+        "K32_fixed": 0.7449830600968038,
+        "K64_decay": 0.7425398717044144,
+        "K64_fixed": 0.7574871817829886,
+        "K8_decay": 0.7314465794798508,
+        "K8_fixed": 0.7338341004543304,
+        "pooled": 0.7297297297297297
+      }
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 6,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7257692866512216,
+        "K16_fixed": 0.7244678357987892,
+        "K32_decay": 0.7220152379149342,
+        "K32_fixed": 0.7200944496985358,
+        "K64_decay": 0.715282624864678,
+        "K64_fixed": 0.7135483390760541,
+        "K8_decay": 0.7277269389101351,
+        "K8_fixed": 0.7269830564421532,
+        "pooled": 0.7297297297297297
+      }
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7373055606097801,
+        "K16_fixed": 0.7382721752149445,
+        "K32_decay": 0.7379018481342751,
+        "K32_fixed": 0.7384972240074837,
+        "K64_decay": 0.7394352299839757,
+        "K64_fixed": 0.7360628545468654,
+        "K8_decay": 0.7370566081651835,
+        "K8_fixed": 0.7377225522790737,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7396439055932271,
+        "K16_fixed": 0.7426772930148472,
+        "K32_decay": 0.7423547739444674,
+        "K32_fixed": 0.7481155563730487,
+        "K64_decay": 0.7475153577612758,
+        "K64_fixed": 0.7579069374105184,
+        "K8_decay": 0.7382545547456397,
+        "K8_fixed": 0.7398109997430945,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 5,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7396439055932271,
+        "K16_fixed": 0.7426772930148472,
+        "K32_decay": 0.7423547739444674,
+        "K32_fixed": 0.7481155563730487,
+        "K64_decay": 0.7475153577612758,
+        "K64_fixed": 0.7579069374105184,
+        "K8_decay": 0.7382545547456397,
+        "K8_fixed": 0.7398109997430945,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.755999997397477,
+        "K16_fixed": 0.7553060096913433,
+        "K32_decay": 0.7554490950901475,
+        "K32_fixed": 0.753102376458703,
+        "K64_decay": 0.754905630815408,
+        "K64_fixed": 0.7468368248563628,
+        "K8_decay": 0.7563520467396453,
+        "K8_fixed": 0.7561333133437929,
+        "pooled": 0.7567567567567568
+      }
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7556702246843492,
+        "K16_fixed": 0.7563293341065496,
+        "K32_decay": 0.7546465886123958,
+        "K32_fixed": 0.7560456699442146,
+        "K64_decay": 0.7529365823803095,
+        "K64_fixed": 0.7556719535351736,
+        "K8_decay": 0.7562084810345312,
+        "K8_fixed": 0.7565228908263103,
+        "pooled": 0.7567567567567568
+      }
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 5,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7596229317229523,
+        "K16_fixed": 0.7634954724701483,
+        "K32_decay": 0.7623790178228527,
+        "K32_fixed": 0.7696168577351635,
+        "K64_decay": 0.7675792770043984,
+        "K64_fixed": 0.7802532702746312,
+        "K8_decay": 0.7582038997480743,
+        "K8_fixed": 0.7602074135637932,
+        "pooled": 0.7567567567567568
+      }
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 6,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7556702246843492,
+        "K16_fixed": 0.7563293341065496,
+        "K32_decay": 0.7546465886123958,
+        "K32_fixed": 0.7560456699442146,
+        "K64_decay": 0.7529365823803095,
+        "K64_fixed": 0.7556719535351736,
+        "K8_decay": 0.7562084810345312,
+        "K8_fixed": 0.7565228908263103,
+        "pooled": 0.7567567567567568
+      }
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7236039364545341,
+        "K16_fixed": 0.7257777001583944,
+        "K32_decay": 0.725076546695051,
+        "K32_fixed": 0.7274752554802585,
+        "K64_decay": 0.7282025971584964,
+        "K64_fixed": 0.7265469872915369,
+        "K8_decay": 0.7229003434805717,
+        "K8_fixed": 0.7242566177441345,
+        "pooled": 0.7222222222222222
+      }
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7242336480827012,
+        "K16_fixed": 0.7259824082889189,
+        "K32_decay": 0.7261390852340034,
+        "K32_fixed": 0.7293166836241233,
+        "K64_decay": 0.7296765737569176,
+        "K64_fixed": 0.7348861220983447,
+        "K8_decay": 0.7232419403842408,
+        "K8_fixed": 0.7241589915867276,
+        "pooled": 0.7222222222222222
+      }
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7165854645037095,
+        "K16_fixed": 0.7117044949281374,
+        "K32_decay": 0.7111384534247359,
+        "K32_fixed": 0.7018631401764281,
+        "K64_decay": 0.7009451177893786,
+        "K64_fixed": 0.6842755942487879,
+        "K8_decay": 0.7193826800299264,
+        "K8_fixed": 0.7168822186514924,
+        "pooled": 0.7222222222222222
+      }
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 5,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7165854645037095,
+        "K16_fixed": 0.7117044949281374,
+        "K32_decay": 0.7111384534247359,
+        "K32_fixed": 0.7018631401764281,
+        "K64_decay": 0.7009451177893786,
+        "K64_fixed": 0.6842755942487879,
+        "K8_decay": 0.7193826800299264,
+        "K8_fixed": 0.7168822186514924,
+        "pooled": 0.7222222222222222
+      }
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 6,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7165854645037095,
+        "K16_fixed": 0.7117044949281374,
+        "K32_decay": 0.7111384534247359,
+        "K32_fixed": 0.7018631401764281,
+        "K64_decay": 0.7009451177893786,
+        "K64_fixed": 0.6842755942487879,
+        "K8_decay": 0.7193826800299264,
+        "K8_fixed": 0.7168822186514924,
+        "pooled": 0.7222222222222222
+      }
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7814390013642468,
+        "K16_fixed": 0.7789408429236375,
+        "K32_decay": 0.7793621128264426,
+        "K32_fixed": 0.7739059802859231,
+        "K64_decay": 0.7759961455586621,
+        "K64_fixed": 0.7632190564043472,
+        "K8_decay": 0.7825781394790637,
+        "K8_fixed": 0.7813863492283702,
+        "pooled": 0.7837837837837838
+      }
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 3,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7878987539060415,
+        "K16_fixed": 0.7926257048023125,
+        "K32_decay": 0.7917986783127327,
+        "K32_fixed": 0.8004962120050284,
+        "K64_decay": 0.799007071722054,
+        "K64_fixed": 0.8138129835199995,
+        "K8_decay": 0.7858690363676146,
+        "K8_fixed": 0.7883348028262652,
+        "pooled": 0.7837837837837838
+      }
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7861770078593997,
+        "K16_fixed": 0.7893119468350239,
+        "K32_decay": 0.788479819942057,
+        "K32_fixed": 0.7943601519734244,
+        "K64_decay": 0.79282992797482,
+        "K64_fixed": 0.8032045492500096,
+        "K8_decay": 0.7849919516239142,
+        "K8_fixed": 0.7866110541331498,
+        "pooled": 0.7837837837837838
+      }
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 5,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.782572712385377,
+        "K16_fixed": 0.7832143536464217,
+        "K32_decay": 0.7813977782372906,
+        "K32_fixed": 0.7824593693725695,
+        "K64_decay": 0.7792286604157111,
+        "K64_fixed": 0.7804214899442713,
+        "K8_decay": 0.7831751081935843,
+        "K8_fixed": 0.7835235656322269,
+        "pooled": 0.7837837837837838
+      }
+    },
+    {
+      "group": "phoe-nix.research/w46-vigil",
+      "ordinal": 2,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7976244337970214,
+        "K16_fixed": 0.7991043038663301,
+        "K32_decay": 0.8000852687036343,
+        "K32_fixed": 0.8016999958912577,
+        "K64_decay": 0.8043739552454138,
+        "K64_fixed": 0.8031447122134322,
+        "K8_decay": 0.7962893852137104,
+        "K8_fixed": 0.7972186388921153,
+        "pooled": 0.7948717948717948
+      }
+    },
+    {
+      "group": "phoe-nix.research/w46-vigil",
+      "ordinal": 3,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7961233368441701,
+        "K16_fixed": 0.7968876089738249,
+        "K32_decay": 0.7973442931750044,
+        "K32_fixed": 0.79882944401891,
+        "K64_decay": 0.7996976667044269,
+        "K64_fixed": 0.8025015304053246,
+        "K8_decay": 0.7955014397976795,
+        "K8_fixed": 0.7958891129607277,
+        "pooled": 0.7948717948717948
+      }
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 2,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.79211683111648,
+        "K16_fixed": 0.7948153067766683,
+        "K32_decay": 0.7946243095297594,
+        "K32_fixed": 0.7989901483946539,
+        "K64_decay": 0.7992988429180506,
+        "K64_fixed": 0.8049108287937671,
+        "K8_decay": 0.7908136376224452,
+        "K8_fixed": 0.7923115496542076,
+        "pooled": 0.7894736842105263
+      }
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.788201994814861,
+        "K16_fixed": 0.7864842976842064,
+        "K32_decay": 0.7868983937358381,
+        "K32_fixed": 0.7834278608031159,
+        "K64_decay": 0.7842093456819813,
+        "K64_fixed": 0.7771353956486063,
+        "K8_decay": 0.7888420307041265,
+        "K8_fixed": 0.7879876898741723,
+        "pooled": 0.7894736842105263
+      }
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 4,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7881602909292657,
+        "K16_fixed": 0.7888056085594188,
+        "K32_decay": 0.786918357924122,
+        "K32_fixed": 0.788587345131795,
+        "K64_decay": 0.7847103613437817,
+        "K64_fixed": 0.7893945900034648,
+        "K8_decay": 0.7888092193987745,
+        "K8_fixed": 0.7890827908186084,
+        "pooled": 0.7894736842105263
+      }
+    },
+    {
+      "group": "phoe-nix.research/w49",
+      "ordinal": 2,
+      "outcome": 0,
+      "predictions": {
+        "K16_decay": 0.7769918722296597,
+        "K16_fixed": 0.7824299636167652,
+        "K32_decay": 0.7790608986912181,
+        "K32_fixed": 0.7881396935992129,
+        "K64_decay": 0.7834323471468565,
+        "K64_fixed": 0.795599929736885,
+        "K8_decay": 0.7759868593285039,
+        "K8_fixed": 0.778955239254513,
+        "pooled": 0.775
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/l48",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7438428736688757,
+        "K16_fixed": 0.7438226680198227,
+        "K32_decay": 0.7442207422847412,
+        "K32_fixed": 0.7426744467566143,
+        "K64_decay": 0.7452953884769847,
+        "K64_fixed": 0.7370631864971277,
+        "K8_decay": 0.7437001375894575,
+        "K8_fixed": 0.7438950259978135,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/l48",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7450701792532088,
+        "K16_fixed": 0.746232906582368,
+        "K32_decay": 0.7464756441537759,
+        "K32_fixed": 0.7486778379970803,
+        "K64_decay": 0.7491016205288993,
+        "K64_fixed": 0.753053205728821,
+        "K8_decay": 0.7443400143042876,
+        "K8_fixed": 0.7449377941942084,
+        "pooled": 0.7435897435897436
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/credits",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7490559746881168,
+        "K16_fixed": 0.7473651369473208,
+        "K32_decay": 0.7480991806933823,
+        "K32_fixed": 0.7446426662914879,
+        "K64_decay": 0.7461477704414383,
+        "K64_fixed": 0.7389449577286088,
+        "K8_decay": 0.7495295901639558,
+        "K8_fixed": 0.7486936457789689,
+        "pooled": 0.75
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7374068427538866,
+        "K16_fixed": 0.7381985596797284,
+        "K32_decay": 0.7380870343405165,
+        "K32_fixed": 0.7382221167831505,
+        "K64_decay": 0.7397447776257783,
+        "K64_fixed": 0.7350777927346459,
+        "K8_decay": 0.7371095850136758,
+        "K8_fixed": 0.737703430273832,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7322862070304321,
+        "K16_fixed": 0.7282161242236169,
+        "K32_decay": 0.7277733228011728,
+        "K32_fixed": 0.7201304253328346,
+        "K64_decay": 0.7191040137509349,
+        "K64_fixed": 0.7055238705445079,
+        "K8_decay": 0.7345629782490147,
+        "K8_fixed": 0.7324643359258932,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 5,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7322862070304321,
+        "K16_fixed": 0.7282161242236169,
+        "K32_decay": 0.7277733228011728,
+        "K32_fixed": 0.7201304253328346,
+        "K64_decay": 0.7191040137509349,
+        "K64_fixed": 0.7055238705445079,
+        "K8_decay": 0.7345629782490147,
+        "K8_fixed": 0.7324643359258932,
+        "pooled": 0.7368421052631579
+      }
+    },
+    {
+      "group": "residual-cli.research/reviewer-notes",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "K16_decay": 0.7495480703325287,
+        "K16_fixed": 0.7495433581315564,
+        "K32_decay": 0.7492910657405017,
+        "K32_fixed": 0.7482672897084554,
+        "K64_decay": 0.7493040572325865,
+        "K64_fixed": 0.7436656195587822,
+        "K8_decay": 0.7497491020273412,
+        "K8_fixed": 0.7498825025704491,
+        "pooled": 0.75
+      }
+    }
+  ],
+  "status": "predeclared-grid-sensitivity-only"
+}

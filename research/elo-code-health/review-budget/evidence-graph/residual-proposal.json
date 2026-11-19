@@ -1,0 +1,46 @@
+{
+  "basis": [
+    "case",
+    "contract",
+    "replay-results"
+  ],
+  "component_candidates": [
+    {
+      "functions": [
+        "finish",
+        "finishExport",
+        "cancel"
+      ],
+      "path": "src/v1/jobs.ts",
+      "revision": "d89c0e7b750786a84ef8bf9a468967707333a9eb",
+      "role": "Stage transition, lease and cancellation decisions"
+    }
+  ],
+  "existing_residual_objects_modified": false,
+  "force_created": false,
+  "imported": false,
+  "limitations": [
+    "Outcome candidates are scoped to the captured tests.",
+    "A concrete bug has not been registered as a Residual stressor.",
+    "No proposed boundary or rerouting has been measured."
+  ],
+  "outcome_candidates": [
+    {
+      "id": "stage-owner",
+      "scenario": "scenario-1",
+      "statement": "Only the current stage job may finalize its state."
+    },
+    {
+      "id": "cancel-before-submit",
+      "scenario": "scenario-2",
+      "statement": "A cancellation observed while finishing export prevents the next run submission."
+    },
+    {
+      "id": "stopped-export-cancel",
+      "scenario": "scenario-3",
+      "statement": "Cancellation of an unprocessed stopped export ends cancelled without running the example."
+    }
+  ],
+  "schema": "research.residual-component-outcome-proposal/1",
+  "status": "proposed"
+}

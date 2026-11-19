@@ -1,0 +1,15 @@
+# Blinded historical challenge feasibility
+
+Frozen 2026-11-17 before assigning reviewers or observing their reports. This is one controlled known-defect family in two historical source versions. It tests whether fresh reviewer contexts and adjudication records are practical. It cannot estimate general reviewer sensitivity, compare models, infer optimal rounds or validate the failed forecasts.
+
+Grounding is the independently replayed Paneweft cancellation family: the same three selected tests fail at `3fa003c852bef303ffe48c788093c2659d677870` and pass at `d89c0e7b750786a84ef8bf9a468967707333a9eb`. Preserve that ground-truth scope; passing these cases does not establish that the corrected version has no other defect.
+
+Archive production source only from each Git object, excluding tests, source control and historical review artifacts. Assign neutral A/B labels by a frozen deterministic hash of the full commit IDs. Keep assignment outside each reviewer's allowed input. Use two fresh Codex contexts, same inherited configuration, one per version, no shared findings, no other providers or child agents. Their prompt and output constraints are identical except snapshot/report path. Reviewers may read only their assigned source snapshot, general skill instructions and their output path. No repository programs, build, test suite or source mutation runs.
+
+The specified contract is lifecycle correctness: accepted cancellation must prevent inappropriate advancement of a collection job, including asynchronous export/run stages; completed stages must not be mistaken for whole-job completion. Reviewers receive that contract and the service's source, but no defect IDs, known interleavings, test assertions, chronology or expected arm label. This is a focused challenge, not an unprompted benchmark.
+
+Primary observation is whether the report identifies at least one concrete interleaving in the predeclared cancellation family. Count one family, not three independent discoveries. Require consistent source reasoning plus the existing executable reproduction before calling it supported. Classify other reports as supported, unsupported or unresolved separately; do not automatically call an unfamiliar report a false positive. A report with no finding is only a reviewer outcome within its inspected scope, never proof of defect absence.
+
+Preserve prompt, source-file manifest/hash, arm assignment, exact report and parent dialogue/adjudication. Reviewer configurations are the same, and two observations are insufficient to fit a detection probability or Elo rating. Source changes cause the difference between arms; this is not a randomized trial of additional review versus no review. The archival exercise is separate from live build-loop rounds and cannot bypass their caps or gates. It launches no live change, external write or workflow automation.
+
+Limit each review to 15 minutes and at most five material findings. Root adjudication and all runs stop by 2026-11-17 09:06:26 UTC. No substantial launch after 09:01 UTC.

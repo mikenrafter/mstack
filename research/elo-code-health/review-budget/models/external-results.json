@@ -1,0 +1,445 @@
+{
+  "always_continue": {
+    "captured_positives": 13.0,
+    "expected_reviews": 14,
+    "missed_positives": 0.0,
+    "recall": 1.0
+  },
+  "external_sha256": "9436791a0d035bd1013c52aac0463f5d9009521c38ad06bacacd50c19ec6907b",
+  "inference_limit": "No generalization inference from one group; reported findings are not verified defects.",
+  "inventory": {
+    "eligible_rows": 14,
+    "excluded": {
+      "first_or_invalid_ordinal": 5,
+      "unknown_label": 4
+    },
+    "groups": 5,
+    "missing_previous_score": 14.0,
+    "negative_rows": 1,
+    "positive_rows": 13
+  },
+  "locked_settings_sha256": "aabff8b8618d3f5435662008e0a7bc33de56be90afaa1eff257f9ee89b7fe1b7",
+  "metrics": {
+    "anchored_elo": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.09087573620280091,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          -0.001480401239599387,
+          0.020519957348165346
+        ],
+        "logistic": [
+          -0.005811920605909832,
+          0.0002518597126816788
+        ],
+        "pooled": [
+          -0.0005876979056817054,
+          -0.0001314473894171835
+        ]
+      }
+    },
+    "elo_seed_17": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.09018744999320505,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          -0.000600733946721012,
+          0.020729790849554917
+        ],
+        "logistic": [
+          -0.004932253313031458,
+          0.0004616932140712523
+        ],
+        "pooled": [
+          -0.00037786440429213194,
+          0.0007482199034611914
+        ]
+      }
+    },
+    "elo_seed_41": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.09088418954784723,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          -0.0014328861836209403,
+          0.020371583000557133
+        ],
+        "logistic": [
+          -0.005764405549931386,
+          0.0001034853650734649
+        ],
+        "pooled": [
+          -0.0007360722532899194,
+          -8.39323334387368e-05
+        ]
+      }
+    },
+    "elo_seed_97": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.09156394860573742,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          -0.002416556712514403,
+          0.020451602620175088
+        ],
+        "logistic": [
+          -0.006748076078824847,
+          0.00018350498469142315
+        ],
+        "pooled": [
+          -0.0010676028623321995,
+          -0.0006560526336719611
+        ]
+      }
+    },
+    "lag_bucket": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.09568115170256287,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          0.0,
+          0.0
+        ],
+        "logistic": [
+          -0.020268097635483664,
+          -0.004331519366310445
+        ],
+        "pooled": [
+          -0.021107655253847047,
+          0.0013489538501822035
+        ]
+      }
+    },
+    "logistic": {
+      "allocation80": {
+        "captured_positives": 10.200000000000001,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.799999999999999,
+        "recall": 0.7846153846153847
+      },
+      "brier": 0.0867963242593458,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          0.004331519366310445,
+          0.020268097635483664
+        ],
+        "logistic": [
+          0.0,
+          0.0
+        ],
+        "pooled": [
+          -0.0008395576183633843,
+          0.005680473216492649
+        ]
+      }
+    },
+    "pooled": {
+      "allocation80": {
+        "captured_positives": 10.400000000000002,
+        "expected_reviews": 11.200000000000001,
+        "missed_positives": 2.599999999999998,
+        "recall": 0.8000000000000002
+      },
+      "brier": 0.09061393152302244,
+      "fallback": false,
+      "paired_group_bootstrap95_vs_each_simple": {
+        "lag_bucket": [
+          -0.0013489538501822035,
+          0.021107655253847047
+        ],
+        "logistic": [
+          -0.005680473216492649,
+          0.0008395576183633843
+        ],
+        "pooled": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "predictions": [
+    {
+      "group": "external/wake-pr/t12",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.772319679419442,
+        "elo_seed_17": 0.7740908867305859,
+        "elo_seed_41": 0.7722082650022081,
+        "elo_seed_97": 0.7706598865255319,
+        "lag_bucket": 0.7700534759358288,
+        "logistic": 0.7852752545544869,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/t12",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7739572979452672,
+        "elo_seed_17": 0.775069868169593,
+        "elo_seed_41": 0.7743692145168803,
+        "elo_seed_97": 0.7724328111493283,
+        "lag_bucket": 0.8264462809917354,
+        "logistic": 0.7857307370711106,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/t12",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7710471919317615,
+        "elo_seed_17": 0.7739789250708031,
+        "elo_seed_41": 0.7710630025635157,
+        "elo_seed_97": 0.7680996481609659,
+        "lag_bucket": 0.7393939393939394,
+        "logistic": 0.7857589565612075,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/t3",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.772319679419442,
+        "elo_seed_17": 0.7740908867305859,
+        "elo_seed_41": 0.7722082650022081,
+        "elo_seed_97": 0.7706598865255319,
+        "lag_bucket": 0.7700534759358288,
+        "logistic": 0.7852752545544869,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/t3",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7739572979452672,
+        "elo_seed_17": 0.775069868169593,
+        "elo_seed_41": 0.7743692145168803,
+        "elo_seed_97": 0.7724328111493283,
+        "lag_bucket": 0.8264462809917354,
+        "logistic": 0.7857307370711106,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/t3",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7710471919317615,
+        "elo_seed_17": 0.7739789250708031,
+        "elo_seed_41": 0.7710630025635157,
+        "elo_seed_97": 0.7680996481609659,
+        "lag_bucket": 0.7393939393939394,
+        "logistic": 0.7857589565612075,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/p8a",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.772319679419442,
+        "elo_seed_17": 0.7740908867305859,
+        "elo_seed_41": 0.7722082650022081,
+        "elo_seed_97": 0.7706598865255319,
+        "lag_bucket": 0.7700534759358288,
+        "logistic": 0.7852752545544869,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/p8a",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7739572979452672,
+        "elo_seed_17": 0.775069868169593,
+        "elo_seed_41": 0.7743692145168803,
+        "elo_seed_97": 0.7724328111493283,
+        "lag_bucket": 0.8264462809917354,
+        "logistic": 0.7857307370711106,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/p8a",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7710471919317615,
+        "elo_seed_17": 0.7739789250708031,
+        "elo_seed_41": 0.7710630025635157,
+        "elo_seed_97": 0.7680996481609659,
+        "lag_bucket": 0.7393939393939394,
+        "logistic": 0.7857589565612075,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/cls1",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.772319679419442,
+        "elo_seed_17": 0.7740908867305859,
+        "elo_seed_41": 0.7722082650022081,
+        "elo_seed_97": 0.7706598865255319,
+        "lag_bucket": 0.7700534759358288,
+        "logistic": 0.7852752545544869,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/cls1",
+      "ordinal": 3,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7739572979452672,
+        "elo_seed_17": 0.775069868169593,
+        "elo_seed_41": 0.7743692145168803,
+        "elo_seed_97": 0.7724328111493283,
+        "lag_bucket": 0.8264462809917354,
+        "logistic": 0.7857307370711106,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/cls1",
+      "ordinal": 4,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.7710471919317615,
+        "elo_seed_17": 0.7739789250708031,
+        "elo_seed_41": 0.7710630025635157,
+        "elo_seed_97": 0.7680996481609659,
+        "lag_bucket": 0.7393939393939394,
+        "logistic": 0.7857589565612075,
+        "pooled": 0.7727272727272727
+      },
+      "project": "edge"
+    },
+    {
+      "group": "external/wake-pr/hmm-code",
+      "ordinal": 2,
+      "outcome": 1,
+      "predictions": {
+        "anchored_elo": 0.772319679419442,
+        "elo_seed_17": 0.7740908867305859,
+        "elo_seed_41": 0.7722082650022081,
+        "elo_seed_97": 0.7706598865255319,
+        "lag_bucket": 0.7700534759358288,
+        "logistic": 0.7852752545544869,
+        "pooled": 0.7727272727272727
+      },
+      "project": "openstrap-analytics"
+    },
+    {
+      "group": "external/wake-pr/hmm-code",
+      "ordinal": 3,
+      "outcome": 0,
+      "predictions": {
+        "anchored_elo": 0.7739572979452672,
+        "elo_seed_17": 0.775069868169593,
+        "elo_seed_41": 0.7743692145168803,
+        "elo_seed_97": 0.7724328111493283,
+        "lag_bucket": 0.8264462809917354,
+        "logistic": 0.7857307370711106,
+        "pooled": 0.7727272727272727
+      },
+      "project": "openstrap-analytics"
+    }
+  ],
+  "random_allocation80": {
+    "captured_positives": 10.400000000000002,
+    "expected_reviews": 11.200000000000001,
+    "missed_positives": 2.599999999999998,
+    "recall": 0.8000000000000002
+  },
+  "settings": {
+    "elo_config": [
+      8,
+      "decay"
+    ],
+    "excluded": {
+      "first_or_invalid_ordinal": 21,
+      "unknown_label": 12
+    },
+    "freeze_reason": "Select on structured corpus only before opening external prose-chain labels.",
+    "label": "documented_consequential_discovery",
+    "logistic_penalty": 10.0,
+    "training_groups": [
+      "edge.research/sol/db-split",
+      "fauxx.research/appkind-review",
+      "fauxx.research/fauxx-implementation",
+      "fauxx.research/location-review",
+      "fauxx.research/phases-review",
+      "fauxx.research/seeding-review",
+      "paneweft.research/review",
+      "paneweft.research/v1/review",
+      "phoe-nix.research/vigil-disk-full",
+      "phoe-nix.research/w46-vigil",
+      "phoe-nix.research/w47-router",
+      "phoe-nix.research/w49",
+      "polara-port.research/build-loop/l48",
+      "polara-port.research/build-loop/modes/credits",
+      "polara-port.research/build-loop/modes/modes",
+      "residual-cli.research/reviewer-notes"
+    ],
+    "training_rows": 42,
+    "training_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c"
+  },
+  "status": "external-reported-finding-proxy-replication",
+  "training_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c"
+}

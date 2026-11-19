@@ -1,0 +1,23 @@
+3fa003c852bef303ffe48c788093c2659d677870
+ca754676a7add6026dd84ce985db9d4c17dcd7d8
+2026-11-11T22:07:52-07:00
+v1 t2: T4 a collection resolves example ids against the catalogue its own run exports
+
+collect resolved ids only against the stored catalogue, built only by the owner-only `catalogue refresh`. On a fresh repository an agent
+following the skill stalled: list_types and scaffold_view answered NOT_FOUND and collect refused "not declared in the catalogue".
+
+- jobs.ts: an exportFirst job runs two queue stages, the catalogue export and then the run it resolved (run-stage.json, qex.export.id,
+  dedupe key <key>:export). The export is authoritative for the run and, on success, replaces the stored catalogue. A stored catalogue
+  proven fresh by its fingerprint still resolves ids at once (unknown id: NOT_FOUND with candidates, nothing queued). An export that
+  fails, or an id the export does not declare, ends the job failed with a diagnostic and runs nothing; a cancel before the export ends
+  cancels the job. Crash point export:after-run-stage is recovered.
+- adapters.ts: checkCollectRequest (request shape without a catalogue) split out of selectExamples.
+- tools.ts: discovery on a repository with a registered adapter and no stored catalogue answers partial/unverified naming the first
+  collect; scaffold_view takes an explicit source there; without an adapter the answer names `paneweft adapter add`. Scaffold plans
+  say "collect" where they said "refresh the catalogue". `catalogue refresh` stays as an owner command.
+- skills/paneweft-views/SKILL.md and docs/v1-red-contract.md follow.
+- tests: jobs ([T4] x7), tools ([T4] x3), skill (no refresh in the steps), and the CLI walkthrough fresh repo -> types -> scaffold ->
+  implement -> collect -> result with no catalogue command.
+
+Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>
+

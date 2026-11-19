@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Optional review observation input v0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "observation_id", "captured_at", "change", "policy", "coverage", "fix_facts", "allocation"],
+  "properties": {
+    "version": {"const": 0},
+    "observation_id": {"type": "string", "minLength": 1},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "change": {
+      "type": "object", "additionalProperties": false,
+      "required": ["project", "group_id", "ledger_sha256", "head_revision", "dirty_patch_sha256", "current_snapshot_sha256"],
+      "properties": {
+        "project": {"type": "string", "minLength": 1},
+        "group_id": {"type": "string", "minLength": 1},
+        "ledger_sha256": {"$ref": "#/$defs/hash"},
+        "head_revision": {"type": "string", "pattern": "^[0-9a-f]{40,64}$"},
+        "dirty_patch_sha256": {"$ref": "#/$defs/hash"},
+        "current_snapshot_sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "policy": {
+      "type": "object", "additionalProperties": false,
+      "required": ["script_sha256", "command_argv", "ledger_schema", "step", "stdout", "capture_verified", "phase", "tier1_rounds", "tier2_rounds"],
+      "properties": {
+        "script_sha256": {"$ref": "#/$defs/hash"},
+        "command_argv": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+        "ledger_schema": {"enum": ["legacy", "2", "unknown"]},
+        "step": {"enum": ["ARGUE", "ROUND", "CHECKPOINT", "OWNER-OK", "NIT-CULL", "FIX-KEPT", "STEP-BACK", "STOP-STUCK", "STOP-AGREED", "unknown"]},
+        "stdout": {"type": "string", "minLength": 1},
+        "capture_verified": {"type": "boolean"},
+        "phase": {"type": "integer", "minimum": 0},
+        "tier1_rounds": {"type": "integer", "minimum": 0},
+        "tier2_rounds": {"type": "integer", "minimum": 0}
+      }
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "reviewed_snapshot_sha256", "verification_ref"],
+      "properties": {
+        "state": {"enum": ["exact-reviewed", "parent-verified-final-fix", "stale", "unknown"]},
+        "reviewed_snapshot_sha256": {"oneOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+        "verification_ref": {"type": ["string", "null"]}
+      },
+      "allOf": [{
+        "if": {"properties": {"state": {"const": "parent-verified-final-fix"}}},
+        "then": {"properties": {"verification_ref": {"type": "string", "minLength": 1}}}
+      }]
+    },
+    "fix_facts": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["category", "fix_revision", "diff_sha256", "source_ref", "accepted"],
+        "properties": {
+          "category": {"enum": ["async-wait", "lock-or-lease", "cancellation", "transaction-publication", "multi-stage-transition", "other", "unknown"]},
+          "fix_revision": {"type": "string", "minLength": 1},
+          "diff_sha256": {"$ref": "#/$defs/hash"},
+          "source_ref": {"type": "string", "minLength": 1},
+          "accepted": {"type": "boolean"}
+        }
+      }
+    },
+    "allocation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["state", "channel", "owner_record_ref"],
+      "properties": {
+        "state": {"enum": ["unresolved", "exhausted", "documented-for-future-design"]},
+        "channel": {"type": ["string", "null"]},
+        "owner_record_ref": {"type": ["string", "null"]}
+      }
+    }
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

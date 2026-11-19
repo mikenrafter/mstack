@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Optional review shadow advisory v0",
+  "type": "object", "additionalProperties": false,
+  "required": ["version", "observation_id", "status", "execution_allowed", "boundary_observed", "canonical_step", "basis", "reasons", "evidence_refs", "unknowns", "suggested_focus", "outcome"],
+  "properties": {
+    "version": {"const": 0},
+    "observation_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["required-review-still-pending", "cap-reached-escalate", "insufficient-evidence", "additional-review-recommended"]},
+    "execution_allowed": {"const": false},
+    "boundary_observed": {"type": "boolean"},
+    "canonical_step": {"type": "string", "minLength": 1},
+    "basis": {"enum": ["canonical-policy", "snapshot-integrity", "fixed-conservative-rule", "unknown"]},
+    "reasons": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "unknowns": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "suggested_focus": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "outcome": {"const": "unobserved"}
+  },
+  "allOf": [{
+    "if": {"properties": {"status": {"const": "additional-review-recommended"}}},
+    "then": {"properties": {"boundary_observed": {"const": true}, "canonical_step": {"const": "STOP-AGREED"}, "basis": {"const": "fixed-conservative-rule"}, "evidence_refs": {"minItems": 1}, "suggested_focus": {"minItems": 1}}}
+  }]
+}

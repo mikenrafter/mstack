@@ -1,0 +1,37 @@
+[
+  {
+    "mutation": "restore unstable fixed gradient step",
+    "test": "test_logistic_large_penalty_descends",
+    "caught": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "mutation": "reverse risk update direction",
+    "test": "test_elo_hand_arithmetic",
+    "caught": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "mutation": "erase independent-group decay",
+    "test": "test_dynamic_k_independent_group_oracle",
+    "caught": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "mutation": "pretend every positive is allocated",
+    "test": "test_tie_allocation_has_equal_fraction_and_exact_budget",
+    "caught": true,
+    "failures": 1,
+    "errors": 0
+  },
+  {
+    "mutation": "read target-round score as a predictor",
+    "test": "test_future_fields_cannot_change_features",
+    "caught": true,
+    "failures": 1,
+    "errors": 0
+  }
+]

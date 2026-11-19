@@ -1,0 +1,410 @@
+{
+  "status": "exploratory-fixed-forecast-sensitivity",
+  "training_sha256": "470561bf8f3bb036bc76fa872ed01371323207dd9457f4e7f65df4d4ef7ed38c",
+  "rows": 54,
+  "known": 39,
+  "unknown": 15,
+  "completions": 32768,
+  "known_predictions_match_preserved": true,
+  "prevalence_bounds": [
+    0.5555555555555556,
+    0.8333333333333334
+  ],
+  "bounds": {
+    "loss_improvement": {
+      "lower": -0.0004676767026092751,
+      "upper": 0.00015420738810081354,
+      "enumeration_agrees": true
+    },
+    "ten_percent_gate": {
+      "lower": -0.029405709078781046,
+      "upper": -0.015962107515058055,
+      "enumeration_agrees": true
+    }
+  },
+  "predictions": [
+    {
+      "group": "edge.research/guides/pr1",
+      "ordinal": 2,
+      "outcome": null,
+      "baseline": 0.7560975609756098,
+      "candidate": 0.7562462498826132
+    },
+    {
+      "group": "edge.research/guides/pr1",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.7560975609756098,
+      "candidate": 0.7557431426806577
+    },
+    {
+      "group": "edge.research/sol/db-split",
+      "ordinal": 2,
+      "outcome": false,
+      "baseline": 0.775,
+      "candidate": 0.7751272634807392
+    },
+    {
+      "group": "edge.research/sol/graphs/graphs",
+      "ordinal": 2,
+      "outcome": null,
+      "baseline": 0.7560975609756098,
+      "candidate": 0.7562462498826132
+    },
+    {
+      "group": "edge.research/sol/graphs/graphs",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.7560975609756098,
+      "candidate": 0.7557431426806577
+    },
+    {
+      "group": "fauxx.research/appkind-review",
+      "ordinal": 2,
+      "outcome": null,
+      "baseline": 0.75,
+      "candidate": 0.7507561688019636
+    },
+    {
+      "group": "fauxx.research/appkind-review",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.75,
+      "candidate": 0.7491987560849339
+    },
+    {
+      "group": "fauxx.research/appkind-review",
+      "ordinal": 4,
+      "outcome": null,
+      "baseline": 0.75,
+      "candidate": 0.748261378129444
+    },
+    {
+      "group": "fauxx.research/fauxx-implementation",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7436729983788114
+    },
+    {
+      "group": "fauxx.research/fauxx-implementation",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.744410407895595
+    },
+    {
+      "group": "fauxx.research/location-review",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7433560442591537
+    },
+    {
+      "group": "fauxx.research/location-review",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7441034970301228
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7297297297297297,
+      "candidate": 0.7300259773761825
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7297297297297297,
+      "candidate": 0.7305182336834591
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 4,
+      "outcome": null,
+      "baseline": 0.7297297297297297,
+      "candidate": 0.7277269389101351
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 5,
+      "outcome": true,
+      "baseline": 0.7297297297297297,
+      "candidate": 0.7314465794798508
+    },
+    {
+      "group": "fauxx.research/phases-review",
+      "ordinal": 6,
+      "outcome": true,
+      "baseline": 0.7297297297297297,
+      "candidate": 0.7277269389101351
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7370566081651835
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7382647922548106
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 4,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7382545547456397
+    },
+    {
+      "group": "fauxx.research/seeding-review",
+      "ordinal": 5,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7382545547456397
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7567567567567568,
+      "candidate": 0.7563520467396453
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.7567567567567568,
+      "candidate": 0.7579296154687545
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 4,
+      "outcome": true,
+      "baseline": 0.7567567567567568,
+      "candidate": 0.7562084810345312
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 5,
+      "outcome": true,
+      "baseline": 0.7567567567567568,
+      "candidate": 0.7582038997480743
+    },
+    {
+      "group": "paneweft.research/review",
+      "ordinal": 6,
+      "outcome": false,
+      "baseline": 0.7567567567567568,
+      "candidate": 0.7562084810345312
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7229003434805717
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7232419403842408
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 4,
+      "outcome": true,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7193826800299264
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 5,
+      "outcome": true,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7193826800299264
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 6,
+      "outcome": true,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7193826800299264
+    },
+    {
+      "group": "paneweft.research/v1/review",
+      "ordinal": 7,
+      "outcome": null,
+      "baseline": 0.7222222222222222,
+      "candidate": 0.7193826800299264
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7837837837837838,
+      "candidate": 0.7825781394790637
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 3,
+      "outcome": false,
+      "baseline": 0.7837837837837838,
+      "candidate": 0.7858690363676146
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 4,
+      "outcome": true,
+      "baseline": 0.7837837837837838,
+      "candidate": 0.7849919516239142
+    },
+    {
+      "group": "phoe-nix.research/vigil-disk-full",
+      "ordinal": 5,
+      "outcome": false,
+      "baseline": 0.7837837837837838,
+      "candidate": 0.7831751081935843
+    },
+    {
+      "group": "phoe-nix.research/w46-vigil",
+      "ordinal": 2,
+      "outcome": false,
+      "baseline": 0.7948717948717948,
+      "candidate": 0.7962893852137104
+    },
+    {
+      "group": "phoe-nix.research/w46-vigil",
+      "ordinal": 3,
+      "outcome": false,
+      "baseline": 0.7948717948717948,
+      "candidate": 0.7955014397976795
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 2,
+      "outcome": false,
+      "baseline": 0.7894736842105263,
+      "candidate": 0.7908136376224452
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7894736842105263,
+      "candidate": 0.7888420307041265
+    },
+    {
+      "group": "phoe-nix.research/w47-router",
+      "ordinal": 4,
+      "outcome": false,
+      "baseline": 0.7894736842105263,
+      "candidate": 0.7888092193987745
+    },
+    {
+      "group": "phoe-nix.research/w49",
+      "ordinal": 2,
+      "outcome": false,
+      "baseline": 0.775,
+      "candidate": 0.7759868593285039
+    },
+    {
+      "group": "polara-port.research/build-loop/clouds",
+      "ordinal": 2,
+      "outcome": null,
+      "baseline": 0.7560975609756098,
+      "candidate": 0.7562462498826132
+    },
+    {
+      "group": "polara-port.research/build-loop/l48",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7437001375894575
+    },
+    {
+      "group": "polara-port.research/build-loop/l48",
+      "ordinal": 3,
+      "outcome": true,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7443400143042876
+    },
+    {
+      "group": "polara-port.research/build-loop/l48",
+      "ordinal": 4,
+      "outcome": null,
+      "baseline": 0.7435897435897436,
+      "candidate": 0.7419234561072617
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/credits",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.75,
+      "candidate": 0.7495295901639558
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7371095850136758
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7382627517230814
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 4,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7345629782490147
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 5,
+      "outcome": true,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7345629782490147
+    },
+    {
+      "group": "polara-port.research/build-loop/modes/modes",
+      "ordinal": 6,
+      "outcome": null,
+      "baseline": 0.7368421052631579,
+      "candidate": 0.7345629782490147
+    },
+    {
+      "group": "residual-cli.research/reviewer-notes",
+      "ordinal": 2,
+      "outcome": true,
+      "baseline": 0.75,
+      "candidate": 0.7497491020273412
+    },
+    {
+      "group": "residual-cli.research/reviewer-notes",
+      "ordinal": 3,
+      "outcome": null,
+      "baseline": 0.75,
+      "candidate": 0.7496627632063512
+    }
+  ],
+  "limits": [
+    "Bounds condition on fixed forecasts and do not refit hypothetical labels.",
+    "Only observed later reviews enter; unperformed reviews remain outside.",
+    "Accepted findings are proxies and group independence is unestablished."
+  ]
+}

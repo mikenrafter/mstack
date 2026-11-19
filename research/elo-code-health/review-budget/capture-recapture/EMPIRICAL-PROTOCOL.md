@@ -1,0 +1,13 @@
+# Published human-inspection matrix diagnostic
+
+Frozen 2026-11-17 before parsing matrices or calculating estimator outcomes. This is a fixed-formula descriptive reproduction on public historical data. It is not another Elo search or validation on the owner's code.
+
+Input is the University of Maryland PBR lab package's public `docs/total.cc`, saved unchanged with its URL and SHA256. Treat C++ source only as data; never compile or execute it. Use all eight documented embedded inspector-by-reference-defect matrices if their actual row/column dimensions and metadata columns can be grounded in source declarations. Reject ambiguous dimensions, duplicate inspector rows within a matrix, nonbinary detection fields, inconsistent widths or nonzero padding. Do not infer reference defect count from the union of discovered defects. If the declared columns' meaning cannot be established, stop rather than invent truth.
+
+For each matrix, enumerate every unordered pair of distinct inspector rows. Apply the already frozen Chapman formula without fitting or changing parameters. Record each inspector's finding count, overlap, observed union, declared reference count, estimated total and estimated remaining reference defects. Actual remaining reference defects means declared reference columns not found by either inspector; it does not mean every possible real defect in the artifact is known.
+
+Report per matrix: inspectors, reference defects, pairs, zero-overlap pairs, mean/median actual and estimated remaining counts, mean error, root mean square error, fraction estimating less than half the remaining reference count among pairs with a nonzero remainder, and zero-estimate-with-reference-unseen frequency. Also report total-population relative error separately from remaining-defect error so the targets cannot be confused. Do not tune a reinspection threshold, fit another estimator, collapse related pairs into independent samples, or claim significance from pair count. Preserve all pair rows for reproducibility.
+
+Inspectors and artifacts may repeat across sessions. The eight matrices are not eight proved independent projects. Report by artifact/session and preserve inspector/perspective metadata where documented. No cross-project portability, LLM detection calibration, optimal-round recommendation or causal review benefit follows from these data.
+
+Verify parser behavior with small independently specified arrays and malformed/padding fixtures. Independently inspect source declarations and manually tally at least one original pair before accepting outputs. The resulting parser, normalized matrices, pair records, source hashes and checks must remain under this research directory. No source repository or workflow changes occur.

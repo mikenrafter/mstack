@@ -1,0 +1,14 @@
+[
+  {
+    "name": "intersection-instead-of-union",
+    "caught": true
+  },
+  {
+    "name": "forget-never-detected-reference-faults",
+    "caught": true
+  },
+  {
+    "name": "wrong-upper-team-quantile",
+    "caught": true
+  }
+]

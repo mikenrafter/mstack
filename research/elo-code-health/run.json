@@ -1,0 +1,85 @@
+{
+  "code_sha256": "bb94876bc9a11be50badde86fdbdbe9af6cc23060a5c34bed013b6e526a3a2a8",
+  "protocol_sha256": "ba17e89542e82d34066d451493f7c6348d67dd0a51edbc7107aece7247abd45a",
+  "replay_order": "first-parent topological",
+  "revisions": [
+    {
+      "first_parent_commits": 637,
+      "fix_source_commits": 216,
+      "fix_title_commits": 245,
+      "newest": "2026-11-17",
+      "oldest": "2026-06-12",
+      "project": "edge",
+      "ref": "upstream/main",
+      "sha": "cd64eaa89948409ccffbea19ee48d7bd22dcb808",
+      "shallow": "false",
+      "source_files": 384,
+      "source_touch_commits": 487
+    },
+    {
+      "first_parent_commits": 128,
+      "fix_source_commits": 44,
+      "fix_title_commits": 47,
+      "newest": "2026-11-16",
+      "oldest": "2026-06-12",
+      "project": "openstrap-analytics",
+      "ref": "upstream/main",
+      "sha": "a438df40b38a4586a52a68ab7e1c100fca111ccd",
+      "shallow": "false",
+      "source_files": 108,
+      "source_touch_commits": 112
+    },
+    {
+      "first_parent_commits": 422,
+      "fix_source_commits": 36,
+      "fix_title_commits": 68,
+      "newest": "2026-10-02",
+      "oldest": "2026-03-19",
+      "project": "diff-core",
+      "ref": "upstream/main",
+      "sha": "7b82ed829fe57b3e4ed36765a5c1b9fb5014f65c",
+      "shallow": "false",
+      "source_files": 70,
+      "source_touch_commits": 199
+    },
+    {
+      "first_parent_commits": 126,
+      "fix_source_commits": 44,
+      "fix_title_commits": 45,
+      "newest": "2026-11-14",
+      "oldest": "2026-08-06",
+      "project": "qex",
+      "ref": "HEAD",
+      "sha": "eeb5788947d6482c75a847185e9b6e29ee871906",
+      "shallow": "false",
+      "source_files": 41,
+      "source_touch_commits": 97
+    },
+    {
+      "first_parent_commits": 85,
+      "fix_source_commits": 6,
+      "fix_title_commits": 7,
+      "newest": "2026-11-11",
+      "oldest": "2026-08-11",
+      "project": "residual-cli",
+      "ref": "feat/reviewer-notes",
+      "sha": "6094b7dc686d409453cf0b23bcd6c033836ca8f6",
+      "shallow": "false",
+      "source_files": 73,
+      "source_touch_commits": 38
+    },
+    {
+      "first_parent_commits": 110,
+      "fix_source_commits": 1,
+      "fix_title_commits": 2,
+      "newest": "2026-11-12",
+      "oldest": "2026-11-11",
+      "project": "paneweft",
+      "ref": "main",
+      "sha": "2c7b9e2e1002e2352d8a3b117da0b0041b2f1f52",
+      "shallow": "false",
+      "source_files": 106,
+      "source_touch_commits": 61
+    }
+  ]
+}

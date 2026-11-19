@@ -1,0 +1,19 @@
+{
+  "record_kind": "post-generation-integration",
+  "completed_utc": "2026-11-17T08:42:45.800585+00:00",
+  "generation_record": "run.json",
+  "generation_record_is_historical": true,
+  "note": "run.json retains generation-time hashes and its then-pending CLI status. This record documents the subsequent integration check and documentation update.",
+  "cli_job": "63566f5e-ea0f-42cb-aaba-033b3ecff92b",
+  "cli_passed": true,
+  "freshness": "unverified",
+  "edges_preserved": 11,
+  "sha256": {
+    "README.md": "cd484f52bd7adf443425e7cfe27a1270339db37e5e23579bd5d8f92286ab3d9f",
+    "check_cli.py": "17a309e14bfde7ba9b201451e0263c89657237f69dd367fe4293e31c348db2ea",
+    "checks.json": "a04b61cd5c7d46e18a2b962f0791ce2ae07a72ea688c6e3d95cd914516bdb1b7",
+    "cli-checks.json": "da2ccad44a562c889734de9029e35a557b8664f546d02465b0ae0d72dc1993f6",
+    "paneweft.bundle.json": "3d44d4e36d704fcccaf25ea2c6dd2d612c3038b211693b2f284a47c2c0edc038",
+    "run.json": "399349d8509c3496910a4c5064ddaa4868ba0bf92dab7803dee4fcccc3ace006"
+  }
+}
