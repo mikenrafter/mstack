@@ -87,6 +87,12 @@ with it; that skill lives in the tool's own repository:
 | `usagewindow-status` | usagewindow |
 | `babeltele` | babeltele |
 
+Some installed skills are other people's and stay theirs: `file-pr`,
+`babysit-pr` and `leaving-pr-comments` come from Theo Browne's
+[tstack](https://github.com/t3dotgg/tstack). Install them from there. When I
+want one to behave differently, the change goes in an mstack skill, not in a
+copy of theirs. `practice-watch` follows tstack for changes.
+
 Every skill is model-invocable. Do not set `disable-model-invocation`.
 Write its description as conditions saying when to invoke it, because the
 model reads that description as a prose hook.
