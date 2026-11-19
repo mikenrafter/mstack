@@ -1,6 +1,8 @@
 ---
 name: uw-agent
-description: Compact your own session or schedule your own resume through usagewindow. Use when your context is getting large, you are near a usage limit, or you want to continue a task later.
+description: >-
+  Use when your context is getting large, you are near a usage limit, or you
+  want to continue a task later through usagewindow.
 ---
 
 # uw-agent: compact yourself, resume yourself later

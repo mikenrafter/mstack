@@ -1,6 +1,8 @@
 ---
 name: github-stars
-description: If you need to know what the user recently starred on GitHub, use this instead of guessing or trying to browse GitHub.
+description: >-
+  Use when you need to know what the user recently starred on GitHub, instead
+  of guessing or browsing GitHub.
 agent-invocable: true
 ---
 

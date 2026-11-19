@@ -1,6 +1,9 @@
 ---
 name: handling-ambiguous-work
-description: Recover a T3 thread after an explicit provider cyber error. Transfer unaffected work to the original model and provider, then independently assess the flagged request and report the outcome.
+description: >-
+  Use when recovering a T3 thread after an explicit provider cyber error, to
+  transfer unaffected work to the original model and provider and
+  independently assess the flagged request.
 ---
 
 The owner authorized this recovery workflow. Your first responsibility is to

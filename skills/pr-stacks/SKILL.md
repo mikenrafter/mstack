@@ -1,6 +1,8 @@
 ---
 name: pr-stacks
-description: Plan work as a stack of small PRs labelled by door (two-way doors are easy to revert, a one-way door is not), enforce the owner's PR size limit, and run a teach-back on each PR so the owner keeps understanding the code. Use when writing tickets or a stack plan, before filing any PR, when a diff passes the size limit, and when reviewing a PR in a stack. Companions: question-everything (plans the stack at the end of the grill), build-loop.
+description: >-
+  Use when writing tickets or a stack plan, before filing any PR, when a diff
+  passes the owner's PR size limit, or when reviewing a PR in a stack.
 ---
 
 # pr-stacks

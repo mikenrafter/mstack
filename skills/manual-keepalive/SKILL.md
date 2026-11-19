@@ -1,12 +1,9 @@
 ---
 name: manual-keepalive
 description: >-
-  Backup only (vigil is the default hold): keep a session's turn open with a
-  repeating background sleep+echo command when vigil is unavailable or
-  failing, relaunched on each completion, instead of a bash while-loop. Use for TDD
-  workflows, long-running commands, or subagent orchestration; keep
-  relaunching until the work is complete. A near-constant effort: maintain it
-  for as long as anything is in flight, and restart it after compaction.
+  Use when vigil is unavailable or failing and a TDD workflow, long-running
+  command or subagent orchestration needs to keep the session open. Vigil is
+  the default hold; this is the backup.
 ---
 
 # manual-keepalive

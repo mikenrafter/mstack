@@ -1,6 +1,9 @@
 ---
 name: writing-copy
-description: Use when writing copy, meaning any text a person outside this session reads (docs, READMEs, UI strings, PR bodies, release notes, explainers, messages to the owner). Loads unslop and plain-writing and adds rules on eyebrow lines, why each piece of text exists, jargon, audience, compliance narration and a three-pass reread.
+description: >-
+  Use when writing text a person outside this session reads, including docs,
+  READMEs, UI strings, PR bodies, release notes, explainers and messages to
+  the owner.
 ---
 
 # Writing copy

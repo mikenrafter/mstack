@@ -1,11 +1,9 @@
 ---
 name: boat
 description: >-
-  Use Boat (boat.dev) cloud sandboxes from this machine: what Boat is, how to
-  reach a sandbox (only through the `boat` CLI), run long jobs, copy files and
-  source, and the gotchas seen here. Use whenever a task mentions Boat, a
-  sandbox id (`bx_...`), "Box"/ascii, a remote x86_64 build or test host, or
-  when local RAM/CPU or architecture (aarch64) is not enough.
+  Use when a task mentions Boat, a sandbox id (`bx_...`), "Box"/ascii, a
+  remote x86_64 build or test host, or when local RAM, CPU or architecture
+  (aarch64) is not enough.
 ---
 
 # Boat

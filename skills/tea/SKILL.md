@@ -1,8 +1,9 @@
 ---
 name: tea
 description: >-
-  Recover a filtered pipeline's exact stdin without rerunning it; tea caches
-  each stage and leaves a pointer on stderr.
+  Use when a filtered pipeline (grep, head, jq, ...) hid output you now need,
+  or a hook or stderr line mentions [tea]; recover the stage's input instead
+  of rerunning the command.
 ---
 
 # tea logs

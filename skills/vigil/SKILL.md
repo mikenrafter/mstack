@@ -1,11 +1,8 @@
 ---
 name: vigil
 description: >-
-  Wait on builds, logs, commands, ports, processes or URLs without polling by
-  hand: create a vigil watch, then run `vigil keepalive <id> --orchestrator`
-  in the background, again on each return, until it fires. Hold the main session in prompt
-  cache with `vigil hold`. Use when a task has to wait
-  minutes to hours for something outside the session.
+  Use when a task has to wait minutes to hours for a build, log, command,
+  port, process, URL or other event outside the session.
 ---
 
 # vigil

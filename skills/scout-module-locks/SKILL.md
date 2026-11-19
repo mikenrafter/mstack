@@ -1,6 +1,9 @@
 ---
 name: update-scout-module-locks
-description: Update phoe-nix scout-module flake locks after changing a satellite repository, with fork/branch verification and an explicit push confirmation.
+description: >-
+  Use after pushing a change to a repo that a phoe-nix scout module pins,
+  before rebuilding. Update the scout-module flake locks with fork/branch
+  verification and an explicit push confirmation.
 ---
 
 # Update scout-module locks

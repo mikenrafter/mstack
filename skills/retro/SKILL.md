@@ -1,6 +1,9 @@
 ---
 name: retro
-description: Look back over recent agent sessions, review findings and the owner's PR comments, find what keeps going wrong, and turn each cause into a check, a standards line or a skill change. Use when a vigil retro reminder fires, after a large piece of work or a merged stack, or when the owner asks for a retro. Companions: adaptive-hardening (budget), pr-stacks, comment-audit.
+description: >-
+  Use when a vigil retro reminder fires, after a large piece of work or a
+  merged stack, or when the owner asks to look back over agent sessions and
+  review findings.
 ---
 
 # retro

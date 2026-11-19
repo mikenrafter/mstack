@@ -1,6 +1,10 @@
 ---
 name: deliberate-changes
-description: Make warranted deletions, replacements, and simplifications when a requested refactor or redesign is being held back by attachment to existing code. Use for explicit requests to reconsider an approach or work more boldly within scope; ordinary edits do not need it.
+description: >-
+  Use when a requested refactor or redesign is held back by attachment to
+  existing code, when the owner explicitly asks to reconsider an approach or
+  work more boldly within scope, or when your own plan keeps code only because
+  it already exists. Ordinary edits do not need it.
 ---
 
 # Deliberate changes

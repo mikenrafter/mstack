@@ -1,6 +1,8 @@
 ---
 name: practice-watch
-description: Turn new videos, posts and skill-repo changes from the owner's watched engineers into a dated digest of practices worth adopting, compared against the mstack skills. Use when the owner asks for the practice digest, to check what the watched engineers have published, or when a scheduled practice-watch run fires.
+description: >-
+  Use when the owner asks for the practice digest, asks what their watched
+  engineers have published, or when a scheduled practice-watch run fires.
 ---
 
 # practice-watch

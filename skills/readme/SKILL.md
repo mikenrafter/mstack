@@ -1,6 +1,9 @@
 ---
 name: readme
-description: Write or revise a project README in the owner's house style (one-line opening, status stated plainly, a usage path someone can follow end to end, limits, credits, MIT license) and audit existing READMEs against it. Use when creating, rewriting or reviewing a README, before publishing a repository, or when the owner asks to bring READMEs into line. Loads writing-copy.
+description: >-
+  Use when creating, rewriting or reviewing a project README, before
+  publishing a repository, or when the owner asks to bring READMEs into line
+  with their house style.
 ---
 
 # readme

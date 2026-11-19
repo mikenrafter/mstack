@@ -1,6 +1,9 @@
 ---
 name: low-ram-hosts
-description: Use on sonic and nixed (both have only ~8GB RAM) before running tests, builds, emulators, or anything memory-hungry (flutter test, cargo, gradle, pnpm/node, nix build), and when a command dies with "Killed" / exit 137. Heavy work goes to Boat via boat-run; local jobs (one or two quick runs, or when the boat-budget advisory says Boat is low) go through the shared qex queue so agents don't collide.
+description: >-
+  Use when running tests, builds, emulators or other memory-hungry commands on
+  sonic or nixed (both have only about 8GB RAM), or when a command dies with
+  "Killed" / exit 137 on either host.
 ---
 
 # Running on RAM-constrained hosts (sonic and nixed)

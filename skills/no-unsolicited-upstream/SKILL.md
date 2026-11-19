@@ -1,6 +1,9 @@
 ---
 name: no-unsolicited-upstream
-description: Never open bug reports, forks, PRs, or other upstream outreach without explicit user approval. Must always apply.
+description: >-
+  Use before any action that would reach outside the owner's own accounts:
+  opening an issue, PR, fork, discussion or post, commenting upstream, or
+  publishing.
 ---
 
 # No unsolicited upstream

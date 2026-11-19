@@ -1,6 +1,8 @@
 ---
 name: comment-audit
-description: Audit code comments as smells. Delete narration and agent session notes, turn workaround excuses into code fixes, move decisions to ADRs and timing rules to test names, and keep sourced claims and interface contracts. Use when a vigil comment-audit reminder fires, when a retro hands over comment findings, or when the owner asks to audit or cut comments. Companions: technical-excellence (CLAIM convention), retro, adaptive-hardening.
+description: >-
+  Use when a vigil comment-audit reminder fires, when a retro hands over
+  comment findings, or when the owner asks to audit or cut comments.
 ---
 
 # comment-audit

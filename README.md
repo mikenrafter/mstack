@@ -73,6 +73,12 @@ The script tests check helper behavior, not whether the workflow improves softwa
 - For research, follow [BRIEF.md](research/BRIEF.md): date sources, grade evidence and mark unverified claims.
 - Keep changes focused and report the checks actually run. Run the helper-script tests when changing those scripts.
 
+### Writing a skill
+
+Every skill is model-invocable. Do not set `disable-model-invocation`.
+Write its description as conditions saying when to invoke it, because the
+model reads that description as a prose hook.
+
 ## License
 
 [MIT](LICENSE), copyright 2026 Tyler Slaughter. The license covers original material in this repository. Cited publications and third-party material retain their own rights.

@@ -1,13 +1,8 @@
 ---
 name: technical-excellence
 description: >-
-  Design and code standards for work that must stay correct: rich interfaces
-  (errors, reason, invariants, parity tests), cited claims with grep-able ids,
-  deep modules, a project lexicon with disciplined naming, type-level safety
-  (invalid states unrepresentable, monoids, exhaustive matching), and a
-  threat-model check on security. Use when designing an abstraction, writing or
-  reviewing code or comments, naming things, or judging a review finding.
-  Companions: test-quality (proving it), build-loop (the workflow).
+  Use when designing an abstraction, writing or reviewing code or comments,
+  naming things, or judging a review finding.
 ---
 
 # technical-excellence

@@ -1,6 +1,9 @@
 ---
 name: unslop
-description: Cut AI tells from writing. Applies to the top-level agent talking to the owner, to copy (see writing-copy), and to reviewers fixing comments. Subagents do not load it otherwise.
+description: >-
+  Use when writing replies to the owner, copy (see writing-copy), or review
+  fixes to comments. Subagents load it only when writing copy or fixing
+  comments as a reviewer.
 ---
 
 # Unslop

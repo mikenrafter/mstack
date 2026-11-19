@@ -1,6 +1,9 @@
 ---
 name: plain-writing
-description: Plain, direct writing voice (no undefined jargon, no throat-clearing, no showing off) for prose a person reads. Applies to the top-level agent talking to the owner, to copy (see writing-copy), and to reviewers fixing comments. Subagents do not load it otherwise.
+description: >-
+  Use when writing prose a person reads: replies to the owner, copy (see
+  writing-copy), or review fixes to comments. Subagents load it only when
+  writing copy or fixing comments as a reviewer.
 ---
 
 # Plain writing

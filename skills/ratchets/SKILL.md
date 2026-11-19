@@ -1,6 +1,9 @@
 ---
 name: ratchets
-description: Turn a rule into a check that only gets stricter (a baseline of existing violations that can shrink but never grow), and use the same pattern to get the operator using a new tool or practice (default on, logged overrides, visible counts, stages that only rise). Use when a review comment or retro finding should never recur, when adding a lint rule to a codebase with many existing violations, when rolling out a new tool, skill or habit, or when the owner says ratchet. Companions: retro (finds what to ratchet), comment-audit, pr-stacks, adaptive-hardening.
+description: >-
+  Use when a review comment or retro finding should never recur, when adding a
+  lint rule to a codebase with many existing violations, when rolling out a
+  new tool, skill or habit, or when the owner says ratchet.
 ---
 
 # ratchets

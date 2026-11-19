@@ -1,6 +1,9 @@
 ---
 name: tailcook
-description: Receive files from the owner over Tailscale into a local directory. Use when the user needs to send a file larger than the harness upload limit, or a file from their phone or another machine.
+description: >-
+  Use when the user needs to send a file larger than the harness upload limit,
+  or a file from their phone or another machine, over Tailscale into a local
+  directory.
 ---
 
 # Receive files over Tailscale

@@ -1,6 +1,10 @@
 ---
 name: adaptive-hardening
-description: Choose and run bounded periodic code or test audits using risk, audit history, and an explicit spend budget. Use when the owner asks for periodic hardening or to spend spare capacity on audit work; do not add audits to every ordinary coding task.
+description: >-
+  Use when the owner asks for periodic hardening or to spend spare capacity on
+  audit work, when a vigil review or comment-audit reminder fires, or at a
+  phase boundary with spare budget. Do not add audits to every ordinary coding
+  task.
 ---
 
 # Adaptive hardening
