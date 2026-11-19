@@ -27,6 +27,14 @@ are.
 
 When unsure, call it one-way.
 
+Data changes are where the label needs the most care. A migration of any
+kind leans one-way, but not always: an additive column that old code
+ignores, with a down migration and no backfill, can be two-way; a backfill
+that overwrites values cannot, even with a down migration, because rows
+written after the deploy are lost on the way back. Name the nuance; never
+let the label stand alone (§5).
+
+
 ## 2. The stack plan
 
 Written at the end of the grill (`question-everything` §6), inside the spec:
@@ -119,14 +127,70 @@ question in the Review check.
 
 ## 5. PR body
 
-Every PR body carries two lines (from Matt Pocock's `pr` skill):
+Order the body like a README (`readme` §1): the person and the why first,
+then the agent's and the reviewer's technical detail, collapsed. A reader
+who stops after the first screen knows what changes, why, whether it can be
+undone, and what is not done.
 
-```
-Door: two-way | one-way (why)
-Blast radius: <one word: none, ui, data, api, auth, build>
-```
+**Project template first.** Before drafting, look for the project's own PR
+template (`.github/PULL_REQUEST_TEMPLATE.md`, `.github/PULL_REQUEST_TEMPLATE/`,
+`docs/pull_request_template.md`, `PULL_REQUEST_TEMPLATE.md`) and rules in
+`CONTRIBUTING`. When one exists, its headings, checkboxes and order win:
+fill every section it asks for, put each part below under the heading that
+fits, and add what is left at the end. Never delete a template's checkbox;
+leave it unticked and say why. Record per-project PR rules in
+`<project>.research/pr-template.md` when they go beyond the template (the
+edge project's `RULES.md` is an example).
 
-Plus the stack position (`Stack: 3 of 5, after #41`) and a **Review check**:
+**Door label.** Every PR is labelled `door: one-way` or `door: two-way`.
+Apply it as a GitHub label in the owner's repos (create the label if it is
+missing); in a repo where you cannot add labels, the Door line below
+carries it.
+
+Open, not collapsed:
+
+1. **Header lines.**
+   ```
+   Door: one-way
+   Blast radius: <one word: none, ui, data, api, auth, build>
+   Stack: 3 of 5, after #41
+   ```
+2. **What it does**, in plain words: what people see or what changes for
+   them. Then **why**, in one to three short paragraphs: the problem, what it
+   costs, why this approach over the simpler one.
+3. **Why this door.** Two to five sentences, never just the label: what a
+   revert undoes and what it cannot; stored, exported or sent data the PR
+   touches; the nuance when the label is close (§1), such as a migration
+   that is additive or a down migration that loses rows written meanwhile;
+   and how to roll back in practice.
+4. **Known limits**, with file:line.
+5. **Questions for reviewers**, if any.
+
+Collapsed (`<details>`), in this order:
+
+6. **Media**, one `<details>` per item, for UI changes. Prefer an image or GIF
+   to a paragraph.
+7. **Review check** (below).
+8. **New terms**, when the project has a lexicon (`residual/lexicon.csv`,
+   `GLOSSARY.md`, `CONTEXT.md`) and the PR adds or renames a term: per term,
+   its scenario table (`question-everything`: five to seven sentences, one
+   column per candidate name, "is this how the owner talks"), the chosen name
+   and the avoid entries. A PR that adds a term without one is not ready.
+9. **Decisions**: ADRs added or touched, one line each.
+10. **Change size**: files and lines added and removed by area (product code,
+    tests, docs, tools, generated), with a total row; for a stacked PR also
+    this section alone, with a link to its own diff.
+11. **Tests**: what ran and the counts, and what is not claimed.
+12. **Provenance**, in repos that welcome AI work (check `CONTRIBUTING`; ask
+    the owner the first time): who wrote which parts and every review round
+    with the reviewer model in full, its verdict and scores
+    (`build-loop` `references/handoff.md`).
+
+When the PR head changes, refresh the change size, the test counts, and
+each Review check Hint link and Answer.
+
+### Review check
+
 10 questions in four levels of `<details>`, all collapsed by default:
 
 1. the whole set, opening with: "If you can answer these at 80% or better
@@ -157,5 +221,3 @@ you have probably reviewed it well enough.
 </details>
 </details>
 ```
-
-When the PR head changes, recheck each Hint link and Answer against it.
