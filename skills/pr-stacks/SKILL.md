@@ -125,6 +125,25 @@ missing test name, or a PR body that hid the point. Fix those, then explain.
 Record the owner's answer, or the fix a wrong answer led to, under that
 question in the Review check.
 
+## 4a. Show the journey (owner, 2026-11-19)
+
+Reviewers learn more from how a design was reached than from a polished
+result. Be candid about the struggle; do not hide it.
+
+- **Do not squash** a branch's history to look clean, and do not rewrite
+  commits to hide dead ends. Each commit says what changed and why. Fixups
+  from review stay as their own commits.
+- **Extracting from a fork or pilot**: the upstream branch gets new commits,
+  so the story lives in the PR body. Cite the donor commits, pilot branches
+  and mock-up versions by SHA or link (§5, items 3 and 11).
+- **Keep the record while you work**, not at PR time: per feature, a journey
+  file in the research directory (`<project>.research/journey/<feature>.md`)
+  that lists each mock-up version, pilot, review round, owner decision and
+  dropped option with its reason, as it happens. Mock-up `PROVENANCE.md`
+  files and decision logs feed it.
+- Perfect is not the bar for a commit message or an intermediate state.
+  The reasoning behind each decision is.
+
 ## 5. PR body
 
 Order the body like a README (`readme` §1): the person and the why first,
@@ -158,30 +177,40 @@ Open, not collapsed:
 2. **What it does**, in plain words: what people see or what changes for
    them. Then **why**, in one to three short paragraphs: the problem, what it
    costs, why this approach over the simpler one.
-3. **Why this door.** Two to five sentences, never just the label: what a
+3. **How we got here**, open, three to eight lines: the path to this
+   design, not just the result. Name the mock-up versions, pilots and
+   earlier attempts by link or SHA, what each one taught, the dead ends and
+   why they were dropped, and the owner corrections that changed course.
+   Full detail goes in the collapsed Journey section (§5, item 11).
+4. **Why this door.** Two to five sentences, never just the label: what a
    revert undoes and what it cannot; stored, exported or sent data the PR
    touches; the nuance when the label is close (§1), such as a migration
    that is additive or a down migration that loses rows written meanwhile;
    and how to roll back in practice.
-4. **Known limits**, with file:line.
-5. **Questions for reviewers**, if any.
+5. **Known limits**, with file:line.
+6. **Questions for reviewers**, if any.
 
 Collapsed (`<details>`), in this order:
 
-6. **Media**, one `<details>` per item, for UI changes. Prefer an image or GIF
+7. **Media**, one `<details>` per item, for UI changes. Prefer an image or GIF
    to a paragraph.
-7. **Review check** (below).
-8. **New terms**, when the project has a lexicon (`residual/lexicon.csv`,
+8. **Review check** (below).
+9. **New terms**, when the project has a lexicon (`residual/lexicon.csv`,
    `GLOSSARY.md`, `CONTEXT.md`) and the PR adds or renames a term: per term,
    its scenario table (`question-everything`: five to seven sentences, one
    column per candidate name, "is this how the owner talks"), the chosen name
    and the avoid entries. A PR that adds a term without one is not ready.
-9. **Decisions**: ADRs added or touched, one line each.
-10. **Change size**: files and lines added and removed by area (product code,
+10. **Decisions**: ADRs added or touched, one line each.
+11. **Journey**: every step that led here, oldest first: mock-up versions
+    and what changed in each, pilots (branch and SHA) and what they showed,
+    review findings that changed the design, rejected options with the
+    reason, and the owner's decisions with dates. Link the pilot branches and
+    mock-ups where reviewers can open them.
+12. **Change size**: files and lines added and removed by area (product code,
     tests, docs, tools, generated), with a total row; for a stacked PR also
     this section alone, with a link to its own diff.
-11. **Tests**: what ran and the counts, and what is not claimed.
-12. **Provenance**, in repos that welcome AI work (check `CONTRIBUTING`; ask
+13. **Tests**: what ran and the counts, and what is not claimed.
+14. **Provenance**, in repos that welcome AI work (check `CONTRIBUTING`; ask
     the owner the first time): who wrote which parts and every review round
     with the reviewer model in full, its verdict and scores
     (`build-loop` `references/handoff.md`).
