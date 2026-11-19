@@ -55,8 +55,10 @@ def advice(tokens, session_id):
 def how_to_compact(session_id):
     thread = os.environ.get("T3CODE_THREAD_ID")
     if thread:
-        return (f"Then send `/compact next: <what comes next>` to your own thread with "
-                f"`t3_thread_send` (threadId {thread}, mode queue) and end the turn.")
+        return (f"Then queue two messages to your own thread with `t3_thread_send` "
+                f"(threadId {thread}, mode queue): first `/compact next: <what comes next>`, "
+                "then a resume message such as `Resume: read <state file>, then <step>` "
+                "(the compaction alone does not wake you). End the turn.")
     return (f"Then run `uw-agent compact ask {session_id} --reason \"<boundary "
             "and what comes next>\"`.")
 

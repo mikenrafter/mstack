@@ -24,11 +24,17 @@ are active and you cannot tell which is yours, ask the user.
 
 ## Compact
 
-In T3 Code, compact yourself natively: send `/compact` to your own thread with
-the T3 tool `t3_thread_send`, `mode: "queue"`. Your thread id is in
-`$T3CODE_THREAD_ID`. Text after the command steers the summary:
-`/compact next: <first step after the boundary>`. The command runs as soon as
-your turn ends, so end the turn after sending it.
+In T3 Code, compact yourself natively with TWO queued messages to your own
+thread (T3 tool `t3_thread_send`, `mode: "queue"`, thread id in
+`$T3CODE_THREAD_ID`), then end the turn:
+
+1. `/compact next: <first step after the boundary>`. Text after the command
+   steers the summary.
+2. A resume message, e.g. `Resume: read <state file>, then <first step>`.
+
+The compaction runs when your turn ends, but it does not start a new turn. Without
+the second message the session stays idle until someone writes to it. Send
+both, in that order, before ending the turn.
 
 Outside T3 Code, ask usagewindow instead. Delivery waits for its next policy
 pass, so expect a delay:

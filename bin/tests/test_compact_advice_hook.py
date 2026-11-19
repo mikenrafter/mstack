@@ -51,6 +51,9 @@ class CompactAdvice(unittest.TestCase):
         self.env["T3CODE_THREAD_ID"] = "thread-9"
         out = self.run_hook([line("assistant", 520_000)])
         self.assertIn("t3_thread_send` (threadId thread-9", out)
+        # catches: advice that queues only /compact, which leaves the session idle.
+        self.assertIn("/compact next:", out)
+        self.assertIn("resume message", out)
         self.assertNotIn("uw-agent", out)
 
     def test_subagent_messages_do_not_count(self):

@@ -41,9 +41,10 @@ Auto-compact cuts wherever the window fills, often mid-step, and the summary
 drops what it did not know mattered. Choose the moment yourself, at a phase
 boundary where every decision and open question is already in a file or the
 ledger: the end of the grill (§1b step 5), after the spec and
-stack plan, after a PR merges, between review rounds. Then send `/compact next: <what comes next>` to your own thread with
-`t3_thread_send` (`threadId` from `$T3CODE_THREAD_ID`, `mode: "queue"`) and
-end the turn; outside T3, `uw-agent compact ask` (`uw-agent` skill).
+stack plan, after a PR merges, between review rounds. Then queue two messages to your own thread with
+`t3_thread_send` (`threadId` from `$T3CODE_THREAD_ID`, `mode: "queue"`):
+`/compact next: <what comes next>`, then a resume message (`Resume: read <state
+file>, then <step>`), since the compaction alone does not wake you. End the turn; outside T3, `uw-agent compact ask` (`uw-agent` skill).
 Above 500k tokens a hook (`bin/compact-advice-hook`) reminds you with your
 session id. Subagent, Sol and peer runs keep going through a compaction
 and report back as usual, so they are no reason to wait. Auto-compact stays on as a backstop

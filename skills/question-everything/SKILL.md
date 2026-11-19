@@ -188,6 +188,6 @@ Before anything else, write down:
 
 Every decision must now live in a file. This is the best moment to compact:
 nothing important exists only in the conversation. If the session is large,
-compact yourself (send `/compact next: <first ticket>` to your own thread
-with `t3_thread_send`; see the `uw-agent` skill) and reread this skill and
+compact yourself (queue `/compact next: <first ticket>` and then a resume
+message to your own thread with `t3_thread_send`; see the `uw-agent` skill) and reread this skill and
 build-loop after.
