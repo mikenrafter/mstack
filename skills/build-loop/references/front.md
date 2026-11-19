@@ -4,15 +4,16 @@ Source: owner, 2026-11-18, after Matt Pocock's spec → tickets → compact →
 build flow (research/17). At session start, run `pr-stacks`
 `scripts/pr-size report` and show the owner any skipped size limits.
 
-## 1. Feature discussion, steps 1–3
+## 1. Feature discussion, steps 1-3
 
-1. **Simpler alternative.** Does a simpler way exist (do less, reuse, change
-   the requirement)?
-2. **Desires.** Their first-order desire (what they asked for), second-order
-   desire (why), and threat model (who can reach it, untrusted inputs, what it holds).
-3. **Debate Socratically.** Question assumptions and offer counter-cases and
-   cheaper options. Then write the agreed intent in 1-2 sentences: the review
-   brief's Intent.
+Follow `question-everything` §1, **Open with a position**, for these steps:
+
+1. **Simpler alternative.**
+2. **Desires and threat model.** Include who can reach it, untrusted inputs
+   and what it holds.
+3. **Debate.** Use §1's **Disagree with evidence** when answers conflict.
+
+Then write the agreed intent in 1-2 sentences: the review brief's Intent.
 
 ## 1b. Front sequence
 

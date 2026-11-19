@@ -1,14 +1,8 @@
 ---
 name: build-loop
 description: >-
-  Orchestrated red/green build with a scored cross-model review loop (Opus
-  orchestrates, Sonnet and Sol implement, Sol or Opus review, Fable decides
-  round 3) and triage of upstream review-bot comments. One working Claude
-  agent at a time; reviewers have their own cap of one; only the owner raises
-  it. Use for multi-phase features, or when the user says "build loop", "opus
-  loop" or "sol loop". Companions: question-everything, technical-excellence,
-  test-quality, vigil (manual-keepalive is the backup). After every
-  compaction, reread this skill and vigil before anything else.
+  Use when implementing multi-phase features, triaging upstream review-bot
+  comments, or when the user says "build loop", "opus loop" or "sol loop".
 ---
 
 # build-loop
@@ -91,8 +85,9 @@ Do this first, in order:
    reference (pilots may share a branch on request); the
    structural round starts fresh. Pilot rules: `references/scoping.md`. Until hardening,
    test the design, not the symptom; every implementer brief carries the 30-minute flag and "never vigil orchestrator mode".
-1–3. **Simpler alternative, desires and threat model, debate**; write the
-   agreed intent in 1-2 sentences (the review brief's Intent).
+1-3. Follow `question-everything` §1, **Open with a position**, for the simpler
+   alternative, desires and threat model, and **Debate**. Write the agreed
+   intent in 1-2 sentences (the review brief's Intent).
 4. **Front sequence (§1b)**: grill → prototype or mockup → pilot → spec and
    stack plan → compaction point; then §3–§6 per stack PR.
 

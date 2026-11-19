@@ -1,15 +1,8 @@
 ---
 name: question-everything
 description: >-
-  Interrogate a feature before any implementation code exists, so defects are
-  caught cheaply in the spec and red tests instead of in review rounds. Covers
-  the designer interview (high-fidelity detail, push back), the questions to
-  ask the user and yourself (which checklists apply, what is reusable, what
-  recurs), turning recurring findings into project checklists early, and a
-  bounded cross-model spec review (spec + red tests, up to two rounds) before
-  green. Use at the start of any feature, before writing a spec, before the
-  green phase, and whenever review findings start to repeat. Companions:
-  build-loop (the workflow), technical-excellence, test-quality.
+  Use when starting a feature, before writing a spec, before the green phase,
+  or whenever review findings start to repeat.
 ---
 
 # question-everything
@@ -34,11 +27,34 @@ The user is the designer. Get high-fidelity detail before anyone writes code.
 Push back: an answer that leaves a state, edge or failure undefined is not an
 answer yet.
 
-**Format.** Ask in rounds. Each round asks every question whose
-prerequisites are settled, numbered, each with your recommended answer, so
-the user can answer in a word. Find facts yourself (grep, read, or a fresh
+**Open with a position.** Before the first round, read the code, then send
+one message: what you think we're building, in two sentences; the design you
+would build and why; the strongest objection to that design and to the
+request as asked; and the simplest alternative (do less, reuse, change the
+requirement). Ask what the owner wants it for, and what that unlocks, before
+any detail question. Your questions follow from your proposal; they do not
+replace it.
+
+**Format.** Ask in rounds. Each round opens with "What I think we're
+building", five lines at most: the intent, the decisions so far (each marked
+owner or mine), and your top open concern. The owner's correction outranks
+any answer. Then ask every question whose prerequisites are settled,
+numbered, each with your recommended answer and its confidence (high,
+medium, low), so the user can answer in a word. For anything below high,
+say what would change it. Find facts yourself (grep, read, or a fresh
 subagent); never ask the user what the code can tell you. Decisions are the
 user's.
+
+**Disagree with evidence.** When an answer conflicts with the code, a doc,
+the glossary, an ADR or an earlier answer, say so in your next message: quote
+the conflict, give your recommendation, and ask the owner to choose. Say it
+once. Push back harder on thin answers when the stakes are higher. No is an
+acceptable answer from you; prefer candour to agreement. Change your
+position only for new information or a stated preference, and name which
+one moved you ("you told me X, which I did not know"). Insistence alone is
+neither. If the owner keeps their answer, it is their decision: record it in
+the spec with your objection beside it, and do not say you were persuaded.
+Do not argue taste, scope or risk appetite twice; those are the owner's.
 
 **Shorthand: "zoom" and "wide".** When the user answers a question and adds
 "zoom" (or "zoom Q3"), that question is the crux. Elaborate on it first:
