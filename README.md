@@ -45,7 +45,7 @@ Copy an entire skill directory if you install it into your agent's skill directo
 
 ## Helper scripts
 
-The build-loop scripts use Python 3 and its standard library. Git is needed for ledger operations on repositories; live bot triage also needs an authenticated GitHub CLI (`gh`). `review-ledger` maintains review state and briefs; `bot-triage` tracks review-bot findings. Inspect their commands with:
+The build-loop scripts use Python 3 and its standard library. Git is needed for ledger operations on repositories; live bot triage also needs an authenticated GitHub CLI (`gh`). `review-ledger` maintains review state and briefs; `bot-triage` tracks review-bot findings. `ui-brief-check` fails a UI brief that names no mock-up, original screen or prior pilot. Inspect their commands with:
 
 ```sh
 python3 skills/build-loop/scripts/review-ledger --help

@@ -39,8 +39,9 @@ This file is a router; detail lives in `references/`. Section numbers are stable
 | `references/budget.md` | On budget advice, a usage limit or reset, before a second agent, on a vigil `item overdue` (§8–§10). |
 | `references/reviewers.md` | Before a contribution to a project you do not own, before re-scoping a PR after review. |
 | `references/handoff.md` | Before a PR body or the final report (§11–§12). |
+| `references/ui.md` | Before any brief that creates or changes a screen, widget, chart or page; before showing the owner UI screenshots or a UI build. |
 
-Scripts in `scripts/`: `review-ledger` (§6 ledger and briefs), `bot-triage`
+Scripts in `scripts/`: `review-ledger` (§6 ledger and briefs), `ui-brief-check` (UI briefs), `bot-triage`
 (blocks a push while a bot thread is unanswered), `transcript-check` (reports
 agent-cap and keepalive breaks in session transcripts).
 
@@ -54,6 +55,12 @@ disagreement. Implementers start work immediately. Roughly five minutes in,
 the orchestrator reads 1–5 relevant files, asks about ambiguities and 2–3
 work-grounded questions, hears the answers, then pushes back and settles the
 direction. Short batches get this check at handoff. Details: `dialogue.md`.
+
+**UI briefs inherit before they build** (`references/ui.md`). A brief that touches a screen
+names the signed-off mock-up, the original screen and every prior pilot or landed feature it
+inherits from, by path or SHA, and `scripts/ui-brief-check <brief>` passes before you delegate.
+No UI screenshots or builds reach the owner until a different model has run a fidelity pass
+(screenshot pairs, mock-up next to build).
 
 Every brief states most-important behavior, invariants, priority concerns, lower
 priorities and evidence. Preserve serious defects regardless of priority. Use

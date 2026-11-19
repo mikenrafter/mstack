@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Check a UI implementer brief before delegating (build-loop references/ui.md).
+
+  ui-brief-check BRIEF.md
+
+Exit 1 unless the brief has a `## UI inheritance` table naming a signed-off mock-up,
+the original screen and prior pilots/landed features (each with a path or SHA, or
+`none found: <search>`), and a `## Fidelity check` section asking for screenshot pairs.
+"""
+import re
+import sys
+from pathlib import Path
+
+ROWS = {
+    "mock-up": re.compile(r"mock-?up", re.I),
+    "original screen": re.compile(r"original", re.I),
+    "prior pilot / landed feature": re.compile(r"prior|pilot|landed", re.I),
+}
+REF = re.compile(r"[\w./-]+\.(html|dart|tsx?|jsx?|css|swift|kt|md)\b|\b[0-9a-f]{7,40}\b|none found:", re.I)
+
+
+def section(text, title):
+    m = re.search(rf"^##\s+{title}\s*$(.*?)(?=^##\s|\Z)", text, re.I | re.M | re.S)
+    return m.group(1) if m else None
+
+
+def main(argv):
+    if len(argv) != 2:
+        print(__doc__.strip())
+        return 2
+    text = Path(argv[1]).read_text(encoding="utf-8")
+    errors = []
+    inh = section(text, "UI inheritance")
+    if inh is None:
+        errors.append("missing '## UI inheritance' section")
+    else:
+        rows = [r for r in inh.splitlines() if r.strip().startswith("|") and not re.match(r"^\|\s*-", r.strip())]
+        for name, pat in ROWS.items():
+            hits = [r for r in rows if pat.search(r.split("|")[1] if r.count("|") > 2 else r)]
+            if not hits:
+                errors.append(f"no '{name}' row")
+            elif not any(REF.search(r) for r in hits):
+                errors.append(f"'{name}' row has no path, SHA or 'none found: <search>'")
+            elif any(len([c for c in r.split("|") if c.strip()]) < 3 for r in hits):
+                errors.append(f"'{name}' row is missing 'Take from it'")
+    fid = section(text, "Fidelity check")
+    if fid is None or not re.search(r"screenshot", fid, re.I):
+        errors.append("missing '## Fidelity check' asking for mock-up | build screenshot pairs")
+    for e in errors:
+        print(f"ui-brief-check: {e}")
+    if not errors:
+        print("ui-brief-check: ok")
+    return 1 if errors else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

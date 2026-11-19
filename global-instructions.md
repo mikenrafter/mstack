@@ -15,6 +15,10 @@ that file; a local edit here is overwritten on the next apply.
   `writing-copy` skill.
 - Subagents do not load `unslop` or `plain-writing` unless they write copy, or
   a reviewer is fixing comments.
+- UI work inherits before it builds: a brief for any screen names the signed-off
+  mock-up, the original screen and every prior pilot or landed feature it reuses,
+  by path or SHA, and the build is compared to the mock-up in screenshot pairs
+  before the owner sees it (build-loop `references/ui.md`, `ui-brief-check`).
 - Mock-ups and inline HTML: show them with the T3 Code tools (`html_preview`,
   then `html_render`), not claude.ai Artifacts (owner, 2026-11-15). Keep the
   HTML file in the project's research directory.
