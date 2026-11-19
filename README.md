@@ -75,6 +75,18 @@ The script tests check helper behavior, not whether the workflow improves softwa
 
 ### Writing a skill
 
+Almost every skill I use lives here. Write a new skill in `skills/` and
+install it from this repository; edit the copy here, never an installed copy
+(`~/.claude/skills`, `~/.codex/skills`), which the next install overwrites.
+The one exception is a skill that documents a tool and has to change in step
+with it; that skill lives in the tool's own repository:
+
+| Skill | Lives in |
+|---|---|
+| `qex` | the qex repository |
+| `usagewindow-status` | usagewindow |
+| `babeltele` | babeltele |
+
 Every skill is model-invocable. Do not set `disable-model-invocation`.
 Write its description as conditions saying when to invoke it, because the
 model reads that description as a prose hook.
