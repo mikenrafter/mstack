@@ -15,10 +15,10 @@ that file; a local edit here is overwritten on the next apply.
   `writing-copy` skill.
 - Subagents do not load `unslop` or `plain-writing` unless they write copy, or
   a reviewer is fixing comments.
-- Show the journey, not just the result: never squash or polish away
-  history; keep a per-feature journey file (mock-up versions, pilots, owner
-  decisions, dead ends and why) and tell that story in every PR body
-  (`pr-stacks` §4a).
+- Show the journey, not just the result: keep a per-feature journey file
+  (mock-up versions, pilots, owner decisions, dead ends and why) and tell
+  that story in every PR body, with mock-ups as PNG/GIF (`pr-stacks` §4a).
+  Reworking commits for legibility is fine.
 - UI work inherits before it builds: a brief for any screen names the signed-off
   mock-up, the original screen and every prior pilot or landed feature it reuses,
   by path or SHA, and the build is compared to the mock-up in screenshot pairs

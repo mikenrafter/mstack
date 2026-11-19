@@ -128,21 +128,27 @@ question in the Review check.
 ## 4a. Show the journey (owner, 2026-11-19)
 
 Reviewers learn more from how a design was reached than from a polished
-result. Be candid about the struggle; do not hide it.
+result. Be explicit about the journey in every PR.
 
-- **Do not squash** a branch's history to look clean, and do not rewrite
-  commits to hide dead ends. Each commit says what changed and why. Fixups
-  from review stay as their own commits.
-- **Extracting from a fork or pilot**: the upstream branch gets new commits,
-  so the story lives in the PR body. Cite the donor commits, pilot branches
-  and mock-up versions by SHA or link (§5, items 3 and 11).
+- **Commits.** Reworking commits so a reviewer can follow them is good:
+  keep doing it. What must not happen is the journey disappearing; it lives
+  in the journey file and the PR body even when the commits are reworked.
+  Where the fork already has clean history for the change, carry those
+  commits over as they are.
 - **Keep the record while you work**, not at PR time: per feature, a journey
   file in the research directory (`<project>.research/journey/<feature>.md`)
   that lists each mock-up version, pilot, review round, owner decision and
   dropped option with its reason, as it happens. Mock-up `PROVENANCE.md`
   files and decision logs feed it.
-- Perfect is not the bar for a commit message or an intermediate state.
-  The reasoning behind each decision is.
+- **In the PR body**: an open "How we got here" and a collapsed Journey
+  (§5, items 3 and 11), citing donor commits, pilot branches and mock-up
+  versions by SHA or link.
+- **Mock-ups as images.** Show each mock-up version that matters as a PNG
+  or GIF in the PR body, so reviewers never have to open HTML to follow the
+  story. Host the images, and the HTML mock-ups for reference, on a sidecar
+  branch of the fork (edge: `journey-assets` on the owner's fork,
+  `<feature>/` per feature), and link the images by commit SHA so they
+  never change under the PR.
 
 ## 5. PR body
 
