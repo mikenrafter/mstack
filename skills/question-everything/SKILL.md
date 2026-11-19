@@ -38,8 +38,14 @@ answer yet.
 prerequisites are settled, numbered, each with your recommended answer, so
 the user can answer in a word. Find facts yourself (grep, read, or a fresh
 subagent); never ask the user what the code can tell you. Decisions are the
-user's. At a crux the user may say "one at a time"; go one question per
-message until they widen it again.
+user's.
+
+**Shorthand: "zoom" and "wide".** When the user answers a question and adds
+"zoom" (or "zoom Q3"), that question is the crux. Elaborate on it first:
+what rides on it, the options, what the code says, and your own position.
+Then ask one question per message on that topic, each building on the last
+answer, until the user says "wide". "Wide" returns to numbered rounds over
+everything still open, starting with what the zoom uncovered.
 
 **When a round comes back all "yes".** Your defaults on that topic are right.
 Move on: look for what has not been explored yet (other states, edges,
