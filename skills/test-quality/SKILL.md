@@ -1,17 +1,8 @@
 ---
 name: test-quality
 description: >-
-  What makes a test worth keeping, and the catalog of ways tests pass while
-  proving nothing. Every test states its WHY (and CLAIM id); co-located tests;
-  monoid laws, model-based state-machine properties, oracles, reviewed goldens,
-  parity tests for mated interfaces; cheap manual mutation checks and periodic
-  mutation tooling; explicit tautology hunting; plus the full failure-mode
-  catalog with detection hints and fixes (tautology, over-mocking, asserting
-  current behavior, happy-path only, host-timezone dependence, skipped
-  fixtures, source-grep guards, wrong-layer pins, shared-table round trips).
   Use when writing tests, reviewing a test diff, fixing a red test, auditing a
-  suite, or when a subagent (rg-implement or build-loop red phase) hands back
-  tests. Companions: technical-excellence, build-loop.
+  suite, or when a subagent in the build-loop red phase hands back tests.
 ---
 
 # Test quality

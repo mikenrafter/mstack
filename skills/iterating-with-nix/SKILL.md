@@ -1,6 +1,11 @@
 ---
 name: iterating-with-nix
-description: Use when iterating on Nix builds (nix build / nixos-rebuild while fixing failures, first build of a new host config), when changing another repo this flake consumes (local path: input loop), or when adding an input for a repo with no remote yet.
+description: >-
+  Use when iterating on Nix builds (nix build / nixos-rebuild while fixing
+  failures, first build of a new host config), when changing another repo this
+  flake consumes (local path: input loop), when testing an unpublished or
+  unpushed repo as a flake input, or when adding an input for a repo with no
+  remote yet.
 ---
 
 # Iterating with Nix
@@ -80,8 +85,32 @@ push and an API-backed relock per try, so iteration is faster.
    `nix-scout update all` again.
 
 `path:` inputs are for testing only; never commit them.
-For a one-off build, `--override-input` (skill `nix-test-rebuild-override`)
-does the same without editing `flake.nix`.
+
+## Testing an unpublished or unpushed input once
+
+Use `--override-input` for a one-off consumer build without editing
+`flake.nix`:
+
+1. Unless instructed otherwise, fully build the producer flake first.
+   `nix flake check` alone is not enough.
+2. Stage new files in the producer with `git add`. Already-tracked files may
+   stay dirty; untracked files are invisible to the input until staged.
+3. Pass `--impure --override-input <input-name> path:<absolute-path-to-producer>`
+   to the consumer build. The input name and flake ref are separate arguments;
+   use an absolute path.
+
+```sh
+nix build .#hostConfig --impure --override-input niri path:/absolute/path/to/niri
+nixos-rebuild build --flake .#host --impure --override-input niri path:/absolute/path/to/niri
+```
+
+For a producer with no remote yet, seed its lock entry as below, then point
+the consumer input at its intended future source and build with the override.
+The placeholder is only for creating a valid lock entry.
+
+Keep `--override-input` and `--impure` out of committed build scripts. After
+the producer is pushed or published, drop the override and run
+`nix flake update <input-name>` so the committed lock points at the real commit.
 
 ## Bootstrapping an input for a repo with no remote yet
 
