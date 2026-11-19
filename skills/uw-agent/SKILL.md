@@ -48,6 +48,10 @@ Either way, do not claim the compaction happened until you see it: a
 `/compact` record in your context, or a status message like
 `compacted from X to Y tokens` (see the usagewindow-status skill).
 
+Runs you delegated keep going through a compaction and stay reachable. Message one
+by its child thread id (`thread:delegated-task:…`, from `t3_thread_list` with
+`includeSubagents: true`), not its task id; "not found" means the wrong id.
+
 usagewindow still compacts sessions that sit idle: at five sixths of the
 cache TTL it reads from your transcript (50 minutes on a 1 hour cache), so a
 long idle session is summarised before its cache expires.

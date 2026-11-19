@@ -47,6 +47,10 @@ stack plan, after a PR merges, between review rounds. Then queue two messages to
 file>, then <step>`), since the compaction alone does not wake you. End the turn; outside T3, `uw-agent compact ask` (`uw-agent` skill).
 Above 500k tokens a hook (`bin/compact-advice-hook`) reminds you with your
 session id. Subagent, Sol and peer runs keep going through a compaction
-and report back as usual, so they are no reason to wait. Auto-compact stays on as a backstop
+and report back as usual, so they are no reason to wait. They stay reachable too: to steer one, send to its
+child thread id (`thread:delegated-task:…`), never the `delegate-task:…` task id, which `t3_thread_send`
+rejects as "not found". Write each child's thread id into the state file at launch; if it is missing, find it with
+`t3_thread_list` (`includeSubagents: true`, `titleContains: <title>`). A "not found" means a wrong id, not a lost child.
+Auto-compact stays on as a backstop
 only. After any compaction, reread SKILL.md (its header rule).
 
