@@ -2,6 +2,7 @@
 
 Spec: phoe-nix.research/review-behavior/dialogue-spec.md, Adaptive maintenance CLI.
 """
+import hashlib
 import json
 import os
 import subprocess
@@ -77,6 +78,7 @@ class Maintenance(unittest.TestCase):
 
     def test_unrepresentable_utc_time_is_unavailable_not_not_due(self):
         # WHY CLAIM(maintenance-state): probe exceptions must not use successful-false exit 1.
+        # catches: returning not-due when a stored timestamp cannot be represented in UTC.
         self.ok(self.call("complete", "--concern", "test-effectiveness", "--evidence", "Checked time."))
         state_file = next(self.state.glob("*.json"))
         state = json.loads(state_file.read_text())
@@ -150,10 +152,35 @@ class Maintenance(unittest.TestCase):
         fake = self.root / "fake-vigil"
         fake.write_text("#!/usr/bin/env python3\nimport json, os, sys\nfrom pathlib import Path\n"
                         "with Path(os.environ['ARGV_CAPTURE']).open('a') as output:\n"
-                        "    output.write(json.dumps(sys.argv[1:]) + '\\n')\nprint('fixture-reminder')\n")
+                        "    output.write(json.dumps(sys.argv[1:]) + '\\n')\n"
+                        "path = Path(os.environ['REMINDERS_STATE'])\n"
+                        "state = json.loads(path.read_text()) if path.exists() else {}\n"
+                        "action, ident = sys.argv[2:4]\n"
+                        "failure = path.with_suffix('.failed')\n"
+                        "if action == 'rm' and ident == os.environ.get('FAIL_REMOVAL') and not failure.exists():\n"
+                        "    failure.touch()\n"
+                        "    print('temporary removal failure', file=sys.stderr)\n    sys.exit(1)\n"
+                        "if action == 'add':\n"
+                        "    if ident in state:\n"
+                        "        print('already exists', file=sys.stderr)\n        sys.exit(1)\n"
+                        "    state[ident] = sys.argv[1:]\n"
+                        "elif action == 'rm':\n"
+                        "    if ident not in state:\n"
+                        "        print('no reminder named ' + ident, file=sys.stderr)\n        sys.exit(1)\n"
+                        "    del state[ident]\n"
+                        "path.write_text(json.dumps(state))\nprint('fixture-reminder')\n")
         fake.chmod(0o755)
-        self.env.update(VIGIL_BIN=str(fake), ARGV_CAPTURE=str(capture))
+        self.env.update(VIGIL_BIN=str(fake), ARGV_CAPTURE=str(capture),
+                        REMINDERS_STATE=str(self.root / "reminders.json"))
         return capture
+
+    def reminders(self):
+        return json.loads(Path(self.env["REMINDERS_STATE"]).read_text())
+
+    def reminder_scopes(self, args):
+        start = args.index("--scope") + 1
+        end = next(index for index in range(start, len(args)) if args[index].startswith("--"))
+        return args[start:end]
 
     def test_logical_project_members_share_completion_context_and_rotation(self):
         # why: CLAIM(maintenance-membership) a product's repositories have one audit history.
@@ -226,39 +253,129 @@ class Maintenance(unittest.TestCase):
         self.ok(self.call("ensure"))
         calls = [json.loads(line) for line in capture.read_text().splitlines()]
         additions = [args for args in calls if args[:2] == ["remind", "add"]]
-        self.assertEqual(len(additions), 1)
+        self.assertEqual(len(additions), 2)
         self.assertIn(first["id"], additions[0])
+        key = hashlib.sha256(str(self.project).encode()).hexdigest()[:24]
+        self.assertEqual(set(self.reminders()), {"review-" + key, "comment-audit-" + key})
+        for args in additions:
+            self.assertEqual(self.reminder_scopes(args), [str(self.project)])
+            self.assertEqual(args[args.index("--tz") + 1], "America/Denver")
+            self.assertEqual(args[args.index("--period") + 1], "week")
+        comment = self.reminders()["comment-audit-" + key]
+        review = self.reminders()["review-" + key]
+        self.assertEqual(review[review.index("--days") + 1], "mon,tue,wed,thu,fri,sat,sun")
+        self.assertEqual(review[review.index("--cache-s") + 1], "3600")
+        self.assertEqual(review[review.index("--timeout-s") + 1], "4")
+        self.assertNotIn("--window", review)
+        self.assertEqual(comment[comment.index("--days") + 1], "sat,sun")
+        self.assertEqual(comment[comment.index("--window") + 1], "09:00-21:00")
+        self.assertNotIn("--probe", comment)
+        self.assertEqual(comment[comment.index("--message") + 1],
+                         "A comment audit is due for this project. Load the comment-audit skill: "
+                         "files changed since the last audit (whole repo once a month). Report only; "
+                         "edits need the owner. Check headroom with adaptive-hardening; this reminder "
+                         "does not authorize paid work beyond lean. Then vigil remind done "
+                         "comment-audit-" + key + ". Snooze if busy.")
         companion = self.root / "firmware"
         companion.mkdir()
         self.ok(self.call("group", "--id", "edge", "--title", "Edge", "--repo", str(companion)))
         self.ok(self.call("register", "--title", "Edge"))
         calls = [json.loads(line) for line in capture.read_text().splitlines()]
-        registration = [args for args in calls if args[:2] == ["remind", "add"]][-1]
-        self.assertIn(str(self.project), registration)
-        self.assertIn(str(companion), registration)
-        self.assertNotIn(str(self.root), registration)
+        registrations = [args for args in calls if args[:2] == ["remind", "add"]][-2:]
+        for registration in registrations:
+            self.assertEqual(self.reminder_scopes(registration), [str(self.project), str(companion)])
         # Grouping an already discovered repo must retire its former reminder,
         # after the replacement exists, so one product does not get two nudges.
-        old_removal = ["remind", "rm", first["id"]]
-        self.assertIn(old_removal, calls)
-        self.assertGreater(calls.index(old_removal), calls.index(registration))
+        for kind in ("review", "comment-audit"):
+            old_id = kind + "-" + key
+            old_removal = ["remind", "rm", old_id]
+            self.assertIn(old_removal, calls)
+            self.assertGreater(calls.index(old_removal), max(calls.index(args) for args in registrations))
+            self.assertNotIn(old_id, self.reminders())
+        self.assertEqual(len(self.reminders()), 2)
         self.ok(self.call("ensure", project=companion))
         repeated = [json.loads(line) for line in capture.read_text().splitlines()]
-        self.assertEqual(len([args for args in repeated if args[:2] == ["remind", "add"]]), 2)
+        self.assertEqual(len([args for args in repeated if args[:2] == ["remind", "add"]]), 4)
+
+    def test_refresh_migrates_old_receipt_and_keeps_both_ids_without_duplicates(self):
+        # WHY: CLAIM(maintenance-discovery) existing projects gain comment audits and keep stable ids.
+        # catches: accepting a review-only receipt, duplicating on refresh, or failing to refresh both scopes.
+        capture = self.fake_vigil()
+        first = json.loads(self.ok(self.call("ensure")))
+        receipt_path = next((self.state / "projects").glob("*.registration.json"))
+        receipt = json.loads(receipt_path.read_text())
+        receipt.pop("kinds", None)
+        receipt["version"] = 2
+        receipt_path.write_text(json.dumps(receipt))
+        comment_id = first["id"].replace("review-", "comment-audit-", 1)
+        path = Path(self.env["REMINDERS_STATE"])
+        path.write_text(json.dumps({first["id"]: self.reminders()[first["id"]]}))
+        self.ok(self.call("ensure"))
+        self.assertEqual(set(self.reminders()), {first["id"], comment_id})
+        research = self.root / "project.research"
+        research.mkdir()
+        self.ok(self.call("ensure"))
+        self.assertEqual(set(self.reminders()), {first["id"], comment_id})
+        for args in self.reminders().values():
+            self.assertEqual(self.reminder_scopes(args), [str(self.project), str(research)])
+        before = capture.read_text()
+        self.assertTrue(json.loads(self.ok(self.call("ensure")))["unchanged"])
+        self.assertEqual(capture.read_text(), before)
+
+    def test_split_scopes_match_for_both_kinds_and_retire_on_regroup(self):
+        # WHY: CLAIM(maintenance-scope) every session scope needs both reminders, including split ids.
+        # catches: dropping scopes above 16, using different suffixes, or leaving split member reminders.
+        self.fake_vigil()
+        self.init_git(self.project)
+        linked = []
+        for index in range(16):
+            worktree = self.root / f"linked-{index:02d}"
+            result = subprocess.run(["git", "-C", str(self.project), "worktree", "add", "-q",
+                                     "--detach", str(worktree)], capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            linked.append(str(worktree))
+        first = json.loads(self.ok(self.call("ensure")))
+        key = first["id"].removeprefix("review-")
+        expected = {kind + "-" + key + suffix for kind in ("review", "comment-audit") for suffix in ("", "-2")}
+        self.assertEqual(set(self.reminders()), expected)
+        for kind in ("review", "comment-audit"):
+            base = kind + "-" + key
+            self.assertEqual(self.reminder_scopes(self.reminders()[base]), [str(self.project), *linked[:15]])
+            self.assertEqual(self.reminder_scopes(self.reminders()[base + "-2"]), linked[15:])
+            if kind == "comment-audit":
+                self.assertIn("vigil remind done " + base + "-2.", self.reminders()[base + "-2"][-1])
+        self.ok(self.call("group", "--id", "edge", "--title", "Edge"))
+        self.ok(self.call("ensure"))
+        group_key = hashlib.sha256(b"project:edge").hexdigest()[:24]
+        self.assertEqual(set(self.reminders()),
+                         {kind + "-" + group_key + suffix for kind in ("review", "comment-audit") for suffix in ("", "-2")})
+        # Removing a linked checkout must retire both obsolete second chunks on refresh.
+        result = subprocess.run(["git", "-C", str(self.project), "worktree", "remove", linked[-1]], capture_output=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.ok(self.call("ensure"))
+        self.assertEqual(set(self.reminders()), {kind + "-" + group_key for kind in ("review", "comment-audit")})
 
     def test_retirement_retry_tolerates_an_already_removed_reminder(self):
         # why: CLAIM(maintenance-discovery) interrupted cleanup can leave a receipt after removal.
+        # catches: treating a removed review as fatal, or skipping comment cleanup when the group is unchanged.
         capture = self.fake_vigil()
-        self.ok(self.call("ensure"))
+        first = json.loads(self.ok(self.call("ensure")))
+        comment_id = first["id"].replace("review-", "comment-audit-", 1)
+        receipt = next((self.state / "projects").glob("*.registration.json"))
         self.ok(self.call("group", "--id", "edge", "--title", "Edge"))
-        fake = Path(self.env["VIGIL_BIN"])
-        fake.write_text("#!/usr/bin/env python3\nimport sys\n"
-                        "if sys.argv[1:3] == ['remind', 'rm']:\n"
-                        " print('no reminder named old', file=sys.stderr)\n sys.exit(1)\n"
-                        "print('registered')\n")
-        self.ok(self.call("ensure"))
-        # Successful cleanup removes the stale receipt, so the next call is unchanged.
+        self.env["FAIL_REMOVAL"] = comment_id
+        self.ok(self.call("ensure"), code=2)
+        self.assertTrue(receipt.exists())
+        self.assertNotIn(first["id"], self.reminders())
+        self.assertIn(comment_id, self.reminders())
+        before = [json.loads(line) for line in capture.read_text().splitlines()]
         self.assertTrue(json.loads(self.ok(self.call("ensure")))["unchanged"])
+        self.assertFalse(receipt.exists())
+        self.assertNotIn(comment_id, self.reminders())
+        self.assertEqual(len(self.reminders()), 2)
+        after = [json.loads(line) for line in capture.read_text().splitlines()]
+        self.assertEqual([args for args in after if args[:2] == ["remind", "add"]],
+                         [args for args in before if args[:2] == ["remind", "add"]])
 
     def test_register_scopes_project_research_and_worktrees_without_repo_writes(self):
         # why: CLAIM(maintenance-scope) reminders follow the project into research and worktree sessions.
@@ -275,15 +392,11 @@ class Maintenance(unittest.TestCase):
         linked = self.root / "separate-worktree"
         self.assertEqual(subprocess.run(["git", "-C", str(self.project), "worktree", "add", "-q", "-b", "fixture", str(linked)],
             capture_output=True).returncode, 0)
-        capture = self.root / "vigil-argv.json"
-        fake = self.root / "fake-vigil"
-        fake.write_text("#!/usr/bin/env python3\nimport json, os, sys\nfrom pathlib import Path\n"
-                        "Path(os.environ['ARGV_CAPTURE']).write_text(json.dumps(sys.argv[1:]))\nprint('fixture-reminder')\n")
-        fake.chmod(0o755)
-        self.env.update(VIGIL_BIN=str(fake), ARGV_CAPTURE=str(capture))
+        capture = self.fake_vigil()
         before = subprocess.run(["git", "-C", str(self.project), "status", "--porcelain"], capture_output=True).stdout
         self.ok(self.call("register", "--title", "Project review"))
-        args = json.loads(capture.read_text())
+        args, comment = [json.loads(line) for line in capture.read_text().splitlines()]
+        self.assertEqual(self.reminder_scopes(args), self.reminder_scopes(comment))
         self.assertEqual(args[:2], ["remind", "add"])
         scopes = []
         reading_scopes = False

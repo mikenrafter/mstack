@@ -415,14 +415,25 @@ undelivered events again, flagged `redelivered`.
 
 ## Project reminders
 
-For the owner's periodic technical review rotation, initialize the current
-project once per session with adaptive-hardening's
+For the owner's periodic technical reviews and comment audits, initialize the
+current project once per session with adaptive-hardening's
 `scripts/review-maintenance ensure --project ABS` (resolve the script relative
 to that skill). It discovers new repositories as single-repository projects and
-resolves configured multi-repository products to shared history. This only
-registers delivery during active sessions; it does not authorize an audit.
+resolves configured multi-repository products to shared technical review history.
+Each project gets `review-<key>` and `comment-audit-<key>` reminders with identical
+scopes, split after 16 entries with matching `-2` and later ids. Rerun `ensure`
+after scope or membership changes to refresh both kinds and retire obsolete
+reminders. Grouping retires the former independent reminders too.
 Use that skill's `group` command to associate additional repositories with a
 product; do not infer membership from directory names.
+Technical review reminders do not authorize paid work.
+
+Comment audits deliver weekly on Saturday or Sunday, 09:00-21:00 in
+America/Denver, the technical review reminder's timezone. Load `comment-audit`
+and check headroom with `adaptive-hardening`. Audit files changed since the last
+audit, or the whole repo once a month. Report only; edits need the owner. The
+reminder authorizes at most lean work. It has no probe; each id's done state
+suppresses its own weekly reminder.
 
 Reminders deliver a project instruction only inside vigil calls you already
 make. They never wake a session. Read `reminders` in keepalive/wait results and

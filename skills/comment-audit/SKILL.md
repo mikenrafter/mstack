@@ -18,6 +18,14 @@ records it). Monthly, or when the owner asks: the whole repo, under
 `adaptive-hardening`'s budget. Report only; edits go in a separate change the
 owner approves.
 
+Adaptive-hardening's `scripts/review-maintenance ensure --project ABS` creates
+one `comment-audit-<key>` reminder per project, sharing the technical review's
+repository, research and worktree scopes. Projects with more than 16 scopes
+get matching `-2` and later reminder ids. Delivery is weekly on Saturday or
+Sunday, 09:00-21:00 in America/Denver, the review reminder's timezone. Each id
+has its own done state in vigil; no audit probe is needed. Check headroom with
+`adaptive-hardening` before starting. The reminder authorizes at most lean work.
+
 ## 2. Classify every comment
 
 | Class | Action |

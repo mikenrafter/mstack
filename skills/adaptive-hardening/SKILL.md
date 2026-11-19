@@ -104,11 +104,20 @@ previous independent histories. A repository belongs to one logical project.
 Membership lives in `projects/registry.json` under the maintenance state directory;
 repositories need no configuration files or purpose comments. Separate clones
 must be added explicitly; matching names or remotes do not establish membership.
-All member repositories, research directories and worktrees receive the same
-project reminder. Rerun `ensure` after membership or worktree changes to refresh
-scopes. Reminders never wake an idle session or start paid work. Seven days since
-a completed technical audit makes the next concern eligible. Budget controls
+Each project gets a `review-<key>` reminder and a `comment-audit-<key>` reminder
+across the same member repositories, research directories and worktrees. Scopes
+split after 16 entries with matching `-2` and later ids for both kinds. Rerun
+`ensure` after membership or worktree changes to refresh both kinds and retire
+obsolete reminders. Grouping also retires the members' independent reminders.
+Reminders never wake an idle session. Seven days since a completed technical
+audit makes the next concern eligible. Budget controls
 inspection depth and whether optional work runs, rather than skipping concerns.
+
+Comment audits are weekly on Saturday or Sunday, 09:00-21:00 in America/Denver,
+the technical review reminder's timezone. Load `comment-audit` for changed files
+since the last audit and a whole-repo pass once a month. Report only; edits need
+the owner. Check headroom first; the reminder authorizes at most lean work.
+Vigil tracks done state per reminder id, so comment audits need no probe.
 
 Copy the current implementation round's focus to maintenance state:
 
@@ -124,7 +133,8 @@ behavior, invariants, priority concerns, lower priorities and evidence. Check
 current context rather than treating an old record as a new acceptance contract.
 Use the existing spend allowance, or ask for one when none is granted.
 
-After an actual audit, record the evidence and suppress this period's reminder:
+After an actual technical audit, record the evidence and suppress this period's
+reminder:
 
 ```sh
 scripts/review-maintenance complete --project ABS --concern CONCERN --evidence REPORT

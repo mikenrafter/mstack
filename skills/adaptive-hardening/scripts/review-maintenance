@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Concern-specific project review reminders. Probes are read-only; complete records evidence.
+"""Per-project maintenance reminders. Review probes are read-only; complete records evidence.
 
 Vigil delivers these only during an existing session, never as an unattended audit.
 """
@@ -18,6 +18,47 @@ import tempfile
 CONCERNS = ('test-effectiveness', 'simplification', 'end-to-end',
             'state-durability', 'trust-boundaries')
 FOCUS_KEYS = ('most_important', 'invariants', 'priority_concerns', 'lower_priority', 'evidence')
+
+
+def review_reminder(title, reminder_id, probe):
+    message = ('Periodic technical review for ' + title + ': {output}. '
+               'Use adaptive-hardening. Audit the selected concern across relevant member '
+               'repositories; current priorities guide inspection without replacing the rotation. '
+               'Establish missing focus first. Check provider headroom and owner allowance. '
+               'Give reviewers most-important behavior, invariants, priority concerns, lower '
+               'priorities and evidence. Record an actual audit with review-maintenance complete, '
+               'then vigil remind done. Snooze if busy; this reminder does not authorize paid work.')
+    return ['--days', 'mon,tue,wed,thu,fri,sat,sun', '--cache-s', '3600', '--timeout-s', '4',
+            '--probe', json.dumps(probe), '--message', message]
+
+
+def comment_audit_reminder(title, reminder_id, probe):
+    message = ('A comment audit is due for this project. Load the comment-audit skill: '
+               'files changed since the last audit (whole repo once a month). Report only; '
+               'edits need the owner. Check headroom with adaptive-hardening; this reminder '
+               'does not authorize paid work beyond lean. Then vigil remind done ' + reminder_id +
+               '. Snooze if busy.')
+    return ['--days', 'sat,sun', '--window', '09:00-21:00', '--message', message]
+
+
+REMINDER_KINDS = {
+    'review': review_reminder,
+    'comment-audit': comment_audit_reminder,
+}
+
+
+def reminder_chunks(key, project_scopes):
+    for kind, specification in REMINDER_KINDS.items():
+        for start in range(0, len(project_scopes), 16):
+            reminder_id = kind + '-' + key + (f'-{start // 16 + 1}' if start else '')
+            yield reminder_id, project_scopes[start:start + 16], specification
+
+
+def remove_reminder(reminder_id):
+    result = subprocess.run([os.environ.get('VIGIL_BIN', 'vigil'), 'remind', 'rm', reminder_id],
+                            capture_output=True, text=True, timeout=20)
+    if result.returncode and 'no reminder named' not in (result.stderr + result.stdout):
+        raise ValueError(result.stderr.strip() or result.stdout.strip() or 'cannot retire reminder')
 
 
 def focus(value):
@@ -187,12 +228,8 @@ def retire_member_reminders(root, ident, record):
         if not receipt.exists():
             continue
         previous = json.loads(receipt.read_text())
-        for start in range(0, len(previous['scopes']), 16):
-            reminder_id = 'review-' + key + (f'-{start // 16 + 1}' if start else '')
-            result = subprocess.run([os.environ.get('VIGIL_BIN', 'vigil'), 'remind', 'rm', reminder_id],
-                                    capture_output=True, text=True, timeout=20)
-            if result.returncode and 'no reminder named' not in (result.stderr + result.stdout):
-                raise ValueError(result.stderr.strip() or 'cannot retire member reminder')
+        for reminder_id, _, _ in reminder_chunks(key, previous['scopes']):
+            remove_reminder(reminder_id)
         receipt.unlink()
 
 
@@ -235,29 +272,21 @@ def main(argv=None):
             if args.command in ('register', 'ensure'):
                 project_scopes = list(dict.fromkeys(scope for member in record['repositories']
                                                     for scope in scopes(Path(member))))
-                signature = {'scopes': project_scopes, 'title': args.title or record['title'], 'version': 2}
+                signature = {'scopes': project_scopes, 'title': args.title or record['title'],
+                             'version': 3, 'kinds': list(REMINDER_KINDS)}
                 receipt_path = args.state_dir / 'projects' / (key + '.registration.json')
-                if args.command == 'ensure' and receipt_path.exists() and json.loads(receipt_path.read_text()) == signature:
+                previous = json.loads(receipt_path.read_text()) if receipt_path.exists() else None
+                if args.command == 'ensure' and previous == signature:
                     retire_member_reminders(args.state_dir, ident, record)
                     print(json.dumps({'id': 'review-' + key, 'project': ident, 'unchanged': True}))
                     return 0
                 probe = [sys.executable, str(Path(__file__).resolve()), '--state-dir',
                          str(args.state_dir.resolve()), 'due', '--project', str(project)]
-                message = ('Periodic technical review for ' + signature['title'] + ': {output}. '
-                           'Use adaptive-hardening. Audit the selected concern across relevant member '
-                           'repositories; current priorities guide inspection without replacing the rotation. '
-                           'Establish missing focus first. Check provider headroom and owner allowance. '
-                           'Give reviewers most-important behavior, invariants, priority concerns, lower '
-                           'priorities and evidence. Record an actual audit with review-maintenance complete, '
-                           'then vigil remind done. Snooze if busy; this reminder does not authorize paid work.')
                 receipts = []
-                for start in range(0, len(project_scopes), 16):
-                    reminder_id = 'review-' + key + (f'-{start // 16 + 1}' if start else '')
+                for reminder_id, chunk, specification in reminder_chunks(key, project_scopes):
                     command = [os.environ.get('VIGIL_BIN', 'vigil'), 'remind', 'add',
-                           reminder_id, '--scope', *project_scopes[start:start + 16], '--days',
-                           'mon,tue,wed,thu,fri,sat,sun', '--tz', 'America/Denver',
-                           '--period', 'week', '--cache-s', '3600', '--timeout-s', '4',
-                           '--probe', json.dumps(probe), '--message', message]
+                               reminder_id, '--scope', *chunk, '--tz', 'America/Denver',
+                               '--period', 'week', *specification(signature['title'], reminder_id, probe)]
                     result = subprocess.run(command, capture_output=True, text=True, timeout=20)
                     if result.returncode and 'already exists' in (result.stderr + result.stdout):
                         # This id belongs to this maintenance project; refresh changed scopes.
@@ -269,6 +298,11 @@ def main(argv=None):
                     if result.returncode:
                         raise ValueError(result.stderr.strip() or result.stdout.strip() or 'vigil registration failed')
                     receipts.append({'id': reminder_id, 'result': result.stdout.strip()})
+                if previous is not None:
+                    current_ids = {receipt['id'] for receipt in receipts}
+                    for reminder_id, _, _ in reminder_chunks(key, previous['scopes']):
+                        if reminder_id not in current_ids:
+                            remove_reminder(reminder_id)
                 receipt_path.parent.mkdir(exist_ok=True)
                 save(receipt_path, signature)
                 retire_member_reminders(args.state_dir, ident, record)
