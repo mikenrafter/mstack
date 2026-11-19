@@ -106,6 +106,11 @@ PR description before it is a gap in the owner's knowledge: unclear code,
 a missing test name, or a PR body that hid the point. Fix those, then
 explain.
 
+Raise the questions in both places: ask the owner in chat, and write the
+same questions into the PR body's `## Teach-back` section (§5) for the
+reviewer. Once answered, add the owner's answers, or the fix each wrong
+answer led to.
+
 ## 5. PR body
 
 Every PR body carries two lines (from Matt Pocock's `pr` skill):
@@ -115,4 +120,9 @@ Door: two-way | one-way (why)
 Blast radius: <one word: none, ui, data, api, auth, build>
 ```
 
-Plus the stack position: `Stack: 3 of 5, after #41`.
+Plus the stack position: `Stack: 3 of 5, after #41`, and the teach-back:
+
+```
+## Teach-back
+1. <question> — answer: <owner's answer, or "wrong; fixed by <commit>">
+```
