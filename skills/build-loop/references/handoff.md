@@ -10,6 +10,7 @@ SKILL.md §11 holds the push and approval rule. The rest:
 
   `Reviewed with build-loop: <N> rounds with <model> (score <n>/10), then 1 pass with <model> (score <n>/10, bar <n>).`
 
+- Add the Review check (`pr-stacks` §5) and run its teach-back (§4).
 - Add `on <effort>` only if the tool exposed it.
 - If the project forbids harness-attribution trailers, follow the project.
 

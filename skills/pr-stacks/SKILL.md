@@ -91,25 +91,31 @@ Two words, two jobs. Do not mix them up.
   explain the change back in their own words, then checks the answers
   against the code.
 
-Teach-back depth follows the door:
+The teach-back uses the PR body's **Review check** (§5): the same
+questions serve the reviewer in the PR and the owner in chat. Depth follows
+the door:
 
-| PR | Teach-back | Owner review |
+| PR | Teach-back (owner, in chat) | Owner review |
 |---|---|---|
-| Two-way door | 3 questions, answered in one batch | Optional |
-| One-way door | Up to 10 questions, one at a time on any wrong answer | Required before merge |
+| Two-way door | 3 of the Review check questions, answered in one batch | Optional |
+| One-way door | All 10, one at a time on any wrong answer | Required before merge |
 | The stack plan itself | Grill it once, before the first PR | Required |
 
-Good teach-back questions ask what the code does in a case the PR changes,
-what breaks if a named line is removed, which invariant a test proves, and
-how to undo the PR. A wrong answer is a finding against the code or the
-PR description before it is a gap in the owner's knowledge: unclear code,
-a missing test name, or a PR body that hid the point. Fix those, then
-explain.
+Questions cover behaviour, risks, edge cases and architectural impact (what
+the change commits the codebase to, coupling, invariants), not trivia: what
+the code does in a case the PR changes, what breaks if a named line is
+removed, which invariant a test proves, how to undo the PR.
 
-Raise the questions in both places: ask the owner in chat, and write the
-same questions into the PR body's `## Teach-back` section (§5) for the
-reviewer. Once answered, add the owner's answers, or the fix each wrong
-answer led to.
+Before posting, the drafting agent answers every question itself, from the
+code, as a real review. Report any defect, flaky behaviour or undocumented
+assumption to the owner; by severity, fix it before posting or write it
+into Known limits with file:line. Never drop one silently.
+
+A wrong answer from the owner is a finding against the code or the PR
+description before it is a gap in the owner's knowledge: unclear code, a
+missing test name, or a PR body that hid the point. Fix those, then explain.
+Record the owner's answer, or the fix a wrong answer led to, under that
+question in the Review check.
 
 ## 5. PR body
 
@@ -120,9 +126,36 @@ Door: two-way | one-way (why)
 Blast radius: <one word: none, ui, data, api, auth, build>
 ```
 
-Plus the stack position: `Stack: 3 of 5, after #41`, and the teach-back:
+Plus the stack position (`Stack: 3 of 5, after #41`) and a **Review check**:
+10 questions in four levels of `<details>`, all collapsed by default:
 
+1. the whole set, opening with: "If you can answer these at 80% or better
+   (24 of 30 points) without looking, you have probably reviewed it well
+   enough.";
+2. each question;
+3. under each question two siblings: **Hint** (specific files and line
+   numbers, linked to the PR head) and **Answer** (three specific facts,
+   one point each);
+4. once the owner has answered in chat, a third sibling, **Owner**: their
+   answer, or "wrong; fixed by <commit>".
+
+```html
+<details><summary>Review check (10 questions, 30 points)</summary>
+
+If you can answer these at 80% or better (24 of 30 points) without looking,
+you have probably reviewed it well enough.
+
+<details><summary>1. What happens to a stored row when …?</summary>
+<details><summary>Hint</summary>
+
+[src/store.rs:120](…/blob/<head>/src/store.rs#L120)
+</details>
+<details><summary>Answer</summary>
+
+1. … 2. … 3. …
+</details>
+</details>
+</details>
 ```
-## Teach-back
-1. <question> — answer: <owner's answer, or "wrong; fixed by <commit>">
-```
+
+When the PR head changes, recheck each Hint link and Answer against it.
