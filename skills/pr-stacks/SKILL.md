@@ -174,10 +174,16 @@ carries it.
 
 Open, not collapsed:
 
-1. **Header lines.**
+0. **Draft reason**, only on a draft: its first line says why it is a draft,
+   in plain words, for example "Draft for now. The code is ready for review.
+   It is a draft only so it can't be merged before the full test suite
+   finishes on this commit." Remove it when marking the PR ready.
+1. **Header lines.** Reviewers outside this workflow do not know these
+   terms, so each carries a plain gloss on the same line (owner, 2026-11-20):
    ```
-   Door: one-way
-   Blast radius: <one word: none, ui, data, api, auth, build>
+   Door: two-way (easy to undo: reverting this PR puts everything back, and it changes no stored data)
+   Door: one-way (harder to undo: <what stays changed after a revert>)
+   Blast radius: <one word: none, ui, data, api, auth, build> (<what that means here, e.g. tests only; no screen changes>)
    Stack: 3 of 5, after #41
    ```
 2. **What it does**, in plain words: what people see or what changes for
