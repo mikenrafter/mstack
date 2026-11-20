@@ -9,7 +9,9 @@ SKILL.md §11 holds the push and approval rule. The rest:
   2026-11-20). A selection by import graph is not enough: it misses tests that
   scan source text (a fork PR passed 3,986 selected tests and broke upstream
   main on such a guard). State the full-suite counts in the body and name each
-  failure as inherited from the base. Run it again before a later push.
+  failure as inherited from the base. Pushes during bot or review rounds
+  need no full suite; run it again on the final head before the PR can merge,
+  and keep the PR draft until it passes if an early merge is possible.
 - For a project you do not own, check the PR against its reviewer notes
   (`references/reviewers.md`).
 - In a PR body, add:
