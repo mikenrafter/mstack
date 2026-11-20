@@ -61,7 +61,9 @@ later: read 1–5 of its files or commits, ask questions, redirect it if it is
 drifting, and look for what is slow. Speed it up when that is reasonable;
 otherwise have it write the slow part up as hardening work or an owner item.
 Track it with a vigil item: `vigil hold add <hold> --for none --expect-s 3600
---label checkin-<run>`; its overdue event is the prompt. Details: `dialogue.md`.
+--label checkin-<run>`; its overdue event is the prompt. When the agent has not checked in for a
+long time, open the message with "URGENT: stop and answer this before your next
+step" and ask it to write its answers to its report before it continues. Details: `dialogue.md`.
 
 **UI briefs inherit before they build** (`references/ui.md`). A brief that touches a screen
 names the signed-off mock-up, the original screen and every prior pilot or landed feature it
