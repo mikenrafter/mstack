@@ -102,6 +102,26 @@ implementer brief, next to: "You may use vigil, but never orchestrator mode (`or
 - An iteration build's estimate holds no review rounds. Give the review loop its own line.
 - Owner deadline: plan to it. Time-box the implementer, ship what is green at the box, list the rest.
 
+## Developer releases: deadlines (owner, 2026-11-20)
+
+A developer release is anything the owner is waiting on: a pilot APK, an upstream PR, a fork release. These get a
+deadline; slow-burn work nobody is waiting on does not (an artificial date thins review and burns budget).
+
+- **Give an estimate when asked, then plan to it.** State it in the owner's time zone and in UTC, and say what
+  would make it slip. Report a slip when it becomes likely, not at the deadline.
+- **Internal cutoffs in every brief:** "pushed by HH:MM UTC", with the priority order inside the run ("naps before
+  the log storm") and "push what is done and list the rest" if the cutoff hits. Leave at least one hour between the
+  last cutoff and the promised delivery for the merge, the combined tests and the build.
+- **Integrate early:** merge and test each branch as it lands, not all at the end; parallel branches conflict where
+  they share a widget or painter, and early merges leave time to resolve them.
+- **Scope freeze at the cutoff (Parkinson's law):** a request that arrives after the cutoff goes to the next build
+  by default. Say so in one line and offer the exception; take it only when the owner says it must make this build.
+  When the owner moves the deadline out, do not refill the slack with new scope unless they ask.
+- **Keep the independent check:** a deadline may move fidelity review to the orchestrator, but never skips it.
+  Write follow-ups for the flaws you let through.
+- **Budget:** parallel runs under a deadline spend the weekly windows faster; check them at each cutoff and move
+  work between providers before one runs out.
+
 ## Faster iteration (§8–9)
 
 - **Many runs on ephemeral compute:** keep a checkout in one ephemeral compute sandbox for the
