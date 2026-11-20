@@ -54,7 +54,14 @@ Challenge an assumption or explain why a simpler design suffices; do not invent
 disagreement. Implementers start work immediately. Roughly five minutes in,
 the orchestrator reads 1–5 relevant files, asks about ambiguities and 2–3
 work-grounded questions, hears the answers, then pushes back and settles the
-direction. Short batches get this check at handoff. Details: `dialogue.md`.
+direction. Short batches get this check at handoff.
+**Hourly check-in (owner, 2026-11-20).** Check in with every running subagent at
+least once an hour, by steering it mid-run (SendMessage), not by queuing work for
+later: read 1–5 of its files or commits, ask questions, redirect it if it is
+drifting, and look for what is slow. Speed it up when that is reasonable;
+otherwise have it write the slow part up as hardening work or an owner item.
+Track it with a vigil item: `vigil hold add <hold> --for none --expect-s 3600
+--label checkin-<run>`; its overdue event is the prompt. Details: `dialogue.md`.
 
 **UI briefs inherit before they build** (`references/ui.md`). A brief that touches a screen
 names the signed-off mock-up, the original screen and every prior pilot or landed feature it
