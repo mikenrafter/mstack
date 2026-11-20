@@ -11,7 +11,8 @@ SKILL.md §11 holds the push and approval rule. The rest:
   main on such a guard). State the full-suite counts in the body and name each
   failure as inherited from the base. Pushes during bot or review rounds
   need no full suite; run it again on the final head before the PR can merge,
-  and keep the PR draft until it passes if an early merge is possible.
+  and keep the PR draft until that run passes: a merged PR cannot be
+  un-merged, so the draft guard comes before the run, never after.
 - For a project you do not own, check the PR against its reviewer notes
   (`references/reviewers.md`).
 - In a PR body, add:
