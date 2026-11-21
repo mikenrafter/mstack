@@ -104,7 +104,7 @@ In `references/estimates.md`: every ETA comes from `agentpace` plan state.
 A developer release is anything the owner is waiting on: a pilot APK, an upstream PR, a fork release. These get a
 deadline; slow-burn work nobody is waiting on does not (an artificial date thins review and burns budget).
 
-- **Give an estimate when asked, then plan to it.** State it in the owner's time zone and in UTC, and say what
+- **Give an estimate when asked, then plan to it.** State it in Mountain time (America/Denver) first, then UTC, and say what
   would make it slip. Report a slip when it becomes likely, not at the deadline.
 - **Internal cutoffs in every brief:** "pushed by HH:MM UTC", with the priority order inside the run ("naps before
   the log storm") and "push what is done and list the rest" if the cutoff hits. Leave at least one hour between the

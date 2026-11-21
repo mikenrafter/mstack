@@ -26,5 +26,7 @@ that file; a local edit here is overwritten on the next apply.
 - Mock-ups and inline HTML: show them with the T3 Code tools (`html_preview`,
   then `html_render`), not claude.ai Artifacts (owner, 2026-11-15). Keep the
   HTML file in the project's research directory.
+- Clock times for the owner: Mountain time (America/Denver) first, then UTC
+  in parentheses.
 - Taildrop files to the owner's Pixel 9a personal profile (`pixel-9a`), never
   `google-pixel-9a-work`. The work profile does not have Taildrop enabled.

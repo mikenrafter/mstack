@@ -7,6 +7,7 @@ feel: models estimate at human-team pace and overshoot agent work 2–5× (vigil
   steps (suites, builds, Boat round trips) and waits. Update it as work moves (`plan start|done|scope`);
   answer an ETA from its current state, never from the original guess. Most ETA error comes from
   not knowing what remains or what changed in scope, not from per-run numbers.
+- **Clock times:** Mountain time (America/Denver, the owner's zone) first, then UTC.
 - **Relay three times:** commit (a Parkinson cut under the median, set by each task's risk appetite),
   P50, and the slip line (P80). State the trade-offs the commit assumes, so the owner can override
   any of them.
