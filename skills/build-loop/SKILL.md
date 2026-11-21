@@ -137,7 +137,7 @@ which run out faster now.
 |---|---|---|
 | Orchestrator | Opus (you) | Specs, prompts, verification, commits, pushes, owner contact. Writes little code. |
 | Implementer | Sonnet and Sol, alternating by fix round (B1) | Red tests, green code, fixes. |
-| Reviewer, rounds 1-2 | Sol or Opus | Scored fix rounds (§6). Reviews only, plus comment fixups. |
+| Reviewer, rounds 1-2 | Sol, Opus or Neon | Scored fix rounds (§6). Reviews only, plus comment fixups. |
 | Reviewer, round 3 | Fable 5.2 or later | The "good enough to ship" call (§6). |
 | Reviewer, tier 2 | Fresh Opus (Fable if Opus wrote code) | One pass on the stable diff. |
 

@@ -41,6 +41,9 @@ Read `vigil advice` by window, at a threshold of 15% left:
   until its weekly reset.
 - Low `codex-budget-weekly`: switch Sol's roles for the rest of the week,
   until its weekly reset. This Codex plan has no 5-hour limit.
+- Low `antigravity-budget-5h` or `-weekly` (20%): Neon's implementer and
+  reviewer slots go back to Sonnet/Sol/Opus by their own budgets. The Pro plan
+  carries about one busy Neon thread at a time.
 
 Read `resets_at` with `usage-budget-probe ClaudeCode --window 5h`,
 `usage-budget-probe ClaudeCode --window weekly`, or `usage-budget-probe Codex

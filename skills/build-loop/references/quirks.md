@@ -56,6 +56,20 @@ resumed only when prompted.
 - Orchestrator: ask for the profile, timing or test output before relaying the claim.
 - Evidence: own use, 2026-11-21 (T3 thread f360e6a4).
 
+**May miss the prompt cache more often than other models (owner, 2026-11-21; re-evaluate weekly).**
+Antigravity sets the cache server-side; no setting changes its TTL. Long threads also get expensive
+anyway: Antigravity bills cached reads against the subscription pool, and the owner's thread reached
+504k of a 512k context in 53 calls (17M cached tokens).
+- Rule: start a fresh Neon agent instead of continuing one past ~100k context. Brief it from files
+  (report, diff, state file), not from thread history.
+- Detect: `mstack/bin/neon-usage <conversation.db>...` reads each conversation's cached and new input tokens from
+  Antigravity's conversation DBs; a miss is a call whose cached tokens fall below half the previous
+  context. `mstack.research/neon-trial/ttl-probe.sh` measures how long the cache survives idle gaps.
+- Orchestrator: keepalive windows for a Neon session stay at 270 s until the probe shows a longer
+  lifetime.
+- Evidence: 2026-11-21, five Neon threads, 170 calls: 90-97% of input tokens cached, 2 misses (own
+  use). The owner's suspicion is not confirmed yet; the weekly vigil reminder `neon-quirks` re-checks it.
+
 **Answers check-ins in the final report, not in chat.** One of two runs did.
 - Brief line: "Answer orchestrator check-ins in chat, then continue."
 - Evidence: own use, 2026-11-21.

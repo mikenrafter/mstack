@@ -271,6 +271,11 @@ at 15% left or less:
   week, until the weekly reset.
 - `codex-budget-weekly`: switch Sol's build-loop roles for the rest of the
   week, until the weekly reset.
+- `antigravity-budget-5h` and `antigravity-budget-weekly` (Gemini Neon, low at
+  20%): hold new Neon runs until the reset, or move them to a family with
+  headroom. The probe is `mstack/bin/antigravity-budget-probe --window
+  5h|weekly`, which reads `agy /usage` through T3's Antigravity profile.
+  Neon sessions get the 270 s keepalive window: their cache TTL is unmeasured.
 
 `usage-budget-probe ClaudeCode --window 5h`, `usage-budget-probe ClaudeCode
 --window weekly`, and `usage-budget-probe Codex --window weekly` report the

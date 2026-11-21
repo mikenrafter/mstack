@@ -131,6 +131,30 @@ class Init(unittest.TestCase):
 
 
 class Reviewer(unittest.TestCase):
+    def test_neon_is_a_tier1_reviewer_outside_the_fable_round(self):
+        # why: owner 2026-11-21: Neon joins the A-model reviewer pool (rounds 1-2 and 4-5); Fable keeps round 3.
+        # proves: Neon accepted at rounds 1 and 2, refused at the Fable round, refused when it wrote the code
+        # catches: a pool still hardcoded to {sol, opus}, Neon leaking into the Fable round, or R2 skipped for Neon
+        L = ledger(self)
+        L.rnd_ok("sha1", BELOW, "neon", "sonnet")
+        L.rnd_ok("sha2", BELOW, "neon", "sol")
+        self.assertIn("reviewer: fable", L.nxt())
+        code, _, err = L.rnd("sha3", BELOW, "neon", "sol")
+        self.assertEqual(code, 2, err)
+        self.assertIn("fable", err)
+        M = ledger(self)
+        code, _, err = M.rnd("sha1", BELOW, "neon", "neon")
+        self.assertEqual(code, 2, err)
+        self.assertIn("author", err.lower())
+
+    def test_tier1_advice_names_neon_in_the_pool(self):
+        # why: `next` tells the orchestrator who may review; Neon must be offered, not only accepted.
+        # catches: enforcement updated but the advice text still saying "sol or opus"
+        L = ledger(self)
+        self.assertIn("reviewer: sol, opus or neon", L.nxt())
+        L.rnd_ok("sha1xxxxxxxxxxxx", BELOW, "sol", "sonnet")
+        self.assertIn("reviewer: sol, opus or neon, not the author of the fixes since sha1xxxxxx", L.nxt())
+
     def test_round3_after_two_below_bar_rounds_is_fable(self):
         # why: Fable makes the ship call when A-model rounds stall (A1).
         # proves: A1
@@ -162,7 +186,7 @@ class Reviewer(unittest.TestCase):
         # catches: a next() that prints the last round's authors, or a bare "sol or opus" with no author clause
         L = ledger(self)
         line = L.nxt()  # no round yet: no author recorded
-        self.assertIn("reviewer: sol or opus", line)
+        self.assertIn("reviewer: sol, opus or neon", line)
         self.assertNotRegex(line, r"\bnot (sonnet|sol|opus|fable)\b")
         for author, reviewer in (("sonnet", "sol"), ("sol", "opus"), ("sonnet,sol", "opus"), ("opus", "sol")):
             M = ledger(self)
@@ -170,7 +194,7 @@ class Reviewer(unittest.TestCase):
             out = M.nxt()
             self.assertIn("round 2", out)
             self.assertNotIn("fable", out)
-            self.assertIn("reviewer: sol or opus, not the author of the fixes since sha1xxxxxx", out)
+            self.assertIn("reviewer: sol, opus or neon, not the author of the fixes since sha1xxxxxx", out)
             self.assertNotRegex(out, r"\bnot (sonnet|sol|opus|fable)\b", f"author {author!r} leaked: {out!r}")
 
     def test_rounds_after_a_pivot_are_a_models_again_through_round_5(self):
@@ -184,12 +208,12 @@ class Reviewer(unittest.TestCase):
         L.run("new-approach")
         out4 = L.nxt()  # the 4th round
         self.assertTrue(out4.startswith("ROUND"), out4)
-        self.assertIn("reviewer: sol or opus", out4)
+        self.assertIn("reviewer: sol, opus or neon", out4)
         self.assertNotIn("fable", out4)
         L.rnd_ok("sha4", BELOW, "sol", "sonnet")
         out5 = L.nxt()  # the 5th round
         self.assertTrue(out5.startswith("ROUND"), out5)
-        self.assertIn("reviewer: sol or opus, not the author of the fixes since sha4", out5)
+        self.assertIn("reviewer: sol, opus or neon, not the author of the fixes since sha4", out5)
         self.assertNotIn("fable", out5)
 
     def test_passing_rounds_1_and_2_go_to_tier2_with_opus_reviewer(self):

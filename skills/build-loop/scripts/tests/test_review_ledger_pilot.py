@@ -74,7 +74,7 @@ class Pilot(unittest.TestCase):
         for pilot in (True, False):
             L = self.ledger(pilot=pilot)
             L.rnd_ok("s1", "SCORE: 4/10", "sol")
-            self.assertIn("reviewer: fable" if pilot else "reviewer: sol or opus", L.nxt())
+            self.assertIn("reviewer: fable" if pilot else "reviewer: sol, opus or neon", L.nxt())
             before = Path(L.path).read_bytes()
             code, _, _ = L.rnd("s2", "SCORE: 4/10", "sol" if pilot else "fable")
             self.assertEqual(code, 2)
@@ -103,7 +103,7 @@ class Pilot(unittest.TestCase):
         L.rnd_ok("s2", "SCORE: 4/10", "fable")
         L.run("new-approach")
         for number, reviewer in ((3, "sol"), (4, "opus"), (5, "sol")):
-            self.assertIn("reviewer: sol or opus", L.nxt())
+            self.assertIn("reviewer: sol, opus or neon", L.nxt())
             L.rnd_ok(f"s{number}", "SCORE: 4/10", reviewer)
         self.assertEqual(L.head(), "STOP-STUCK")
 
@@ -177,7 +177,7 @@ class Pilot(unittest.TestCase):
         L.run("hardening")
         self.assertIn("tidy helper", L.run("brief"))
         L.rnd_ok("h1", "SCORE: 4/10", "sol")
-        self.assertIn("reviewer: sol or opus", L.nxt())
+        self.assertIn("reviewer: sol, opus or neon", L.nxt())
         self.assertEqual(L.data()["concerns"], {"wiring": 8})
 
     def test_structural_nonblocking_findings_also_wait_for_hardening(self):

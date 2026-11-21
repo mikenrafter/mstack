@@ -18,7 +18,7 @@ this round reviews: round 1 and tier 2, everything since base; later rounds,
 everything since the last reviewed sha. Models: sonnet, sol, opus, fable. The
 ledger keeps the union. `round` exits 2 when the reviewer is in the list: a
 reviewer never reviews code it wrote. `next` names the expected reviewer
-(`reviewer: sol or opus, not the author of the fixes since <sha>`, or
+(`reviewer: sol, opus or neon, not the author of the fixes since <sha>`, or
 `reviewer: fable`). It cannot name a model: the next author is whoever wrote
 those fixes, so you pick a reviewer who did not.
 
@@ -26,10 +26,21 @@ those fixes, so you pick a reviewer who did not.
 
 | Round | Reviewer | If it passes | If not |
 |---|---|---|---|
-| Pilot: 1, then 2 | 1: Sol or Opus, not author; 2: Fable | All agreed concern bars met plus owner build thumbs-up: CHECKPOINT, NIT-CULL, FIX-KEPT, STOP-AGREED | Round 2: ARGUE, then STEP-BACK; normal caps after that |
-| 1-2 | Sol or Opus | CHECKPOINT, then tier 2 | next round |
+| Pilot: 1, then 2 | 1: Sol, Opus or Neon, not author; 2: Fable | All agreed concern bars met plus owner build thumbs-up: CHECKPOINT, NIT-CULL, FIX-KEPT, STOP-AGREED | Round 2: ARGUE, then STEP-BACK; normal caps after that |
+| 1-2 | Sol, Opus or Neon | CHECKPOINT, then tier 2 | next round |
 | 3 | Fable (`--reviewer fable`) | CHECKPOINT, NIT-CULL, FIX-KEPT, STOP-AGREED | ARGUE, then STEP-BACK |
-| 4-5 (after a pivot) | Sol or Opus | same as round 3 | ARGUE (round 4), then next round; STOP-STUCK after round 5 (the owner decides) |
+| 4-5 (after a pivot) | Sol, Opus or Neon | same as round 3 | ARGUE (round 4), then next round; STOP-STUCK after round 5 (the owner decides) |
+
+**Neon in the pool (owner, 2026-11-21).** Gemini 4 Neon (`--reviewer neon`; T3 provider
+`antigravity`, model `gemini-4-neon`) reviews rounds 1-2 and 4-5 alongside Sol and Opus, never round 3
+or tier 2. Pick by budget and family: when Claude or Codex is low, Neon takes the round, and a
+round reviewed by one family should be followed by another where budget allows. R2 still applies.
+- **Check its findings before fixing them.** Neon's analysis claims are less reliable than its code
+  (`roles.md` §2b). A blocking Neon finding needs a reproduction, a failing test or a file:line the
+  orchestrator has read; the rest go to the argument exchange first.
+- **A fresh run per round**, briefed with the diff; never continue a Neon thread past ~100k context
+  (`quirks.md`).
+- The brief carries Neon's quirk lines (`quirks.md`).
 
 Pilot bars are agreed before starting with `init --pilot --bar concern=N` (repeatable)
 and `--bars-agreed "<owner quote or note>"`. Defaults: durability 7, others 6;

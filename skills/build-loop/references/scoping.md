@@ -28,7 +28,7 @@ question when the kind is obvious.
   defaults to 9 and is included automatically. `durable-state`/`migration` categories also select it.
   Init prints the default applied. Pilots never record or constrain a region's shape/stage in
   `bars.json`. Structural and later stages keep the normal shape × stage bars.
-- **Review schedule.** Round 1: Sol or Opus, never the author. Round 2: Fable, including ARGUE,
+- **Review schedule.** Round 1: Sol, Opus or Neon, never the author. Round 2: Fable, including ARGUE,
   STEP-BACK, NIT-CULL and FIX-KEPT; later rounds keep the normal caps. Every named concern must
   meet its bar, and the owner must approve the pilot build. Record `review-ledger -l L owner-ok
   "<quote>"`; without it the ledger refuses CHECKPOINT and STOP-AGREED.

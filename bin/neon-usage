@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Per-call token usage from Antigravity conversation DBs (gen_metadata protobuf blobs).
+
+Field meanings are inferred, not documented (2026-11-21): usage block = field 1.4;
+2 = new (uncached) input tokens, 5 = cached input tokens, 3 = output, 9/10 = thinking-related;
+context size = 1.9.10.1; model id = 1.19. A miss: a call whose cached tokens fall below half the
+previous call's context.
+
+Usage: neon-usage <conversation.db>...  (opens each read-only)
+"""
+import os
+import sqlite3
+import sys
+
+
+def varint(b, i):
+    r = s = 0
+    while True:
+        c = b[i]
+        i += 1
+        r |= (c & 0x7F) << s
+        s += 7
+        if c < 0x80:
+            return r, i
+
+
+def fields(b):
+    i, out = 0, {}
+    while i < len(b):
+        k, i = varint(b, i)
+        f, w = k >> 3, k & 7
+        if w == 0:
+            v, i = varint(b, i)
+        elif w == 2:
+            n, i = varint(b, i)
+            v = b[i:i + n]
+            i += n
+        elif w == 1:
+            v, i = b[i:i + 8], i + 8
+        elif w == 5:
+            v, i = b[i:i + 4], i + 4
+        else:
+            raise ValueError("unsupported wire type")
+        out.setdefault(f, v)
+    return out
+
+
+def usage(blob):
+    """(usage fields, context tokens, model) for one call, or None."""
+    try:
+        one = fields(fields(blob)[1])
+        u = fields(one[4])
+        ctx = fields(fields(one[9])[10]).get(1) if 9 in one else None
+        model = one.get(19)
+        return ({k: v for k, v in u.items() if isinstance(v, int)}, ctx,
+                model.decode() if isinstance(model, bytes) else None)
+    except Exception:
+        return None
+
+
+def summarize(path):
+    db = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    rows = [r for r in (usage(b) for (b,) in db.execute("select data from gen_metadata order by idx")) if r]
+    if not rows:
+        return None
+    new = sum(r[0].get(2, 0) for r in rows)
+    cached = sum(r[0].get(5, 0) for r in rows)
+    misses = [i for i in range(1, len(rows)) if rows[i][0].get(5, 0) < 0.5 * (rows[i - 1][1] or 0)]
+    return dict(conv=os.path.basename(path)[:8], model=next((r[2] for r in rows if r[2]), None),
+                calls=len(rows), new_in=new, cached=cached,
+                hit_pct=round(100 * cached / max(1, new + cached), 1), misses=len(misses),
+                max_ctx=max(r[1] or 0 for r in rows), over_100k=sum((r[1] or 0) > 100_000 for r in rows))
+
+
+if __name__ == "__main__":
+    for path in sys.argv[1:]:
+        try:
+            s = summarize(path)
+        except sqlite3.Error:
+            continue
+        if s:
+            print(" ".join(f"{k}={v}" for k, v in s.items()))

@@ -98,6 +98,9 @@ TIER1_CAP = 3          # rounds per approach before a step-back
 TIER1_TOTAL_CAP = 5    # tier-1 rounds over the whole change
 TIER2_CAP = 2          # one full pass + one diff-only re-review
 DISPUTE_CAP = 2        # replies on one disputed finding before the user decides
+# Tier-1 reviewers outside the Fable round (owner 2026-11-21: Neon joins the pool).
+TIER1_REVIEWERS = ("sol", "opus", "neon")
+TIER1_POOL = ", ".join(TIER1_REVIEWERS[:-1]) + " or " + TIER1_REVIEWERS[-1]
 BLOCKING_SEVERITIES = {"blocker", "should"}
 CLOSED = {"resolved", "declined", "pre-existing", "repeat", "escaped", "discarded"}
 REJECTED = {"declined", "pre-existing", "repeat", "disagree"}
@@ -643,7 +646,7 @@ def _next_step(led):
     if stuck:
         return "STOP-STUCK", f"disputed after {DISPUTE_CAP} replies: " + ", ".join(f["id"] for f in stuck)
     if not rounds:
-        return "ROUND", "tier 1 round 1 (full diff from base)" + ("; reviewer: sol or opus" if v2 else "")
+        return "ROUND", "tier 1 round 1 (full diff from base)" + ("; reviewer: " + TIER1_POOL if v2 else "")
     last = rounds[-1]
     passed = round_meets_bar(led, last) and not open_blocking
     t1 = [r for r in rounds if r["tier"] == 1]
@@ -682,7 +685,7 @@ def _next_step(led):
         if v2:
             # The next author is whoever wrote the fixes since last["sha"]; the ledger cannot know who.
             advice = ("; reviewer: fable" if len(t1) + 1 == fable_round(led) else
-                      f"; reviewer: sol or opus, not the author of the fixes since {last['sha'][:10]}")
+                      f"; reviewer: {TIER1_POOL}, not the author of the fixes since {last['sha'][:10]}")
         return "ROUND", f"tier 1 round {len(t1_now) + 1} (diff-only since {last['sha'][:10]})" + advice
     t2 = [r for r in rounds if r["tier"] == 2]
     if passed:
@@ -1316,9 +1319,9 @@ def cmd_round(a):
             sys.exit(_refuse("pilot reviews use tier 1, with Fable at round 2; no tier-2 bypass"))
         if a.tier == 1:
             number = sum(r["tier"] == 1 for r in phase_rounds(led)) + 1
-            expected = {"fable"} if number == fable_round(led) else {"sol", "opus"}
+            expected = {"fable"} if number == fable_round(led) else set(TIER1_REVIEWERS)
             if a.reviewer.strip().lower() not in expected:
-                sys.exit(_refuse(f"tier 1 round {number} expects reviewer " + " or ".join(sorted(expected))))
+                sys.exit(_refuse(f"tier 1 round {number} expects reviewer " + (" or ".join(sorted(expected)) if len(expected) == 1 else TIER1_POOL)))
     text = Path(a.reply).read_text()
     score, verdict, findings, resolutions = parse_reply(text)
     _, nits, hard, fixups = split_sections(text)
