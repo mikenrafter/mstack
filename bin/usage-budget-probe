@@ -98,7 +98,7 @@ def budget(document, provider, window_name=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("provider", choices=("ClaudeCode", "Codex"))
+    parser.add_argument("provider", choices=("ClaudeCode", "Codex", "Gemini"))
     parser.add_argument("--window", choices=("5h", "weekly"), help="report only this duration; absent windows exit 3")
     args = parser.parse_args()
     try:
