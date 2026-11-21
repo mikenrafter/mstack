@@ -56,22 +56,19 @@ resumed only when prompted.
 - Orchestrator: ask for the profile, timing or test output before relaying the claim.
 - Evidence: own use, 2026-11-21 (T3 thread f360e6a4).
 
-**May miss the prompt cache more often than other models (owner, 2026-11-21; re-evaluate weekly).**
-Antigravity sets the cache server-side; no setting changes its TTL. Long threads also get expensive
-anyway: Antigravity bills cached reads against the subscription pool, and the owner's thread reached
-504k of a 512k context in 53 calls (17M cached tokens).
-- Rule: start a fresh Neon agent instead of continuing one past ~100k context. Brief it from files
-  (report, diff, state file), not from thread history.
-- Detect: `mstack/bin/neon-usage <conversation.db>...` reads each conversation's cached and new input tokens from
-  Antigravity's conversation DBs; a miss is a call whose cached tokens fall below half the previous
-  context. `mstack.research/neon-trial/ttl-probe.sh` measures how long the cache survives idle gaps.
-- TTL probe (2026-11-21): cached tokens survived idle gaps of 3, 6, 12, 24 and 48 min. But the
-  cached part (~7.6k tokens) is the shared system prefix, already cached on a fresh conversation, so
-  this shows the prefix stays warm, not how long one conversation's own context lasts. usagewindow
-  assumes 23 min for Gemini sessions; keepalive windows stay at 270 s until a probe with a large
-  conversation-specific context (>50k) measures it.
-- Evidence: 2026-11-21, five Neon threads, 170 calls: 90-97% of input tokens cached, 2 misses (own
-  use). The owner's suspicion is not confirmed yet; the weekly vigil reminder `neon-quirks` re-checks it.
+**Its prompt cache lasts only about 4-5 minutes (measured 2026-11-21; re-evaluate weekly).**
+Antigravity sets the cache server-side; no setting changes it. A conversation with ~70k tokens of
+its own context was fully cached after idle gaps of 1-4 minutes and fully uncached after 5, 10 and
+20 minutes (logs: `mstack.research/neon-trial/ttl-probe-large.log`, `ttl-probe-fine.log`). Each
+miss re-reads the whole context, billed against the subscription pool; the owner's thread reached
+504k of a 512k context.
+- Rule: start a fresh Neon agent instead of continuing one past ~100k context, and brief it from
+  files. Avoid idle waits over ~4 minutes inside a Neon run; batch the waiting outside it.
+- Orchestrator: vigil keepalive for an Antigravity orchestrator uses a window under the lifetime
+  (180 s); usagewindow treats Gemini sessions as a 3-minute TTL.
+- Detect: `mstack/bin/neon-usage <conversation.db>...` gives cached vs new input per thread; the
+  weekly vigil reminder `neon-quirks` reruns it.
+- Evidence: own use, 2026-11-21 (probes above; 5 earlier threads: 90-97% cached while busy).
 
 **Answers check-ins in the final report, not in chat.** One of two runs did.
 - Brief line: "Answer orchestrator check-ins in chat, then continue."
