@@ -60,6 +60,41 @@ End with a ranked list of at most five proposed changes. Open nothing
 upstream (`no-unsolicited-upstream`). The owner approves each change before
 anyone edits a skill.
 
+## Estimates
+
+agentpace measures how far its run estimates missed, once a week. The tool reports
+evidence; you judge it. Do not change a rule, threshold or keyword list from a number
+alone.
+
+1. Read the newest `~/Documents/repos/mstack.research/practice-watch/agentpace-calibration-<date>.md`.
+   If it is older than 8 days, run `agentpace learn` and then
+   `agentpace calibration --since 7d --out <that path with today's date>`, and say so in
+   the digest. Treat the file as private: it holds thread ids, transcript paths and vigil labels.
+2. Open the top misses. Each row carries a pointer (thread id, transcript path, vigil hold
+   and label, plan task). Read enough of the run to say why the estimate missed: scope the
+   estimate did not see, a wait that was not work, a label that put the run in the wrong
+   kind, an estimate guessed rather than computed.
+3. Read the drift flags and the "New or thin history" table. A model with little history
+   (a new model such as a Gemini or a new Claude release) gets a line of its own: how many
+   runs it has, how many carried an estimate, and whether to keep falling back on another
+   model's history until it has more.
+4. Read "Vigil holds". Only holds tied to exactly one run are scored; the rest are listed by
+   reason. Many `shared-target` holds mean holds were registered after a batch of dispatches
+   (register each right after its own dispatch). Cite coverage, not an impression: say how many
+   scored holds finished under their `--expect-s` and how many misses a true P80 would give
+   (one in five). At 31 of 31 under the estimate, against about 6 misses expected for a true
+   P80, the `--expect-s` values are ceilings, not P80s; with a handful of holds the same
+   reading would be noise, so the count comes first.
+5. Read "How runs were labelled". Many `other` kinds or `unknown` models mean the keyword
+   labelling missed those runs; that is evidence for a better way to label, not a reason to
+   widen the keyword list.
+6. Write an "Estimates" part in the digest: what moved, which misses you opened and what
+   each showed, and at most three proposed algorithm or labelling changes, each with the
+   evidence (counts, pointers) and what to measure after it. Queue them as proposals for the
+   owner. Apply nothing. Open nothing upstream.
+7. If the file shows no estimate-bearing runs, say that. Do not infer calibration from
+   groups with no estimates.
+
 ## Readwise
 
 Readwise is the scraping backbone (`readwise` CLI, signed in). Two write modes are allowed, and
