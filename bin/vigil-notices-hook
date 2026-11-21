@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# SessionStart / UserPromptSubmit hook (Claude Code and Codex): put pending
+# vigil notices in the agent's context. vigil records each notice as delivered
+# to this session, so a notice appears once per session across hooks,
+# keepalive and the MCP `notices` tool.
+#
+# Fail-open: a missing vigil, a timeout, empty output or unparsable input prints
+# nothing and exits 0. Input: the hook JSON on stdin (session_id, cwd,
+# hook_event_name). Output: hookSpecificOutput.additionalContext, or nothing.
+set -u
+input="$(cat)" || exit 0
+command -v vigil >/dev/null 2>&1 || exit 0
+event="$(printf '%s' "$input" | jq -r '.hook_event_name // empty' 2>/dev/null)" || exit 0
+[ -n "$event" ] || event=UserPromptSubmit
+out="$(printf '%s' "$input" | timeout 5 vigil notices --from-hook 2>/dev/null)" || exit 0
+[ -n "$out" ] || exit 0
+jq -n --arg event "$event" --arg text "vigil notices (one-time announcements from the operator):
+$out" '{hookSpecificOutput: {hookEventName: $event, additionalContext: $text}}' 2>/dev/null || exit 0
