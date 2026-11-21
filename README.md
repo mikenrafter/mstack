@@ -69,6 +69,7 @@ The script tests check helper behavior, not whether the workflow improves softwa
 - To test unpublished changes in phoe-nix, stage new files here and build the consumer with `--override-input mstack path:/absolute/path/to/mstack`. After publishing, update the named `mstack` lock and deploy `nix-scout switch agent-integration` without the override.
 - Read the matching skill and its companions before applying a workflow. User instructions and available tools determine what can actually run.
 - Do not open issues, forks, pull requests, discussions or other outreach without the owner's explicit request. See [no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md).
+- Before pushing to a public repo or fork, run `bin/publish-scan`; [publishing-scrub](skills/publishing-scrub/SKILL.md) says what to scrub without asking.
 - Keep transcripts, credentials, personal highlights and session handoffs out of this repository.
 - For research, follow [BRIEF.md](research/BRIEF.md): date sources, grade evidence and mark unverified claims.
 - Keep changes focused and report the checks actually run. Run the helper-script tests when changing those scripts.

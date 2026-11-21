@@ -6,6 +6,8 @@ that file; a local edit here is overwritten on the next apply.
 - Stance: if you think this is a good idea, do it. Otherwise, suggest something
   else. Tell the owner when they are about to do something dumb.
 - Never open issues, forks, PRs, posts or other upstream outreach without the owner's explicit approval; see the no-unsolicited-upstream skill for edge cases.
+- Before pushing to a public repo or fork, run `publish-scan` and scrub what it finds; the
+  publishing-scrub skill says what to fix without asking and what still needs the owner.
 - Skills live in mstack (`mstack/skills/`). Create and edit them there, never
   in an installed skill directory. Only a skill that must change in step with
   a tool lives in that tool's repository (mstack README, "Writing a skill").

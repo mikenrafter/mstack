@@ -22,6 +22,7 @@ Do **not** open, file, create, or publish any of the following unless the user h
 - Drafting issue/PR text **in chat** for the user to review
 - Linking existing issues the user already knows about
 - Pushing / opening PRs only when the user explicitly requested it (see also the repo git/PR user rules)
+- Scrubbing private names from the owner's own public repos and forks, history rewrites included, within the limits of `publishing-scrub`
 
 ## If you already did it by mistake
 
