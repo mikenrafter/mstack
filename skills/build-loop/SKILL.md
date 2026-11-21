@@ -195,7 +195,7 @@ if vigil fails; never loops or chained sleeps.
 start the next. Subagents never use orchestrator mode. One session hold
 (bare is fine); each delegated run is an item: `vigil hold add <hold> --for
 pid:N|file:<report>|none --label <run> $(agentpace estimate-run --model M --kind K --vigil-meta)
---meta run=<childThreadId>` (`references/estimates.md`); `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
+--meta run=<taskId>` (`references/estimates.md`); `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
 releases, make a new hold at once.
 
 "In flight": a working or paused subagent, Sol run or reviewer; a background

@@ -122,7 +122,7 @@ return. Never a foreground `keepalive` call (every user message interrupts
 it). Keep one session hold (a bare one is fine) and add each delegated run to
 it as an item rather than making a hold per run: `vigil hold add <hold> --for
 pid:N|file:<report>|none --label <run> $(agentpace estimate-run --model M --kind K --vigil-meta)
---meta run=<childThreadId>` (the pid or report file
+--meta run=<taskId>` (the pid or report file
 when the run has one, else `none`; `--vigil-meta` always supplies `--expect-s`, so a stalled run raises
 `item overdue: <run>`). The same keepalive covers every item; each one that
 ends raises `item ended: <run>: <why>` and the hold stays live while other items remain (the last item's event comes with the release). When a `none`
