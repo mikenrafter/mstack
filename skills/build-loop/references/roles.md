@@ -87,11 +87,11 @@ A new model gets no pinned role (round-3 reviewer, hardening, press release) unt
 4. **Re-check on version bumps.** A new version of a profiled model is re-trialled briefly, never
    assumed equal (B3).
 
-**Gemini 4 Neon** (Google, medium model, 2026-11). Untrialled here. Reported: high coherency and
-capability, the best plan and press-release copy the reviewer had seen, weak at 3D, analysis
-hallucinations as above. It runs through Antigravity: the T3 `antigravity` provider is disabled on
-this host until the owner installs and signs in. Until it is trialled and available, its roles fall
-back as listed (press release: Opus).
+**Gemini 4 Neon** (Google, medium model, 2026-11). Available here since 2026-11-20: T3 provider
+`antigravity`, model `gemini-4-neon` (always name it; the provider default is Gemini 3.8 Flash), on a
+Google AI Pro account. Untrialled. Reported: high coherency and capability, the best plan and
+press-release copy the reviewer had seen, weak at 3D, analysis hallucinations as above. Until the
+trial (§2c) scores it, its roles fall back as listed (press release: Opus).
 
 **Switch by budget.** Claude usage low: Sol implements, Opus reviews and
 verifies. Sol low or at its limit: Sonnet implements, Opus reviews or waits
