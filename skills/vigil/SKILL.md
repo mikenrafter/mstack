@@ -109,7 +109,10 @@ Rules for the main session:
 - Keep one session hold. Add each delegated run (T3 delegate, background agent,
   build) to it as an item: `--for pid:N` or `--for file:<report>` when the run
   has one, else `--for none`. Always pass `--expect-s` set to its time
-  estimate, so a stalled run raises overdue notes and then attention, and `--label <run>`. When a
+  estimate (`agentpace estimate-run --expect-s`, the run's P80), so a stalled run raises overdue
+  notes and then attention, and `--label <run>`. Tag it for the estimator: `--meta model=<m>
+  --meta kind=<k>`, plus `--meta task=<plan>/<task>` when it belongs to an agentpace plan. Finished
+  items land in `~/.local/state/vigil/items.jsonl`. When a
   `none` run's completion notification arrives, `vigil hold done <hold> <run>`.
   A hold takes 16 live items; ended items free capacity. The most recently
   added 64 ended items stay in history. Undelivered events survive history

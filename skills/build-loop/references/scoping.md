@@ -97,10 +97,7 @@ implementer brief, next to: "You may use vigil, but never orchestrator mode (`or
 
 ## Estimates (§2)
 
-- Estimate from `TIMINGS.md` (or the project's equivalent) and count the runs: iterations × round trip,
-  plus builds. State the per-iteration cost ("~10 min per ephemeral compute run, 4–6 runs").
-- An iteration build's estimate holds no review rounds. Give the review loop its own line.
-- Owner deadline: plan to it. Time-box the implementer, ship what is green at the box, list the rest.
+In `references/estimates.md`: every ETA comes from `agentpace` plan state.
 
 ## Developer releases: deadlines (owner, 2026-11-20)
 

@@ -59,6 +59,8 @@ Model-based property tests: a small pure model of the intended states and
 transitions; generate random command sequences; apply to model and real
 system; assert observable state agrees after every step, and that illegal
 transitions are refused. Include crash/rollback and retry commands.
+Report each command's firing count. A property "holds" vacuously when the action that would
+break it never fired; fail the run when a declared action has zero firings.
 
 ### Conditional and leads-to properties
 A property shaped *when X, then Y* passes for free when X never happens; so
@@ -264,6 +266,12 @@ in Retry eventually leaves Retry" holds for any worker that never retries.
 Detect: break Y; still green means X never fired. Fix: a witness that
 reaches X through production with shipped defaults, plus a generator check
 (§3).
+
+**Leaked processes.** A test that spawns a server, watcher or emulator and dies without killing
+it leaves the process running. One suite left 1,121 such processes, some ten hours old, pushing
+load to 30–60 and making unrelated tests flaky. On 8 GB hosts that is fatal. Give each test file
+its own temp dir. After the file, fail it if any live process still has that dir in its command
+line or working directory.
 
 ## 9. Domain checks worth adding wherever they apply
 

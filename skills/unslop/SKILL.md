@@ -8,6 +8,9 @@ description: >-
 
 # Unslop
 
+**Exception (owner, 2026-11-20): Gemini Neon does not load this skill.** Its copy is trialled
+without it; the owner will revisit the decision after the trial. Every other model still follows it.
+
 Edit text to remove AI patterns and add human voice.
 
 ## Process

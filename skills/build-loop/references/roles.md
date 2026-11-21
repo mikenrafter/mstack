@@ -31,6 +31,68 @@ The agent cap and the role table stay in SKILL.md §2. This file holds the rest.
 - **Copy (C3).** Subagents do not load `unslop` or `plain-writing` unless they
   write copy; briefs to implementers say so.
 
+## 2b. Capability and coherency (owner, 2026-11-20)
+
+Judge every model on six sub-axes in two groups. Benchmarks mostly measure the last one.
+
+**Coherency.** Can you follow it and work with it?
+- **Copy:** text a person reads easily. Plans, PR bodies and replies have no slop and no stumbles.
+- **Task juggling:** it stays on task over hours, keeps parallel threads straight, finishes the work
+  and does not stop halfway. Failure looks like "slop for days" or dropped threads.
+- **HITL comms:** it understands what the owner meant, asks the right question at the right time,
+  reports what it did and what it needs, and answers the ask instead of a side question.
+
+**Capability.** What can it do, and what does it cost when it goes wrong?
+- **Safeguard aggression:** how readily safety filters stop legitimate work. Current ranking, most
+  aggressive first: Opus 5+, Sonnet 5+, Sol (every version), Opus 4.8. Other models are unknown.
+  Before giving a model security, firmware or reverse-engineering work, check this ranking, and
+  `handling-ambiguous-work` for recovery.
+- **Mistake gravity:** how bad its errors are when they happen. A wrong comment is cheap. A silent
+  data change, a destructive command or a confident false claim is expensive.
+- **Capability ceiling:** the hardest problem it can solve.
+
+**Evidence and its weight.** Score each sub-axis from two sources, recorded separately:
+1. The owner's own use: review ledgers, retro findings, trials (§2c). This weighs most.
+2. The collective temperature: practitioners' write-ups and videos (`practice-watch`, Theo's
+   council, people the owner follows), with the source and date.
+
+AI companies' own announcements, press releases and launch benchmarks count for almost nothing.
+They are notoriously unreliable. Never let one raise a score on its own.
+
+Where the axes decide the role:
+- **Release hardening and final reviews:** task juggling and HITL comms first, then low mistake
+  gravity. Use a capable model that is weak on these only for bounded subtasks, with ~30-minute
+  check-ins.
+- **Pilots with a deadline:** task juggling over the capability ceiling. A model that stays on task
+  beats a stronger one that drifts. Hard, isolated subproblems go to the strongest model.
+- **Copy, press releases, PR bodies:** copy first.
+- **Open-ended research:** the capability ceiling matters most, but every claim is marked verified
+  or unverified. High mistake gravity in analysis (Neon: 10 of 72 claims wrong in one review) means
+  claims are checked before anyone acts on them.
+
+## 2c. A new model arrives
+
+A new model gets no pinned role (round-3 reviewer, hardening, press release) until it is scored.
+
+1. **Access and cost first.** How do we run it here (T3 provider, CLI)? What does it cost or what
+   subscription subsidises it (`budget.md` §8a)? Tell the owner if it needs a login or a paid plan.
+2. **Trial as a pilot.** About an hour on real work, scored on both axes:
+   - a coherency probe: a long, bounded task with a mid-run steer, and a "why is this slow / what is
+     wrong" diagnosis on a thread another model got lost in;
+   - a capability probe: a hard, verifiable task from the current backlog.
+   Record a profile entry in `reviewer-profiles.json` (strengths, failure modes, both scores, date,
+   source) and tell the owner the result before giving it a role.
+3. **Its quirks go into `references/quirks.md`**: what it does, how to detect it, and the
+   defined response, in the brief and in the orchestrator.
+4. **Re-check on version bumps.** A new version of a profiled model is re-trialled briefly, never
+   assumed equal (B3).
+
+**Gemini 4 Neon** (Google, medium model, 2026-11). Untrialled here. Reported: high coherency and
+capability, the best plan and press-release copy the reviewer had seen, weak at 3D, analysis
+hallucinations as above. It runs through Antigravity: the T3 `antigravity` provider is disabled on
+this host until the owner installs and signs in. Until it is trialled and available, its roles fall
+back as listed (press release: Opus).
+
 **Switch by budget.** Claude usage low: Sol implements, Opus reviews and
 verifies. Sol low or at its limit: Sonnet implements, Opus reviews or waits
 for Sol (§8). Never quietly substitute a model for a role the user pinned.

@@ -40,6 +40,16 @@ wrong, or context loss at compaction. Count instances in the codebase as well
 as in the sessions; a pattern with thousands of existing instances needs a
 baseline, not a rule.
 
+### Reviewer noise per model
+
+Sum `review-ledger status` across the period's ledgers. For each reviewer model, report the share
+of findings that ended fixed against disagreed, declined or discarded, and the mean rounds to
+pass. Compare with the outside references: Anthropic's review telemetry (mean 1.32 rounds to pass
+after round caps and step-backs, heard through Theo) and Theo's council (scores move from ~7.5 to
+~9 after two or more rounds). A model whose noise share stands out loses reviewer weight in
+`reviewer-profiles.json`. It feeds the mistake-gravity and HITL-comms scores (`build-loop`
+`roles.md` §2b).
+
 ## 4. Route each cause
 
 Checks first. Prose rules did not survive compaction in the owner's own data

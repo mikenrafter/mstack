@@ -22,6 +22,17 @@ already answered.
 
 1. **Grill** (`question-everything` §1–§1a): alignment with the owner;
    glossary terms, ADRs the owner approves.
+1a. **Press release** (feature sets; owner, 2026-11-20). Before the plan, write the announcement
+   as if the feature had shipped: the blog post a user would read, from Amazon's working-backwards
+   practice. It names who it is for, the problem in their words, what they can now do, and what
+   it deliberately does not do. Then the plan works backwards from it.
+   - **Author:** Gemini Neon. Backup: Opus, when Neon is unavailable or has no scored profile
+     (`roles.md` §2c). **Sol never writes it**, not even as a fallback.
+   - The author loads `writing-copy`. The page is HTML, kept in the project's research directory
+     and shown with `html_preview` then `html_render`. The owner approves it before the spec.
+   - The spec, red tests and final review check against it. Anything the release promises is in
+     scope; anything else waits. A scope change edits the press release first.
+   - Skip for a bug fix, a single-screen tweak or internal tooling with one user.
 2. **Prototype or mockup** (`question-everything` §1b) when the answer depends
    on look, feel or unpredictable behaviour. Throwaway; never merged.
 3. **Pilot** (`references/scoping.md`) when the open question is whether the

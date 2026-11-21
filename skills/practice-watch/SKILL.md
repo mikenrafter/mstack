@@ -14,7 +14,8 @@ what, if anything, the owner should change.
 ## Run
 
 1. `bin/practice-watch fetch --captions` (add `--to-reader` only when the
-   owner has approved Reader saves for this run or for scheduled runs). It
+   owner has approved Reader saves for this run or for scheduled runs; transcript
+   fills and highlights follow "Readwise" below). It
    writes `research/practice-watch/inbox/<date>.json`. Read that file. Report
    every entry in `failures` at the end of the digest; do not retry silently.
 2. For each item, read the primary source. Videos: the caption file in
@@ -58,6 +59,29 @@ plain prose, a URL and date per claim, an evidence grade A to D, and
 End with a ranked list of at most five proposed changes. Open nothing
 upstream (`no-unsolicited-upstream`). The owner approves each change before
 anyone edits a skill.
+
+## Readwise
+
+Readwise is the scraping backbone (`readwise` CLI, signed in). Two write modes are allowed, and
+nothing else is written to it:
+
+1. **Fill a missing transcript.** When Reader holds a video without a transcript (or never got
+   one) and this run captured captions, submit the cleaned transcript:
+   `readwise reader-create-document --url <video url> --markdown <transcript> --title <title>
+   --author <channel> --tags practice-watch`. Clean it first: drop repeated rolling caption lines,
+   rejoin words split across lines, and keep `[mm:ss]` markers every minute or so.
+2. **Read for the brief.** Use Reader as a source: `reader-search-documents` and
+   `reader-get-document-details` for transcripts and articles the feeds missed.
+
+**Highlights: at most one per automated read, and only after the owner approves it.**
+- Pick the one passage that changes what we do. Take a slightly larger span than the key sentence,
+  then cut the middle with `[…]`, so the quote carries its own context and the note can stay short.
+- The note says why it matters to us and adds the context the quote lacks (which skill, project or
+  decision it bears on).
+- Queue proposals in `research/practice-watch/highlights-pending.md` (source, quote, note) and list
+  them in the digest. Submit only the ones the owner approves:
+  `readwise readwise-create-highlights` with text, title, author, `source_url` and `note`.
+  Record each submission in the digest.
 
 ## Sources
 

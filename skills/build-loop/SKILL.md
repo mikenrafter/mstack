@@ -35,7 +35,8 @@ This file is a router; detail lives in `references/`. Section numbers are stable
 | `references/bars.md` | At `review-ledger init`, to choose the bar (§6a). |
 | `references/bots.md` | When a PR bot posts (§6e). |
 | `references/sol.md` | Before the first Sol run (§7). |
-| `references/scoping.md` | At scope, before pilot red or a structural round, before estimates, deadlines or ephemeral compute iteration plans. |
+| `references/quirks.md`, `references/estimates.md` | Briefs to a model listed there; every ETA. |
+| `references/scoping.md` | At scope, before pilot red or a structural round, deadlines or ephemeral compute plans. |
 | `references/budget.md` | On budget advice, a usage limit or reset, before a second agent, on a vigil `item overdue` (§8–§10). |
 | `references/reviewers.md` | Before a contribution to a project you do not own, before re-scoping a PR after review. |
 | `references/handoff.md` | Before a PR body or the final report (§11–§12). |

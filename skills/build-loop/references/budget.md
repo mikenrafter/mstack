@@ -11,6 +11,27 @@ When a model hits its limit mid-run:
 4. Relaunch with a "resume" prompt pointing at the partial work and report.
    Never restart from scratch.
 
+## 8a. Subscription subsidies (Gemini, 2026-11-20)
+
+Subsidised plans buy far more work than API billing at the same price. Know each one's shape
+before planning around it.
+
+- **Google AI plans** (Antigravity, which T3 drives): Pro $19.99, Ultra 5x $99.99, Ultra 20x
+  $199.99 a month. Gemini models share one rate limit "drawn down according to API pricing"
+  ([Antigravity plans post](https://antigravity.google/blog/changes-to-antigravity-plans/)). It
+  refreshes every 5 hours, up to a weekly cap. Ultra 5x has 5× Pro's tokens, and 20x has 20×. Google
+  publishes no absolute size. Past the cap, AI credit packs (2,500 / 5,000 / 20,000) bill at Gemini
+  Enterprise rates. Bringing your own API key gives no extra plan quota.
+- **Neon draws the pool fast:** $3 / M input, $15 / M output (cached input reportedly $0.15 / M).
+  That is 4× Flash until 2026-12-31, then 2×.
+- **Sizing a run** (our Sol runs as a proxy: 1,202 runs, P50 1.6 M tokens, P80 10 M, P90 23 M; assuming
+  ~92% cached input, 7% fresh input, 1% output, about $0.50 per million): about $0.80 of API value for
+  a typical run, $5 for a P80 run, $11 for a P90 run. The plan's window size is unknown, so measure
+  it: on the first Neon run, read "Five Hour Limit Remaining" before and after, along with the
+  run's tokens. That turns the plan into "runs per window" and "runs per week".
+- Until measured, plan Neon as a scarce role (press release, coherency-critical reviews), not the
+  default implementer.
+
 ## B5. Back to default roles
 
 Read `vigil advice` by window, at a threshold of 15% left:

@@ -26,3 +26,5 @@
    commands use qex/Boat and vigil per their skills; subagents never use
    orchestrator mode or sleep loops. Reviewer work stays read-only, with
    checks run in a disposable copy when needed.
+7. **Quirks.** Sol's known quirks and the defined responses are in `quirks.md`. On an
+   `item overdue` for a Sol review, read the child once for a `VERDICT:` line before waiting longer.
