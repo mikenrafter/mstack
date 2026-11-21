@@ -65,8 +65,11 @@ anyway: Antigravity bills cached reads against the subscription pool, and the ow
 - Detect: `mstack/bin/neon-usage <conversation.db>...` reads each conversation's cached and new input tokens from
   Antigravity's conversation DBs; a miss is a call whose cached tokens fall below half the previous
   context. `mstack.research/neon-trial/ttl-probe.sh` measures how long the cache survives idle gaps.
-- Orchestrator: keepalive windows for a Neon session stay at 270 s until the probe shows a longer
-  lifetime.
+- TTL probe (2026-11-21): cached tokens survived idle gaps of 3, 6, 12, 24 and 48 min. But the
+  cached part (~7.6k tokens) is the shared system prefix, already cached on a fresh conversation, so
+  this shows the prefix stays warm, not how long one conversation's own context lasts. usagewindow
+  assumes 23 min for Gemini sessions; keepalive windows stay at 270 s until a probe with a large
+  conversation-specific context (>50k) measures it.
 - Evidence: 2026-11-21, five Neon threads, 170 calls: 90-97% of input tokens cached, 2 misses (own
   use). The owner's suspicion is not confirmed yet; the weekly vigil reminder `neon-quirks` re-checks it.
 
