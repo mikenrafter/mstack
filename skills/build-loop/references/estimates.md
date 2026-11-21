@@ -18,7 +18,8 @@ feel: models estimate at human-team pace and overshoot agent work 2–5× (vigil
   words (`--owner-grant "<quote>"`). Max effort is not a speed lever.
 - **Vigil:** dispatch, then register the hold right after it with
   `vigil hold add <hold> --for none --label <run> $(agentpace estimate-run --model <M> --kind <K> --vigil-meta)
-  --meta run=<childThreadId or task id>` (plus `--meta task=<plan>/<task>` for a plan task). The flags carry the
+  --meta run=<childThreadId>` (plus `--meta task=<plan>/<task>` for a plan task; a T3 taskId also works,
+  an Agent needs its agentId). The flags carry the
   run P80 as `--expect-s` and the estimator's p50/p80 as meta; `run` ties the hold to its run exactly, so
   agentpace learn scores that estimate. Vigil's ledger then closes plan tasks. A hand-typed `--expect-s` is
   only a ceiling, reported apart from P80 coverage.

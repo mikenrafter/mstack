@@ -73,8 +73,8 @@ No UI screenshots or builds reach the owner until a different model has run a fi
 (screenshot pairs, mock-up next to build).
 
 Every brief states most-important behavior, invariants, priority concerns, lower
-priorities and evidence. Preserve serious defects regardless of priority. Use
-`references/dialogue.md` and the ledger to record focus and dialogue. No upfront
+priorities and evidence. Preserve serious defects regardless of priority. Record
+focus and dialogue in the ledger (`references/dialogue.md`). No upfront
 proposal approval.
 
 ## 0. Boldness
@@ -187,17 +187,16 @@ stash`. `references/budget.md`, `references/scoping.md`.
 ## 10. Keepalive and low-budget conduct
 
 **Hold the session with vigil** while anything is in flight, even with nothing
-to watch: each wait also checks usage limits and advisories. Manual tick only
-if vigil is unavailable or failing; never loops or chained sleeps.
+to watch: each wait checks usage limits and advisories. Manual tick only
+if vigil fails; never loops or chained sleeps.
 
 **Wait in the background:** `vigil keepalive <hold> --orchestrator`,
 `run_in_background`, timeout at least 3,600,000 ms; on each return, act and
 start the next. Subagents never use orchestrator mode. One session hold
 (bare is fine); each delegated run is an item: `vigil hold add <hold> --for
 pid:N|file:<report>|none --label <run> $(agentpace estimate-run --model M --kind K --vigil-meta)
---meta run=<childThreadId or task id>` (the flags carry `--expect-s` and the estimate; see
-`references/estimates.md`), and `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
-releases, make a new hold in the same turn.
+--meta run=<childThreadId>` (`references/estimates.md`); `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
+releases, make a new hold at once.
 
 "In flight": a working or paused subagent, Sol run or reviewer; a background
 command; a wait on CI, a bot or a usage reset; queued work; or the user asked

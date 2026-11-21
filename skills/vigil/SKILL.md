@@ -112,9 +112,10 @@ Rules for the main session:
   estimate, so a stalled run raises overdue notes and then attention, and `--label <run>`.
   Dispatch first, then register the hold with the estimator's own flags and the run's id:
   `vigil hold add <hold> --for none --label <run> $(agentpace estimate-run --model <M> --kind <K>
-  --vigil-meta) --meta run=<childThreadId or task id>`. `--vigil-meta` prints `--expect-s <P80>` and
-  `--meta p50/p80/est/model/kind`; `run` (a T3 child thread id or task id, a Claude background-agent id,
-  or a Codex session id) lets agentpace link the hold to its run exactly. Add `--meta task=<plan>/<task>`
+  --vigil-meta) --meta run=<childThreadId>`. `--vigil-meta` prints `--expect-s <P80>` and
+  `--meta p50/p80/est/model/kind`; `run` lets agentpace link the hold to its run exactly. For a T3
+  delegate it is the childThreadId (preferred; the taskId, including a `t3_thread_send` follow-up's,
+  also works); for a Claude background agent its agentId; for Codex its session id. Add `--meta task=<plan>/<task>`
   when it belongs to an agentpace plan. A hand-typed `--expect-s` without the estimator's meta is
   only a ceiling and is never scored as a P80. Finished
   items land in `~/.local/state/vigil/items.jsonl`. When a
