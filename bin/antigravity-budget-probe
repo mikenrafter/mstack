@@ -8,7 +8,16 @@ case "$pool" in gemini) row="Gemini Models";; claude-gpt) row="Claude and GPT mo
 case "$window" in 5h) col="Five Hour Limit Remaining";; weekly) col="Weekly Limit Remaining";; *) exit 2;; esac
 P=$(ls -d "$HOME"/.t3/userdata/providers/antigravity/*/ 2>/dev/null | head -1)
 cd "${TMPDIR:-/tmp}"
-out=$(GEMINI_HOME=${P:-$HOME/.gemini} AGY_ACP_FORCE_FILE_STORAGE=1 AGY_CLI_DISABLE_AUTO_UPDATE=1 timeout 17 agy --print /usage --print-timeout 15s 2>/dev/null)
+# One agy start serves every window and pool: the raw /usage output is cached for 60 s under a lock,
+# so vigil's serial advisory pass pays one cold start, and two probes never run agy at once.
+C=${XDG_CACHE_HOME:-$HOME/.cache}/antigravity-budget-probe; mkdir -p "$C"
+exec 9>"$C/lock"; flock -w 18 9 || { echo '{"error":"lock busy"}'; exit 1; }
+if [ -s "$C/usage" ] && [ $(( $(date +%s) - $(stat -c %Y "$C/usage") )) -lt 60 ]; then
+  out=$(cat "$C/usage")
+else
+  out=$(GEMINI_HOME=${P:-$HOME/.gemini} AGY_ACP_FORCE_FILE_STORAGE=1 AGY_CLI_DISABLE_AUTO_UPDATE=1 timeout 17 agy --print /usage --print-timeout 15s 2>/dev/null) || true
+  [ -n "$out" ] && printf '%s\n' "$out" > "$C/usage.tmp" && mv "$C/usage.tmp" "$C/usage"
+fi
 line=$(printf '%s\n' "$out" | awk -F'\t' -v r="$row" -v c="$col" '$1==r && $2==c {print $3 "\t" $4; exit}')
 [ -n "$line" ] || { echo '{"error":"no usage row"}'; exit 1; }
 pct=${line%%%*}; resets=${line#*$'\t'}
