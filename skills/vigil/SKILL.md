@@ -109,9 +109,14 @@ Rules for the main session:
 - Keep one session hold. Add each delegated run (T3 delegate, background agent,
   build) to it as an item: `--for pid:N` or `--for file:<report>` when the run
   has one, else `--for none`. Always pass `--expect-s` set to its time
-  estimate (`agentpace estimate-run --expect-s`, the run's P80), so a stalled run raises overdue
-  notes and then attention, and `--label <run>`. Tag it for the estimator: `--meta model=<m>
-  --meta kind=<k>`, plus `--meta task=<plan>/<task>` when it belongs to an agentpace plan. Finished
+  estimate, so a stalled run raises overdue notes and then attention, and `--label <run>`.
+  Dispatch first, then register the hold with the estimator's own flags and the run's id:
+  `vigil hold add <hold> --for none --label <run> $(agentpace estimate-run --model <M> --kind <K>
+  --vigil-meta) --meta run=<childThreadId or task id>`. `--vigil-meta` prints `--expect-s <P80>` and
+  `--meta p50/p80/est/model/kind`; `run` (a T3 child thread id or task id, a Claude background-agent id,
+  or a Codex session id) lets agentpace link the hold to its run exactly. Add `--meta task=<plan>/<task>`
+  when it belongs to an agentpace plan. A hand-typed `--expect-s` without the estimator's meta is
+  only a ceiling and is never scored as a P80. Finished
   items land in `~/.local/state/vigil/items.jsonl`. When a
   `none` run's completion notification arrives, `vigil hold done <hold> <run>`.
   A hold takes 16 live items; ended items free capacity. The most recently

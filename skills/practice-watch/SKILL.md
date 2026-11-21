@@ -81,10 +81,12 @@ alone.
 4. Read "Vigil holds". Only holds tied to exactly one run are scored; the rest are listed by
    reason. Many `shared-target` holds mean holds were registered after a batch of dispatches
    (register each right after its own dispatch). Cite coverage, not an impression: say how many
-   scored holds finished under their `--expect-s` and how many misses a true P80 would give
-   (one in five). At 31 of 31 under the estimate, against about 6 misses expected for a true
-   P80, the `--expect-s` values are ceilings, not P80s; with a handful of holds the same
-   reading would be noise, so the count comes first.
+   scored holds finished under their estimate and how many misses a true P80 would give
+   (one in five). Holds that carry the estimator's `--meta p50/p80` are scored as that estimate
+   (P80 coverage); a hand-typed `--expect-s` with no such meta is reported apart under "Hand-set
+   ceilings", never as P80 coverage. If most scored holds are ceilings, the digest's first
+   finding is that dispatches are not using `agentpace estimate-run --vigil-meta` and
+   `--meta run=<id>`. With a handful of holds any reading is noise, so the count comes first.
 5. Read "How runs were labelled". Many `other` kinds or `unknown` models mean the keyword
    labelling missed those runs; that is evidence for a better way to label, not a reason to
    widen the keyword list.

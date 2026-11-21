@@ -194,8 +194,9 @@ if vigil is unavailable or failing; never loops or chained sleeps.
 `run_in_background`, timeout at least 3,600,000 ms; on each return, act and
 start the next. Subagents never use orchestrator mode. One session hold
 (bare is fine); each delegated run is an item: `vigil hold add <hold> --for
-pid:N|file:<report>|none --expect-s N --label <run>`, and `vigil hold done
-<hold> <run>` on a `none` run's notification. Never cancel it; if it
+pid:N|file:<report>|none --label <run> $(agentpace estimate-run --model M --kind K --vigil-meta)
+--meta run=<childThreadId or task id>` (the flags carry `--expect-s` and the estimate; see
+`references/estimates.md`), and `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
 releases, make a new hold in the same turn.
 
 "In flight": a working or paused subagent, Sol run or reviewer; a background

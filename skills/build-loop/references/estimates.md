@@ -16,9 +16,12 @@ feel: models estimate at human-team pace and overshoot agent work 2–5× (vigil
 - **Never buy the deadline with spend.** High-cost trade-offs (extra agents past the cap, fast modes,
   large or extra sandboxes) are suggestions marked `needs_owner`. Apply one only on the owner's
   words (`--owner-grant "<quote>"`). Max effort is not a speed lever.
-- **Vigil:** `--expect-s` comes from `agentpace estimate-run --expect-s` (run P80), and each item carries
-  `--meta task=<plan>/<task> --meta model=<m> --meta kind=<k>`. Vigil's ledger then closes plan tasks
-  and scores the estimate.
+- **Vigil:** dispatch, then register the hold right after it with
+  `vigil hold add <hold> --for none --label <run> $(agentpace estimate-run --model <M> --kind <K> --vigil-meta)
+  --meta run=<childThreadId or task id>` (plus `--meta task=<plan>/<task>` for a plan task). The flags carry the
+  run P80 as `--expect-s` and the estimator's p50/p80 as meta; `run` ties the hold to its run exactly, so
+  agentpace learn scores that estimate. Vigil's ledger then closes plan tasks. A hand-typed `--expect-s` is
+  only a ceiling, reported apart from P80 coverage.
 - **Machine time:** record suites and builds with `agentpace record` (it replaces hand-written
   `TIMINGS.md` rows; `agentpace timings import` converted the old files).
 - An iteration build's estimate holds no review rounds. Give the review loop its own line.
