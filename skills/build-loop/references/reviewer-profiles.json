@@ -1214,6 +1214,109 @@
       },
       "scope": "aggregate",
       "role": "reviewer"
+    },
+    {
+      "model": "gemini-4-neon",
+      "family": "neon",
+      "aliases": [
+        "neon",
+        "gemini-neon"
+      ],
+      "archetype": null,
+      "status": "provisional",
+      "role": "implementation",
+      "scope": "exact",
+      "observations": [
+        "Trial 2026-11-21 (build-loop roles.md \u00a72c): three delegated runs (T3 provider antigravity, thought_level high) plus the owner's own top-level Neon thread. Small sample; scores are provisional.",
+        "Runs finished 3-5x faster than agentpace's default estimate: diagnosis 8 min, a 7-commit Rust lint fix 10.5 min, a 2,000-line Python feature with tests 25 min.",
+        "Spend: the four threads together used 43 points of the Google AI Pro 5-hour window and 13 of the weekly in 28 minutes (quota-log.md)."
+      ],
+      "axes": {
+        "copy": {
+          "score": 7,
+          "note": "Clear, structured reports that keep the verified/unverified tags; long and heavy on bold. Press-release copy not yet tried."
+        },
+        "task_juggling": {
+          "score": 8,
+          "note": "All three runs finished in one turn; the brief line kept it from ending a turn while Boat jobs ran. The mid-run steer was not tested: runs finished before it."
+        },
+        "hitl_comms": {
+          "score": 7,
+          "note": "Answered a check-in in under a minute (usage-gap); the clippy run answered in its report instead of chat. In the owner's thread it asked a good scoping question with options, but then said it had 'implemented 60fps optimizations' before any profiling ran."
+        },
+        "safeguard_aggression": {
+          "score": null,
+          "note": "No refusals; no security, firmware or reverse-engineering work tried."
+        },
+        "mistake_gravity": {
+          "score": 7,
+          "note": "Higher is better (low gravity). No wrong claim found in orchestrator spot-checks of 8 citations; respected read-only, privacy and behaviour-preserving constraints. One overclaim of unmeasured work (owner thread)."
+        },
+        "capability_ceiling": {
+          "score": 8,
+          "note": "Found why round 4 saw no Claude limit markers (the regex missed the 'monthly spend limit' wording, present in 36 transcripts); mutation-tested its own tests; exact T3 migration root cause."
+        }
+      },
+      "strengths": [
+        {
+          "pattern": "Finds the real root cause and cites file:line evidence that checks out.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/neon-trial/report-t3-diagnosis.md",
+            "/home/mini/Documents/repos/mstack.research/neon-trial/scoring-notes.md"
+          ]
+        },
+        {
+          "pattern": "Writes red tests first and checks them with deliberate mutations without being asked.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/neon-trial/report-usage-gap.md"
+          ]
+        },
+        {
+          "pattern": "Keeps hard constraints: read-only, no private data in a public repo, no #[allow], sandbox stopped.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/neon-trial/report-vigil-clippy.md"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Reports work as done before it is measured (60fps 'implemented' before profiling).",
+          "status": "observed",
+          "evidence": [
+            "T3 thread f360e6a4-2efd-4016-b759-01a2bca774fd, 2026-11-21T03:46Z"
+          ]
+        },
+        {
+          "pattern": "Answers orchestrator check-ins in the final report rather than in chat, sometimes.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/neon-trial/report-vigil-clippy.md"
+          ]
+        },
+        {
+          "pattern": "Large single batches (2,000 lines in one pilot run); exceeds pilot test-size guidance.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/neon-trial/report-usage-gap.md"
+          ]
+        }
+      ],
+      "mask": [
+        "Ask for measurements (profiles, timings, test output) behind every performance or completion claim.",
+        "Put check-in answers in chat before continuing.",
+        "Name the model gemini-4-neon in every delegation; the provider default is Gemini 3.8 Flash."
+      ],
+      "sample": {
+        "role": "implementation",
+        "window": "2026-11-21/2026-11-21",
+        "provider": "antigravity",
+        "effort": "high",
+        "selection": "Neon trial: three delegated runs plus the owner's top-level thread; orchestrator spot-checks.",
+        "evidence": "/home/mini/Documents/repos/mstack.research/neon-trial/"
+      }
     }
   ],
   "cautions": [

@@ -89,9 +89,14 @@ A new model gets no pinned role (round-3 reviewer, hardening, press release) unt
 
 **Gemini 4 Neon** (Google, medium model, 2026-11). Available here since 2026-11-20: T3 provider
 `antigravity`, model `gemini-4-neon` (always name it; the provider default is Gemini 3.8 Flash), on a
-Google AI Pro account. Untrialled. Reported: high coherency and capability, the best plan and
-press-release copy the reviewer had seen, weak at 3D, analysis hallucinations as above. Until the
-trial (§2c) scores it, its roles fall back as listed (press release: Opus).
+Google AI Pro account. Reported: high coherency and capability, the best plan and press-release copy
+the reviewer had seen, weak at 3D, analysis hallucinations as above. Trial 2026-11-21 (profile in
+`reviewer-profiles.json`, provisional): copy 7, task juggling 8, HITL comms 7, mistake gravity 7
+(low), capability ceiling 8, safeguards untested; 3-5x faster than estimated. Spot-checked claims held
+up. It overclaimed unmeasured work once, and the mid-run steer is still untested. Use it as an
+implementer and for diagnosis, with claims checked. Press release: Neon, with Opus as the backup.
+Pro budget: one busy Neon thread uses about 5 points of the 5-hour window per 12 minutes, so Pro
+carries one thread at a time; steady parallel use needs Ultra.
 
 **Switch by budget.** Claude usage low: Sol implements, Opus reviews and
 verifies. Sol low or at its limit: Sonnet implements, Opus reviews or waits

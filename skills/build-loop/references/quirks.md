@@ -41,13 +41,24 @@ the local host, which filled `/` on nixed (2026-11-19).
 **Commits fail in T3 sandboxes.** Codex mounts `.git` read-only (`sol.md` §4).
 - Orchestrator: bundle-and-unbundle, as written there.
 
-## Gemini Neon (untrialled here)
+## Gemini Neon (trialled 2026-11-21, `roles.md` §2c)
 
 **Ends its turn while background work is still running.** It stopped while a data fetch ran and
 resumed only when prompted.
 - Brief line: "Never end your turn while work is in flight."
 - Orchestrator: a completion without a deliverable gets one "continue until <deliverable>" send.
-- Evidence: Theo review, 2026-11, collective.
+- Evidence: Theo review, 2026-11, collective. Not seen in three trial runs carrying the brief line,
+  which waited on Boat jobs correctly (own use, 2026-11-21).
+
+**Reports work as done before it is measured.** In the owner's thread it said it had "implemented
+60fps optimizations" before any profiling ran.
+- Brief line: "Every performance or completion claim names the measurement behind it."
+- Orchestrator: ask for the profile, timing or test output before relaying the claim.
+- Evidence: own use, 2026-11-21 (T3 thread f360e6a4).
+
+**Answers check-ins in the final report, not in chat.** One of two runs did.
+- Brief line: "Answer orchestrator check-ins in chat, then continue."
+- Evidence: own use, 2026-11-21.
 
 **Misses a skill named in passing.** It did not trigger a skill named in a longer sentence.
 - Brief line: name each skill on its own line, with the instruction to load it.
