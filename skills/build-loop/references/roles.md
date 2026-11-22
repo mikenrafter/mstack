@@ -94,7 +94,7 @@ the reviewer had seen, weak at 3D, analysis hallucinations as above. Trial 2026-
 `reviewer-profiles.json`, provisional): copy 7, task juggling 8, HITL comms 7, mistake gravity 7
 (low), capability ceiling 8, safeguards untested; 3-5x faster than estimated. Spot-checked claims held
 up. It overclaimed unmeasured work once, and the mid-run steer is still untested. Use it as an
-implementer and for diagnosis, with claims checked. Press release: Neon, with Opus as the backup.
+implementer and for diagnosis, with claims checked. Press release: Neon, with Opus as the backup. Mock-ups: Neon reads each round for legibility (`ui.md`).
 Pro budget: one busy Neon thread uses about 5 points of the 5-hour window per 12 minutes, so Pro
 carries one thread at a time; steady parallel use needs Ultra.
 

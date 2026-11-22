@@ -63,6 +63,7 @@ Checks first. Prose rules did not survive compaction in the owner's own data
 | Skill gap or skill defect | A proposed edit to the mstack skill, shown to the owner. |
 | Lost at compaction | Move the rule into a hook or the file the hook re-reads. |
 | Comments hiding workarounds | Hand to `comment-audit`. |
+| An agent guessed at state a program could measure, again and again | Propose a core: a tool that shows the state (`legible-cores`). |
 
 A repo with no check covering a repeated family is itself a finding.
 
@@ -70,7 +71,8 @@ A repo with no check covering a repeated family is itself a finding.
 
 Write `<project>.research/retro/<date>.md`: families ranked by cost (rounds,
 tokens, owner time), each with evidence (session ids, PR comment links,
-counts), cause, and the proposed fix. Propose; do not apply. The owner picks
+counts), cause, and the proposed fix. End with a **Cores** part
+(`legible-cores`, "Weekly"). Propose; do not apply. The owner picks
 what to do. Issues, PRs and upstream reports need approval
 (`no-unsolicited-upstream`). After the owner decides, record the outcome and
 run `vigil remind done <id>` if a reminder started the retro.

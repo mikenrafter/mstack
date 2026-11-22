@@ -15,6 +15,21 @@ The orchestrator, always (owner, 2026-11-21). It writes and revises every mock-u
 shows it with the T3 Code tools and gets sign-off. Never put a mock-up step in an implementer or
 reviewer brief; an implementer that needs a design change asks the orchestrator.
 
+**Neon reads each mock-up round (owner, 2026-11-21).** Neon (Gemini Neon, `delegate_task`) lays out
+output very legibly, and reading even a little of it makes the orchestrator write to the owner more
+clearly. So before showing the owner a mock-up version, send Neon the HTML path and the note you
+plan to send. Neon writes and edits nothing. It returns:
+
+1. what a first-time reader sees first, second and third, and what they will miss;
+2. labels, copy or groupings it found unclear, each with a rewrite;
+3. its own version of the note to the owner.
+
+Read all of it before revising. Take what is right, revise the mock-up yourself, and write the note
+in your own words; Neon's version is input, not the message. The pass is advisory and runs alongside
+the Claude agent cap. Skip it, and say so in the note, when vigil advice shows the Antigravity
+budget past 90% or Neon has not answered within about 10 minutes. Neon does not write mock-ups
+(rule above), and its brief carries the Neon brief lines in `quirks.md`.
+
 ## The brief (checked by `scripts/ui-brief-check`)
 
 Any brief that creates or changes a screen, widget, chart or page is a UI brief. Write it to a

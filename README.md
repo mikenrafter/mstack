@@ -12,6 +12,8 @@ A review bar fixed for the whole life of a project does damage. One of my tools 
 
 I want to test practices against things that really happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. Security gets a written threat model for each project, covering who can reach it, what strangers can feed it and what it holds, and findings are weighed against that model. Two agents sending the same request in the same millisecond goes on a list for the hardening phase.
 
+The tools that work best in agent work have a deterministic core that the agent reads to see its situation: a clock, a ledger, a measurement, an index, a test. Around the core sits a mushy edge of judgement, where inference earns its cost, and beyond that the chaos of reality. Code alone is fast but can't adapt. Inference alone adapts but is slow and imprecise. Agents misjudged time and cache expiry until vigil and agentpace showed them both, and the same pattern runs through residual (what a change does next), paneweft (architecture) and a layout-shift measure for UI that is otherwise judged by eye. It is a twist on the bitter lesson. More compute keeps improving the models, but anyone, human or model, who can't see the state still guesses. So I look for guesses a program could replace, and the [legible-cores](skills/legible-cores/SKILL.md) skill has agents raise the ones big enough to build a company on.
+
 Views of code should produce insight. A component earns its place by answering a question about the code that the reader would otherwise guess at, and decoration gets cut. The record of a decision keeps its dead ends, because the paths I dropped explain the one I took. I want views to make tests, invariants and their coverage visible, so that a wrong change looks wrong. paneweft, linked below, is where I try this, starting from the moldable development ideas in Glamorous Toolkit.
 
 I also work under two limits, money and my own attention. Keepalive ticks alone drove about a quarter of my estimated Claude spend in the data I measured, so I run one working subagent at a time, push heavy builds to cloud sandboxes, and plan to move work to another model provider when a usage window runs low. For attention, I want short lessons at build-loop phase boundaries and ten questions before a pull request ships, so I can keep up with code I did not type. Those teaching steps remain planned work. Agents need my approval before opening issues, forks, pull requests or posts.
@@ -38,6 +40,7 @@ cd mstack
 | Track what other engineers publish about their practice | [practice-watch](skills/practice-watch/SKILL.md) |
 | Write or audit a README | [readme](skills/readme/SKILL.md) |
 | Add a rule that only gets stricter, or roll out a new tool | [ratchets](skills/ratchets/SKILL.md) |
+| Find guesses a measurement could replace | [legible-cores](skills/legible-cores/SKILL.md) |
 
 Copy an entire skill directory if you install it into your agent's skill directory. `build-loop` needs its `references/` and `scripts/` subdirectories. Referenced companion skills must also be available. Installation paths and tool names vary by agent.
 

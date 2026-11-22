@@ -56,7 +56,8 @@ plain prose, a URL and date per claim, an evidence grade A to D, and
 - where it conflicts with an existing skill, say which rule and who has the
   better evidence.
 
-End with a ranked list of at most five proposed changes. Open nothing
+Add a **Cores** part (`legible-cores`, "Weekly"): what the week's items
+say about cores we have or lack. Then end with a ranked list of at most five proposed changes. Open nothing
 upstream (`no-unsolicited-upstream`). The owner approves each change before
 anyone edits a skill.
 

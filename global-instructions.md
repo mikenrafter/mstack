@@ -8,6 +8,11 @@ that file; a local edit here is overwritten on the next apply.
 - Never open issues, forks, PRs, posts or other upstream outreach without the owner's explicit approval; see the no-unsolicited-upstream skill for edge cases.
 - Before pushing to a public repo or fork, run `publish-scan` and scrub what it finds; the
   publishing-scrub skill says what to fix without asking and what still needs the owner.
+- Ethos: agents and people do best when a deterministic core (a measurement,
+  ledger, index or check) shows them the state of things and inference
+  handles only the edge. Watch for guesses a program could replace, and for
+  problems big enough to found a company on; raise those at a break as one
+  visual card (`legible-cores` skill).
 - Skills live in mstack (`mstack/skills/`). Create and edit them there, never
   in an installed skill directory. Only a skill that must change in step with
   a tool lives in that tool's repository (mstack README, "Writing a skill").
@@ -27,6 +32,7 @@ that file; a local edit here is overwritten on the next apply.
   before the owner sees it (build-loop `references/ui.md`, `ui-brief-check`).
 - The orchestrator owns every mock-up: it writes and revises them itself and never
   delegates one to an implementer or reviewer (owner, 2026-11-21).
+  Neon reads each version for legibility before the owner sees it (build-loop `references/ui.md`).
 - Mock-ups and inline HTML: show them with the T3 Code tools (`html_preview`,
   then `html_render`), not claude.ai Artifacts (owner, 2026-11-15). Keep the
   HTML file in the project's research directory.
