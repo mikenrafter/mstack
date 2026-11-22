@@ -110,6 +110,20 @@ deadline; slow-burn work nobody is waiting on does not (an artificial date thins
   from git ancestry: pilots get squashed, rebuilt and reworked, so patch or ancestor matching undercounts. Record
   the owner's statements about their phone as evidence, flag where they and the code disagree, and update the
   ledger at every build.
+- **Version checklist for every build the owner installs (owner, 2026-11-22).** Version metadata is how the owner,
+  a crash log and the ledger agree on which build ran. Before handing over a build:
+  1. The build number (Android `versionCode`) is higher than the last build you handed over, every time, and comes
+     from a counter in the repo that the build reads, never from memory or a hand edit. Same application id and
+     signing key, so it installs over the last one. Never reuse a number for different contents.
+  2. The version name keeps the project's base name and adds the short commit and `-dirty` when the tree has
+     uncommitted changes, so a crash report header (name and code) points at a commit.
+  3. Read the numbers back from the built file (`aapt2 dump badging`: package, versionCode, versionName), not from
+     the source, and compare them with the counter.
+  4. The file name carries the base, the feature set and the build number.
+  5. The delivery message gives package, build number, version name, size and sha256, says "replaces build N", and
+     says whether it should install over the current one. Tell the owner to compare the number on their phone.
+  6. The ledger entry records number, sha256, base commit, contents and evidence. If a log or screenshot from the
+     owner shows a number you did not hand over, or the same number for different contents, fix the counter first.
 - **ETA means the owner's deliverable.** An ETA question asks about something the owner will use (an APK on
   their phone, a PR they will read). If you cannot say why the deliverable matters to them directly, it is the
   wrong one; ask.
