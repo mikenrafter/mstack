@@ -104,6 +104,15 @@ In `references/estimates.md`: every ETA comes from `agentpace` plan state.
 A developer release is anything the owner is waiting on: a pilot APK, an upstream PR, a fork release. These get a
 deadline; slow-burn work nobody is waiting on does not (an artificial date thins review and burns budget).
 
+- **Build ledger (owner, 2026-11-22).** Keep one ledger per project (edge: `edge.research/builds/ledger.json`)
+  of what each build the owner runs contains, by feature or pilot, with evidence; which pilots the owner wants;
+  and the next build's recipe (base, branches to merge) and checks. Plan builds, ETAs and merge rules from it, not
+  from git ancestry: pilots get squashed, rebuilt and reworked, so patch or ancestor matching undercounts. Record
+  the owner's statements about their phone as evidence, flag where they and the code disagree, and update the
+  ledger at every build.
+- **ETA means the owner's deliverable.** An ETA question asks about something the owner will use (an APK on
+  their phone, a PR they will read). If you cannot say why the deliverable matters to them directly, it is the
+  wrong one; ask.
 - **Give an estimate when asked, then plan to it.** State it in Mountain time (America/Denver) first, then UTC, and say what
   would make it slip. Report a slip when it becomes likely, not at the deadline.
 - **Internal cutoffs in every brief:** "pushed by HH:MM UTC", with the priority order inside the run ("naps before
