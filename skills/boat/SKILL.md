@@ -100,6 +100,11 @@ example `| python3 -c 'import json,sys; d=json.loads(sys.stdin.readline()); prin
   (check `creditBalanceHours`), so hours are the cheaper thing to burn and
   starts the scarcer. Do not stretch it past the TTL, and still never leave one
   up overnight.
+- **Name the sandbox (owner, 2026-11-22).** Project wrappers such as edge's
+  `boat-run` have no default sandbox: pass `--sandbox ID` (or set
+  `BOAT_SANDBOX`), or `--own`. They refuse other projects' sandboxes, and
+  start a stopped one only with `--resume`, because each start uses a launch.
+  Put the sandbox ID in every brief that runs Boat.
 - **Size is not a saving (owner, 2026-11-21).** Do not hold back from `large`
   to save money. When a job needs the RAM, or a smaller size would force a
   resize (which costs a start), use `large`.
