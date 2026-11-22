@@ -17,6 +17,8 @@ sources were read only through search summaries, and those are marked.
 | Architecture beyond hand-drawn mock-ups | paneweft | In-code views, viewer server |
 | UI stability judged by eye | Edge layout-shift (CLS) measurement | Used in Edge UI work |
 | What a push publishes | publish-scan | mstack 090297b |
+| Whether prose reads as machine-made | unslop's catalogue of patterns | Prose, checked by the model; a script could check the mechanical patterns |
+| What survives compaction | BabelTele compaction hook, skill-reread hooks | Hooks fire on every compaction; research/00-index item 4 found prose rules alone were lost |
 
 ## What others have said
 
@@ -60,6 +62,11 @@ model does those itself. What lasts is a core that gives the model *information 
 thinking*: the time, a cache TTL, a quota, a pixel offset, what a push contains. Hence the test in
 legible-cores: would a model ten times smarter still need it? Brooks's point applies too: count the
 whole cost, including the human design that made the core possible.
+
+The owner counts unslop and the compaction guidance as cores too (2026-11-21). Both give the model
+a fixed reference at a fixed moment instead of trusting its recall: the hook fires on every
+compaction, and unslop's catalogue is something to test a draft against. The most deterministic part
+of each is what lasts; the parts that only ask the model to judge are edge.
 
 Applied to mstack: sensors (vigil, agentpace, publish-scan, CLS) stay. Prose rules that tell the
 model how to think are candidates for deletion with each model release. A pass over the skills to

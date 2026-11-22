@@ -37,6 +37,8 @@ The owner's own run of these:
 | Code architecture beyond hand-drawn mock-ups | paneweft |
 | UI stability, otherwise judged by eye | Edge's CLS (layout shift) measurement |
 | What a push publishes | publish-scan |
+| Whether prose reads as machine-made | unslop's fixed catalogue of patterns (owner, 2026-11-21) |
+| What survives compaction | The BabelTele compaction hook and the skill-reread hooks: they fire every time, so the rules don't depend on memory |
 
 ## Spot one in the work
 
