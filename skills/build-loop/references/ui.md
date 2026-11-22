@@ -12,7 +12,8 @@ the implementer reuses that code. New code covers only what the mock-up adds.
 ## Who makes the mock-up
 
 The orchestrator, always (owner, 2026-11-21). It writes and revises every mock-up version itself,
-shows it with the T3 Code tools and gets sign-off. Never put a mock-up step in an implementer or
+shows it with the T3 Code tools, collapsed in a `<details>` element whose summary names the
+mock-up and version (owner, 2026-11-21), and gets sign-off. Never put a mock-up step in an implementer or
 reviewer brief; an implementer that needs a design change asks the orchestrator.
 
 **Neon reads each mock-up round (owner, 2026-11-21).** Neon (Gemini Neon, `delegate_task`) lays out

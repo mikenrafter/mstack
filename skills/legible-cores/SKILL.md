@@ -97,7 +97,9 @@ state (vigil, agentpace, residual, paneweft) offers `--html <path>`: one
 self-contained page (inline CSS, no server or network), coloured with the host
 theme's CSS variables plus fallbacks, with the same snapshot as `--json`
 embedded in a `<script type="application/json">` block for agents. Put the
-overview on the first screen as cards and the detail below it. residual's
+overview on the first screen as cards and the detail below it. Leave about 6rem
+of space under the last card so it clears T3's mobile navigation. Budgets and
+limits show when they reset. residual's
 static export is the reference (research/23).
 
 ## Weekly, with the Friday breakdown
