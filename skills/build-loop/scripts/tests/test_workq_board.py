@@ -223,9 +223,9 @@ class Board:
         self.script = page_script(html)
         self.snapshot = state_block(html)
 
-    def run(self, code):
-        program = (f"{self.script}\nconst board = globalThis.workqBoard;\n"
-                   f"const snapshot = {json.dumps(self.snapshot)};\n{code}")
+    def run(self, code, prelude=""):
+        program = (f"const snapshot = {json.dumps(self.snapshot)};\n{prelude}\n{self.script}\n"
+                   f"const board = globalThis.workqBoard;\n{code}")
         result = subprocess.run([NODE, "-e", program], text=True, capture_output=True, timeout=60)
         if result.returncode:
             raise AssertionError(f"node failed:\n{result.stderr}")
@@ -234,6 +234,52 @@ class Board:
     def call(self, name, arguments):
         out = self.run(f"console.log(JSON.stringify(board.{name}(snapshot, {json.dumps(arguments)})));")
         return json.loads(out)
+
+
+STUB_DOM = r"""
+const listeners = {}, elements = {};
+const element = (id) => elements[id] ||= {id, textContent: "", innerHTML: "", value: "", dataset: {},
+  select() {}, click() {}, classList: {add() {}, remove() {}}};
+globalThis.navigator = {};
+globalThis.setTimeout = () => 0;
+globalThis.document = {
+  getElementById: (id) => id === "workq-state" ? {textContent: JSON.stringify(snapshot)} : element(id),
+  querySelectorAll: () => [], querySelector: () => null,
+  addEventListener: (type, handler) => (listeners[type] ||= []).push(handler),
+  elementsFromPoint: () => [],
+};
+const press = (dataset) => listeners.click.forEach((handler) =>
+  handler({target: {closest: (selector) => selector === "button" ? {dataset} : null}}));
+"""
+
+
+class BoardWiring(BoardCase):
+    @needs_node
+    def test_buttons_drive_the_page_end_to_end(self):
+        """WHY/CLAIM(board-handback): clicking the board and pressing Copy changes yields the commands."""
+        # catches: DOM wiring that renders but never feeds the edits into Copy changes
+        self.seed()
+        board = Board(self.page())
+        out = board.run("""
+const text = () => elements.view.innerHTML;
+press({set: "1", s: "done"});
+press({down: "5"});
+elements.copyChanges.onclick();
+const changes = elements.out.value;
+elements.copyState.onclick();
+const state = elements.out.value;
+press({set: "1", s: "open"}); press({up: "5"});
+elements.out.value = state; elements.pasteState.onclick();
+elements.copyChanges.onclick();
+console.log(JSON.stringify({changes, restored: elements.out.value, counts: elements.counts.textContent,
+                            view: text().includes('data-n="1"')}));""", prelude=STUB_DOM)
+        result = json.loads(out)
+        # Original order 5,1,2,3,4. Item 1 is closed by the first click, so Down on 5 hops over the
+        # hidden 1 and the live 2 -> 1,2,5,3,4: one move, after 2.
+        self.assertEqual(result["changes"], "workq done 1\nworkq move 5 --after 2")
+        self.assertEqual(result["restored"], result["changes"], "paste restores what was copied")
+        self.assertEqual(result["counts"], "1 open · 1 running · 2 done · 1 dropped")
+        self.assertTrue(result["view"])
 
 
 class BoardCommands(BoardCase):
@@ -342,14 +388,18 @@ const edited = {order: [3, 1, 2, 4, 5], status: {1:"open",2:"running",3:"done",4
 const text = board.stateText(snapshot, edited);
 const back = board.restoreState(snapshot, text);
 const other = board.restoreState(snapshot, JSON.stringify({workq: 1, order: [1, 2], status: {1: "open", 2: "open"}, comments: {}}));
+const full = {1:"open",2:"open",3:"open",4:"open",5:"open"};
+const short = (order) => board.restoreState(snapshot, JSON.stringify({workq: 1, order, status: full, comments: {}}));
+const shapes = [short([1, 2, 3, 4]), short([1, 1, 3, 4, 5]), short([1, 2, 3, 4, 9]), short([1, 2, 3, 4, 5, 6])];
 const junk = board.restoreState(snapshot, "not json");
 const evil = board.restoreState(snapshot, JSON.stringify({workq: 1, order: [1,2,3,4,5], status: {1:"open",2:"open",3:"open",4:"open",5:"bogus"}, comments: {}}));
-console.log(JSON.stringify({back, other, junk, evil, text: JSON.parse(text)}));""")
+console.log(JSON.stringify({back, other, shapes, junk, evil, text: JSON.parse(text)}));""")
         result = json.loads(out)
         self.assertEqual(result["back"], {"order": [3, 1, 2, 4, 5],
                                           "status": {"1": "open", "2": "running", "3": "done", "4": "done", "5": "dropped"},
                                           "comments": {"2": ["keep this"]}})
         self.assertEqual((result["other"], result["junk"], result["evil"]), (None, None, None))
+        self.assertEqual(result["shapes"], [None] * 4, "missing, duplicate, unknown and extra items")
         self.assertEqual(result["text"]["workq"], 1)
 
 
