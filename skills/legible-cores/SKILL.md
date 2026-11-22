@@ -63,9 +63,11 @@ When a signal shows up and the problem is also big outside this work
   turn), not in the middle of a fix. At most one per session unless the owner
   asks for more. Skip the ones already in the ledger unless there is new
   evidence.
-- **How (it's a visual thing):** one card shown with `html_preview` then
+- **How (it's a visual thing):** cards shown with `html_preview` then
   `html_render`, HTML kept in `~/Documents/repos/mstack.research/opportunities/`.
-  The card fits one screen:
+  The owner prefers cards for any idea brief (2026-11-21): one card per idea
+  or part, in a grid, each short enough to take in at a glance. An
+  opportunity's cards cover:
   - the problem, and who has it (people, agents, both);
   - the core, and what it leaves to the edge;
   - evidence from our work (session, commit, file);
@@ -85,6 +87,16 @@ When a signal shows up and the problem is also big outside this work
   core's interface, what to measure, what would make us drop it. Creating a
   public repo or anything outward still needs the owner
   (`no-unsolicited-upstream`).
+
+## Cores show their state as HTML
+
+A core is only as good as how fast someone can read it. A tool that holds
+state (vigil, agentpace, residual, paneweft) offers `--html <path>`: one
+self-contained page (inline CSS, no server or network), coloured with the host
+theme's CSS variables plus fallbacks, with the same snapshot as `--json`
+embedded in a `<script type="application/json">` block for agents. Put the
+overview on the first screen as cards and the detail below it. residual's
+static export is the reference (research/23).
 
 ## Weekly, with the Friday breakdown
 

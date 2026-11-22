@@ -243,6 +243,7 @@ section files.
 | [08-career-communication.md](08-career-communication.md) | Workplace communication and the 2026 job search, with a 12-week plan | 5,744 |
 | [09-cross-check.md](09-cross-check.md) | Corrections, contradictions, schema mismatches and triangulated confidence | 5,060 |
 | [22-agent-cadence.md](22-agent-cadence.md) | Whether one model's output changes how another writes, and a way to measure it here | 496 |
+| [23-legible-cores.md](23-legible-cores.md) | The core-edge-chaos ethos against the bitter lesson and harness-deletion writers, and tool state as HTML | 840 |
 
 **For tooling work:** 09's triangulation table, then 06 sections 1 and 5,
 07's candidate actions, 01's "Where your setup differs", 04's recommended
