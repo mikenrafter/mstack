@@ -13,6 +13,15 @@ that file; a local edit here is overwritten on the next apply.
   handles only the edge. Watch for guesses a program could replace, and for
   problems big enough to found a company on; raise those at a break as one
   visual card (`legible-cores` skill).
+- When the owner asks any agent to update mstack, phoe-nix or a skill, do it
+  globally and finish the job (owner, 2026-11-21): edit in mstack, commit there,
+  then install through nix-scout: build `agent-integration` with
+  `--override-input mstack path:/home/mini/Documents/repos/mstack`, then
+  `nix-scout switch agent-integration` with the same override. Check the
+  installed copy under `~/.claude/skills` matches the commit. Pushing, and
+  updating the published locks afterward, still needs the owner's go-ahead
+  (`update-scout-module-locks`); say that the lock is stale until then. Do not
+  stop at editing the source tree.
 - Skills live in mstack (`mstack/skills/`). Create and edit them there, never
   in an installed skill directory. Only a skill that must change in step with
   a tool lives in that tool's repository (mstack README, "Writing a skill").

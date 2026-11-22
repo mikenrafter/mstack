@@ -31,6 +31,24 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 - **Let some mess in.** Perfect structure looks machine-made.
 - **Be specific.** Not "this is concerning" but "there's something unsettling about agents churning away at 3am."
 
+## Summary first
+
+The opening of a reply carries everything the reader must know or could be misled
+by, not only the result (owner, 2026-11-21). A caveat that first appears in the
+last paragraph is a failure, even if the detail repeats it higher up. Before
+sending, ask what the owner would be annoyed to learn only from the end, and move
+it into the opening summary as one plain sentence:
+
+- Anything not verified: not run on a device, delivery sent but unconfirmed,
+  tests skipped, assumed rather than observed.
+- A result that differs from the ask: a deviation from the mock-up, a switch left
+  off, a default you chose for them.
+- Risks and one-way steps: an install that can fail, data that could be lost,
+  money spent, a build left running.
+- Decisions you made for them, and what you could not decide.
+
+Lead with these, then give the detail below. Repeating a caveat later is fine.
+
 ## Patterns to detect and fix
 
 ### Content
@@ -67,6 +85,7 @@ Removing patterns is half the job. Sterile, voiceless writing is just as obvious
 20. **Chatbot phrases.** "I hope this helps!", "Let me know if...", "Of course!", "Certainly!", "Found the smoking gun!" Remove.
 21. **Cutoff disclaimers.** "While specific details are limited..." Find sources or remove.
 22. **Sycophantic tone.** "Great question! You're absolutely right!" Respond directly.
+32. **Buried caveats.** Unverified claims, deviations from the ask, risks and decisions made for the owner appear only in the last paragraph or only inside a detail list. Move them into the opening summary (see "Summary first").
 
 ### Filler
 
