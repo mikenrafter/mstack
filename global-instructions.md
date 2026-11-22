@@ -45,10 +45,14 @@ that file; a local edit here is overwritten on the next apply.
 - Mock-ups and inline HTML: show them with the T3 Code tools (`html_preview`,
   then `html_render`), not claude.ai Artifacts (owner, 2026-11-15). Keep the
   HTML file in the project's research directory.
-  Wrap every mock-up you show the owner in a collapsed `<details>` element whose
-  `<summary>` names it and its version (owner, 2026-11-21); preview it opened, render
-  it collapsed. Pages for T3 keep about 6rem of space at the bottom so the last card
-  clears T3's mobile navigation.
+  Show every mock-up collapsed (owner, 2026-11-22): in the reply, a Markdown
+  `<details>` block whose `<summary>` names the mock-up and version and holds a
+  full-page PNG screenshot from `html_preview` (saved next to the HTML). That is the
+  only form that expands fully on T3 mobile. When interaction matters, also
+  `html_render` the page wrapped in its own `<details>` with the size script from
+  build-loop `references/ui.md` (web resizes to fit; mobile does not yet,
+  pingdotgg/t3code#40718). Every page for T3 keeps about 6rem of space at the bottom
+  so the last card clears T3's mobile navigation.
 - vigil notices are one-time announcements from the owner. Claude Code and
   Codex get them from a hook. In a harness without hooks (Antigravity / Neon),
   call the vigil MCP `notices` tool once at the start of a session.

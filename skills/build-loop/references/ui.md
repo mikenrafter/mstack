@@ -12,8 +12,28 @@ the implementer reuses that code. New code covers only what the mock-up adds.
 ## Who makes the mock-up
 
 The orchestrator, always (owner, 2026-11-21). It writes and revises every mock-up version itself,
-shows it with the T3 Code tools, collapsed in a `<details>` element whose summary names the
-mock-up and version (owner, 2026-11-21), and gets sign-off. Never put a mock-up step in an implementer or
+shows it collapsed (below) and gets sign-off.
+
+**Showing a mock-up (owner, 2026-11-22).** T3's preview frame keeps the height it measured at
+render time, so a `<details>` inside a page clips when expanded. On web the page can resize the
+frame by posting MCP Apps' `ui/notifications/size-changed`; the mobile app ignores it
+(pingdotgg/t3code#40718). So:
+
+1. Always: in the reply, a Markdown `<details><summary>Mock-up vN · name</summary>` block holding
+   the full-page PNG from `html_preview` (keep the PNG beside the HTML). It collapses and expands
+   fully on web and mobile and travels into PR bodies.
+2. When the owner needs to interact: also `html_render` the page wrapped in its own `<details>`,
+   with this script before `</body>`:
+
+```html
+<script>
+(function(){var last=0;function send(){var h=Math.ceil(document.documentElement.getBoundingClientRect().height);
+if(h!==last){last=h;parent.postMessage({jsonrpc:"2.0",method:"ui/notifications/size-changed",params:{height:h}},"*");}}
+new ResizeObserver(send).observe(document.documentElement);document.addEventListener("toggle",send,true);send();})();
+</script>
+```
+
+Every page for T3 leaves about 6rem below its last card for the mobile navigation. Never put a mock-up step in an implementer or
 reviewer brief; an implementer that needs a design change asks the orchestrator.
 
 **Neon reads each mock-up round (owner, 2026-11-21).** Neon (Gemini Neon, `delegate_task`) lays out
