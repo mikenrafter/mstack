@@ -66,6 +66,10 @@ Track it with a vigil item: `vigil hold add <hold> --for none --expect-s 3600
 long time, open the message with "URGENT: stop and answer this before your next
 step" and ask it to write its answers to its report before it continues. Details: `dialogue.md`.
 
+**The orchestrator owns every mock-up** (owner, 2026-11-21): it writes, revises and shows them
+itself and never delegates a mock-up to an implementer or reviewer. Implementers build from the
+signed-off version only.
+
 **UI briefs inherit before they build** (`references/ui.md`). A brief that touches a screen
 names the signed-off mock-up, the original screen and every prior pilot or landed feature it
 inherits from, by path or SHA, and `scripts/ui-brief-check <brief>` passes before you delegate.
@@ -135,7 +139,7 @@ which run out faster now.
 
 | Role | Default | Does |
 |---|---|---|
-| Orchestrator | Opus (you) | Specs, prompts, verification, commits, pushes, owner contact. Writes little code. |
+| Orchestrator | Opus (you) | Specs, prompts, mock-ups, verification, commits, pushes, owner contact. Writes little code. |
 | Implementer | Sonnet and Sol, alternating by fix round (B1) | Red tests, green code, fixes. |
 | Reviewer, rounds 1-2 | Sol, Opus or Neon | Scored fix rounds (§6). Reviews only, plus comment fixups. |
 | Reviewer, round 3 | Fable 5.2 or later | The "good enough to ship" call (§6). |

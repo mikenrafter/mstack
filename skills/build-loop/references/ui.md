@@ -9,6 +9,12 @@ and two earlier pilots already did all of these correctly. The owner caught it f
 UI work inherits before it builds. A UI brief names every source the screen inherits from, and
 the implementer reuses that code. New code covers only what the mock-up adds.
 
+## Who makes the mock-up
+
+The orchestrator, always (owner, 2026-11-21). It writes and revises every mock-up version itself,
+shows it with the T3 Code tools and gets sign-off. Never put a mock-up step in an implementer or
+reviewer brief; an implementer that needs a design change asks the orchestrator.
+
 ## The brief (checked by `scripts/ui-brief-check`)
 
 Any brief that creates or changes a screen, widget, chart or page is a UI brief. Write it to a

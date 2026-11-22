@@ -25,6 +25,8 @@ that file; a local edit here is overwritten on the next apply.
   mock-up, the original screen and every prior pilot or landed feature it reuses,
   by path or SHA, and the build is compared to the mock-up in screenshot pairs
   before the owner sees it (build-loop `references/ui.md`, `ui-brief-check`).
+- The orchestrator owns every mock-up: it writes and revises them itself and never
+  delegates one to an implementer or reviewer (owner, 2026-11-21).
 - Mock-ups and inline HTML: show them with the T3 Code tools (`html_preview`,
   then `html_render`), not claude.ai Artifacts (owner, 2026-11-15). Keep the
   HTML file in the project's research directory.
