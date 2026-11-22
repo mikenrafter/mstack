@@ -306,23 +306,35 @@ See build-loop's `references/budget.md`, B5.
 
 There is always a session to keep warm while work is in flight. The only cold
 path is going from working or waiting to done. vigil never wakes or revives a
-session, so when the work is done (or you are told to end the session), post
-ONE collapsed BabelTele summary of the session inline in your final message and
-end the turn. Call the MCP tool `cold` (or run `vigil cold ID...`) to cancel
-your watches and holds; it replies with this instruction and the ids still
-pending. Then stop calling vigil.
+session, so when the work is done (or you are told to end the session), call the
+MCP tool `cold` (or run `vigil cold ID...`) to cancel your watches and holds,
+queue ONE `/compact` that carries the BabelTele summary of the session, and end
+the turn. Then stop calling vigil.
 Never start a long cold wait instead: no background command that only waits for
 something that may come much later, no sleeping until a result might arrive.
 
-```
-<details><summary>Session state (BabelTele)</summary>
-task and its progress; work in flight (ids, paths, watch ids); tools in use
-(MCP servers, CLIs such as vigil and qex); the user's standing rules for this
-session; skills loaded
-</details>
-```
+The summary goes into the compaction, not into your final message as a
+`<details>` block (owner, 2026-11-21): the session is then already compacted when
+it is next opened, and nothing long is left in the thread.
 
-Use the `babeltele` skill to write it compactly.
+- In T3 Code, queue the command to your own thread with `t3_thread_send`
+  (`mode: "queue"`, thread id in `$T3CODE_THREAD_ID`), then end the turn:
+
+  ```
+  /compact <BabelTele summary: task and its progress; work in flight (ids, paths,
+  watch ids); tools in use (MCP servers, CLIs such as vigil and qex); the user's
+  standing rules for this session; skills loaded>
+  ```
+
+  Send no resume message after it: going cold means the session stays idle until
+  someone writes to it (the `uw-agent` skill sends one only when it means to
+  continue).
+- Outside T3 Code, ask usagewindow: `uw-agent compact ask <session-id> --reason
+  "<the same summary>"`.
+
+Write the summary with the `babeltele` skill. Keep the final message itself to
+what the owner needs: what is done, what is not, and where it lives. Do not claim
+the compaction happened until you see it (see `uw-agent`).
 
 ## Fire rules
 
