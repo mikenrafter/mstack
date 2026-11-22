@@ -93,6 +93,16 @@ example `| python3 -c 'import json,sys; d=json.loads(sys.stdin.readline()); prin
   finished build output, temp databases, logs already downloaded), harder past
   ~25 GB used. Always keep at least 50 starts in reserve for the day; reuse or
   wait rather than go below it.
+- **Under 20 starts left (owner, 2026-11-21).** A stop-and-resume costs a start,
+  so keep your own sandbox up a little longer than usual: let the idle TTL run
+  out (or set `--ttl 3600`) instead of stopping right after a job, in case a
+  fix or rebuild follows. Weigh that against hours: the credit pack is large
+  (check `creditBalanceHours`), so hours are the cheaper thing to burn and
+  starts the scarcer. Do not stretch it past the TTL, and still never leave one
+  up overnight.
+- **Size is not a saving (owner, 2026-11-21).** Do not hold back from `large`
+  to save money. When a job needs the RAM, or a smaller size would force a
+  resize (which costs a start), use `large`.
 - **Credit after the plan runs out.** When the plan's included hours are used
   up, starts draw from the prepaid pack or wallet: check `creditBalanceHours`
   and `canStart` in `boat billing status` before calling Boat empty. Plan-hours
@@ -109,7 +119,7 @@ mode from the situation and say which one you are in.
 | | Cheap (default) | Time crunch (owner deadline) |
 |---|---|---|
 | When | No deadline given | The owner asked for a result by a time |
-| Size | `default` for test iterations; `large` only for full suites, APK builds and jobs that need its RAM | `large` throughout |
+| Size | `large` whenever the job needs the RAM or the sandbox is already `large`; `default` only for light test iterations on a sandbox that is already `default` | `large` throughout |
 | Idle | Sandbox stops itself ~15 min after the last job (`boat-run` and `boat-sync-test` set the idle TTL); stop it explicitly at the end of a batch | Keep it up for the window; still stop it when the deadline work is delivered |
 | Runs | Targeted files; batch checks into one run; full suite only at a gate (before pushing a shared branch) | Same targeting; run independent jobs in parallel; start a warm build early |
 | Never | Leave a sandbox up overnight, or a 2-hour keepalive for one quick run | Run past the deadline work at `large` "while you are there" |
