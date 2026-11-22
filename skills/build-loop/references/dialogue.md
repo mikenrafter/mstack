@@ -118,3 +118,15 @@ recorded rounds, deduplicate copied replies, and cite source locators. Keep raw
 history private in project research; commit only necessary observations and
 pointers. Revise the mapping or mask when evidence changes. Do not rename the
 archetype merely because a provider changes weights.
+
+## Hourly check-in (owner, 2026-11-20)
+
+Check in with every running subagent at
+least once an hour, by steering it mid-run (SendMessage), not by queuing work for
+later: read 1–5 of its files or commits, ask questions, redirect it if it is
+drifting, and look for what is slow. Speed it up when that is reasonable;
+otherwise have it write the slow part up as hardening work or an owner item.
+Track it with a vigil item: `vigil hold add <hold> --for none --expect-s 3600
+--label checkin-<run>`; its overdue event is the prompt. When the agent has not checked in for a
+long time, open the message with "URGENT: stop and answer this before your next
+step" and ask it to write its answers to its report before it continues.

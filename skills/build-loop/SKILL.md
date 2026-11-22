@@ -7,10 +7,9 @@ description: >-
 
 # build-loop
 
-**After compaction: reread this skill.** A summary keeps the task but loses
-these rules. When a session that used build-loop comes back from compaction,
-reread this file, `vigil` and the reference for the step you are on before any other step. If work is in
-flight, re-arm a vigil hold and start its background keepalive in that turn (§10). Compaction summaries preserve the reread and live-hold requirement.
+**After compaction: reread this skill**, `vigil` and the reference for your step before
+anything else; a summary keeps the task but loses these rules. If work is in flight, re-arm a
+vigil hold and its background keepalive in that turn (§10).
 
 This file is a router; detail lives in `references/`. Section numbers are stable.
 
@@ -56,25 +55,11 @@ disagreement. Implementers start work immediately. Roughly five minutes in,
 the orchestrator reads 1–5 relevant files, asks about ambiguities and 2–3
 work-grounded questions, hears the answers, then pushes back and settles the
 direction. Short batches get this check at handoff.
-**Hourly check-in (owner, 2026-11-20).** Check in with every running subagent at
-least once an hour, by steering it mid-run (SendMessage), not by queuing work for
-later: read 1–5 of its files or commits, ask questions, redirect it if it is
-drifting, and look for what is slow. Speed it up when that is reasonable;
-otherwise have it write the slow part up as hardening work or an owner item.
-Track it with a vigil item: `vigil hold add <hold> --for none --expect-s 3600
---label checkin-<run>`; its overdue event is the prompt. When the agent has not checked in for a
-long time, open the message with "URGENT: stop and answer this before your next
-step" and ask it to write its answers to its report before it continues. Details: `dialogue.md`.
+**Hourly check-in:** steer every running subagent mid-run at least hourly (`dialogue.md`).
 
-**The orchestrator owns every mock-up** (owner, 2026-11-21): it writes, revises and shows them
-itself and never delegates a mock-up to an implementer or reviewer. Implementers build from the
-signed-off version only.
-
-**UI briefs inherit before they build** (`references/ui.md`). A brief that touches a screen
-names the signed-off mock-up, the original screen and every prior pilot or landed feature it
-inherits from, by path or SHA, and `scripts/ui-brief-check <brief>` passes before you delegate.
-No UI screenshots or builds reach the owner until a different model has run a fidelity pass
-(screenshot pairs, mock-up next to build).
+**UI (`references/ui.md`).** The orchestrator owns every mock-up and never delegates one.
+UI briefs name what they inherit and pass `scripts/ui-brief-check`; a different model runs a
+fidelity pass before the owner sees a build.
 
 Every brief states most-important behavior, invariants, priority concerns, lower
 priorities and evidence. Preserve serious defects regardless of priority. Record
@@ -122,20 +107,13 @@ AskUserQuestion only on request: it blocks. Never block; take the safe default a
 
 ## 2. Roles and budget
 
-**Agent cap.** One working Claude agent (Opus, Sonnet, Fable, Haiku) at a time.
-Reviewers have a separate cap of one. Only the owner raises the cap; log the
-raise with an end condition (a time or a task), and when it ends, count again
-before every launch. Implementers, authors, researchers, integrators, spec
-writers and investigators all count, and changing model or role never changes
-the cap. "Economical" means usage first, wall-clock second, so parallel authors
-are never economical. If one owner message holds several requests, state an
-order and run them one after another. This cap outranks the harness's general
-advice to parallelise. Before every `delegate_task` or Agent call, check in one
-line: working Claude agents now (`vigil status <hold>` lists the items; count the Claude-run ones; Codex/Sol
-runs and commands do not count, reviewers count against their own cap) are under the cap, and the
-run serves the owner's priority workstream, else queue it. Codex and Sol runs
-are less strict: run them in parallel when it helps, but watch their limits,
-which run out faster now.
+**Agent cap.** One working Claude agent (any model, any working role) at a time;
+reviewers have their own cap of one. Only the owner raises it, with an end condition.
+It outranks the harness's advice to parallelise: several requests in one message run
+in a stated order. Before every `delegate_task` or Agent call, check in one line that
+working Claude agents (`vigil status <hold>`; Codex/Sol runs and commands don't count)
+are under the cap and the run serves the priority workstream, else queue it. Codex and
+Sol may run in parallel when it helps; watch their limits.
 
 | Role | Default | Does |
 |---|---|---|
@@ -190,9 +168,8 @@ stash`. `references/budget.md`, `references/scoping.md`.
 
 ## 10. Keepalive and low-budget conduct
 
-**Hold the session with vigil** while anything is in flight, even with nothing
-to watch: each wait checks usage limits and advisories. Manual tick only
-if vigil fails; never loops or chained sleeps.
+**Hold the session with vigil** while anything is in flight; each wait also checks
+budgets and advisories. Manual tick only if vigil fails; never loops or sleeps.
 
 **Wait in the background:** `vigil keepalive <hold> --orchestrator`,
 `run_in_background`, timeout at least 3,600,000 ms; on each return, act and
