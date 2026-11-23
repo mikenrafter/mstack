@@ -12,7 +12,8 @@ next step, and prints the next reviewer brief.
                           [--bar N [--bar-reason ".."]] [--research DIR] [--out-of-scope ..]
                           [--checks ..] [--paths a b]      # --usage-model is an alias of --threat-model
   review-ledger -l L round --tier 1 --reviewer sol --author sonnet[,opus] --sha SHA --reply reply.txt
-                          --requested-effort low|medium|high|xhigh [--xhigh-reason ".."] [--model M --effort E]
+                          --requested-effort low|medium|high|xhigh --author-effort a=low|medium|high[,b=..]
+                          [--xhigh-reason ".."] [--model M --effort E]
   review-ledger -l L argue --note FILE      # one labelled orchestrator/reviewer exchange; every new round
   review-ledger -l L cull --reply FILE      # KEEP: S1, N2 (at most 2 nit ids; KEEP: none discards all)
   review-ledger -l L outcome S3|N1 fixed|disagree|declined|pre-existing|resolved|escaped [--evidence ".."]
@@ -1303,6 +1304,21 @@ def _refuse(why):
 EFFORTS = ("low", "medium", "high", "xhigh")
 
 
+def parse_author_effort(text, authors):
+    """sonnet=low,sol=high -> {"sonnet": "low", "sol": "high"}; one known entry per author, never xhigh."""
+    got, ok = {}, True
+    for entry in (text or "").split(","):
+        if not entry.strip():
+            continue
+        name, sep, value = entry.partition("=")
+        ok = ok and bool(sep) and value.strip().lower() in EFFORTS[:3]
+        got[name.strip().lower()] = value.strip().lower()
+    if not ok or set(got) != set(authors):
+        sys.exit(_refuse("schema 2 requires --author-effort with one model=low|medium|high entry for each author ("
+                         + ", ".join(authors) + "); xhigh is for reviewers only"))
+    return got
+
+
 def _bar_refusal(why):
     print(f"error: {why}; pass --bar-reason \"<text>\" to override", file=sys.stderr)
     return 2
@@ -1322,6 +1338,7 @@ def cmd_round(a):
         if a.requested_effort not in EFFORTS:
             sys.exit(_refuse("schema 2 requires --requested-effort " + "|".join(EFFORTS)
                              + " (the owner's word if given, else high or low by task complexity)"))
+        author_effort = parse_author_effort(a.author_effort, authors)
         if a.requested_effort == "xhigh" and not (a.xhigh_reason or "").strip():
             sys.exit(_refuse("xhigh needs --xhigh-reason: the security boundary, the big change to it,"
                              " and the threat-model entry it matches"))
@@ -1370,6 +1387,7 @@ def cmd_round(a):
                           **({"model": a.model} if a.model else {}),
                           **({"effort": a.effort or "unknown"} if led.get("schema") == 2 else {}),
                           **({"requested_effort": a.requested_effort} if a.requested_effort else {}),
+                          **({"author_effort": author_effort} if led.get("schema") == 2 else {}),
                           **({"xhigh_reason": a.xhigh_reason.strip()} if a.requested_effort == "xhigh" else {}),
                           **({"scores": scores} if scores else {}),
                           **({"author": authors} if authors else {}),
@@ -1732,6 +1750,8 @@ def main(argv=None):
     r.add_argument("--effort", help="effective reasoning effort only when exposed; omitted means unknown")
     r.add_argument("--requested-effort", help="requested effort (low|medium|high|xhigh), separately from the effective "
                    "exposed value; required for schema 2")
+    r.add_argument("--author-effort", help="effort each author ran at, e.g. sonnet=low,sol=high (low|medium|high); "
+                   "one entry per --author; required for schema 2")
     r.add_argument("--xhigh-reason", help="required with xhigh: boundary, big change, matching threat model")
     r.add_argument("--author", help="comma list of code authors in the reviewed diff; required for schema 2")
     sub.add_parser("argue").add_argument("--note", required=True)

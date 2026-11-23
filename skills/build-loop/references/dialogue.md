@@ -81,7 +81,7 @@ IDs. Do not create a second manually maintained concern list.
 
 ```sh
 review-ledger -l LED round --tier 1 --reviewer sol --author sonnet \
-  --model EXACT_MODEL --requested-effort B6_EFFORT [--effort VERIFIED_EFFORT] --sha SHA --reply review.txt
+  --model EXACT_MODEL --requested-effort B6_EFFORT --author-effort AUTHOR=B6_EFFORT [--effort VERIFIED_EFFORT] --sha SHA --reply review.txt
 review-ledger -l LED next
 review-ledger -l LED brief --model EXACT_MODEL > argument-brief.txt
 review-ledger -l LED argue --note exchange.txt

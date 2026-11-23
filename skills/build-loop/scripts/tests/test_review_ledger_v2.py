@@ -61,11 +61,14 @@ class V2(Ledger):
         p.write_text(text)
         return str(p)
 
-    def rnd(self, sha, reply, reviewer="sol", author="sonnet", tier=1, effort="high", more=()):
+    def rnd(self, sha, reply, reviewer="sol", author="sonnet", tier=1, effort="high", more=(), author_effort="auto"):
         """Record a round. author=None omits --author (legacy ledgers; schema 2 must refuse).
         effort=None omits --requested-effort (schema 2 must refuse)."""
         extra = ["--author", author] if author is not None else []
         extra += ["--requested-effort", effort] if effort is not None else []
+        if author_effort == "auto" and author is not None:
+            author_effort = ",".join(f"{a}=high" for a in author.split(","))
+        extra += ["--author-effort", author_effort] if author_effort not in (None, "auto") else []
         return self.call("round", "--tier", str(tier), "--reviewer", reviewer, *extra, *more,
                          "--sha", sha, "--reply", self.file(f"reply-{sha}.txt", reply))
 
@@ -363,6 +366,20 @@ class Author(unittest.TestCase):
         self.assertEqual(Path(L.path).read_bytes(), before)
         L.rnd_ok("sha1", BELOW, "sol", "sonnet", effort="medium")
         self.assertEqual(L.data()["rounds"][-1]["requested_effort"], "medium")
+
+    def test_schema2_round_stores_author_efforts_that_match_the_authors(self):
+        # why: the owner wants implementer effort in the ledger too, one per author in the diff.
+        # catches: a missing, unmatched, unknown or xhigh author effort being accepted
+        L = ledger(self)
+        L.focus()
+        before = Path(L.path).read_bytes()
+        for bad in (None, "sonnet=max", "sol=high", "sonnet=xhigh", "sonnet"):
+            code, _, err = L.rnd("sha1", BELOW, "opus", "sonnet", author_effort=bad)
+            self.assertEqual(code, 2, (bad, err))
+            self.assertIn("author-effort", err)
+        self.assertEqual(Path(L.path).read_bytes(), before)
+        L.rnd_ok("sha1", BELOW, "opus", "sonnet,sol", author_effort="sonnet=low,sol=medium")
+        self.assertEqual(L.data()["rounds"][-1]["author_effort"], {"sonnet": "low", "sol": "medium"})
 
     def test_xhigh_needs_a_written_security_boundary_reason(self):
         # why: xhigh is for a well defined security boundary with a big change that fits the threat model.

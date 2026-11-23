@@ -64,7 +64,7 @@ class DialogueTransitions(DialogueCase):
         self.ok(ledger.call("round", "--tier", "1", "--reviewer", "sol", "--author", "sonnet",
                             "--sha", "s1", "--reply", ledger.file("reply.txt", CLEAN_PASS),
                             "--model", "gpt-6.1-sol", "--effort", "high",
-                            "--requested-effort", "medium"))
+                            "--requested-effort", "medium", "--author-effort", "sonnet=low"))
         record = ledger.data()["rounds"][-1]
         self.assertEqual((record["model"], record["effort"], record["requested_effort"]),
                          ("gpt-6.1-sol", "high", "medium"))

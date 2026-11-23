@@ -30,7 +30,7 @@ The agent cap and the role table stay in SKILL.md §2. This file holds the rest.
   complex task, low for a simple one. B3 keeps Fable at high. `xhigh` is for
   the reviewer role only, when a well defined security boundary gets a big
   change that matches a realistic threat-model entry; the ledger demands
-  `--xhigh-reason`. Pass `--requested-effort` on every round. Effort names are
+  `--xhigh-reason`. Pass `--requested-effort` (reviewer) and `--author-effort sonnet=low,sol=high` (one per author, never xhigh) on every round. Effort names are
   not equivalent across models; compare a model with itself.
 - **B5 Back to default.** On a usage reset, on `claude-budget` or
   `codex-budget` advice that budget is fine, or on `credit_state_changed` with
