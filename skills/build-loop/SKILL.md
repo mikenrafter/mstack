@@ -123,7 +123,7 @@ Sol may run in parallel when it helps; watch their limits.
 | Reviewer, round 3 | Fable 5.2 or later | The "good enough to ship" call (§6). |
 | Reviewer, tier 2 | Fresh Opus (Fable if Opus wrote code) | One pass on the stable diff. |
 
-B1–B5, R2 (a reviewer never reviews code it wrote), C3, budget switching and
+B1–B6 (B6: effort per run: the owner's word, else high or low by complexity; xhigh only for a reviewer on a security boundary), R2 (a reviewer never reviews code it wrote), C3, budget switching and
 batching: `references/roles.md`. Never quietly substitute a model for a role
 the user pinned. State who holds which role at the start of each phase.
 

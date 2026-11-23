@@ -24,6 +24,14 @@ The agent cap and the role table stay in SKILL.md §2. This file holds the rest.
   the Agent tool's `fable` alias returns 404 here), effort high. Never swap
   versions silently; tell the owner.
 - **R2 Authors.** A reviewer never reviews code it wrote.
+- **B6 Effort (owner, 2026-11-22).** Every run asks for one effort, set per
+  delegation (T3 `target.options`; Sol CLI `model_reasoning_effort`).
+  The owner's word wins: "Neon at medium" means medium. Otherwise high for a
+  complex task, low for a simple one. B3 keeps Fable at high. `xhigh` is for
+  the reviewer role only, when a well defined security boundary gets a big
+  change that matches a realistic threat-model entry; the ledger demands
+  `--xhigh-reason`. Pass `--requested-effort` on every round. Effort names are
+  not equivalent across models; compare a model with itself.
 - **B5 Back to default.** On a usage reset, on `claude-budget` or
   `codex-budget` advice that budget is fine, or on `credit_state_changed` with
   `on_credits` false, return to the default roles at the next phase boundary,
@@ -87,7 +95,7 @@ A new model gets no pinned role (round-3 reviewer, hardening, press release) unt
 4. **Re-check on version bumps.** A new version of a profiled model is re-trialled briefly, never
    assumed equal (B3).
 
-**Gemini 4 Neon** (Google, medium model, 2026-11). Available here since 2026-11-20: T3 provider
+**Gemini 4 Neon** (Google, medium model, 2026-11; run at effort medium, owner 2026-11-22, B6). Available here since 2026-11-20: T3 provider
 `antigravity`, model `gemini-4-neon` (always name it; the provider default is Gemini 3.8 Flash), on a
 Google AI Pro account. Reported: high coherency and capability, the best plan and press-release copy
 the reviewer had seen, weak at 3D, analysis hallucinations as above. Trial 2026-11-21 (profile in

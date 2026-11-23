@@ -81,7 +81,7 @@ IDs. Do not create a second manually maintained concern list.
 
 ```sh
 review-ledger -l LED round --tier 1 --reviewer sol --author sonnet \
-  --model EXACT_MODEL --effort VERIFIED_EFFORT --sha SHA --reply review.txt
+  --model EXACT_MODEL --requested-effort B6_EFFORT [--effort VERIFIED_EFFORT] --sha SHA --reply review.txt
 review-ledger -l LED next
 review-ledger -l LED brief --model EXACT_MODEL > argument-brief.txt
 review-ledger -l LED argue --note exchange.txt
@@ -95,7 +95,7 @@ The ledger rejects one-sided/empty notes and exact duplicates. It blocks a new
 round or phase transition while an earlier exchange remains unfinished.
 Revised reviewer SCORE/VERDICT lines update the round and preserve originals.
 
-Use `--requested-effort` to record a request separately from exposed `--effort`.
+`--requested-effort` (required, schema 2) records the B6 request separately from exposed `--effort`.
 Record effective model and effort when exposed. Do not label a requested effort
 as verified. Missing effort remains unknown. Observe priorities, finding classes,
 review dispositions and source evidence when refreshing profiles.

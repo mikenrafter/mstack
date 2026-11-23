@@ -12,6 +12,7 @@ next step, and prints the next reviewer brief.
                           [--bar N [--bar-reason ".."]] [--research DIR] [--out-of-scope ..]
                           [--checks ..] [--paths a b]      # --usage-model is an alias of --threat-model
   review-ledger -l L round --tier 1 --reviewer sol --author sonnet[,opus] --sha SHA --reply reply.txt
+                          --requested-effort low|medium|high|xhigh [--xhigh-reason ".."] [--model M --effort E]
   review-ledger -l L argue --note FILE      # one labelled orchestrator/reviewer exchange; every new round
   review-ledger -l L cull --reply FILE      # KEEP: S1, N2 (at most 2 nit ids; KEEP: none discards all)
   review-ledger -l L outcome S3|N1 fixed|disagree|declined|pre-existing|resolved|escaped [--evidence ".."]
@@ -1299,6 +1300,9 @@ def _refuse(why):
     return 2
 
 
+EFFORTS = ("low", "medium", "high", "xhigh")
+
+
 def _bar_refusal(why):
     print(f"error: {why}; pass --bar-reason \"<text>\" to override", file=sys.stderr)
     return 2
@@ -1315,6 +1319,12 @@ def cmd_round(a):
             sys.exit(_refuse("schema 2 requires --author with every model that wrote code in the reviewed diff"))
         if a.reviewer.strip().lower() in authors:
             sys.exit(_refuse(f"reviewer {a.reviewer} is in the author list: {', '.join(authors)}"))
+        if a.requested_effort not in EFFORTS:
+            sys.exit(_refuse("schema 2 requires --requested-effort " + "|".join(EFFORTS)
+                             + " (the owner's word if given, else high or low by task complexity)"))
+        if a.requested_effort == "xhigh" and not (a.xhigh_reason or "").strip():
+            sys.exit(_refuse("xhigh needs --xhigh-reason: the security boundary, the big change to it,"
+                             " and the threat-model entry it matches"))
         if pilot_phase(led) and a.tier == 2:
             sys.exit(_refuse("pilot reviews use tier 1, with Fable at round 2; no tier-2 bypass"))
         if a.tier == 1:
@@ -1360,6 +1370,7 @@ def cmd_round(a):
                           **({"model": a.model} if a.model else {}),
                           **({"effort": a.effort or "unknown"} if led.get("schema") == 2 else {}),
                           **({"requested_effort": a.requested_effort} if a.requested_effort else {}),
+                          **({"xhigh_reason": a.xhigh_reason.strip()} if a.requested_effort == "xhigh" else {}),
                           **({"scores": scores} if scores else {}),
                           **({"author": authors} if authors else {}),
                           **({"comment_fixups": fixups} if fixups else {})})
@@ -1719,7 +1730,9 @@ def main(argv=None):
     r.add_argument("--reply", required=True)
     r.add_argument("--model", help="requested reviewer model identifier")
     r.add_argument("--effort", help="effective reasoning effort only when exposed; omitted means unknown")
-    r.add_argument("--requested-effort", help="requested effort, separately from the effective exposed value")
+    r.add_argument("--requested-effort", help="requested effort (low|medium|high|xhigh), separately from the effective "
+                   "exposed value; required for schema 2")
+    r.add_argument("--xhigh-reason", help="required with xhigh: boundary, big change, matching threat model")
     r.add_argument("--author", help="comma list of code authors in the reviewed diff; required for schema 2")
     sub.add_parser("argue").add_argument("--note", required=True)
     sub.add_parser("cull").add_argument("--reply", required=True)

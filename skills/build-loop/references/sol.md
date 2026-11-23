@@ -11,7 +11,7 @@
    Sol can be the implementer (green or fix rounds, B1): pass `--author sol`
    to the ledger and do not let it review that diff.
 2. **Fallback when T3 is unavailable.** Run the `codex` binary directly:
-   `codex exec -m <sol model> -c model_reasoning_effort=high -s workspace-write - < prompt`
+   `codex exec -m <sol model> -c model_reasoning_effort=<B6 effort> -s workspace-write - < prompt`
    (read-only for pure review). Or use a project wrapper script that also
    enables network (local test servers) and adds writable dirs (for example
    `edge.research/bin/sol <worktree> <prompt> <log>`).

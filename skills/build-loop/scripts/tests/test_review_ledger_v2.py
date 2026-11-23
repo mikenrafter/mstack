@@ -61,10 +61,12 @@ class V2(Ledger):
         p.write_text(text)
         return str(p)
 
-    def rnd(self, sha, reply, reviewer="sol", author="sonnet", tier=1):
-        """Record a round. author=None omits --author (legacy ledgers; schema 2 must refuse)."""
+    def rnd(self, sha, reply, reviewer="sol", author="sonnet", tier=1, effort="high", more=()):
+        """Record a round. author=None omits --author (legacy ledgers; schema 2 must refuse).
+        effort=None omits --requested-effort (schema 2 must refuse)."""
         extra = ["--author", author] if author is not None else []
-        return self.call("round", "--tier", str(tier), "--reviewer", reviewer, *extra,
+        extra += ["--requested-effort", effort] if effort is not None else []
+        return self.call("round", "--tier", str(tier), "--reviewer", reviewer, *extra, *more,
                          "--sha", sha, "--reply", self.file(f"reply-{sha}.txt", reply))
 
     def focus(self):
@@ -346,6 +348,35 @@ class Author(unittest.TestCase):
         L.checkpoint()
         code, _, err = L.rnd("sha2", CLEAN_PASS, "opus", None, tier=2)
         self.assertEqual(code, 2, err)
+
+    def test_schema2_round_requires_a_known_requested_effort_and_stores_it(self):
+        # why: the owner wants every round's effort in the ledger, so a round without one is refused.
+        # catches: --requested-effort staying optional, or accepting a value outside low/medium/high/xhigh
+        L = ledger(self)
+        L.focus()
+        before = Path(L.path).read_bytes()
+        code, _, err = L.rnd("sha1", BELOW, "sol", "sonnet", effort=None)
+        self.assertEqual(code, 2, err)
+        self.assertIn("requested-effort", err)
+        code, _, err = L.rnd("sha1", BELOW, "sol", "sonnet", effort="max")
+        self.assertEqual(code, 2, err)
+        self.assertEqual(Path(L.path).read_bytes(), before)
+        L.rnd_ok("sha1", BELOW, "sol", "sonnet", effort="medium")
+        self.assertEqual(L.data()["rounds"][-1]["requested_effort"], "medium")
+
+    def test_xhigh_needs_a_written_security_boundary_reason(self):
+        # why: xhigh is for a well defined security boundary with a big change that fits the threat model.
+        # catches: xhigh accepted as a bare value, or the reason dropped before persistence
+        L = ledger(self)
+        L.focus()
+        code, _, err = L.rnd("sha1", BELOW, "sol", "sonnet", effort="xhigh")
+        self.assertEqual(code, 2, err)
+        self.assertIn("xhigh-reason", err)
+        self.assertEqual(L.data()["rounds"], [])
+        reason = "token-signing boundary rewritten; matches the threat model's forged-token attacker"
+        L.rnd_ok("sha1", BELOW, "sol", "sonnet", effort="xhigh", more=("--xhigh-reason", reason))
+        last = L.data()["rounds"][-1]
+        self.assertEqual((last["requested_effort"], last["xhigh_reason"]), ("xhigh", reason))
 
     def test_legacy_ledger_without_author_loads_and_keeps_working(self):
         # why: ledgers written before v2 have no schema and no author keys; every command must still work (A2, R1).
