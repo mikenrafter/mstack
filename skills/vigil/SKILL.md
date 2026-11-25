@@ -12,6 +12,23 @@ inputs every `interval_s` and fires on a rule. Nothing runs between calls:
 ticks happen only inside `keepalive`. State is in
 `~/.local/state/vigil`, never in the repo.
 
+## Background, not inline (main session)
+
+The main orchestrator session holds itself with **one** keepalive running in
+the **background**, relaunched each time it returns:
+
+```sh
+vigil keepalive --session --brief --orchestrator
+```
+
+Never call the blocking `keepalive` tool inline in the main turn. An inline call
+ties the session up for the whole window (up to 50 minutes), so it can do no
+other work and every user message interrupts it. Blocking inline keepalive is
+the anti-pattern. Run the command above as a background shell (timeout at least
+3,600,000 ms), act when its completion notification wakes you, then relaunch it.
+Keep exactly one chain. Only a main session whose harness cannot run background
+commands falls back to the inline `keepalive` tool.
+
 **Subagents and delegated implementers may use vigil, but never orchestrator
 mode** (`orchestrator: true` / `--orchestrator`; owner 2026-11-14). That mode
 is only for the main session that talks with the user. (A Sonnet implementer
