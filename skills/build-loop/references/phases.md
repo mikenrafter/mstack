@@ -24,7 +24,8 @@ between that and the review loop (§6).
 ## 4. Red (one run)
 
 One implementer run writes failing tests for the WHOLE scope, plus only the
-stubs needed to compile. No behaviour. Prompt it with `test-quality`. On a
+stubs needed to compile. No behaviour. Prompt it with `test-quality`: paste
+`test-quality/references/tester-brief.md` into the brief verbatim and give it the launch budget. On a
 pilot, the scope is the pilot's own cases (`references/scoping.md`).
 
 Verify the red gate yourself:
@@ -46,7 +47,7 @@ and yourself (its §1–§3) on states, edges, data lifecycle, precedence, safet
 checklists and reuse. Push back until the detail is high-fidelity.
 
 After red is committed, send the spec, the red tests and the checklists to
-the reviewer (Sol). Ask it also to write short wrong implementations that pass
+the reviewer (Sol). Paste `test-quality/references/tester-brief.md` into its brief. Ask it also to write short wrong implementations that pass
 the red tests; each one is a missing test. Fix the spec and red tests, then
 re-verify the red gate. At most two spec rounds; anything still open becomes a
 logged default (§1a). Then start green and the review loop (§6). On a pilot the
@@ -65,7 +66,9 @@ Verify between phases with the project's runner, on touched suites plus
 guards. Commit each phase before the next.
 
 **Spot mutations.** After green, apply 2-3 of the `# catches:` wrong
-implementations and check the matching tests go red. A green implementer that
+implementations and check the matching tests go red. Then run the white-box pass
+(`test-quality` §4): read the code, add a test at each part that is not obviously
+correct, within the launch budget. A green implementer that
 edits a red test says so in its report; the edit becomes a review finding.
 
 **Commit hygiene.** Check `git diff --cached --stat` before every commit; in

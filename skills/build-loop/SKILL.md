@@ -39,6 +39,7 @@ This file is a router; detail lives in `references/`. Section numbers are stable
 | `references/budget.md` | On budget advice, a usage limit or reset, before a second agent, on a vigil `item overdue` (§8–§10). |
 | `references/reviewers.md` | Before a contribution to a project you do not own, before re-scoping a PR after review. |
 | `references/handoff.md` | Before a PR body or the final report (§11–§12). |
+| `references/nitpicks.md` | When an audit, retro or research finds defects outside a review. |
 | `references/ui.md` | Before any brief that creates or changes a screen, widget, chart or page; before showing the owner UI screenshots or a UI build. |
 
 Scripts in `scripts/`: `review-ledger` (§6 ledger and briefs), `ui-brief-check` (UI briefs), `bot-triage`
