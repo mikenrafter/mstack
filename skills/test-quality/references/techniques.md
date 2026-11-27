@@ -54,6 +54,30 @@ deliberate, flagged act, never silent. A golden nobody inspected is mode 12.
 Retain exact comparison for a fixed version; do not hide change behind a
 blanket tolerance.
 
+**Golden, invariant or substring: pick by what the contract is** (owner, 2026-11-27).
+- **The whole output is the contract** (text an agent or person reads and follows:
+  hook advice, CLI help and messages, a rendered prompt or brief, a report): one golden
+  of the complete output, normalised only for what really varies (temp paths, clocks).
+  Not a row of substring checks: those are micro-snapshots (mode 13), which pin a few
+  fragments and let every other sentence change unreviewed. The iterative red-green
+  loop drifts into them, because each fix round adds one more `assertIn` for the
+  phrase it just changed.
+- **Only a property matters** (every output names a next step, no output exceeds a
+  width, every row has an owner): an invariant checked over every output or a
+  generated set, not a snapshot.
+- **One fact must survive rewording** (the alert names the changed file): a single
+  substring check is fine.
+- Prefer a golden that covers a larger part of the system (a whole session's output,
+  a whole report) over many small ones.
+
+**Who may regenerate a golden.** Regenerating is the owner's call by default: ask, show
+the diff, and list each regenerated file and why it changed in the commit message.
+The exception is a golden that moves because of a change the owner asked for: when the
+owner requests a skill or wording change and the hook's golden changes with it, the
+request is the approval. Regenerate, read the diff to confirm it shows that change and
+nothing else, and say so in the commit. Any change you did not expect in the diff goes
+back to the owner.
+
 ### Parity tests for mated interfaces
 Writer/reader, encoder/decoder, client/server: test both against literal
 bytes or messages from the spec or a real capture, field by field, not just

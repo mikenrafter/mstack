@@ -1,0 +1,1 @@
+Before compaction this session loaded these skills: demo (<root>/installed/skills/demo/SKILL.md). The summary keeps the task but not their rules. Reread each one you still need before your next step, along with the reference file for the step you are on.

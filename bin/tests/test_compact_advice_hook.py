@@ -6,6 +6,8 @@ import subprocess
 import tempfile
 import unittest
 
+import golden
+
 HOOK = Path(__file__).resolve().parent.parent / "compact-advice-hook"
 
 
@@ -13,6 +15,10 @@ def line(kind, tokens, sidechain=False):
     usage = {"input_tokens": 2, "cache_creation_input_tokens": 1000,
              "cache_read_input_tokens": tokens - 1002, "output_tokens": 50}
     return json.dumps({"type": kind, "isSidechain": sidechain, "message": {"usage": usage}})
+
+
+def context(out):
+    return json.loads(out)["hookSpecificOutput"]["additionalContext"]
 
 
 class CompactAdvice(unittest.TestCase):
@@ -40,25 +46,17 @@ class CompactAdvice(unittest.TestCase):
     def test_advises_once_per_band_with_the_session_id(self):
         # WHY: the advice must repeat as context grows, but not on every tool call.
         first = self.run_hook([line("assistant", 520_000)])
-        self.assertIn("uw-agent compact ask s1", first)
+        golden.check(self, "compact_advice_uw", context(first))
         self.assertEqual(self.run_hook([line("assistant", 560_000)]), "")
         self.assertIn("about 610k", self.run_hook([line("assistant", 610_000)]))
 
     def test_inside_t3_advises_the_native_self_message(self):
         # WHY: in T3 Code `/compact` sent to the session's own thread runs at the
-        # end of the turn; the usagewindow queue waits for a policy pass.
-        # catches: advice still naming uw-agent when a thread id is known.
+        # end of the turn; the usagewindow queue waits for a policy pass. The golden is
+        # the whole advice: the two queued messages, the self-resume marker and the
+        # hand-written BabelTele summary (owner, 2026-11-27).
         self.env["T3CODE_THREAD_ID"] = "thread-9"
-        out = self.run_hook([line("assistant", 520_000)])
-        self.assertIn("t3_thread_send` (threadId thread-9", out)
-        # catches: advice that queues only /compact, which leaves the session idle.
-        self.assertIn("/compact next:", out)
-        self.assertIn("resume message", out)
-        # catches: a resume a later, already-resumed session cannot tell is its own and stale.
-        self.assertIn("[self-resume <id>", out)
-        # catches: leaving the summary to the summarizer, or to the broken babeltele CLI.
-        self.assertIn("BabelTele summary by hand", out)
-        self.assertNotIn("uw-agent", out)
+        golden.check(self, "compact_advice_t3", context(self.run_hook([line("assistant", 520_000)])))
 
     def test_subagent_messages_do_not_count(self):
         # WHY: CLAIM(context-size); a sidechain's large context is not the main session's.

@@ -7,6 +7,8 @@ import tempfile
 import time
 import unittest
 
+import golden
+
 HOOK = Path(__file__).resolve().parent.parent / "skill-watch-hook"
 
 
@@ -38,13 +40,14 @@ class SkillWatch(unittest.TestCase):
                              capture_output=True, env=self.env, check=True).stdout.strip()
         return json.loads(out)["hookSpecificOutput"]["additionalContext"] if out else ""
 
+    def paths(self):
+        return ((self.root, "<root>"),)
+
     def test_reports_a_changed_reference_once(self):
         # WHY: CLAIM(baseline-at-load); the alert must name the file and not repeat.
         self.assertEqual(self.run_hook(), "")
         (self.skill / "references" / "step.md").write_text("r2\n")
-        alert = self.run_hook()
-        self.assertIn("references/step.md", alert)
-        self.assertNotIn("SKILL.md", alert)
+        golden.check(self, "skill_watch_changed_reference", self.run_hook(), self.paths())
         self.assertEqual(self.run_hook(), "")
 
     def test_the_sessions_own_edit_is_not_reported(self):
@@ -59,7 +62,7 @@ class SkillWatch(unittest.TestCase):
         (self.source / "demo" / "SKILL.md").write_text("v1\n")
         self.run_hook()
         (self.source / "demo" / "SKILL.md").write_text("v2\n")
-        self.assertIn("mstack source (not yet installed)", self.run_hook())
+        golden.check(self, "skill_watch_source_not_installed", self.run_hook(), self.paths())
 
     def test_installed_source_change_says_follow_it_now(self):
         # WHY: a source change that the install already copied is live; the old wording
@@ -70,11 +73,7 @@ class SkillWatch(unittest.TestCase):
         self.run_hook()
         (self.source / "demo" / "SKILL.md").write_text("v2\n")
         (self.skill / "SKILL.md").write_text("v2\n")
-        alert = self.run_hook()
-        self.assertIn("mstack source, installed", alert)
-        self.assertIn("follow them now", alert)
-        self.assertNotIn("not yet installed", alert)
-        self.assertNotIn("only if the owner asked", alert)
+        golden.check(self, "skill_watch_source_installed", self.run_hook(), self.paths())
 
     def test_a_directory_is_reported_once(self):
         # WHY: loading the mstack copy directly and the installed copy made one directory
@@ -88,9 +87,7 @@ class SkillWatch(unittest.TestCase):
             handle.write(json.dumps(load) + "\n")
         self.run_hook()
         (self.source / "demo" / "SKILL.md").write_text("v2\n")
-        alert = self.run_hook()
-        self.assertEqual(alert.count(str(self.source / "demo")), 1, alert)
-        self.assertIn("mstack source (not yet installed)", alert)
+        golden.check(self, "skill_watch_directory_once", self.run_hook(), self.paths())
 
     def test_dotted_cache_directories_are_ignored(self):
         # catches: reporting .pytest_cache/README.md as a skill change
@@ -103,8 +100,8 @@ class SkillWatch(unittest.TestCase):
 
     def test_compaction_lists_loaded_skills(self):
         self.run_hook()
-        alert = self.run_hook("SessionStart", source="compact")
-        self.assertIn(f"demo ({self.skill}/SKILL.md)", alert)
+        golden.check(self, "skill_watch_compaction", self.run_hook("SessionStart", source="compact"),
+                     self.paths())
         self.assertEqual(self.run_hook("SessionStart", source="startup"), "")
 
     def test_change_before_first_hook_run_is_reported(self):
@@ -113,7 +110,7 @@ class SkillWatch(unittest.TestCase):
         load = json.loads(self.transcript.read_text())
         load["timestamp"] = "2020-01-01T00:00:00Z"
         self.transcript.write_text(json.dumps(load) + "\n")
-        self.assertIn("SKILL.md", self.run_hook())
+        golden.check(self, "skill_watch_change_before_first_run", self.run_hook(), self.paths())
 
     def test_sidechain_loads_are_ignored(self):
         load = json.loads(self.transcript.read_text())

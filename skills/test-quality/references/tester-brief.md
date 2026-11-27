@@ -66,6 +66,14 @@ techniques?", 2026). The steers push against those defaults. The references hold
 5. No-panic tests and source greps don't count toward the launch budget. Keep a grep only as a
    whole-tree ban with a positive control.
 
+## Text output: goldens, not micro-snapshots
+
+When the code's output is text someone reads (a message, advice, a report, a prompt),
+pin the whole of it in one golden, not with several substring checks (techniques.md,
+"Goldens", mode 13). Use an invariant when only a property of the text matters. Do not
+regenerate an existing golden unless the change the owner asked for moves it; say which
+goldens moved and why.
+
 ## Before you hand back
 
 Run `tq lint --since <base>` on your tests. Fix every gating row, or mark a deliberate form with

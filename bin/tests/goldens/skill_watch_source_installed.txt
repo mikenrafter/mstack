@@ -1,0 +1,4 @@
+Skills you loaded earlier changed on disk since you read them:
+- demo (installed copy, <root>/installed/skills/demo): SKILL.md
+- demo (mstack source, installed, <root>/mstack/skills/demo): SKILL.md
+Reread the changed files before relying on those skills again. These changes are installed: follow them now.

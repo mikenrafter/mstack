@@ -37,6 +37,10 @@ Verify the red gate yourself:
   fails; none nameable means likely tautology (`test-quality`).
 - a test of the form *when X, then Y* names its witness:
   `# reaches: <test that drives the system into X>`.
+- text output (advice, messages, reports, prompts) is pinned by one golden of the whole text or by an
+  invariant, not by a growing row of substring checks; each fix round must not add one more `assertIn`
+  for the phrase it just changed (`test-quality` mode 13). A golden moved by a change the owner asked
+  for needs no second approval; any other regeneration does;
 - `tq lint --since <base>` shows no gating rows on the new tests (`test-quality` §4a); log it
   with `tq log lint --since <base>`.
 
