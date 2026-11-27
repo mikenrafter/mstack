@@ -36,20 +36,23 @@ new ResizeObserver(send).observe(document.documentElement);document.addEventList
 Every page for T3 leaves about 6rem below its last card for the mobile navigation. Never put a mock-up step in an implementer or
 reviewer brief; an implementer that needs a design change asks the orchestrator.
 
-**Neon reads each mock-up round (owner, 2026-11-21).** Neon (Gemini Neon, `delegate_task`) lays out
-output very legibly, and reading even a little of it makes the orchestrator write to the owner more
-clearly. So before showing the owner a mock-up version, send Neon the HTML path and the note you
-plan to send. Neon writes and edits nothing. It returns:
+**Neon reads each mock-up round, alongside the owner (owner, 2026-11-21; parallel since 2026-11-26).**
+Neon (Gemini Neon, `delegate_task`) lays out output very legibly, and reading even a little of it
+makes the orchestrator write to the owner more clearly. Neon and the owner catch different things,
+so neither waits for the other: show the owner each mock-up version as soon as it renders, and in
+the same turn send Neon the HTML path, the PNG and the note you sent. Neon writes and edits nothing.
+It returns:
 
 1. what a first-time reader sees first, second and third, and what they will miss;
 2. labels, copy or groupings it found unclear, each with a rewrite;
 3. its own version of the note to the owner.
 
-Read all of it before revising. Take what is right, revise the mock-up yourself, and write the note
-in your own words; Neon's version is input, not the message. The pass is advisory and runs alongside
+When Neon answers, read all of it, set it beside the owner's feedback and fold both into the next
+version yourself; Neon's note is input, not the message. Tell the owner which of Neon's points you
+took and which you left, briefly, with the next version. The pass is advisory and runs alongside
 the Claude agent cap. Skip it, and say so in the note, when vigil advice shows the Antigravity
-budget past 90% or Neon has not answered within about 10 minutes. Neon does not write mock-ups
-(rule above), and its brief carries the Neon brief lines in `quirks.md`.
+budget past 90%. If Neon has not answered within about 10 minutes, carry on without it. Neon does
+not write mock-ups (rule above), and its brief carries the Neon brief lines in `quirks.md`.
 
 ## The brief (checked by `scripts/ui-brief-check`)
 
