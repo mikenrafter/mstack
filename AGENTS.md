@@ -7,7 +7,7 @@ The human overview is [README.md](README.md). This file is for an agent or a per
 | Path | Holds |
 |---|---|
 | `skills/<name>/SKILL.md` | One skill: frontmatter (`name`, `description`), the rules, and pointers to its `references/` |
-| `skills/build-loop/scripts/` | Helper scripts (`review-ledger`, `bot-triage`, `ui-brief-check`) and the tests for the skill text |
+| `skills/build-loop/scripts/` | Helper scripts and the tests for the skill text: `review-ledger` (review state and briefs), `bot-triage` (review-bot findings), `ui-brief-check` (fails a UI brief that names no mock-up, original screen or prior pilot) |
 | `bin/` | Workflow helpers and hooks, including `publish-scan` |
 | `global-instructions.md` | The instructions installed into `~/.claude/CLAUDE.md` and Codex |
 | `research/` | Dated research; follow [research/BRIEF.md](research/BRIEF.md) |
@@ -18,7 +18,7 @@ The human overview is [README.md](README.md). This file is for an agent or a per
 - phoe-nix consumes a locked `mstack` input and installs these files through its agent-integration scout module. There is no second editable copy there.
 - To try an unpublished change, build the consumer with `--override-input mstack path:/absolute/path/to/mstack`. After publishing, update the `mstack` lock and run `nix-scout switch agent-integration` without the override.
 - A skill that documents a tool and must change in step with it lives in that tool's repository: `qex` (qex), `usagewindow-status` (usagewindow), `babeltele` (babeltele).
-- `file-pr`, `babysit-pr` and `leaving-pr-comments` come from Theo Browne's [tstack](https://github.com/t3dotgg/tstack); install them from there. To change how one behaves, write the change into an mstack skill, not a copy of theirs.
+- `file-pr`, `babysit-pr` and `leaving-pr-comments` come from Theo Browne's [tstack](https://github.com/t3dotgg/tstack); install them from there. To change how one behaves, write the change into an mstack skill, not a copy of theirs. `practice-watch` follows tstack for changes.
 
 ## Writing a skill
 
@@ -50,4 +50,6 @@ The tests check the helpers and the skill text, not whether the workflow improve
 - Never open issues, forks, pull requests, discussions or other outreach without the owner's explicit request ([no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md)).
 - Before pushing, run `bin/publish-scan`; [publishing-scrub](skills/publishing-scrub/SKILL.md) says what to scrub without asking.
 - Keep transcripts, credentials, personal highlights and session handoffs out of this repository.
+- Read the matching skill and its companions before applying a workflow. The owner's instructions and the tools at hand decide what can actually run.
+- For research, follow [research/BRIEF.md](research/BRIEF.md): date sources, grade evidence and mark unverified claims.
 - Keep changes focused and report the checks you actually ran.

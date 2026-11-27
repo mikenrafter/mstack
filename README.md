@@ -2,7 +2,7 @@
 
 The skills, helper scripts and research I use to work with coding agents.
 
-mstack is the source for my agent skills and global instructions. The skills are written for my own tools, hosts and habits, so adapt them before you use them. The research keeps dated observations and grades every claim from A (a controlled study) to D (opinion). Agents working in this repository should read [AGENTS.md](AGENTS.md) instead of this page.
+mstack is the source for my agent skills and global instructions. The skills are written for my own tools, hosts and habits, so adapt them before you use them. The research keeps dated observations and grades every claim from A (a controlled study) to D (opinion); start with a skill you need, or with the [research index](research/00-index.md) for the evidence and its limits. The original 2026-11-12 snapshot is the v0.1.0 release. Agents working in this repository should read [AGENTS.md](AGENTS.md) instead of this page.
 
 ## How I work with agents
 
@@ -20,7 +20,7 @@ People call agent work more art than science. I read that as science nobody has 
 
 The picture is a twist on the core model of Barry O'Reilly's residuality theory ([research 18](research/18-girba-wayne-oreilly.md)), where ordered software sits inside a complex business, which sits inside a disordered world. Here the middle ring is judgement, and the ordered core exists to show that judgement the state of things.
 
-Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. A smarter model still guesses when it cannot see the state, so I look for guesses a program could replace:
+Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. It is a twist on the bitter lesson: more compute keeps improving the models, but anyone, human or model, who cannot see the state still guesses. So I look for guesses a program could replace:
 
 | Agents kept guessing at | The core that replaced the guess |
 |---|---|
@@ -46,6 +46,16 @@ Agents write most of the code, and I still have to own it. These are the habits 
 | Assumption review | Ten questions about what a module assumes about its inputs, each with the evidence that would settle it | Pilot on one module |
 | Views that teach | A benchmark for whether a view makes a fresh agent understand the code better than reading it | Proposed ([research 13](research/13-research-direction-views-that-teach.md)) |
 
+Views of the code should produce insight. A component earns its place by answering a question the reader would otherwise guess at, and decoration gets cut. I want views to make tests, invariants and their coverage visible, so that a wrong change looks wrong. paneweft is where I try this, starting from the moldable development ideas in Glamorous Toolkit. Short lessons at build-loop phase boundaries are still planned.
+
+### Testing practices against what really happened
+
+I want to test practices against things that happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. The tq rounds are a first small step: each rule is measured on 30 public repos, with a separate model judging samples of what it finds.
+
+Review bars follow the project. A bar fixed for a project's whole life does damage: one of my tools spent eight review rounds on concurrency races that no real user would hit for a long time, while it was still a prototype. Early on the bars run high on fit, architecture that is expensive to change, security boundaries and test quality, and low on concurrency hardening, performance and polish. Once a project has users and stored data, the curve flips. Maturity is judged per region of the code, and I can override what the tool computes.
+
+Security gets a written threat model for each project: who can reach it, what strangers can feed it and what it holds. Findings are weighed against that model. Two agents sending the same request in the same millisecond goes on a list for the hardening phase.
+
 ### What changed my mind lately
 
 | Finding | Where it lives now |
@@ -56,9 +66,7 @@ Agents write most of the code, and I still have to own it. These are the habits 
 | Reading a new rule back to three fresh agents finds wording they would misread | a pilot over ten skill edits |
 | A row of substring checks over one text hides drift; one golden of the whole text does not | test-quality failure mode 13 |
 
-Review bars also follow the project. Early on they run high on fit, architecture that is expensive to change, security boundaries and test quality, and low on concurrency hardening and polish. Once a project has users and stored data, the curve flips.
-
-I work under two limits, money and attention. I run one working Claude agent at a time, push heavy builds to cloud sandboxes, and switch providers when a usage window runs low. Agents need my approval before they open issues, forks, pull requests or posts.
+I work under two limits, money and attention. Keepalive ticks alone drove about a quarter of my estimated Claude spend in the data I measured, so I run one working Claude agent at a time, push heavy builds to cloud sandboxes, and switch providers when a usage window runs low. Agents need my approval before they open issues, forks, pull requests or posts.
 
 ## Skills
 
@@ -81,9 +89,9 @@ Skills come in sets of three that run together:
 | Wait for long work without burning budget | [vigil](skills/vigil/SKILL.md), [uw-agent](skills/uw-agent/SKILL.md), [manual-keepalive](skills/manual-keepalive/SKILL.md) |
 | Run builds on my hosts | [boat](skills/boat/SKILL.md), [low-ram-hosts](skills/low-ram-hosts/SKILL.md), [iterating-with-nix](skills/iterating-with-nix/SKILL.md) |
 
-The rest are single tools for my setup: [scout-module-locks](skills/scout-module-locks/SKILL.md), [tea](skills/tea/SKILL.md), [tailcook](skills/tailcook/SKILL.md), [github-stars](skills/github-stars/SKILL.md), [cyber-build-loop](skills/cyber-build-loop/SKILL.md) (a clean-room firmware project) and [handling-ambiguous-work](skills/handling-ambiguous-work/SKILL.md) (recovering a thread after a provider error).
+The rest are single tools for my setup: [scout-module-locks](skills/scout-module-locks/SKILL.md), [tea](skills/tea/SKILL.md), [tailcook](skills/tailcook/SKILL.md), [github-stars](skills/github-stars/SKILL.md), [cyber-build-loop](skills/cyber-build-loop/SKILL.md) (clean-room reverse engineering, built from the build-loop insights that apply to it) and [handling-ambiguous-work](skills/handling-ambiguous-work/SKILL.md) (recovering a thread after a provider error).
 
-Copy a whole skill directory when you install one; `build-loop` needs its `references/` and `scripts/`. The host and tool skills describe my environment, and reading them does not install those tools.
+Copy a whole skill directory when you install one; `build-loop` needs its `references/` and `scripts/`, and the companion skills a skill names must be installed too. Installation paths and tool names vary by agent. The host and tool skills describe my environment, and reading them does not install those tools.
 
 ## Limits
 
@@ -91,7 +99,7 @@ The research covers one person on one host. Nothing in it measures escaped defec
 
 ## Research
 
-[research/00-index.md](research/00-index.md) starts the literature review and the analysis of my own agent usage. Raw transcripts and private usage data are left out; citations to them are marked as private. [RELEASE.md](RELEASE.md) lists publication checks and open questions, [research/PLAN.md](research/PLAN.md) the dated plan, and [related.md](related.md) the neighboring tools.
+[research/00-index.md](research/00-index.md) starts the literature review and the analysis of my own agent usage. Raw transcripts and private usage data are left out; citations to them are marked as private. [RELEASE.md](RELEASE.md) lists publication checks and open questions, [research/PLAN.md](research/PLAN.md) the dated plan, and [related.md](related.md) the neighboring tools. `research/site/index.html` is an optional reader for sections 00 to 09; it fetches the Markdown files and outside rendering libraries, so it needs HTTP hosting. The Markdown files are the main way to read it.
 
 ## For agents and contributors
 
