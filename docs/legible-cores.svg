@@ -1,46 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="760" height="340" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 330" width="100%" role="img" aria-labelledby="t d">
   <title id="t">A legible core</title>
-  <desc id="d">Three rings. In the center, a deterministic core: a clock, a ledger, a test, a measurement. Around it, judgement by the agent or the owner. Outside, the chaos of reality. Code alone is fast but rigid; inference alone adapts but is slow and imprecise; the core shows the state and judgement acts on it.</desc>
+  <desc id="d">Three nested rings. In the center, a deterministic core. Around it, judgement by the agent or the owner. Outside, the chaos of reality.</desc>
   <style>
-    .bg{fill:#ffffff}
     .chaos{fill:#fdf1e7;stroke:#d97a2b}
     .edge{fill:#eaf2fd;stroke:#3a78c9}
     .core{fill:#1f6f43;stroke:#14512f}
-    .ink{fill:#1f2328} .muted{fill:#59636e} .on-core{fill:#ffffff}
-    .rule{stroke:#8c959f}
+    .ink{fill:#1f2328} .muted{fill:#4a525b} .on-core{fill:#ffffff}
     text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
     @media (prefers-color-scheme: dark){
-      .bg{fill:#0d1117}
       .chaos{fill:#2a1d12;stroke:#e08a3c}
       .edge{fill:#12233a;stroke:#5b9be6}
       .core{fill:#2ea062;stroke:#7ee2a8}
-      .ink{fill:#f0f6fc} .muted{fill:#9198a1} .on-core{fill:#04150c}
-      .rule{stroke:#6e7681}
+      .ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on-core{fill:#04150c}
     }
   </style>
-  <rect class="bg" width="760" height="340" rx="12"/>
-  <!-- outer: reality, a wobbly ring -->
-  <path class="chaos" stroke-width="2" stroke-dasharray="6 5"
-    d="M170 22 C235 14 300 40 318 92 C340 150 330 205 306 250 C282 300 222 322 168 318 C108 314 52 292 34 238 C14 182 22 120 52 76 C80 38 120 26 170 22 Z"/>
-  <circle class="edge" stroke-width="2" cx="172" cy="170" r="104"/>
-  <circle class="core" stroke-width="2" cx="172" cy="170" r="52"/>
-  <text class="on-core" x="172" y="166" text-anchor="middle" font-size="15" font-weight="600">Core</text>
-  <text class="on-core" x="172" y="184" text-anchor="middle" font-size="11">deterministic</text>
-  <text class="ink" x="172" y="94" text-anchor="middle" font-size="13" font-weight="600">Judgement</text>
-  <text class="ink" x="172" y="40" text-anchor="middle" font-size="13" font-weight="600">Reality</text>
-
-  <line class="rule" x1="350" y1="40" x2="350" y2="300" stroke-width="1"/>
-
-  <text class="ink" x="374" y="58" font-size="15" font-weight="600">Core: a clock, a ledger, a test, a measurement</text>
-  <text class="muted" x="374" y="78" font-size="13">Shows the agent, or me, where things stand. Fast and exact.</text>
-
-  <text class="ink" x="374" y="128" font-size="15" font-weight="600">Judgement: the agent or me</text>
-  <text class="muted" x="374" y="148" font-size="13">Reads the core and decides. Inference earns its cost here.</text>
-
-  <text class="ink" x="374" y="198" font-size="15" font-weight="600">Reality: users, hardware, other people</text>
-  <text class="muted" x="374" y="218" font-size="13">What surprises us feeds back into a better core.</text>
-
-  <text class="muted" x="374" y="268" font-size="13">Code alone is fast but cannot adapt.</text>
-  <text class="muted" x="374" y="288" font-size="13">Inference alone adapts but is slow and imprecise.</text>
-  <text class="ink" x="374" y="308" font-size="13" font-weight="600">A smarter model still guesses when it cannot see the state.</text>
+  <path class="chaos" stroke-width="3" stroke-dasharray="9 7"
+    d="M260 8 C360 4 470 34 506 104 C532 160 516 232 468 276 C412 322 330 324 260 322 C184 324 102 320 54 276 C6 232 -8 160 18 106 C54 36 160 10 260 8 Z"/>
+  <ellipse class="edge" stroke-width="3" cx="260" cy="200" rx="200" ry="112"/>
+  <ellipse class="core" stroke-width="3" cx="260" cy="230" rx="118" ry="62"/>
+  <text class="ink" x="260" y="44" text-anchor="middle" font-size="28" font-weight="700">Reality</text>
+  <text class="muted" x="260" y="70" text-anchor="middle" font-size="19">users, hardware, other people</text>
+  <text class="ink" x="260" y="124" text-anchor="middle" font-size="26" font-weight="700">Judgement</text>
+  <text class="muted" x="260" y="150" text-anchor="middle" font-size="19">the agent, or me</text>
+  <text class="on-core" x="260" y="226" text-anchor="middle" font-size="28" font-weight="700">Core</text>
+  <text class="on-core" x="260" y="254" text-anchor="middle" font-size="19">a clock, a ledger, a test</text>
 </svg>

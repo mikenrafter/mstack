@@ -10,9 +10,15 @@ People call agent work more art than science. I read that as science nobody has 
 
 ### Legibility: a solid core, a soft edge
 
-![Three rings: a deterministic core in the middle, judgement around it, the chaos of reality outside](docs/legible-cores.svg)
+<p align="center"><img src="docs/legible-cores.svg" width="560" alt="Three nested rings: a deterministic core in the middle, judgement around it, the chaos of reality outside"></p>
 
-The tools that work best have a deterministic core the agent reads to see where it stands. So I look for guesses a program could replace:
+| Ring | What it does |
+|---|---|
+| Core: a clock, a ledger, a test, a measurement | Shows the agent, or me, where things stand. Fast and exact. |
+| Judgement: the agent, or me | Reads the core and decides. This is where inference earns its cost. |
+| Reality: users, hardware, other people | Surprises us, and each surprise feeds back into a better core. |
+
+Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. A smarter model still guesses when it cannot see the state, so I look for guesses a program could replace:
 
 | Agents kept guessing at | The core that replaced the guess |
 |---|---|
@@ -31,7 +37,7 @@ Agents write most of the code, and I still have to own it. These are the habits 
 
 | Habit | What it does | Status |
 |---|---|---|
-| Review check | Every pull request ends with ten questions; if I can answer 24 of 30 points without looking, I have reviewed it | In use ([pr-stacks](skills/pr-stacks/SKILL.md)) |
+| Review check | Every pull request ends with ten questions; if I answer 24 of 30 points correctly, I have reviewed it | In use ([pr-stacks](skills/pr-stacks/SKILL.md)) |
 | Journey file | Each feature keeps its mock-ups, my decisions and its dead ends, because the paths I dropped explain the one I took | In use ([build-loop](skills/build-loop/SKILL.md)) |
 | Question first | An interview on states, edges and precedence before any spec | In use ([question-everything](skills/question-everything/SKILL.md)) |
 | Sliced red and green | One model writes a few failing tests and the mutants they must kill; a different model writes the code. Each slice has one real flip, not just "delete the button" | In use since 2026-11-27 ([build-loop](skills/build-loop/references/slices.md)) |
@@ -60,30 +66,20 @@ Clone the repository and ask your agent to read the `SKILL.md` you need and the 
 git clone https://github.com/mikenrafter/mstack.git
 ```
 
-These are the ones worth starting with:
+Skills come in sets of three that run together:
 
-| If you want to | Use |
+| If you want to | Use these together |
 |---|---|
-| Question a feature before building it | [question-everything](skills/question-everything/SKILL.md) |
-| Check that tests prove behavior | [test-quality](skills/test-quality/SKILL.md) |
-| Review interfaces, naming and design | [technical-excellence](skills/technical-excellence/SKILL.md) |
-| Run a feature through spec, red, green and review | [build-loop](skills/build-loop/SKILL.md) |
-| Split work into small pull requests | [pr-stacks](skills/pr-stacks/SKILL.md) |
-| Make a rule only ever get stricter | [ratchets](skills/ratchets/SKILL.md) |
-| Turn repeated review findings into checks | [retro](skills/retro/SKILL.md) |
-| Find guesses a measurement could replace | [legible-cores](skills/legible-cores/SKILL.md) |
-| Write plainly | [plain-writing](skills/plain-writing/SKILL.md), [unslop](skills/unslop/SKILL.md), [writing-copy](skills/writing-copy/SKILL.md) |
+| Build a feature with agents, from first question to merged code | [question-everything](skills/question-everything/SKILL.md), [build-loop](skills/build-loop/SKILL.md), [test-quality](skills/test-quality/SKILL.md) |
+| Stop agents guessing, and learn from each week | [legible-cores](skills/legible-cores/SKILL.md), [retro](skills/retro/SKILL.md), [practice-watch](skills/practice-watch/SKILL.md) |
+| Review a design and ship it in small pieces | [technical-excellence](skills/technical-excellence/SKILL.md), [deliberate-changes](skills/deliberate-changes/SKILL.md), [pr-stacks](skills/pr-stacks/SKILL.md) |
+| Make a lesson stick so it never comes back | [ratchets](skills/ratchets/SKILL.md), [adaptive-hardening](skills/adaptive-hardening/SKILL.md), [comment-audit](skills/comment-audit/SKILL.md) |
+| Write for people | [plain-writing](skills/plain-writing/SKILL.md), [unslop](skills/unslop/SKILL.md), [writing-copy](skills/writing-copy/SKILL.md) |
+| Publish without leaking or overstepping | [readme](skills/readme/SKILL.md), [publishing-scrub](skills/publishing-scrub/SKILL.md), [no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md) |
+| Wait for long work without burning budget | [vigil](skills/vigil/SKILL.md), [uw-agent](skills/uw-agent/SKILL.md), [manual-keepalive](skills/manual-keepalive/SKILL.md) |
+| Run builds on my hosts | [boat](skills/boat/SKILL.md), [low-ram-hosts](skills/low-ram-hosts/SKILL.md), [iterating-with-nix](skills/iterating-with-nix/SKILL.md) |
 
-Everything else:
-
-| Area | Skills |
-|---|---|
-| Review and cleanup | [adaptive-hardening](skills/adaptive-hardening/SKILL.md), [comment-audit](skills/comment-audit/SKILL.md), [deliberate-changes](skills/deliberate-changes/SKILL.md), [readme](skills/readme/SKILL.md) |
-| Publishing safely | [no-unsolicited-upstream](skills/no-unsolicited-upstream/SKILL.md), [publishing-scrub](skills/publishing-scrub/SKILL.md) |
-| Waiting and budgets | [vigil](skills/vigil/SKILL.md), [manual-keepalive](skills/manual-keepalive/SKILL.md), [uw-agent](skills/uw-agent/SKILL.md) |
-| My hosts and tools | [boat](skills/boat/SKILL.md), [low-ram-hosts](skills/low-ram-hosts/SKILL.md), [iterating-with-nix](skills/iterating-with-nix/SKILL.md), [scout-module-locks](skills/scout-module-locks/SKILL.md), [tea](skills/tea/SKILL.md), [tailcook](skills/tailcook/SKILL.md), [github-stars](skills/github-stars/SKILL.md) |
-| Keeping up | [practice-watch](skills/practice-watch/SKILL.md) |
-| Special cases | [cyber-build-loop](skills/cyber-build-loop/SKILL.md) (a clean-room firmware project), [handling-ambiguous-work](skills/handling-ambiguous-work/SKILL.md) (recovering a thread after a provider error) |
+The rest are single tools for my setup: [scout-module-locks](skills/scout-module-locks/SKILL.md), [tea](skills/tea/SKILL.md), [tailcook](skills/tailcook/SKILL.md), [github-stars](skills/github-stars/SKILL.md), [cyber-build-loop](skills/cyber-build-loop/SKILL.md) (a clean-room firmware project) and [handling-ambiguous-work](skills/handling-ambiguous-work/SKILL.md) (recovering a thread after a provider error).
 
 Copy a whole skill directory when you install one; `build-loop` needs its `references/` and `scripts/`. The host and tool skills describe my environment, and reading them does not install those tools.
 

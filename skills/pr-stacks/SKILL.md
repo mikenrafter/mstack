@@ -235,7 +235,7 @@ each Review check Hint link and Answer.
 10 questions in four levels of `<details>`, all collapsed by default:
 
 1. the whole set, opening with: "If you can answer these at 80% or better
-   (24 of 30 points) without looking, you have probably reviewed it well
+   (24 of 30 points) correctly, you have probably reviewed it well
    enough.";
 2. each question;
 3. under each question two siblings: **Hint** (specific files and line
@@ -247,8 +247,8 @@ each Review check Hint link and Answer.
 ```html
 <details><summary>Review check (10 questions, 30 points)</summary>
 
-If you can answer these at 80% or better (24 of 30 points) without looking,
-you have probably reviewed it well enough.
+If you can answer these at 80% or better (24 of 30 points) correctly, you
+have probably reviewed it well enough.
 
 <details><summary>1. What happens to a stored row when …?</summary>
 <details><summary>Hint</summary>
