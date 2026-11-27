@@ -23,6 +23,9 @@ between that and the review loop (§6).
 
 ## 4. Red (one run)
 
+Pilots and the low-budget fallback only. From the structural round on, red and green run in
+slices instead: `references/slices.md` (owner, 2026-11-27).
+
 One implementer run writes failing tests for the WHOLE scope, plus only the
 stubs needed to compile. No behaviour. Prompt it with `test-quality`: paste
 `test-quality/references/tester-brief.md` into the brief verbatim and give it the launch budget. On a
