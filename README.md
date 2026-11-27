@@ -18,6 +18,8 @@ People call agent work more art than science. I read that as science nobody has 
 | Judgement: the agent, or me | Reads the core and decides. This is where inference earns its cost. |
 | Reality: users, hardware, other people | Surprises us, and each surprise feeds back into a better core. |
 
+The picture is a twist on the core model of Barry O'Reilly's residuality theory ([research 18](research/18-girba-wayne-oreilly.md)), where ordered software sits inside a complex business, which sits inside a disordered world. Here the middle ring is judgement, and the ordered core exists to show that judgement the state of things.
+
 Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. A smarter model still guesses when it cannot see the state, so I look for guesses a program could replace:
 
 | Agents kept guessing at | The core that replaced the guess |
