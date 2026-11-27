@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 834" width="100%" role="img" aria-labelledby="t d">
-<title id="t">Review rounds, and how the stages differ</title>
-<desc id="d">A review cycle. A model that wrote none of the code reviews one diff, argues at least one point with the orchestrator, and review-ledger scores each concern against its bar. At the bar: checkpoint, then tier 2 or ship. Below the bar in rounds 1, 2 or 4: the other model fixes it and the next round starts. Below the bar in round 3: Fable steps back and names a pivot. Below the bar after round 5: I decide. A table compares pilot, structural and hardening.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 610" width="100%" role="img" aria-labelledby="t d">
+<title id="t">A review round</title>
+<desc id="d">Three columns, as in the slice diagram. The reviewer, a model that wrote none of the code, reviews one diff and sends findings and scores. The orchestrator pushes back on a finding; the reviewer keeps, changes or drops it, and they go round until it is settled (at least once, twice with Fable). review-ledger then scores each concern against its bar. At the bar: checkpoint. Below it: the other model fixes it, failing test first, and the next round starts. Below it after round 3: Fable steps back and names a pivot. Below it after round 5: I decide.</desc>
 <defs>
 <marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
 <marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
@@ -29,90 +29,59 @@ text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,san
 <text class="git mono" x="440" y="20" font-size="12" text-anchor="start">git</text>
 <line class="bk" x1="470" y1="16" x2="500" y2="16" stroke-width="2"/>
 <text class="muted" x="506" y="20" font-size="12" text-anchor="start">back edge</text>
-<rect class="judge" x="230" y="50" width="180" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="320.0" y="71" font-size="15" font-weight="700" text-anchor="middle">Review round k</text>
-<text class="muted" x="320.0" y="88" font-size="12.5" text-anchor="middle">a model that wrote none of it</text>
-<text class="git mono" x="320.0" y="103" font-size="11.5" text-anchor="middle">one diff since the base</text>
-<rect class="judge" x="230" y="150" width="180" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="320.0" y="171" font-size="15" font-weight="700" text-anchor="middle">Argue</text>
-<text class="muted" x="320.0" y="188" font-size="12.5" text-anchor="middle">at least one real exchange</text>
-<text class="muted" x="320.0" y="203" font-size="12.5" text-anchor="middle">(Fable: two)</text>
-<rect class="core" x="230" y="250" width="180" height="80" rx="10" stroke-width="2"/>
-<text class="on" x="320.0" y="271" font-size="15" font-weight="700" text-anchor="middle">review-ledger</text>
-<text class="on" x="320.0" y="288" font-size="12.5" text-anchor="middle">scores each concern</text>
-<text class="on" x="320.0" y="303" font-size="12.5" text-anchor="middle">against its bar;</text>
-<text class="on" x="320.0" y="318" font-size="12.5" text-anchor="middle">prints the next step</text>
-<rect class="judge" x="10" y="260" width="172" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="96.0" y="281" font-size="15" font-weight="700" text-anchor="middle">Fix</text>
-<text class="muted" x="96.0" y="298" font-size="12.5" text-anchor="middle">the other model;</text>
-<text class="git mono" x="96.0" y="313" font-size="11.5" text-anchor="middle">commit, Test-Phase: fix</text>
-<rect class="chaos" x="10" y="100" width="160" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
-<text class="ink" x="90.0" y="122.0" font-size="15" font-weight="700" text-anchor="middle">A bot&#x27;s finding</text>
-<path class="in" d="M90 134 L90 256" stroke-width="2" marker-end="url(#hin)"/>
-<text class="muted" x="96" y="200" font-size="11.5" text-anchor="start">bot-triage</text>
-<rect class="judge" x="470" y="260" width="160" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="550.0" y="281" font-size="15" font-weight="700" text-anchor="middle">Checkpoint</text>
-<text class="muted" x="550.0" y="298" font-size="12.5" text-anchor="middle">cull nits, keep fixes</text>
-<rect class="judge" x="10" y="410" width="172" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="96.0" y="431" font-size="15" font-weight="700" text-anchor="middle">Step back</text>
-<text class="muted" x="96.0" y="448" font-size="12.5" text-anchor="middle">Fable: what should I</text>
-<text class="muted" x="96.0" y="463" font-size="12.5" text-anchor="middle">pivot to instead?</text>
-<rect class="chaos" x="230" y="510" width="180" height="50" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
-<text class="ink" x="320.0" y="540.0" font-size="15" font-weight="700" text-anchor="middle">Stuck: I decide</text>
-<rect class="judge" x="470" y="400" width="160" height="64" rx="10" stroke-width="2"/>
-<text class="ink" x="550.0" y="421" font-size="15" font-weight="700" text-anchor="middle">Tier 2</text>
-<text class="muted" x="550.0" y="438" font-size="12.5" text-anchor="middle">a fresh Opus, one pass</text>
-<rect class="judge" x="470" y="520" width="160" height="50" rx="10" stroke-width="2"/>
-<text class="ink" x="550.0" y="550.0" font-size="15" font-weight="700" text-anchor="middle">Ship</text>
-<path class="fw" d="M320 114 L320 146" stroke-width="2" marker-end="url(#hfw)"/>
-<path class="fw" d="M320 214 L320 246" stroke-width="2" marker-end="url(#hfw)"/>
-<path class="fw" d="M410 290 L466 290" stroke-width="2" marker-end="url(#hfw)"/>
-<text class="muted" x="438" y="282" font-size="11.5" text-anchor="middle">at bar</text>
-<path class="fw" d="M230 290 L186 290" stroke-width="2" marker-end="url(#hfw)"/>
-<text class="muted" x="207" y="282" font-size="11.5" text-anchor="middle">below</text>
-<text class="muted" x="207" y="308" font-size="11.5" text-anchor="middle">1, 2, 4</text>
-<path class="bk" d="M150 260 C150 180 180 82 226 82" stroke-width="2" marker-end="url(#hbk)"/>
-<text class="bkink" x="163" y="196" font-size="11.5" text-anchor="start">round k+1</text>
-<path class="fw" d="M250 330 C230 370 200 390 186 414" stroke-width="2" marker-end="url(#hfw)"/>
-<text class="muted" x="236" y="386" font-size="11.5" text-anchor="start">round 3 below</text>
-<path class="bk" d="M96 410 L96 328" stroke-width="2" marker-end="url(#hbk)"/>
-<text class="bkink" x="102" y="372" font-size="11.5" text-anchor="start">new approach</text>
-<path class="fw" d="M320 330 L320 506" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M612 452 C650 452 650 44 560 44 L170 44 C140 44 127 56 127 80" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="330" y="40" font-size="11.5" text-anchor="middle">next round</text>
+<text class="ink" x="127" y="70" font-size="15" text-anchor="middle" font-weight="700">Reviewer</text>
+<text class="ink" x="320" y="70" font-size="15" text-anchor="middle" font-weight="700">Programs</text>
+<text class="ink" x="529" y="70" font-size="15" text-anchor="middle" font-weight="700">Orchestrator</text>
+<rect class="judge" x="44" y="84" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="105" font-size="15" font-weight="700" text-anchor="middle">Review round k</text>
+<text class="muted" x="127.0" y="122" font-size="12.5" text-anchor="middle">wrote none of the code</text>
+<text class="git mono" x="127.0" y="137" font-size="11.5" text-anchor="middle">one diff since the base</text>
+<rect class="judge" x="446" y="84" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="105" font-size="15" font-weight="700" text-anchor="middle">Push back</text>
+<text class="muted" x="529.0" y="122" font-size="12.5" text-anchor="middle">challenge one finding</text>
+<text class="muted" x="529.0" y="137" font-size="12.5" text-anchor="middle">or its assumption</text>
+<rect class="judge" x="44" y="210" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="231" font-size="15" font-weight="700" text-anchor="middle">Answer</text>
+<text class="muted" x="127.0" y="248" font-size="12.5" text-anchor="middle">keep, change or drop</text>
+<text class="muted" x="127.0" y="263" font-size="12.5" text-anchor="middle">the finding</text>
+<rect class="core" x="232" y="300" width="176" height="80" rx="10" stroke-width="2"/>
+<text class="on" x="320.0" y="321" font-size="15" font-weight="700" text-anchor="middle">review-ledger</text>
+<text class="on" x="320.0" y="338" font-size="12.5" text-anchor="middle">scores each concern</text>
+<text class="on" x="320.0" y="353" font-size="12.5" text-anchor="middle">against its bar;</text>
+<text class="on" x="320.0" y="368" font-size="12.5" text-anchor="middle">prints the next step</text>
+<rect class="judge" x="446" y="308" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="329" font-size="15" font-weight="700" text-anchor="middle">Checkpoint</text>
+<text class="muted" x="529.0" y="346" font-size="12.5" text-anchor="middle">cull nits, keep fixes;</text>
+<text class="muted" x="529.0" y="361" font-size="12.5" text-anchor="middle">tier 2 or ship</text>
+<rect class="judge" x="446" y="420" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="441" font-size="15" font-weight="700" text-anchor="middle">Fix</text>
+<text class="muted" x="529.0" y="458" font-size="12.5" text-anchor="middle">the model that didn&#x27;t</text>
+<text class="git mono" x="529.0" y="473" font-size="11.5" text-anchor="middle">failing test first</text>
+<rect class="judge" x="44" y="420" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="441" font-size="15" font-weight="700" text-anchor="middle">Fable steps back</text>
+<text class="muted" x="127.0" y="458" font-size="12.5" text-anchor="middle">what should we</text>
+<text class="muted" x="127.0" y="473" font-size="12.5" text-anchor="middle">pivot to instead?</text>
+<rect class="chaos" x="232" y="500" width="176" height="44" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="320.0" y="527.0" font-size="15" font-weight="700" text-anchor="middle">Stuck: I decide</text>
+<path class="fw" d="M210 110 L442 110" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="326" y="102" font-size="11.5" text-anchor="middle">findings and scores</text>
+<path class="fw" d="M470 148 C430 190 260 190 214 224" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="326" y="178" font-size="11.5" text-anchor="middle">objection</text>
+<path class="bk" d="M210 252 C300 250 470 230 500 152" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="330" y="262" font-size="11.5" text-anchor="middle">answer; again until settled</text>
+<text class="bkink" x="326" y="276" font-size="11.5" text-anchor="middle">(Fable: at least twice)</text>
+<path class="fw" d="M590 148 C600 220 470 290 412 318" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="560" y="262" font-size="11.5" text-anchor="start">settled</text>
+<path class="fw" d="M408 340 L442 340" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="426" y="334" font-size="11.5" text-anchor="middle">at bar</text>
+<path class="fw" d="M408 370 C425 390 430 420 442 440" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="418" y="410" font-size="11.5" text-anchor="end">below</text>
+<path class="fw" d="M240 372 C225 390 215 410 212 424" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="206" y="396" font-size="11.5" text-anchor="end">round 3 below</text>
+<path class="fw" d="M320 380 L320 496" stroke-width="2" marker-end="url(#hfw)"/>
 <text class="muted" x="326" y="470" font-size="11.5" text-anchor="start">round 5 below</text>
-<path class="fw" d="M550 324 L550 396" stroke-width="2" marker-end="url(#hfw)"/>
-<text class="muted" x="556" y="360" font-size="11.5" text-anchor="start">passed before</text>
-<text class="muted" x="556" y="374" font-size="11.5" text-anchor="start">round 3</text>
-<path class="fw" d="M550 464 L550 516" stroke-width="2" marker-end="url(#hfw)"/>
-<path class="bk" d="M630 300 C662 300 662 545 634 545" stroke-width="2" marker-end="url(#hbk)"/>
-<text class="bkink" x="645" y="422" font-size="11.5" text-anchor="middle" transform="rotate(-90 645 422)">Fable passed</text>
-<text class="ink" x="16" y="610" font-size="14" text-anchor="start" font-weight="700"></text>
-<text class="ink" x="124" y="610" font-size="14" text-anchor="start" font-weight="700">Pilot</text>
-<text class="ink" x="298" y="610" font-size="14" text-anchor="start" font-weight="700">Structural</text>
-<text class="ink" x="474" y="610" font-size="14" text-anchor="start" font-weight="700">Hardening</text>
-<line class="grid" x1="10" y1="622" x2="640" y2="622" stroke-width="1"/>
-<text class="ink" x="16" y="642" font-size="12.5" text-anchor="start" font-weight="600">Tests</text>
-<text class="muted" x="124" y="642" font-size="12" text-anchor="start">one red run, one green;</text>
-<text class="muted" x="124" y="657" font-size="12" text-anchor="start">thrown away with the design</text>
-<text class="muted" x="298" y="642" font-size="12" text-anchor="start">slice by slice</text>
-<text class="muted" x="474" y="642" font-size="12" text-anchor="start">slice by slice</text>
-<line class="grid" x1="10" y1="670" x2="640" y2="670" stroke-width="1"/>
-<text class="ink" x="16" y="690" font-size="12.5" text-anchor="start" font-weight="600">Review</text>
-<text class="muted" x="124" y="690" font-size="12" text-anchor="start">round 1, then Fable,</text>
-<text class="muted" x="124" y="705" font-size="12" text-anchor="start">then my thumbs-up</text>
-<text class="muted" x="298" y="690" font-size="12" text-anchor="start">rounds 1-2, Fable at 3,</text>
-<text class="muted" x="298" y="705" font-size="12" text-anchor="start">pivot, 4-5, stop at 5</text>
-<text class="muted" x="474" y="690" font-size="12" text-anchor="start">the same rounds,</text>
-<text class="muted" x="474" y="705" font-size="12" text-anchor="start">stricter bars</text>
-<line class="grid" x1="10" y1="718" x2="640" y2="718" stroke-width="1"/>
-<text class="ink" x="16" y="738" font-size="12.5" text-anchor="start" font-weight="600">Bars</text>
-<text class="muted" x="124" y="738" font-size="12" text-anchor="start">about four concerns,</text>
-<text class="muted" x="124" y="753" font-size="12" text-anchor="start">agreed with me</text>
-<text class="muted" x="298" y="738" font-size="12" text-anchor="start">the beta table</text>
-<text class="muted" x="474" y="738" font-size="12" text-anchor="start">the production table;</text>
-<text class="muted" x="474" y="753" font-size="12" text-anchor="start">security from a threat model</text>
-<line class="grid" x1="10" y1="766" x2="640" y2="766" stroke-width="1"/>
-<text class="ink" x="16" y="786" font-size="12.5" text-anchor="start" font-weight="600">Used for</text>
-<text class="muted" x="124" y="786" font-size="12" text-anchor="start">trying an idea</text>
-<text class="muted" x="298" y="786" font-size="12" text-anchor="start">branches I run myself</text>
-<text class="muted" x="474" y="786" font-size="12" text-anchor="start">upstream PRs, releases</text>
+<path class="bk" d="M127 484 C127 600 529 600 529 488" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="330" y="592" font-size="11.5" text-anchor="middle">new approach</text>
 </svg>
