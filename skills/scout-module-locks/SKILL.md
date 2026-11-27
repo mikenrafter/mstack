@@ -12,7 +12,10 @@ Use this skill when a change in a satellite repository needs to be reflected in 
 phoe-nix scout module's `flake.lock` files.
 
 Before any push, show the user the change and ask for confirmation to push it to
-GitHub. Do not infer push approval from approval to edit files or update locks.
+GitHub. Do not infer push approval from approval to edit files alone. An owner
+request to install, update or apply the change is that confirmation (owner,
+2026-11-26): it covers `publish-scan`, the push, the lock update, and committing
+and pushing the updated lock files, with no second ask.
 
 After the user confirms:
 
@@ -34,8 +37,8 @@ After the user confirms:
 
 4. Review the staged lockfile diff. Stage only the affected scout-module lock
    files, verify that no unrelated files changed, and report the exact lockfiles
-   updated. Do not commit or push phoe-nix unless the user separately asks for
-   that.
+   updated. Commit and push phoe-nix (after `publish-scan` if it is public) when
+   the owner asked to install or update; otherwise wait until they ask.
 
 Do not update a lock from an unpublished local branch, silently retarget a flake
 input, or run a broad lock update when named inputs and modules are sufficient.

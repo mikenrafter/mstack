@@ -18,10 +18,12 @@ that file; a local edit here is overwritten on the next apply.
   then install through nix-scout: build `agent-integration` with
   `--override-input mstack path:/home/mini/Documents/repos/mstack`, then
   `nix-scout switch agent-integration` with the same override. Check the
-  installed copy under `~/.claude/skills` matches the commit. Pushing, and
-  updating the published locks afterward, still needs the owner's go-ahead
-  (`update-scout-module-locks`); say that the lock is stale until then. Do not
-  stop at editing the source tree.
+  installed copy under `~/.claude/skills` matches the commit. "Install" (or
+  "update", "apply") includes publishing (owner, 2026-11-26): run `publish-scan`
+  and scrub, push mstack, then update the published scout locks
+  (`update-scout-module-locks`) without a separate go-ahead. Only when the owner
+  asked for an edit without asking to install does the push wait for a go-ahead;
+  then say the lock is stale. Do not stop at editing the source tree.
 - Skills live in mstack (`mstack/skills/`). Create and edit them there, never
   in an installed skill directory. Only a skill that must change in step with
   a tool lives in that tool's repository (mstack README, "Writing a skill").
