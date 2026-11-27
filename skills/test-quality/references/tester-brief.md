@@ -65,3 +65,9 @@ techniques?", 2026). The steers push against those defaults. The references hold
    test-only thresholds.
 5. No-panic tests and source greps don't count toward the launch budget. Keep a grep only as a
    whole-tree ban with a positive control.
+
+## Before you hand back
+
+Run `tq lint --since <base>` on your tests. Fix every gating row, or mark a deliberate form with
+`# tq: allow RULE REASON` and say why in your report. Run `tq catches` and report which named
+faults did not turn a test red.

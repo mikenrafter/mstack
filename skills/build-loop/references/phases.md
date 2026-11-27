@@ -37,8 +37,11 @@ Verify the red gate yourself:
   fails; none nameable means likely tautology (`test-quality`).
 - a test of the form *when X, then Y* names its witness:
   `# reaches: <test that drives the system into X>`.
+- `tq lint --since <base>` shows no gating rows on the new tests (`test-quality` §4a); log it
+  with `tq log lint --since <base>`.
 
-Commit red.
+Commit red with a `Test-Phase: red` trailer, then `tq log record --since <base>`. Green,
+white-box and fix commits carry their own `Test-Phase:` trailer the same way.
 
 ## 4a. Spec review gate (before green)
 
@@ -65,8 +68,8 @@ Prefer a type-level fix to a runtime check (`technical-excellence`).
 Verify between phases with the project's runner, on touched suites plus
 guards. Commit each phase before the next.
 
-**Spot mutations.** After green, apply 2-3 of the `# catches:` wrong
-implementations and check the matching tests go red. Then run the white-box pass
+**Spot mutations.** After green, replay the `# catches:` wrong implementations with
+`tq catches` (and `tq log kill`), and check the matching tests go red. Then run the white-box pass
 (`test-quality` §4): read the code, add a test at each part that is not obviously
 correct, within the launch budget. A green implementer that
 edits a red test says so in its report; the edit becomes a review finding.

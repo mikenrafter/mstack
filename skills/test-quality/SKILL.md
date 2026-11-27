@@ -96,6 +96,21 @@ Diff its result against ours. Each disagreement is a test to write or a spec
 question to settle. This is for finding unknown bugs, not for checking known
 ones.
 
+## 4a. tq in every red gate (owner, 2026-11-27)
+
+`tq` is installed on PATH. Use it in every red phase, pilots included:
+
+- `tq lint --since <base>` on the new and changed tests. A gating row blocks the gate.
+  A deliberate form gets `# tq: allow RULE REASON` on the line, with a reason the reviewer can
+  check. `tq rules` lists the rules and what each one exempts.
+- `tq catches` replays each `# catches:` fault in a temporary copy, so the spot mutations are
+  run by a program, not described.
+- `tq log record --since <base>` after each phase commit, `tq log lint --since <base>` with
+  the gate, and `tq log kill` with the replays. They write the test ledger
+  (`<repo>.research/tq/ledger.jsonl`). Phase commits carry a `Test-Phase:` trailer (`red`,
+  `green`, `white-box`, `re-derivation`, `hardening`, `review-fix`, `bug-fix`).
+- `tq log report` shows survival by phase, rule precision and deletion candidates.
+
 ## 5. Reviewing tests
 
 Read the assertions before the green checkmark. For each test, name the bug it
