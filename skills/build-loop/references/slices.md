@@ -25,10 +25,11 @@ flow; their tests are thrown away with the design. tq still runs in every red ga
 | Role | Default | Does |
 |---|---|---|
 | Orchestrator | Opus | Holds project direction. Interjects about five minutes into each slice, settles disputes, keeps the journey |
-| Red | Sonnet, one session kept for the whole feature | Writes each slice's tests and pinned mutants, runs the slice gate itself, reads each finished green slice, does the white-box pass |
-| Green | Sol | Implements one slice at a time; reads the slice log; may add notes to it |
+| Red | Sol by default, Sonnet now and then (B1); one thread kept for the whole feature | Writes each slice's tests and pinned mutants, runs the slice gate itself, reads each finished green slice, does the white-box pass |
+| Green | The other model | Implements one slice at a time; reads the slice log; may add notes to it |
 
-This fits the current cap: red is the one working Claude agent, and Sol does not count.
+This fits the current cap: whichever side Sonnet holds is the one working Claude agent, and Sol
+does not count.
 
 ## The slice loop
 

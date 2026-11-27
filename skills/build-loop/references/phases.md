@@ -57,7 +57,7 @@ and yourself (its §1–§3) on states, edges, data lifecycle, precedence, safet
 checklists and reuse. Push back until the detail is high-fidelity.
 
 After red is committed, send the spec, the red tests and the checklists to
-the reviewer (Sol). Paste `test-quality/references/tester-brief.md` into its brief. Ask it also to write short wrong implementations that pass
+a reviewer that did not write them (Sol when Sonnet wrote red, else Neon or Opus). Paste `test-quality/references/tester-brief.md` into its brief. Ask it also to write short wrong implementations that pass
 the red tests; each one is a missing test. Fix the spec and red tests, then
 re-verify the red gate. At most two spec rounds; anything still open becomes a
 logged default (§1a). Then start green and the review loop (§6). On a pilot the

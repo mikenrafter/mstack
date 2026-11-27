@@ -51,7 +51,7 @@ Read `resets_at` with `usage-budget-probe ClaudeCode --window 5h`,
 Missing windows or adapter failures are unavailable, not recovered; keep current
 roles when unknown.
 
-Return to default roles, Sonnet and Sol alternating with Opus orchestrating,
+Return to default roles (Sonnet and Sol alternating, Sol leaning to red, Opus orchestrating)
 at the next phase boundary once all relevant windows have recovered. A 5-hour
 reset or `on_credits: false` alone does not clear a low weekly window. Say the
 switch in the next phase's role statement. Replace the old combined

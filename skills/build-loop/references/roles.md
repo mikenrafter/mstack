@@ -15,9 +15,12 @@ The agent cap and the role table stay in SKILL.md §2. This file holds the rest.
 
 ## 2. Role rules
 
-- **B1 Alternate.** Outside low budget, implementers alternate by fix round:
-  if Sonnet wrote the first build, Sol writes the round-1 fixes and Sonnet the
-  round-2 fixes. Green may also alternate from red. Pass `--author` to the ledger.
+- **B1 Alternate, leaning on Sol for red.** Outside low budget, Sonnet and Sol
+  alternate, and the model that writes green is never the one that wrote its red.
+  Lean on Sol for red (owner, 2026-11-27): it is the sharper adversary for tests, so
+  most features get Sol on red and Sonnet on green; give Sonnet red now and then (a
+  small or familiar feature, Sol near its limit). Fix rounds alternate: whoever did
+  not write the first build writes the round-1 fixes. Pass `--author` to the ledger.
 - **B2 Poor scope.** Ask for detail first. Occasionally an Opus agent on high
   effort implements instead of Sonnet; say why.
 - **B3 Fable.** A T3 delegate (`orchestrator_capabilities` lists the version;

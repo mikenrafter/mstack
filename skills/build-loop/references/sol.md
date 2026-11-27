@@ -8,7 +8,7 @@
    delegate containing the prior review, ledger and objections. T3 children
    get no history, so every brief is self-contained. Before native Sol
    delegation, follow the harness routing instructions when applicable.
-   Sol can be the implementer (green or fix rounds, B1): pass `--author sol`
+   Sol is the usual red implementer, and takes green or fix rounds when Sonnet wrote red (B1): pass `--author sol`
    to the ledger and do not let it review that diff.
 2. **Fallback when T3 is unavailable.** Run the `codex` binary directly:
    `codex exec -m <sol model> -c model_reasoning_effort=<B6 effort> -s workspace-write - < prompt`

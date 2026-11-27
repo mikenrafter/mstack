@@ -121,14 +121,14 @@ Sol may run in parallel when it helps; watch their limits.
 | Role | Default | Does |
 |---|---|---|
 | Orchestrator | Opus (you) | Specs, prompts, mock-ups, verification, commits, pushes, owner contact. Writes little code. |
-| Implementer | Sonnet and Sol, alternating by fix round (B1) | Red tests, green code, fixes. |
+| Implementer | Sonnet and Sol alternating, leaning on Sol for red (B1) | Red tests, green code, fixes. |
 | Reviewer, rounds 1-2 | Sol, Opus or Neon | Scored fix rounds (§6). Reviews only, plus comment fixups. |
 | Reviewer, round 3 | Fable 5.2 or later | The "good enough to ship" call (§6). |
 | Reviewer, tier 2 | Fresh Opus (Fable if Opus wrote code) | One pass on the stable diff. |
 
-Launch each model only through its primary provider: Gemini via `antigravity`, OpenAI via
-`codex`, Anthropic via `claudeAgent` (owner, 2026-11-27; `references/roles.md` §2b').
-B1–B6 (B6: effort per run: the owner's word, else high or low by complexity; xhigh only for a reviewer on a security boundary), R2 (a reviewer never reviews code it wrote), C3, budget switching and
+Launch each model only through its own provider: Gemini `antigravity`, OpenAI `codex`,
+Anthropic `claudeAgent` (`references/roles.md` §2b').
+B1–B6 (B6: effort per run), R2 (a reviewer never reviews code it wrote), C3, budget switching and
 batching: `references/roles.md`. Never quietly substitute a model for a role
 the user pinned. State who holds which role at the start of each phase.
 
