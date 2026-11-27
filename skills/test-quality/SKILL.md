@@ -109,9 +109,11 @@ PATH. Use it in every red phase, pilots included:
   run by a program, not described.
 - `tq log record --since <base>` after each phase commit, `tq log lint --since <base>` with
   the gate, and `tq log kill` with the replays. They write the test ledger
-  (`<repo>.research/tq/ledger.jsonl`). Phase commits carry a `Test-Phase:` trailer (`red`,
-  `green`, `white-box`, `re-derivation`, `hardening`, `review-fix`, `bug-fix`).
-- `tq log report` shows survival by phase, rule precision and deletion candidates.
+  (`tq log where` shows where it is; a config file sets it). Phase commits carry a
+  `Test-Phase:` trailer (`red`, `green`, `white-box`, `re-derivation`, `hardening`,
+  `review-fix`, `bug-fix`).
+- `tq log report` shows survival by phase, rule precision and deletion candidates;
+  `tq log report --global` does the same across every repository, for retros.
 
 ## 5. Reviewing tests
 
