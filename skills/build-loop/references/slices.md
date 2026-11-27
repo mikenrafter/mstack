@@ -53,6 +53,11 @@ agent that waits keeps its own vigil hold (never orchestrator mode for red or gr
 turn for the orchestrator to resume. The orchestrator's hold covers all three, so a stalled agent raises
 `item overdue`.
 
+## Why can't this run in parallel? (owner, 2026-11-27)
+
+Ask it at every cut. If the answer is budget, live with the slower serial path. If it is the code (two
+slices edit the same file), split the module first or resolve the merge afterwards, whichever is faster.
+
 ## The slice gate (red runs it; a program decides)
 
 `tq slice check N` passes when:
