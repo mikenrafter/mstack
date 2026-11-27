@@ -19,11 +19,15 @@ render time, so a `<details>` inside a page clips when expanded. On web the page
 frame by posting MCP Apps' `ui/notifications/size-changed`; the mobile app ignores it
 (pingdotgg/t3code#40718). So:
 
-1. Always: in the reply, a Markdown `<details><summary>Mock-up vN · name</summary>` block holding
-   the full-page PNG from `html_preview` (keep the PNG beside the HTML). It collapses and expands
-   fully on web and mobile and travels into PR bodies.
-2. When the owner needs to interact: also `html_render` the page wrapped in its own `<details>`,
-   with this script before `</body>`:
+Always both, both collapsed (owner, 2026-11-27):
+
+1. `html_render` the page inline, wrapped in its own `<details>`, with the script below before
+   `</body>`. Not the `preview_*` browser tools.
+2. In the reply, a Markdown `<details><summary>Mock-up vN · name</summary>` holding the full-page
+   PNG from `html_preview` (kept beside the HTML) and a link to the HTML file by absolute path. It
+   expands fully on web and mobile and travels into PR bodies.
+
+The size script:
 
 ```html
 <script>
