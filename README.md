@@ -84,23 +84,29 @@ Views of the code should produce insight. A component earns its place by answeri
 
 </details>
 
+<details><summary><b>Pictures carry more than prose</b></summary>
+
+This README leans on diagrams for the same reason the loop leans on mock-ups: a picture carries more at once than text. A state machine, a radar of bars or a mock-up shows in one look what takes paragraphs to say, and a wrong change looks wrong. Agents now draw these well, but a picture made once and thrown away has to be paid for again next time. [paneweft](https://github.com/mikenrafter/paneweft) keeps views inside the code they explain, so they are saved, reused and checked when the code changes, and drawing stays cheap over time.
+
+</details>
+
 ### The build loop: a fixed path, unpredictable input
 
-Every feature runs through the same state machine ([build-loop](skills/build-loop/SKILL.md)). The diagram shows one stage of a feature; the cards under it open the slices inside red and green, the review rounds, how the session waits, and how a mock-up becomes a screen, each with its own diagram.
+Every feature runs through the same state machine ([build-loop](skills/build-loop/SKILL.md)). The diagram is one stage; each card below opens one part of it, with its own diagram.
 
 <p align="center"><img src="docs/build-loop.svg" width="600" alt="One stage of the build loop as a state machine: discuss, scope and estimate, red tests, spec gate, green code, review round, ship, with the git work in each state. The spec gate sends red back at most twice, review sends green back at most five times, and ship starts the next stage. My inputs enter on the left. A usage limit or compaction can pause any state, and the session resumes in the same state."></p>
 
-My input is the chaotic part. A new idea, a change of plan or "not what I meant" can arrive in any state, and the loop takes it where it lands instead of restarting.
+My input is the chaotic part: a new idea, a change of plan or "not what I meant" can arrive in any state, and the loop takes it where it lands.
 
 <details><summary><b>Why each state is there</b></summary>
 
-Discussion opens with a recommendation, not a questionnaire. Before asking me anything, the agent reads the code and sends what it thinks we are building, the design it would build, the strongest objection to that design, and a simpler alternative. Its questions come numbered, each with its recommended answer and how sure it is, so I can answer most of them in a word. A question I leave open becomes a logged default, and the work keeps moving.
+Discussion opens with a recommendation: what the agent thinks we are building, the design it would build, the strongest objection and a simpler alternative. Its questions come numbered with recommended answers, so most take a word; one I leave open becomes a logged default.
 
-Scoping fixes one base commit and one diff command for the whole feature, so every reviewer reads the same change. [agentpace](https://github.com/mikenrafter/agentpace) turns the scope into a plan with a committed time, a median and a slip line (P80). The plan is updated as work moves, because most estimate error comes from not knowing what is left.
+Scoping fixes one base commit and one diff, so every reviewer reads the same change, and [agentpace](https://github.com/mikenrafter/agentpace) turns it into a plan with a committed time, a median and a P80.
 
-Red comes before green so that the tests state the contract before any code exists to agree with them. The spec gate then gives the spec and the red tests to a model that wrote neither, and asks it to write wrong code that still passes. Each one it finds is a missing test.
+Red comes before green so the tests state the contract before any code can agree with them. At the spec gate, a model that wrote neither the spec nor the tests tries to write wrong code that still passes; each success is a missing test.
 
-Each stage repeats the loop with higher bars. A pilot tries an idea cheaply and throws its tests away with the design; the structural stage builds what I will run myself; hardening builds what other people will. Each state's work is committed before the next begins, so a usage limit or a full context can stop the session anywhere and it resumes in the same state.
+Every state's work is committed before the next begins, so the session can stop anywhere and resume in place.
 
 </details>
 
@@ -108,7 +114,7 @@ Each stage repeats the loop with higher bars. A pilot tries an idea cheaply and 
 
 <p align="center"><img src="docs/build-loop-slices.svg" width="600" alt="Two coupled cycles. Red writes slice N+1 and runs tq slice check, then waits for green to finish slice N, reads it, and writes the next. Green waits for the gate, builds the slice, and runs tq mutants check until every pinned mutant fails its test."></p>
 
-From the structural stage on, red and green run at the same time. While green builds slice N, red writes slice N+1, and two programs referee. `tq slice check` decides whether red's tests are real: each fails on an assertion and names the wrong code it catches. `tq mutants check` decides whether green's code is: each named wrong version must fail its test. Red never runs more than one slice ahead, so its next tests fit the code that was actually built. About five minutes into each slice the orchestrator reads the log and pushes on one or two points: direction, a weak input, a missing case. It does not argue anything the programs already settled. Each agent keeps its own vigil hold while it waits, because their prompt caches expire at different times. Only one of the pair is a Claude model, so the two run in parallel under my cap of one working Claude agent. At every cut the loop asks why the work can't run in parallel. If the answer is budget, it stays serial; if two slices edit the same file, the module gets split first.
+From the structural stage on, red and green run at once: green builds slice N while red writes N+1. Programs referee. `tq slice check` passes red's tests only if each fails on an assertion and names the wrong code it catches; `tq mutants check` passes green's code only if each named wrong version fails its test. Red stays at most one slice ahead, so its tests fit the code actually built. About five minutes into each slice the orchestrator pushes on a point or two, never on what the programs settled. Only one of the pair is a Claude model, so the two run in parallel under my cap of one working Claude agent, and at every cut the loop asks what stops more of the work running in parallel.
 
 </details>
 
@@ -116,11 +122,11 @@ From the structural stage on, red and green run at the same time. While green bu
 
 <p align="center"><img src="docs/build-loop-review.svg" width="600" alt="A review round in three columns: the reviewer sends findings and scores, the orchestrator pushes back, the reviewer answers until it is settled, and review-ledger scores each concern against its bar. At the bar: checkpoint. Below it: a fix and the next round; Fable steps back after round 3; I decide after round 5."></p>
 
-Review is where most of the cost goes, so it has hard limits. Each round goes to a model that wrote none of the code. It sends its findings and scores, and the orchestrator pushes back on at least one of them: a finding that looks wrong, or the assumption behind it. The reviewer keeps, changes or drops the finding, and they go back and forth until it is settled. Fable, the strongest reviewer, gets at least two of these exchanges. The point is not to invent disagreement but to make every finding survive a challenge before anyone spends a fix on it.
+Review is where most of the cost goes, so it has hard limits. A model that wrote none of the code sends findings and scores. The orchestrator challenges at least one finding or the assumption behind it, and the reviewer keeps, changes or drops it until it is settled; Fable gets two such exchanges. Every finding has to survive a challenge before a fix is spent on it.
 
-review-ledger then scores every concern against the stage's bar and prints the next step, so whether to go on is a lookup, not a mood. Below the bar, the model that did not write the last fix writes the next one, failing test first. If Fable rejects round 3, it is asked what to pivot to instead of for more fixes. After round 5 the loop stops and I decide. A bot's finding is sorted by bot-triage first.
+review-ledger then scores each concern against the stage's bar and prints the next step. Below the bar, the model that did not write the last fix writes the next one, failing test first. A failed round 3 asks Fable for a pivot, not more fixes; after round 5, I decide.
 
-The stages differ in how much they ask. A pilot runs one red run and one green run, gets round 1 and then Fable, and ships on my thumbs-up; its bars are the four or so concerns we agreed at the start. The structural stage goes slice by slice and runs the full schedule: rounds 1 and 2, Fable at round 3, a pivot if needed, then rounds 4 and 5. Hardening runs the same rounds against production bars, with the security bar set by a threat model; it is for upstream pull requests and releases.
+A pilot gets round 1, then Fable, then my thumbs-up, against the four or so bars we agreed. Structural and hardening run all five rounds, hardening against production bars and a threat model.
 
 </details>
 
@@ -128,7 +134,7 @@ The stages differ in how much they ask. A pilot runs one red run and one green r
 
 <p align="center"><img src="docs/build-loop-waiting.svg" width="600" alt="How the session waits: the orchestrator dispatches a run, adds it to a vigil hold with agentpace's P80, and calls keepalive, which blocks until the run ends or the window ends. Past the P80 the run is overdue. At any point, my messages go into workq, a usage limit pauses the session, and a full context is compacted."></p>
 
-Most of an agent session is waiting. Every delegated run becomes an item on one [vigil](https://github.com/mikenrafter/vigil) hold, with agentpace's P80 as the time it should take; past it, the item is flagged overdue and the orchestrator checks on the run. The keepalive call blocks until something changes, and its window follows the prompt cache: up to 50 minutes on a one-hour cache, 4.5 minutes on a five-minute one, so a wait never lets the cache expire. Each message I send while the agent is busy is filed in workq and worked in order, so it is not lost. The agent compacts its own context at a phase boundary, where every decision is already in a file, instead of letting the harness cut it mid-step. The summary is written in BabelTele, a dense notation any model can read without a codebook, and hooks make the agent reread its skills afterwards.
+Every delegated run is an item on one [vigil](https://github.com/mikenrafter/vigil) hold, expected to take agentpace's P80; past it, the orchestrator checks on the run. keepalive blocks until something changes, with its window matched to the prompt cache (up to 50 minutes on a one-hour cache, 4.5 on a five-minute one), so no wait lets the cache expire. Messages I send mid-run go into workq and are worked in order. The agent compacts at a phase boundary it chooses, writes the summary in BabelTele, a dense notation any model reads without a codebook, and rereads its skills afterwards.
 
 </details>
 
@@ -136,13 +142,7 @@ Most of an agent session is waiting. Every delegated run becomes an item on one 
 
 <p align="center"><img src="docs/build-loop-mockups.svg" width="600" alt="The mock-up cycle: the orchestrator writes each version and shows it as an inline page and a PNG; I read it and Gemini Neon reads it for legibility at the same time; both go into the next version. After sign-off, ui-brief-check gates the build brief, and the build is compared with the mock-up in screenshot pairs until they match."></p>
 
-UI work stands or falls on the mock-up, so the orchestrator writes every version itself and never hands one to an implementer. I see each version as a live page inline and as a PNG, and Gemini Neon reads the same version for legibility at the same time, because we catch different things. The orchestrator folds both into the next version. Once I sign off, `ui-brief-check` fails any build brief that does not name the mock-up, the original screen and every earlier pilot it reuses; an implementer once rebuilt toggles, list rows and charts that the app already had. The build is then compared with the mock-up in screenshot pairs, and the pull request shows every version, dead ends included.
-
-</details>
-
-<details><summary><b>Pictures carry more than prose</b></summary>
-
-This README leans on diagrams for the same reason the loop leans on mock-ups: a picture carries more at once than text. A state machine, a radar of bars or a mock-up shows in one look what takes paragraphs to say, and a wrong change looks wrong. Agents now draw these well, but a picture made once and thrown away has to be paid for again next time. [paneweft](https://github.com/mikenrafter/paneweft) keeps views inside the code they explain, so they are saved, reused and checked when the code changes, and drawing stays cheap over time.
+UI work stands or falls on the mock-up, so the orchestrator writes every version itself. I see each one inline and as a PNG while Gemini Neon reads it for legibility, since we catch different things, and both feed the next version. After sign-off, `ui-brief-check` fails a build brief that does not name the mock-up, the original screen and every earlier pilot, because an implementer once rebuilt parts the app already had. The build is compared with the mock-up in screenshot pairs, and the pull request shows every version.
 
 </details>
 
