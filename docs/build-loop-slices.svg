@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 640" width="100%" role="img" aria-labelledby="t d">
+<title id="t">Red and green, slice by slice</title>
+<desc id="d">Two coupled cycles. Red (Sol) writes slice N+1, runs tq slice check, then waits on a vigil hold for green to finish slice N, reads it, and writes the next. Green (Sonnet) waits for gate-ok, builds the slice, runs tq mutants check until every pinned mutant fails its test, and signals green-done. Red is never more than one slice ahead.</desc>
+<defs>
+<marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hin" d="M0 0 L10 5 L0 10 Z"/></marker>
+</defs>
+<style>
+.judge{fill:#eaf2fd;stroke:#3a78c9} .core{fill:#1f6f43;stroke:#14512f} .chaos{fill:#fdf1e7;stroke:#d97a2b}
+.ink{fill:#1f2328} .muted{fill:#4a525b} .on{fill:#ffffff} .git{fill:#8250df}
+.fw{stroke:#57606a;fill:none} .bk{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none} .encl{stroke:#8c959f;fill:none}
+.hfw{fill:#57606a} .hbk{fill:#3a78c9} .hin{fill:#d97a2b} .bkink{fill:#2f6db5} .grid{stroke:#d1d9e0}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){
+.judge{fill:#12233a;stroke:#5b9be6} .core{fill:#2ea062;stroke:#7ee2a8} .chaos{fill:#2a1d12;stroke:#e08a3c}
+.ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on{fill:#04150c} .git{fill:#c297ff}
+.fw{stroke:#8b949e} .bk{stroke:#5b9be6} .in{stroke:#e08a3c} .encl{stroke:#6e7681}
+.hfw{fill:#8b949e} .hbk{fill:#5b9be6} .hin{fill:#e08a3c} .bkink{fill:#7fb3f0} .grid{stroke:#30363d}
+}
+</style>
+<rect class="chaos" x="8" y="8" width="22" height="14" rx="4" stroke-width="2" stroke-dasharray="4 3"/>
+<text class="muted" x="36" y="20" font-size="12" text-anchor="start">me, or the world</text>
+<rect class="judge" x="150" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="178" y="20" font-size="12" text-anchor="start">an agent decides</text>
+<rect class="core" x="292" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="320" y="20" font-size="12" text-anchor="start">a program decides</text>
+<text class="git mono" x="440" y="20" font-size="12" text-anchor="start">git</text>
+<line class="bk" x1="470" y1="16" x2="500" y2="16" stroke-width="2"/>
+<text class="muted" x="506" y="20" font-size="12" text-anchor="start">back edge</text>
+<text class="ink" x="115" y="56" font-size="15" text-anchor="middle" font-weight="700">Red (Sol)</text>
+<text class="ink" x="320" y="56" font-size="15" text-anchor="middle" font-weight="700">Programs</text>
+<text class="ink" x="525" y="56" font-size="15" text-anchor="middle" font-weight="700">Green (Sonnet)</text>
+<rect class="judge" x="44" y="80" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="101" font-size="15" font-weight="700" text-anchor="middle">Write slice N+1</text>
+<text class="muted" x="127.0" y="118" font-size="12.5" text-anchor="middle">2-4 tests, pinned mutants</text>
+<text class="git mono" x="127.0" y="133" font-size="11.5" text-anchor="middle">commit, Test-Phase: red</text>
+<rect class="core" x="232" y="80" width="176" height="80" rx="10" stroke-width="2"/>
+<text class="on" x="320.0" y="101" font-size="15" font-weight="700" text-anchor="middle">tq slice check</text>
+<text class="on" x="320.0" y="118" font-size="12.5" text-anchor="middle">lint; fails on assertions;</text>
+<text class="on" x="320.0" y="133" font-size="12.5" text-anchor="middle">catches: and reaches:</text>
+<text class="on mono" x="320.0" y="148" font-size="11.5" text-anchor="middle">scratch copy of red</text>
+<rect class="judge" x="446" y="80" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="101" font-size="15" font-weight="700" text-anchor="middle">Wait for gate-ok</text>
+<text class="muted" x="529.0" y="118" font-size="12.5" text-anchor="middle">vigil hold on the slice log</text>
+<rect class="judge" x="446" y="200" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="221" font-size="15" font-weight="700" text-anchor="middle">Build slice N</text>
+<text class="muted" x="529.0" y="238" font-size="12.5" text-anchor="middle">reads the log, adds notes</text>
+<text class="git mono" x="529.0" y="253" font-size="11.5" text-anchor="middle">commit --only</text>
+<rect class="core" x="232" y="290" width="176" height="80" rx="10" stroke-width="2"/>
+<text class="on" x="320.0" y="311" font-size="15" font-weight="700" text-anchor="middle">tq mutants check</text>
+<text class="on" x="320.0" y="328" font-size="12.5" text-anchor="middle">each pinned mutant</text>
+<text class="on" x="320.0" y="343" font-size="12.5" text-anchor="middle">must fail its test</text>
+<text class="on mono" x="320.0" y="358" font-size="11.5" text-anchor="middle">git worktree --detach</text>
+<rect class="judge" x="44" y="320" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="341" font-size="15" font-weight="700" text-anchor="middle">Wait for green</text>
+<text class="muted" x="127.0" y="358" font-size="12.5" text-anchor="middle">vigil hold: green-done N</text>
+<rect class="judge" x="446" y="420" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="529.0" y="441" font-size="15" font-weight="700" text-anchor="middle">Slice done</text>
+<text class="muted" x="529.0" y="458" font-size="12.5" text-anchor="middle">logs green-done</text>
+<rect class="judge" x="44" y="440" width="166" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="127.0" y="461" font-size="15" font-weight="700" text-anchor="middle">Read green&#x27;s slice N</text>
+<text class="muted" x="127.0" y="478" font-size="12.5" text-anchor="middle">white-box pass on its code</text>
+<path class="fw" d="M210 112 L228 112" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M285 80 C285 64 150 64 150 77" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="218" y="68" font-size="11.5" text-anchor="middle">fails: red fixes</text>
+<path class="fw" d="M408 112 L442 112" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M262 160 C240 230 170 260 140 316" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="196" y="222" font-size="11.5" text-anchor="start">passed</text>
+<path class="fw" d="M529 144 L529 196" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="536" y="175" font-size="11.5" text-anchor="start">slice N</text>
+<path class="fw" d="M446 240 C426 250 426 300 412 318" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M408 352 C470 352 500 320 505 268" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="470" y="372" font-size="11.5" text-anchor="middle">a mutant lives</text>
+<path class="fw" d="M408 336 C428 380 428 440 442 450" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="420" y="400" font-size="11.5" text-anchor="end">all killed</text>
+<path class="bk" d="M612 452 C646 452 646 112 616 112" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="636" y="282" font-size="11.5" text-anchor="middle" transform="rotate(-90 636 282)">next slice</text>
+<path class="fw" d="M446 462 C330 470 250 420 214 362" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="300" y="480" font-size="11.5" text-anchor="middle">green-done</text>
+<path class="fw" d="M127 384 L127 436" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M44 472 C8 472 8 112 40 112" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="34" y="300" font-size="11.5" text-anchor="middle" transform="rotate(-90 34 300)">write N+2</text>
+<text class="muted" x="8" y="548" font-size="13" text-anchor="start">Each agent holds its own wait, because their prompt caches expire at different times.</text>
+<text class="muted" x="8" y="566" font-size="13" text-anchor="start">About five minutes into each slice the orchestrator pushes on one or two points;</text>
+<text class="muted" x="8" y="584" font-size="13" text-anchor="start">the programs settle the rest. Every test names the wrong code it catches.</text>
+</svg>

@@ -1,67 +1,114 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 700" width="100%" role="img" aria-labelledby="t d">
-  <title id="t">The build loop and what drives it</title>
-  <desc id="d">Seven phases run top to bottom: discuss, scope, red tests, spec gate, green code, review rounds, ship. The spec gate loops back to red at most twice, and review loops back to green for fix rounds at most five times. From the structural round on, red and green alternate in small slices. On the left, the owner's unpredictable inputs enter at different phases: a new idea, a decision or silence, "that's not what I meant", a change of plan, a bug found by a bot or another session, a usage limit, and "ship it".</desc>
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L10 5 L0 10 Z"/></marker>
-    <marker id="al" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="loophead" d="M0 0 L10 5 L0 10 Z"/></marker>
-    <marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead-in" d="M0 0 L10 5 L0 10 Z"/></marker>
-  </defs>
-  <style>
-    .state{fill:#1f6f43;stroke:#14512f} .on{fill:#fff}
-    .input{fill:#fdf1e7;stroke:#d97a2b} .ink{fill:#1f2328} .muted{fill:#4a525b}
-    .flow{stroke:#1f6f43;fill:none} .loop{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none}
-    .arrowhead{fill:#1f6f43} .arrowhead-in{fill:#d97a2b} .loopink{fill:#3a78c9}
-    .slice{fill:none;stroke:#3a78c9} .loophead{fill:#3a78c9}
-    text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
-    @media (prefers-color-scheme: dark){
-      .state{fill:#2ea062;stroke:#7ee2a8} .on{fill:#04150c}
-      .input{fill:#2a1d12;stroke:#e08a3c} .ink{fill:#f0f6fc} .muted{fill:#b1b8c0}
-      .flow{stroke:#7ee2a8} .arrowhead{fill:#7ee2a8} .loop{stroke:#5b9be6} .loopink{fill:#7fb3f0}
-      .in{stroke:#e08a3c} .arrowhead-in{fill:#e08a3c} .slice{stroke:#5b9be6} .loophead{fill:#5b9be6}
-    }
-  </style>
-
-  <!-- phases -->
-  <g font-size="17" font-weight="700" text-anchor="middle">
-    <rect class="state" x="232" y="14"  width="150" height="50" rx="10"/><text class="on" x="307" y="45">Discuss</text>
-    <rect class="state" x="232" y="110" width="150" height="50" rx="10"/><text class="on" x="307" y="141">Scope</text>
-    <rect class="state" x="232" y="206" width="150" height="50" rx="10"/><text class="on" x="307" y="237">Red tests</text>
-    <rect class="state" x="232" y="302" width="150" height="50" rx="10"/><text class="on" x="307" y="333">Spec gate</text>
-    <rect class="state" x="232" y="398" width="150" height="50" rx="10"/><text class="on" x="307" y="429">Green code</text>
-    <rect class="state" x="232" y="494" width="150" height="50" rx="10"/><text class="on" x="307" y="525">Review rounds</text>
-    <rect class="state" x="232" y="590" width="150" height="50" rx="10"/><text class="on" x="307" y="621">Ship</text>
-  </g>
-  <g class="flow" stroke-width="2.5" marker-end="url(#a)">
-    <line x1="307" y1="64" x2="307" y2="106"/><line x1="307" y1="160" x2="307" y2="202"/>
-    <line x1="307" y1="256" x2="307" y2="298"/><line x1="307" y1="352" x2="307" y2="394"/>
-    <line x1="307" y1="448" x2="307" y2="490"/><line x1="307" y1="544" x2="307" y2="586"/>
-  </g>
-
-  <!-- loops back, right side -->
-  <path class="loop" stroke-width="2.5" marker-end="url(#al)" d="M382 327 C430 327 430 231 386 231"/>
-  <path class="loop" stroke-width="2.5" marker-end="url(#al)" d="M382 519 C430 519 430 423 386 423"/>
-  <g font-size="16" class="loopink">
-    <text x="436" y="272">fix tests</text><text x="436" y="292">(2 max)</text>
-    <text x="436" y="466">fix round</text><text x="436" y="484">(5 max)</text>
-  </g>
-  <!-- slices bracket -->
-  <rect class="slice" x="222" y="198" width="170" height="258" rx="14" stroke-width="2" stroke-dasharray="5 5"/>
-  <g class="loopink" font-size="15"><text x="436" y="360">dashed:</text><text x="436" y="379">slice by</text><text x="436" y="398">slice, from</text><text x="436" y="417">structural</text></g>
-
-  <!-- the owner's inputs, left side -->
-  <g font-size="16">
-    <rect class="input" x="8" y="20"  width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="45">"A new idea"</text>
-    <rect class="input" x="8" y="114" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="139">A decision or silence</text>
-    <rect class="input" x="8" y="306" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="331">"Not what I meant"</text>
-    <rect class="input" x="8" y="392" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="417">Change of plan</text>
-    <rect class="input" x="8" y="446" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="471">A usage limit</text>
-    <rect class="input" x="8" y="500" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="525">A bot finds a bug</text>
-    <rect class="input" x="8" y="594" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="619">"Ship it"</text>
-  </g>
-  <g class="in" stroke-width="2" marker-end="url(#ai)">
-    <path d="M186 40 L228 40"/><path d="M186 134 L228 134"/><path d="M186 326 L228 326"/>
-    <path d="M186 412 L228 420"/><path d="M186 466 C206 466 210 440 228 438"/>
-    <path d="M186 520 L228 520"/><path d="M186 614 L228 614"/>
-  </g>
-  <text class="muted" x="8" y="672" font-size="15">Orange: what I send, whenever I send it.</text><text class="muted" x="8" y="692" font-size="15">A decision I do not give becomes a logged default.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 870" width="100%" role="img" aria-labelledby="t d">
+<title id="t">One stage of the build loop</title>
+<desc id="d">A state machine. Discuss, scope and estimate, red tests, spec gate, green code, review round, ship. The spec gate sends red back at most twice; review sends green back at most five times; ship starts the next stage: pilot, then structural, then hardening. My inputs enter on the left. From any state the session can pause at a usage limit or compact, and it resumes in the same state. Purple lines are the git work in each state.</desc>
+<defs>
+<marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hin" d="M0 0 L10 5 L0 10 Z"/></marker>
+</defs>
+<style>
+.judge{fill:#eaf2fd;stroke:#3a78c9} .core{fill:#1f6f43;stroke:#14512f} .chaos{fill:#fdf1e7;stroke:#d97a2b}
+.ink{fill:#1f2328} .muted{fill:#4a525b} .on{fill:#ffffff} .git{fill:#8250df}
+.fw{stroke:#57606a;fill:none} .bk{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none} .encl{stroke:#8c959f;fill:none}
+.hfw{fill:#57606a} .hbk{fill:#3a78c9} .hin{fill:#d97a2b} .bkink{fill:#2f6db5} .grid{stroke:#d1d9e0}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){
+.judge{fill:#12233a;stroke:#5b9be6} .core{fill:#2ea062;stroke:#7ee2a8} .chaos{fill:#2a1d12;stroke:#e08a3c}
+.ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on{fill:#04150c} .git{fill:#c297ff}
+.fw{stroke:#8b949e} .bk{stroke:#5b9be6} .in{stroke:#e08a3c} .encl{stroke:#6e7681}
+.hfw{fill:#8b949e} .hbk{fill:#5b9be6} .hin{fill:#e08a3c} .bkink{fill:#7fb3f0} .grid{stroke:#30363d}
+}
+</style>
+<rect class="chaos" x="8" y="8" width="22" height="14" rx="4" stroke-width="2" stroke-dasharray="4 3"/>
+<text class="muted" x="36" y="20" font-size="12" text-anchor="start">me, or the world</text>
+<rect class="judge" x="150" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="178" y="20" font-size="12" text-anchor="start">an agent decides</text>
+<rect class="core" x="292" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="320" y="20" font-size="12" text-anchor="start">a program decides</text>
+<text class="git mono" x="440" y="20" font-size="12" text-anchor="start">git</text>
+<line class="bk" x1="470" y1="16" x2="500" y2="16" stroke-width="2"/>
+<text class="muted" x="506" y="20" font-size="12" text-anchor="start">back edge</text>
+<rect class="encl" x="168" y="44" width="254" height="688" rx="14" stroke-width="1.5" stroke-dasharray="3 5"/>
+<rect class="judge" x="180" y="56" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="77" font-size="15" font-weight="700" text-anchor="middle">Discuss</text>
+<text class="muted" x="295.0" y="94" font-size="12.5" text-anchor="middle">Opus recommends; I answer or not</text>
+<text class="git mono" x="295.0" y="109" font-size="11.5" text-anchor="middle">journey file</text>
+<rect class="judge" x="180" y="156" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="177" font-size="15" font-weight="700" text-anchor="middle">Scope and estimate</text>
+<text class="muted" x="295.0" y="194" font-size="12.5" text-anchor="middle">agentpace plan: commit, P50, P80</text>
+<text class="git mono" x="295.0" y="209" font-size="11.5" text-anchor="middle">fetch; merge-base = base SHA</text>
+<rect class="judge" x="180" y="256" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="277" font-size="15" font-weight="700" text-anchor="middle">Red tests</text>
+<text class="muted" x="295.0" y="294" font-size="12.5" text-anchor="middle">Sol writes tests that fail</text>
+<text class="git mono" x="295.0" y="309" font-size="11.5" text-anchor="middle">commit, Test-Phase: red</text>
+<rect class="judge" x="180" y="356" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="377" font-size="15" font-weight="700" text-anchor="middle">Spec gate</text>
+<text class="muted" x="295.0" y="394" font-size="12.5" text-anchor="middle">wrong code that still passes?</text>
+<text class="git mono" x="295.0" y="409" font-size="11.5" text-anchor="middle">fixes committed, red re-checked</text>
+<rect class="judge" x="180" y="456" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="477" font-size="15" font-weight="700" text-anchor="middle">Green code</text>
+<text class="muted" x="295.0" y="494" font-size="12.5" text-anchor="middle">the other model makes them pass</text>
+<text class="git mono" x="295.0" y="509" font-size="11.5" text-anchor="middle">commit --only, per phase</text>
+<rect class="judge" x="180" y="556" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="577" font-size="15" font-weight="700" text-anchor="middle">Review round</text>
+<text class="muted" x="295.0" y="594" font-size="12.5" text-anchor="middle">scored by another model family</text>
+<text class="git mono" x="295.0" y="609" font-size="11.5" text-anchor="middle">one diff: base to working tree</text>
+<rect class="judge" x="180" y="656" width="230" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="295.0" y="677" font-size="15" font-weight="700" text-anchor="middle">Ship</text>
+<text class="muted" x="295.0" y="694" font-size="12.5" text-anchor="middle">on my word only</text>
+<text class="git mono" x="295.0" y="709" font-size="11.5" text-anchor="middle">bot-triage guard, publish-scan</text>
+<path class="fw" d="M295 120 L295 153" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M295 220 L295 253" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M295 320 L295 353" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M295 420 L295 453" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M295 520 L295 553" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M295 620 L295 653" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M410 388 C458 388 458 288 414 288" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="452" y="344" font-size="12" text-anchor="start">fix the tests</text>
+<text class="bkink" x="452" y="359" font-size="12" text-anchor="start">at most 2 rounds</text>
+<path class="bk" d="M410 588 C458 588 458 488 414 488" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="452" y="544" font-size="12" text-anchor="start">fix round</text>
+<text class="bkink" x="452" y="559" font-size="12" text-anchor="start">at most 5 rounds</text>
+<path class="bk" d="M410 696 C598 696 598 80 414 80" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="576" y="396.0" font-size="12.5" text-anchor="middle" transform="rotate(-90 576 396.0)">next stage: pilot, then structural, then hardening</text>
+<rect class="chaos" x="8" y="71" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="93.0" font-size="15" font-weight="700" text-anchor="middle">&quot;A new idea&quot;</text>
+<path class="in" d="M160 88 L176 88" stroke-width="2" marker-end="url(#hin)"/>
+<rect class="chaos" x="8" y="171" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="193.0" font-size="15" font-weight="700" text-anchor="middle">Decision or silence</text>
+<path class="in" d="M160 188 L176 188" stroke-width="2" marker-end="url(#hin)"/>
+<rect class="chaos" x="8" y="371" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="393.0" font-size="15" font-weight="700" text-anchor="middle">&quot;Not what I meant&quot;</text>
+<path class="in" d="M160 388 L176 388" stroke-width="2" marker-end="url(#hin)"/>
+<rect class="chaos" x="8" y="471" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="493.0" font-size="15" font-weight="700" text-anchor="middle">Change of plan</text>
+<path class="in" d="M160 488 L176 488" stroke-width="2" marker-end="url(#hin)"/>
+<rect class="chaos" x="8" y="571" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="593.0" font-size="15" font-weight="700" text-anchor="middle">A bot finds a bug</text>
+<path class="in" d="M160 588 L176 588" stroke-width="2" marker-end="url(#hin)"/>
+<rect class="chaos" x="8" y="671" width="152" height="34" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="84.0" y="693.0" font-size="15" font-weight="700" text-anchor="middle">&quot;Ship it&quot;</text>
+<path class="in" d="M160 688 L176 688" stroke-width="2" marker-end="url(#hin)"/>
+<text class="muted" x="8" y="222" font-size="11.5" text-anchor="start">silence: a logged default</text>
+<text class="muted" x="8" y="274" font-size="12" text-anchor="start">From the structural</text>
+<text class="muted" x="8" y="289" font-size="12" text-anchor="start">round, red and green go</text>
+<text class="muted" x="8" y="304" font-size="12" text-anchor="start">slice by slice</text>
+<text class="muted" x="8" y="319" font-size="12" text-anchor="start">(diagram 2)</text>
+<rect class="judge" x="40" y="790" width="240" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="160.0" y="811" font-size="15" font-weight="700" text-anchor="middle">Paused at a usage limit</text>
+<text class="muted" x="160.0" y="828" font-size="12.5" text-anchor="middle">save, wait for the reset</text>
+<text class="git mono" x="160.0" y="843" font-size="11.5" text-anchor="middle">nothing lost: work is committed</text>
+<rect class="judge" x="320" y="790" width="240" height="64" rx="10" stroke-width="2"/>
+<text class="ink" x="440.0" y="811" font-size="15" font-weight="700" text-anchor="middle">Compacting</text>
+<text class="muted" x="440.0" y="828" font-size="12.5" text-anchor="middle">at a phase boundary I choose</text>
+<text class="muted" x="440.0" y="843" font-size="12.5" text-anchor="middle">BabelTele summary, skill rereads</text>
+<path class="fw" d="M120 732 L120 787" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M180 790 L180 735" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="muted" x="114" y="766" font-size="11.5" text-anchor="end">from any state</text>
+<text class="bkink" x="186" y="766" font-size="11.5" text-anchor="start">resume there</text>
+<path class="fw" d="M400 732 L400 787" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M460 790 L460 735" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="muted" x="394" y="766" font-size="11.5" text-anchor="end">from any state</text>
+<text class="bkink" x="466" y="766" font-size="11.5" text-anchor="start">resume there</text>
 </svg>
