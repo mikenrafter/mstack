@@ -57,8 +57,11 @@ def how_to_compact(session_id):
     if thread:
         return (f"Then queue two messages to your own thread with `t3_thread_send` "
                 f"(threadId {thread}, mode queue): first `/compact next: <what comes next>`, "
-                "then a resume message such as `Resume: read <state file>, then <step>` "
-                "(the compaction alone does not wake you). End the turn.")
+                "then a self-resume message starting `[self-resume <id> · queued by this session "
+                "before /compact at <UTC time> · stale if you already resumed]` and then "
+                "`Resume: read <state file>, then <step>` (the compaction alone does not wake you). "
+                "Load the babeltele skill first and write a BabelTele summary by hand into the "
+                "/compact message (not the babeltele CLI). End the turn.")
     return (f"Then run `uw-agent compact ask {session_id} --reason \"<boundary "
             "and what comes next>\"`.")
 

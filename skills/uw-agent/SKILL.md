@@ -28,13 +28,33 @@ In T3 Code, compact yourself natively with TWO queued messages to your own
 thread (T3 tool `t3_thread_send`, `mode: "queue"`, thread id in
 `$T3CODE_THREAD_ID`), then end the turn:
 
-1. `/compact next: <first step after the boundary>`. Text after the command
-   steers the summary.
-2. A resume message, e.g. `Resume: read <state file>, then <first step>`.
+1. `/compact next: <first step after the boundary> · resume <id> queued · babeltele: <summary>`.
+   Text after the command steers the summary. Load the `babeltele` skill first and
+   write the summary yourself in its notation: the task and the owner's constraints,
+   what is in flight (run, where, report path), decisions, the state file path and
+   the next steps, with paths, ids and numbers verbatim. Keep it to a few hundred
+   tokens. Write it by hand; do not call the `babeltele` CLI (owner, 2026-11-27).
+2. A self-resume message, marked so a later you knows who sent it and when:
 
-The compaction runs when your turn ends, but it does not start a new turn. Without
-the second message the session stays idle until someone writes to it. Send
+   ```text
+   [self-resume <id> · queued by this session before /compact at <UTC time> · stale if you already resumed]
+   Resume: read <state file>, then <first step>.
+   ```
+
+   Use a fresh `<id>` each time (for example `r-` and the UTC time, `r-1030Z`), the
+   same one named in the `/compact` message.
+
+The compaction runs when your turn ends, and usually it does not start a new turn.
+Without the second message the session stays idle until someone writes to it. Send
 both, in that order, before ending the turn.
+
+**A late self-resume.** Sometimes the compaction does wake the session, or another
+message does, and the self-resume arrives after you have already resumed. When a
+message starts with `[self-resume`, check before acting: if this session has already
+resumed since that compaction (you reread the state file, or acted on its next
+steps), it is stale. Say so in one line (`stale self-resume <id>; already resumed`)
+and carry on with the current work. Do not restart steps it lists. Act on it only
+when it is the first thing you see after the compaction.
 
 Outside T3 Code, ask usagewindow instead. Delivery waits for its next policy
 pass, so expect a delay:

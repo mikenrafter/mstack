@@ -56,6 +56,10 @@ stack plan, after a PR merges, between review rounds. Then queue two messages to
 `t3_thread_send` (`threadId` from `$T3CODE_THREAD_ID`, `mode: "queue"`):
 `/compact next: <what comes next>`, then a resume message (`Resume: read <state
 file>, then <step>`), since the compaction alone does not wake you. End the turn; outside T3, `uw-agent compact ask` (`uw-agent` skill).
+Both messages follow the `uw-agent` skill's "Compact" rules (owner, 2026-11-27): load the `babeltele`
+skill first and write a BabelTele summary by hand into the `/compact` message (never the
+`babeltele` CLI), and mark the resume message as a self-resume, so a session that has already
+resumed treats a late copy as stale.
 Above 500k tokens a hook (`bin/compact-advice-hook`) reminds you with your
 session id. Subagent, Sol and peer runs keep going through a compaction
 and report back as usual, so they are no reason to wait. They stay reachable too: to steer one, send to its

@@ -54,6 +54,10 @@ class CompactAdvice(unittest.TestCase):
         # catches: advice that queues only /compact, which leaves the session idle.
         self.assertIn("/compact next:", out)
         self.assertIn("resume message", out)
+        # catches: a resume a later, already-resumed session cannot tell is its own and stale.
+        self.assertIn("[self-resume <id>", out)
+        # catches: leaving the summary to the summarizer, or to the broken babeltele CLI.
+        self.assertIn("BabelTele summary by hand", out)
         self.assertNotIn("uw-agent", out)
 
     def test_subagent_messages_do_not_count(self):
