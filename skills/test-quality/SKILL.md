@@ -98,10 +98,12 @@ ones.
 
 ## 4a. tq in every red gate (owner, 2026-11-27)
 
-`tq` is installed on PATH. Use it in every red phase, pilots included:
+`tq` ([testquest](https://github.com/mikenrafter/testquest), installed through phoe-nix) is on
+PATH. Use it in every red phase, pilots included:
 
 - `tq lint --since <base>` on the new and changed tests. A gating row blocks the gate.
-  A deliberate form gets `# tq: allow RULE REASON` on the line, with a reason the reviewer can
+  A deliberate form gets `# tq: allow RULE REASON` on the flagged line or the line above it
+  (for no-assert and guarded-assert, that is the `def`/`fn` line), with a reason the reviewer can
   check. `tq rules` lists the rules and what each one exempts.
 - `tq catches` replays each `# catches:` fault in a temporary copy, so the spot mutations are
   run by a program, not described.
