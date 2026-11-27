@@ -38,20 +38,18 @@ behaviour.
 
 1. Red writes slice 1 and runs `tq slice check 1` (below). Once it passes, green starts slice 1.
 2. While green works on slice N, red writes slice N+1.
-3. **Red is never more than one slice ahead.** When red finishes N+1 before green finishes N,
-   it waits on its own vigil hook: `vigil hold --for log:<slice log>?event=green-done&slice=N` (marker file `NN.green-done` until the `log:` kind ships), then
-   `keepalive`, never in orchestrator mode. When the event lands, red wakes up, reads green's
-   slice N and only then writes N+2. That keeps the built system in mind when it writes tests
-   that must make sense in the full system. (owner, 2026-11-27)
+3. **Red is never more than one slice ahead** (owner, 2026-11-27). Done with N+1 before green
+   finishes N, red waits on its own hold (`vigil hold --for log:<slice log>?event=green-done&slice=N`;
+   marker file `NN.green-done` until the `log:` kind ships), never in orchestrator mode, then
+   reads green's slice N before writing N+2, so its tests fit the built system.
 4. About five minutes into each slice, the orchestrator reads the log and red's tests and
    pushes on one or two points: direction, a weak input, a missing case. It does not referee
    anything the gate already settled.
 5. Each dropped test goes in the log with its reason.
 
-**Each agent holds itself.** Red, green and the orchestrator have different prompt-cache lifetimes, so each
-agent that waits keeps its own vigil hold (never orchestrator mode for red or green) instead of ending its
-turn for the orchestrator to resume. The orchestrator's hold covers all three, so a stalled agent raises
-`item overdue`.
+**Each agent holds itself.** Their prompt caches expire at different times, so each waiting agent keeps
+its own vigil hold instead of ending its turn. The orchestrator's hold covers all three, so a stalled
+agent raises `item overdue`.
 
 ## Why can't this run in parallel? (owner, 2026-11-27)
 

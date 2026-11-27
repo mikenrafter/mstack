@@ -37,6 +37,10 @@ That lets a rule land on day one in a repo with thousands of violations.
    a baseline only shrinks when someone happens to touch the code.
 7. **Fix the examples first.** If docs or existing code teach the banned
    pattern, agents copy it. Clean the docs before the code (`retro` §4).
+8. **A check that cannot run fails in CI; it never skips silently.** A missing
+   tool, file or grammar is a red build, not a pass.
+9. **Prove each gate once:** tighten it, or feed it one known violation, and
+   watch the build fail before trusting it green.
 
 Existing tools: `betterer` (TypeScript), `eslint --max-warnings`, ruff
 per-file ignores, `cargo-deny`, `cargo clippy` with `#[expect]` lists. A

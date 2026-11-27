@@ -97,6 +97,12 @@ Some installed skills are other people's and stay theirs: `file-pr`,
 want one to behave differently, the change goes in an mstack skill, not in a
 copy of theirs. `practice-watch` follows tstack for changes.
 
+Before installing an edit that changes a rule, try a read-back (a pilot from
+practice-watch 2026-11-27, after Pocock's skill rewrite): give three fresh
+agents only the changed skill and a concrete situation, ask what they would do,
+and fix the wording wherever one misreads it. Log misreadings per edit in
+`mstack.research/skill-readback.md`; after ten edits, keep the step or drop it.
+
 Every skill is model-invocable. Do not set `disable-model-invocation`.
 Write its description as conditions saying when to invoke it, because the
 model reads that description as a prose hook.

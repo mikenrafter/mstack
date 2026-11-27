@@ -29,6 +29,13 @@ An interface is more than signatures. Each abstraction documents:
 | Invariants | What is always true before, during and after calls. |
 | Mating parts | If it has a second or third counterpart (writer/reader, encoder/decoder, client/server), name them. |
 
+**Agent-facing tools refuse with the next step.** When a tool an agent calls
+says no, the message names the call to make first ("remove the subclasses
+first", "pass --confirm 50b2f3d3"), and its errors carry values the agent can
+pass straight back in. A destructive action goes through a preview or an undo.
+vigil and `review-ledger` already work this way; new tools follow them
+(practice-watch 2026-11-27, gt4llm).
+
 **Mated parts need parity tests** proving both sides agree: round trip, plus
 independent fixtures (see `test-quality`, parity and oracles). A pair that is
 only tested against each other's constants proves nothing.
