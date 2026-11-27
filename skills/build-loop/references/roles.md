@@ -106,6 +106,16 @@ a copywriter and a sounding board (a second opinion on a plan or a mock-up), wit
 Pro budget: one busy Neon thread uses about 5 points of the 5-hour window per 12 minutes, so Pro
 carries one thread at a time; steady parallel use needs Ultra.
 
+**Gemini 4 Hydrogen** (Google, 2026-11). T3 provider `antigravity`, model `gemini-4-hydrogen`, on the same
+Google AI Pro quota as Neon, so the two share the one-busy-thread budget. Trial 2026-11-27 (profile in
+`reviewer-profiles.json`, provisional): head to head with Sonnet on one bounded port with a corpus
+measure. Both kept every judged-real row; Hydrogen was faster (17 against 21 minutes) but wrote twice the
+code with fewer tests, and Sonnet's result matched the reference more closely. Scores: copy 6, task
+juggling 8, HITL comms 7, mistake gravity 7 (low), capability ceiling 7, safeguards untested. **Slot:**
+a Luna-like implementer for well-bounded tasks with a measured result (a port, a parity target, a
+fixture-driven rule), when Sol and Sonnet are busy or out of budget. Not for open design, structural
+rounds or work without a harness that checks it. Review its diffs for size.
+
 **Switch by budget.** Claude usage low: Sol implements, Opus reviews and
 verifies. Sol low or at its limit: Sonnet implements, Opus reviews or waits
 for Sol (§8). Never quietly substitute a model for a role the user pinned.

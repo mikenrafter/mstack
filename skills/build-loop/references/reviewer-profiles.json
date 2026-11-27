@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_at": "2026-11-16",
+  "updated_at": "2026-11-27",
   "archetypes": [
     {
       "id": "contract-cartographer",
@@ -1227,7 +1227,7 @@
       "role": "implementation",
       "scope": "exact",
       "observations": [
-        "Trial 2026-11-21 (build-loop roles.md \u00a72c): three delegated runs (T3 provider antigravity, thought_level high) plus the owner's own top-level Neon thread. Small sample; scores are provisional.",
+        "Trial 2026-11-21 (build-loop roles.md §2c): three delegated runs (T3 provider antigravity, thought_level high) plus the owner's own top-level Neon thread. Small sample; scores are provisional.",
         "Runs finished 3-5x faster than agentpace's default estimate: diagnosis 8 min, a 7-commit Rust lint fix 10.5 min, a 2,000-line Python feature with tests 25 min.",
         "Spend: the four threads together used 43 points of the Google AI Pro 5-hour window and 13 of the weekly in 28 minutes (quota-log.md)."
       ],
@@ -1317,6 +1317,84 @@
         "selection": "Neon trial: three delegated runs plus the owner's top-level thread; orchestrator spot-checks.",
         "evidence": "/home/mini/Documents/repos/mstack.research/neon-trial/"
       }
+    },
+    {
+      "model": "gemini-4-hydrogen",
+      "family": "hydrogen",
+      "aliases": [
+        "hydrogen",
+        "gemini-hydrogen"
+      ],
+      "archetype": null,
+      "status": "provisional",
+      "role": "implementation",
+      "scope": "exact",
+      "observations": [
+        "Trial 2026-11-27 (build-loop roles.md §2c): one bounded port run head to head with Sonnet 5.5 on the same brief (tq nondistinguishing-literal onto ast-grep, Python and Rust, measured against 28 judged-real corpus rows). T3 provider antigravity. One run; scores are provisional.",
+        "Result: 28/28 judged-real kept; 50 of 54 reference rows, 6 added and 4 removed, all 10 of the judged-intended kind (2 are the same rows one line apart). Sonnet: 28/28, 52 of 54, 0 added, 2 removed. 17 minutes against Sonnet's 21.",
+        "First corpus measurement added 28 rows; it traced them to four fact-extraction mistakes of its own and fixed them unprompted (28 -> 6 added).",
+        "Code size: a 1,654-line module and 14 tests (325 lines), against Sonnet's 814 lines and 22 tests. No regex, no legacy readers, eight shared policy functions reused, as the brief required."
+      ],
+      "axes": {
+        "copy": {
+          "score": 6,
+          "note": "Accurate, dense checklist reports; heavy on code names, little explanation of why."
+        },
+        "task_juggling": {
+          "score": 8,
+          "note": "Stayed inside the one-rule scope, finished in one turn, iterated on its own measurement until it converged."
+        },
+        "hitl_comms": {
+          "score": 7,
+          "note": "Answered the mid-run check-in point by point with the numbers asked for."
+        },
+        "safeguard_aggression": {
+          "score": null,
+          "note": "No security, firmware or reverse-engineering work tried."
+        },
+        "mistake_gravity": {
+          "score": 7,
+          "note": "Higher is better (low gravity). Its parity claim (28/28, nothing real lost) held; its 'all added rows are intended' claim is unverified by the orchestrator."
+        },
+        "capability_ceiling": {
+          "score": 7,
+          "note": "Correct on a bounded, measurable port; twice the code of Sonnet's version for the same result, and it did not find the shared engine gap (macro-argument line numbers) that Sonnet fixed."
+        }
+      },
+      "strengths": [
+        {
+          "pattern": "Converges on a measured target: reruns the harness and fixes its own extraction mistakes until the numbers hold.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/test-quality-core/install/report-ndl-hydrogen.md"
+          ]
+        },
+        {
+          "pattern": "Respects hard brief constraints (no regex, no legacy imports, reuse named shared functions).",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/mstack.research/test-quality-core/install/report-ndl-hydrogen.md"
+          ]
+        }
+      ],
+      "weaknesses": [
+        {
+          "pattern": "Verbose implementations: about twice the code of a peer for the same behaviour, so more to review.",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/testquest.worktrees/ndl-hydrogen/tq_rules/ast_grep_literals.py"
+          ]
+        },
+        {
+          "pattern": "Fewer, coarser tests than a peer on the same brief (14 against 22).",
+          "status": "observed",
+          "evidence": [
+            "/home/mini/Documents/repos/testquest.worktrees/ndl-hydrogen/tests/test_tq_ast_grep_literals.py"
+          ]
+        }
+      ],
+      "mask": null,
+      "sample": 1
     }
   ],
   "cautions": [
