@@ -123,5 +123,12 @@ plausible wrong version pass? Check the budget: are the tests aimed at the
 risk map, or under the streetlight? Report each hollow test with the assertion
 quoted, the mode number (`modes.md`) and a concrete fix.
 
+A checked proof (Lean, Verus, a property a solver discharges) is a test, and it
+can be hollow in the same ways: it proves the wrong statement, its hypotheses
+contradict each other, or its guarantee restates a precondition. For a new
+proof, name the requested behaviour in the theorem, show one case that meets the
+premises, and name one plausible broken implementation the theorem excludes
+(owner, 2026-11-27).
+
 Findings outside the change under review go to `<repo>.research/nitpicks.md`
 (format: build-loop `references/nitpicks.md`), not into this diff.
