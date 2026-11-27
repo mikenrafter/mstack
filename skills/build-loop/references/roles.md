@@ -78,6 +78,21 @@ Where the axes decide the role:
   or unverified. High mistake gravity in analysis (Neon: 10 of 72 claims wrong in one review) means
   claims are checked before anyone acts on them.
 
+## 2b'. Which provider launches a model (owner, 2026-11-27)
+
+Only a model's primary provider launches it, for now:
+
+| Model family | Launch through |
+|---|---|
+| Gemini (Neon, Hydrogen, Flash) | T3 provider `antigravity` |
+| OpenAI (Sol) | `codex` |
+| Anthropic (Opus, Sonnet, Fable, Haiku) | `claudeAgent` (or the native Agent tool) |
+
+Never run a model through another provider that happens to list it (for example Claude Sonnet under
+`antigravity`), even to spare a budget window. If a run was started that way, stop it and hand its
+committed work and logs to a run on the primary provider. A model that is unavailable on its primary
+provider is a blocker to report, not a reason to route around it.
+
 ## 2c. A new model arrives
 
 A new model gets no pinned role (round-3 reviewer, hardening, press release) until it is scored.
