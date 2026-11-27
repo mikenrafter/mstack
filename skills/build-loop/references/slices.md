@@ -15,21 +15,10 @@ Three tools this process names are not built yet. Use these equivalents and say 
 | `tq mutants check` (inline `tq-mutant` blocks) | Write each pinned mutant as a fault patch named in the test's `catches:` comment; keep the inline block as documentation. |
 | `tq revert-check` | By hand, in a scratch worktree only (`git worktree add --detach`): apply the mutant or revert, run the test (red), restore, run it (green). Never `stash`, `reset`, `checkout` or `clean` in the live tree. |
 
-## Why
-
-Big red rounds write the whole spec as tests before any code exists. The weak tests surface
-late, far from the reasoning that produced them, and the retro sees only the end state. Dan
-Luu's runs point the same way: agents asked for TDD or mutation testing mostly did ordinary
-testing under that name. So the parts agents skip are made into checks a program runs, and
-the agents argue over small slices while the code is fresh.
-
 ## When it applies (owner, 2026-11-27)
 
-Only the structural round and later stages (hardening, releases). Pilots and other early,
-malleable work keep the batch flow: one red run, then one green run. Their tests are expected to
-be thrown away with the design, so the rigor isn't worth its cost there.
-tq still runs in every red gate, pilots included (`tq lint --since`, `tq log`). Only the
-slice-by-slice argument is saved for the stages where it matters.
+The structural round and later (hardening, releases). Pilots and other malleable work keep the batch
+flow; their tests are thrown away with the design. tq still runs in every red gate, pilots included.
 
 ## Roles
 
@@ -56,21 +45,12 @@ behaviour.
 4. About five minutes into each slice, the orchestrator reads the log and red's tests and
    pushes on one or two points: direction, a weak input, a missing case. It does not referee
    anything the gate already settled.
-5. Some tests in most slices will not survive. Each drop goes in the log with its reason.
+5. Each dropped test goes in the log with its reason.
 
-**Each agent holds itself.** The three agents can have different prompt-cache lifetimes. A
-Claude subagent's cache and a Sol session's cache expire on their own clocks, and the
-orchestrator's clock is a third. So every agent that waits keeps its own vigil hold, and vigil
-paces each keepalive to that agent's cache lifetime. Ending the turn and having the
-orchestrator resume it would let red's cache go cold and reread the system from scratch, and it
-would make the orchestrator a relay. Green does the same while it waits on slice N+1's
-`NN.gate-ok`. The orchestrator's own hold covers all three, so a stalled agent raises
+**Each agent holds itself.** Red, green and the orchestrator have different prompt-cache lifetimes, so each
+agent that waits keeps its own vigil hold (never orchestrator mode for red or green) instead of ending its
+turn for the orchestrator to resume. The orchestrator's hold covers all three, so a stalled agent raises
 `item overdue`.
-
-vigil already does most of this: keepalive reads the cache lifetime it observes in the
-session's Claude transcript (5m or 1h), and uses 270 s for Codex when it can't observe one. Still
-to check in the trial: that a subagent's keepalive finds the subagent's own transcript, not the
-orchestrator's.
 
 ## The slice gate (red runs it; a program decides)
 
@@ -106,27 +86,7 @@ A readable `NN.md` is generated from it.
 Each test names the wrong implementation it catches, as a mutant with an id that a program
 can apply. Then mutation testing is a check tq runs, not something we ask an agent to do.
 
-There are two formats. A project picks one (see "Choosing a variant" below).
-
-**Variant A: sidecar.** The swap lives in a side file, and the source carries a one-line
-marker.
-
-```python
-def window(items, n):
-    # tq-mutant: M-012 (window end is inclusive)
-    return items[:n]
-```
-
-`.tq/mutants/M-012.json`:
-
-```json
-{"id": "M-012", "file": "src/window.py", "anchor": "return items[:n]",
- "swap": "return items[:n - 1]", "assumes": "A-07",
- "flip": "boundary", "killed_by": ["tests/test_window.py::test_last_item_kept"]}
-```
-
-The anchor is the original text, not a line number, so the mutant survives edits that move
-code.
+Two formats: inline (default, below) and a sidecar file (`.tq/mutants/M-012.json`, opt-out).
 
 **Variant B: inline (owner, 2026-11-27).** The swap sits as a comment block right above the
 lines it replaces. There's no sidecar and no anchor to match. A reader, a reviewer and the
@@ -150,15 +110,8 @@ self.flush()?;
   lines right below the block. `replaces=N` overrides that count.
 - tq applies the swap in a scratch copy only, keeping the indentation of the lines it replaces.
 
-What tq checks for this variant:
-- The block is still followed by code, and the swap still parses once applied.
-- When a later commit edits the lines below a block but not the block, `tq mutants check`
-  flags the mutant as `stale` for review, because the swap may no longer be the wrong version
-  of the new code. This catches the main drift risk of inline comments.
-
-**Choosing a variant.** Both use the same ids, fields and outcomes, and tq reads both. A
-project picks one in `.tq/config` (`mutants = inline | sidecar`). The default is inline, since
-colocation helps every reader. Sidecar is for projects that won't carry the comments.
+tq applies a swap only in a scratch copy, and flags a mutant `stale` when a later commit edits the lines
+below a block but not the block.
 
 **Which flips.** Each mutant challenges one assumption. The guideline set, in order of how
 often it found real bugs in the corpus rounds:
@@ -185,10 +138,7 @@ gets at least one mutant.
 | anchor missing | the code was restructured | retire the mutant; the journey says why |
 | no longer expressible (e.g. a type now rules the bug out) | the structure guarantees it | the test may be redundant; the journey records the guarantee the structure now gives, so later agents know why the architecture moved |
 
-The assumption ids are shared with the assumption ledger and with the queued
-assumption-masked differential experiment (`test-audit-2026-11-26/experiments-queued.md` #2):
-build variants with one assumption withheld, then check whether the pinned mutants and the
-variants' disagreements point at the same places.
+Mutant ids point at the assumption ledger (`assumes=A-nn`).
 
 ## White-box pass and the revert check
 
@@ -197,53 +147,24 @@ and adds mutants for parts that are not obviously correct. For each adjusted tes
 `tq revert-check TEST --mutant ID|--revert COMMIT` must show it red with the code broken and
 green with the code back.
 
-**Data safety 10.** The script never touches the live tree:
-- it copies the tree into a scratch worktree (`git worktree add --detach` under the scratch
-  directory) and works only there;
-- no `stash`, `reset`, `checkout` or `clean` in the live tree;
-- before and after, it records `git status --porcelain` and a hash of every tracked and
-  untracked file in the live tree, and fails loudly if they differ;
-- it removes the scratch worktree in a `finally`, and on failure keeps it and prints the path;
-- it writes a `kill` event to the test ledger for every result.
+**Data safety 10.** It works only in a scratch worktree (`git worktree add --detach`), never runs
+`stash`, `reset`, `checkout` or `clean` in the live tree, checks the live tree's status and file hashes are
+unchanged before and after, and writes a `kill` event to the test ledger per result.
 
 ## Batch variant (pilots, and low budget)
 
-Pilots always use it. Structural work falls back to it when budgets are low (build-loop B5):
-the legacy batch flow, which is one red run for the
-whole scope and one green run. Then the white-box follow-up, with pinned mutants and
-`tq revert-check` on the tests it touches.
+Pilots always use the batch flow (`phases.md` §4–§5). Structural work falls back to it on a low budget
+(B5), followed by the white-box pass with pinned mutants on the tests it touches.
 
-## Ledger additions
+## Decisions (owner, 2026-11-27)
 
-`slice` (feature, number, tests proposed and kept, drops and their reasons, argument count,
-wall time), `mutant` (id, assumption, flip, outcome), plus the existing `born`, `died`, `kill` and
-`cost` events. The questions this adds: are slice tests kept more often than batch tests? Do
-pinned mutants find more escapes than white-box tests? What does a slice cost against a batch?
+- Pinned mutants are inline by default; sidecar is the opt-out.
+- The orchestrator interjects on every slice in an area whose concern bar is 9; below 9, only when the
+  gate fails.
+- The orchestrator proposes the slice plan from the bars, the budget and the urgency (vigil advisories,
+  agentpace ETAs). A slice covers at least two methods and at most one module.
+- Log events use a vigil `log:` item kind once it ships; marker files until then.
+- A review-fix slice takes a soft maximum of three findings; one fix that closes several counts as one,
+  and the log names every finding it closes.
 
-## Cost
-
-Unmeasured. Record tokens per slice through agentpace on every sliced round, and compare it with
-the batch flow of earlier rounds.
-
-## Decided (owner, 2026-11-27)
-
-1. **Pinned-mutant format:** inline is the default, with sidecar as the opt-out (variant B above).
-2. **Orchestrator interjection:** every slice in an area whose concern bar is 9 (review ledger
-   bars). Below 9, only when the gate fails.
-3. **Slice size:** the orchestrator proposes a slice plan for each feature from the bars, the
-   budget and the urgency, read from vigil advisories and agentpace ETAs. A slice covers at
-   least two methods and at most one module. It is never one method, and never more than a
-   module.
-4. **Log events:** a dedicated vigil hook, not marker files. vigil gets a `log:` item kind
-   (`log:<file>?event=green-done&slice=3`) that fires when a matching JSONL line is appended. Red,
-   green and the orchestrator each hold on the events they wait for. Marker files are only the
-   fallback until that ships.
-5. **Review-fix slices (owner, 2026-11-27):** a fix slice takes a soft maximum of three review
-   findings. It's soft because one fix sometimes closes several findings. Those count as one,
-   and the slice log names every finding the fix closes.
-
-## Open questions
-
-- Is one `| ` prefix fine for inline swaps in both Python and Rust?
-- The vigil `log:` item is new vigil work (the vigil repo, Rust). It needs its own spec and red
-  tests before the slice trial.
+Open questions (inline-swap prefix, the vigil `log:` spec) live in the design record.

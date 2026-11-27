@@ -35,7 +35,7 @@ This file is a router; detail lives in `references/`. Section numbers are stable
 | `references/bots.md` | When a PR bot posts (§6e). |
 | `references/sol.md` | Before the first Sol run (§7). |
 | `references/quirks.md`, `references/estimates.md` | Briefs to a model listed there; every ETA. |
-| `references/slices.md` | Before red on a structural, hardening or release round: sliced red/green (pilots keep the batch flow). |
+| `references/slices.md` | Before red from the structural round on. |
 | `references/scoping.md` | At scope, before pilot red or a structural round, deadlines or ephemeral compute plans. |
 | `references/budget.md` | On budget advice, a usage limit or reset, before a second agent, on a vigil `item overdue` (§8–§10). |
 | `references/reviewers.md` | Before a contribution to a project you do not own, before re-scoping a PR after review. |
@@ -133,8 +133,7 @@ the user pinned. State who holds which role at the start of each phase.
 ## 3–5. Scope, red, spec gate, green
 
 Find the base, ONE diff command (§3). Pilots: one red run for the whole scope; verify
-the red gate yourself, commit red (§4). Structural round onward: sliced red/green, red one
-slice ahead of green (`references/slices.md`). Spec gate before green (§4a). Green in
+the red gate yourself, commit red (§4). Structural round on: `references/slices.md`. Spec gate before green (§4a). Green in
 batches, verified and committed per phase (§5). Shared tree: `git commit
 --only -- <paths>`; never stash. Steps: `references/phases.md`.
 
