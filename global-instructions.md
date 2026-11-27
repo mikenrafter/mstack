@@ -59,6 +59,10 @@ that file; a local edit here is overwritten on the next apply.
   inline tool; the `preview_*` browser tools are not a substitute. Every page for T3
   keeps about 6rem of space at the bottom so the last card clears T3's mobile
   navigation.
+- Going cold always means compacting (owner, 2026-11-27, after it was skipped more than once): cancel
+  the holds (vigil `cold`), queue ONE `/compact` to your own thread carrying a BabelTele summary of the
+  session (vigil skill, "Going cold"), then end the turn. A final message alone, however complete, is
+  not going cold. This holds even when a tool's own `next` text says only to post a summary.
 - vigil notices are one-time announcements from the owner. Claude Code and
   Codex get them from a hook. In a harness without hooks (Antigravity / Neon),
   call the vigil MCP `notices` tool once at the start of a session.

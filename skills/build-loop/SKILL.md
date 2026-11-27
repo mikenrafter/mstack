@@ -177,9 +177,8 @@ stash`. `references/budget.md`, `references/scoping.md`.
 budgets and advisories. Manual tick only if vigil fails; never loops or sleeps.
 
 **Wait in the background:** `vigil keepalive <hold> --orchestrator`,
-`run_in_background`, timeout at least 3,600,000 ms; on each return, act and
-start the next. Subagents never use orchestrator mode. One session hold
-(bare is fine); each delegated run is an item: `vigil hold add <hold> --for
+`run_in_background`, timeout at least 3,600,000 ms; on each return, act,
+start the next. Subagents never use orchestrator mode. One session hold; each delegated run is an item: `vigil hold add <hold> --for
 pid:N|file:<report>|none --label <run> $(agentpace estimate-run --model M --kind K --vigil-meta)
 --meta run=<taskId>` (`references/estimates.md`); `vigil hold done <hold> <run>` on a `none` run's notification. Never cancel it; if it
 releases, make a new hold at once.
@@ -188,7 +187,9 @@ releases, make a new hold at once.
 command; a wait on CI, a bot or a usage reset; queued work; or the user asked
 (only they end it). Never end a turn with work in flight and no live hold.
 
-Long jobs and low budget: `references/budget.md` §10.
+**Going cold:** `cold`, queued `/compact`, end turn.
+
+Low budget: `references/budget.md` §10.
 
 ## 10a. Compaction is your call
 

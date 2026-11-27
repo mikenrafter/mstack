@@ -321,6 +321,10 @@ See build-loop's `references/budget.md`, B5.
 
 ## Going cold: the work is done
 
+**Going cold always compacts.** Cancel, queue ONE `/compact` with the summary, end the turn: all
+three, every time (owner, 2026-11-27). A final message alone is not going cold, whatever a tool's
+`next` text says.
+
 There is always a session to keep warm while work is in flight. The only cold
 path is going from working or waiting to done. vigil never wakes or revives a
 session, so when the work is done (or you are told to end the session), call the
