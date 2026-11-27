@@ -66,6 +66,14 @@ techniques?", 2026). The steers push against those defaults. The references hold
 5. No-panic tests and source greps don't count toward the launch budget. Keep a grep only as a
    whole-tree ban with a positive control.
 
+## Pick the shape, not just the example
+
+Name a plausible wrong implementation first, then choose the test shape that would catch it
+(`references/shapes.md`, "Choose by what can go wrong"): a metamorphic relation, a property, a stateful
+model, a differential or anchored round trip, a replay, fault injection, an interleaving, a boundary table,
+a golden, the real collaborator, negative space, or a resource budget. A one-to-three-item happy-path
+fixture is a choice to justify, not the default.
+
 ## Text output: goldens, not micro-snapshots
 
 When the code's output is text someone reads (a message, advice, a report, a prompt),

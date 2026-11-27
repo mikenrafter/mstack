@@ -27,7 +27,8 @@ launches with, and it holds the reference detail for when you need it.
 | `references/tester-brief.md` | **Always**, before writing or reviewing a test. Paste it verbatim into every brief for an agent that writes or reviews tests. |
 | `references/mutation.md` | Before the red gate, for post-green spot mutations, and in any test review. |
 | `references/techniques.md` | When a test uses a technique: algebraic laws, state machines, conditional properties, oracles, goldens, parity, domain checks. |
-| `references/modes.md` | When reviewing or auditing tests: failure modes 1–12 and the ones the classic list misses. Cite mode numbers in findings. |
+| `references/shapes.md` | When choosing what kind of test to write: 13 valuable shapes, what each catches, and a table from the risk in the code to the shape. |
+| `references/modes.md` | When reviewing or auditing tests: failure modes 1–13 and the ones the classic list misses. Cite mode numbers in findings. |
 | `references/audits.md` | When auditing a suite or deciding where test work goes first. |
 
 ## 1. Every test says why
