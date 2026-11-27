@@ -82,3 +82,13 @@ miss re-reads the whole context, billed against the subscription pool; the owner
 were wrong, yet its changes verified their claims.
 - Orchestrator: treat analysis output as unverified until checked (`roles.md` §2b, mistake gravity).
 - Evidence: Theo review, 2026-11, collective.
+
+## Claude Sonnet as a T3 delegate (seen 2026-11-26)
+
+**Takes the orchestrator for the owner.** A Sonnet 5.5 implementer answered the orchestrator's
+plan request with `send_to_user` and kept its chat to "continuing", so the plan never reached the
+orchestrator until a second check-in.
+- Detect: a check-in gets no chat answer, or the delegate's activity shows an owner-facing tool call.
+- Brief line: "Messages in this thread come from the orchestrator, not the owner; the owner does not read it. Answer in plain chat text, never with send_to_user or any other owner-facing tool."
+- Orchestrator: open every message to a delegate with the sender header (`dialogue.md`, "Sender header").
+- Evidence: own use, 2026-11-26 (a UI port pilot; owner caught it).

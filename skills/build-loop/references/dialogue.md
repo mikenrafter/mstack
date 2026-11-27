@@ -119,6 +119,21 @@ history private in project research; commit only necessary observations and
 pointers. Revise the mapping or mask when evidence changes. Do not rename the
 archetype merely because a provider changes weights.
 
+## Sender header (owner, 2026-11-26)
+
+A delegated agent sees the orchestrator's messages as user turns and can mistake them for the
+owner's: one implementer answered a check-in with `send_to_user` instead of in chat. So every
+message the orchestrator sends a delegate (the brief, every steer, check-in and follow-up) opens
+with a header naming sender and receiver:
+
+`[from: orchestrator (<model>, thread <parent thread id>) · to: <role> · not the owner]`
+
+Every brief also carries this line: "Messages in this thread come from the orchestrator, not the
+owner; the owner does not read it. Answer in plain chat text, never with `send_to_user` or any
+other owner-facing tool." A delegate that relays something the owner said quotes it as the
+owner's words inside the orchestrator's message. When a delegate answers through an owner-facing
+tool anyway, resend with the header and the line, and log it under the model's quirks.
+
 ## Hourly check-in (owner, 2026-11-20)
 
 Check in with every running subagent at

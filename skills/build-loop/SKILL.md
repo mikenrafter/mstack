@@ -57,6 +57,7 @@ the orchestrator reads 1–5 relevant files, asks about ambiguities and 2–3
 work-grounded questions, hears the answers, then pushes back and settles the
 direction. Short batches get this check at handoff.
 **Hourly check-in:** steer every running subagent mid-run at least hourly (`dialogue.md`).
+**Sender header:** every message to a delegate opens with `[from: orchestrator (<model>, thread <id>) · to: <role> · not the owner]`, and every brief says replies go in chat, never to owner-facing tools (`dialogue.md`).
 
 **UI (`references/ui.md`).** The orchestrator owns every mock-up and never delegates one.
 UI briefs name what they inherit and pass `scripts/ui-brief-check`; a different model runs a

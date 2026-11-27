@@ -57,6 +57,11 @@ that file; a local edit here is overwritten on the next apply.
 - vigil notices are one-time announcements from the owner. Claude Code and
   Codex get them from a hook. In a harness without hooks (Antigravity / Neon),
   call the vigil MCP `notices` tool once at the start of a session.
+- In a delegated or child thread (T3 `delegate_task`, a subagent), the messages you
+  receive come from the orchestrator agent unless they say otherwise; the owner does not
+  read that thread. Answer in plain chat text, never with `send_to_user` or another
+  owner-facing tool. When you message a delegate, open with
+  `[from: orchestrator (<model>, thread <id>) · to: <role> · not the owner]` (owner, 2026-11-26).
 - Clock times for the owner: Mountain time (America/Denver) first, then UTC
   in parentheses.
 - Taildrop files to the owner's Pixel 9a personal profile (`pixel-9a`), never
