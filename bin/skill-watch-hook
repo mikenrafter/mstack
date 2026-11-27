@@ -31,6 +31,7 @@ import re
 import sys
 
 STATE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local" / "state")) / "skill-watch"
+INSTALLED_SKILLS = Path(os.environ.get("INSTALLED_SKILLS", Path.home() / ".claude" / "skills"))
 MSTACK_SKILLS = Path(os.environ.get("MSTACK_SKILLS", Path.home() / "Documents" / "repos" / "mstack" / "skills"))
 BASE_DIR = re.compile(r"Base directory for this skill: (\S+)")
 SKILL_MD = re.compile(r"((?:~|\$HOME|\$\{HOME\})?[^\s'\"`=]*?skills/[^/\s'\"`]+)/SKILL\.md")
@@ -91,6 +92,8 @@ def snapshot(directory):
     """{relative path: [mtime, sha256]} for every *.md file in a skill."""
     files = {}
     for path in sorted(Path(directory).rglob("*.md")):
+        if any(part.startswith(".") for part in path.relative_to(directory).parts):
+            continue  # .pytest_cache and the like are not skill text
         try:
             files[str(path.relative_to(directory))] = [
                 path.stat().st_mtime, hashlib.sha256(path.read_bytes()).hexdigest()]
@@ -117,12 +120,34 @@ def scan(transcript, state):
                 state["skills"][skill_dir] = {"loaded_at": epoch(entry.get("timestamp")), "dirs": {}}
 
 
+def is_source(directory):
+    return Path(directory).resolve().parent == MSTACK_SKILLS.resolve()
+
+
+def installed(source, names, state):
+    """True when an installed copy of this mstack skill already has the changed files."""
+    copies = [Path(d) for d in state["skills"] if Path(d).name == source.name and not is_source(d)]
+    copies.append(INSTALLED_SKILLS / source.name)
+    for copy in copies:
+        if copy.resolve() == source.resolve() or not copy.is_dir():
+            continue
+        try:
+            if all((copy / name).read_bytes() == (source / name).read_bytes() for name in names):
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def changes(state, self_edited):
-    """Compare each watched directory with its baseline; return report lines."""
-    report = []
+    """Compare each watched directory with its baseline; return (report lines, any uninstalled)."""
+    report, pending, seen = [], False, set()
     for skill_dir, record in state["skills"].items():
         for directory in watched_dirs(skill_dir):
             key = str(directory)
+            if key in seen:
+                continue
+            seen.add(key)
             now = snapshot(directory)
             before = record["dirs"].get(key)
             if before is None:
@@ -135,9 +160,15 @@ def changes(state, self_edited):
             if self_edited and any(str(directory / name) in self_edited for name in changed):
                 continue
             if changed:
-                where = "installed copy" if directory == Path(skill_dir) else "mstack source (not yet installed)"
+                live = [name for name in changed if (directory / name).exists()]
+                if not is_source(directory):
+                    where = "installed copy"
+                elif installed(directory, live, state):
+                    where = "mstack source, installed"
+                else:
+                    where, pending = "mstack source (not yet installed)", True
                 report.append(f"- {Path(skill_dir).name} ({where}, {directory}): {', '.join(sorted(changed))}")
-    return report
+    return report, pending
 
 
 def respond(event, text):
@@ -165,12 +196,14 @@ def main():
             tool_input = payload.get("tool_input") or {}
             if payload.get("tool_name") in SELF_EDIT_TOOLS:
                 edited.add(str(tool_input.get("file_path") or tool_input.get("notebook_path") or ""))
-            report = changes(state, edited)
+            report, pending = changes(state, edited)
             if report:
+                tail = ("A change marked not yet installed applies once the owner installs it; follow "
+                        "that one now only if the owner asked for the new behaviour. Follow the others now."
+                        if pending else "These changes are installed: follow them now.")
                 respond(event, "Skills you loaded earlier changed on disk since you read them:\n"
                         + "\n".join(report) + "\nReread the changed files before relying on those "
-                        "skills again. A change in the mstack source applies once the owner installs it; "
-                        "follow it now only if the owner asked for the new behaviour.")
+                        "skills again. " + tail)
         STATE.mkdir(parents=True, exist_ok=True)
         state_path.write_text(json.dumps(state))
     except Exception:

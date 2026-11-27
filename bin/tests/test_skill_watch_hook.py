@@ -20,7 +20,7 @@ class SkillWatch(unittest.TestCase):
         (self.skill / "references" / "step.md").write_text("r1\n")
         self.source = self.root / "mstack" / "skills"
         self.env = dict(os.environ, XDG_STATE_HOME=str(self.root / "state"),
-                        MSTACK_SKILLS=str(self.source))
+                        MSTACK_SKILLS=str(self.source), INSTALLED_SKILLS=str(self.root / "no-install"))
         self.transcript = self.root / "t.jsonl"
         # Loaded "a minute from now" so files written in setUp predate the load.
         stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() + 60))
@@ -60,6 +60,46 @@ class SkillWatch(unittest.TestCase):
         self.run_hook()
         (self.source / "demo" / "SKILL.md").write_text("v2\n")
         self.assertIn("mstack source (not yet installed)", self.run_hook())
+
+    def test_installed_source_change_says_follow_it_now(self):
+        # WHY: a source change that the install already copied is live; the old wording
+        # ("not yet installed", "only if the owner asked") let an agent discount it.
+        # catches: labelling every mstack-source change as uninstalled
+        (self.source / "demo").mkdir(parents=True)
+        (self.source / "demo" / "SKILL.md").write_text("v1\n")
+        self.run_hook()
+        (self.source / "demo" / "SKILL.md").write_text("v2\n")
+        (self.skill / "SKILL.md").write_text("v2\n")
+        alert = self.run_hook()
+        self.assertIn("mstack source, installed", alert)
+        self.assertIn("follow them now", alert)
+        self.assertNotIn("not yet installed", alert)
+        self.assertNotIn("only if the owner asked", alert)
+
+    def test_a_directory_is_reported_once(self):
+        # WHY: loading the mstack copy directly and the installed copy made one directory
+        # appear twice, under two contradictory labels.
+        # catches: walking the mstack source once per loaded skill directory
+        (self.source / "demo").mkdir(parents=True)
+        (self.source / "demo" / "SKILL.md").write_text("v1\n")
+        load = json.loads(self.transcript.read_text().splitlines()[0])
+        load["message"]["content"][0]["text"] = f"Base directory for this skill: {self.source / 'demo'}\n\n# Demo"
+        with open(self.transcript, "a") as handle:
+            handle.write(json.dumps(load) + "\n")
+        self.run_hook()
+        (self.source / "demo" / "SKILL.md").write_text("v2\n")
+        alert = self.run_hook()
+        self.assertEqual(alert.count(str(self.source / "demo")), 1, alert)
+        self.assertIn("mstack source (not yet installed)", alert)
+
+    def test_dotted_cache_directories_are_ignored(self):
+        # catches: reporting .pytest_cache/README.md as a skill change
+        cache = self.skill / ".pytest_cache"
+        cache.mkdir()
+        (cache / "README.md").write_text("c1\n")
+        self.run_hook()
+        (cache / "README.md").write_text("c2\n")
+        self.assertEqual(self.run_hook(), "")
 
     def test_compaction_lists_loaded_skills(self):
         self.run_hook()
