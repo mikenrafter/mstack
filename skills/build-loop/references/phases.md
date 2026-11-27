@@ -38,8 +38,13 @@ Verify the red gate yourself:
 - each test states its WHY, and CLAIM ids where a claim is proved;
 - each test carries `# catches:` naming a plausible wrong implementation it
   fails; none nameable means likely tautology (`test-quality`).
-- a test of the form *when X, then Y* names its witness:
-  `# reaches: <test that drives the system into X>`.
+- each test of the form *when X, then Y* has a `# reaches:` note. Use
+  `# reaches: <test name>` to name another test that drives the system into X,
+  or `# reaches: when X, then Y` to state the distinct condition and effect in
+  your own words. Use a `file::name` selector if the test name is ambiguous or
+  reads like a *when X, then Y* sentence.
+- no test whose only claim is that nothing crashed, unless not crashing is the property; check the
+  result instead (tq `no-crash` advisory).
 - text output (advice, messages, reports, prompts) is pinned by one golden of the whole text or by an
   invariant, not by a growing row of substring checks; each fix round must not add one more `assertIn`
   for the phrase it just changed (`test-quality` mode 13). A golden moved by a change the owner asked

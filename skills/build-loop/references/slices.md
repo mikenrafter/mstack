@@ -4,16 +4,14 @@ Policy since 2026-11-27 (owner). The design record, with the owner's decisions a
 `mstack.research/test-quality-core/slices/spec-draft.md`. Read this file before cutting slices for a
 structural, hardening or release round, and paste the slice rules into the red and green briefs.
 
-## Until the tooling ships
+## Tools
 
-Three tools this process names are not built yet. Use these equivalents and say so in the slice log:
-
-| Named here | Until it ships |
+| Tool | Does |
 |---|---|
-| `tq slice check N` | Red runs, in a scratch copy at its commit: `tq lint --since <slice base>` (no gating rows), the slice's tests (each fails on an assertion), and a check that every test has `catches:` naming a mutant id (and `reaches:` where it states *when X, then Y*). Once green lands: `tq catches` with each mutant as a `[patch: …]` fault patch, so every named mutant is killed by its test. |
-| vigil `log:` item kind | Marker files beside the slice log (`NN.green-done`, `NN.gate-ok`), held with `vigil hold --for file:<marker>`. Never orchestrator mode for red or green. |
-| `tq mutants check` (inline `tq-mutant` blocks) | Write each pinned mutant as a fault patch named in the test's `catches:` comment; keep the inline block as documentation. |
-| `tq revert-check` | By hand, in a scratch worktree only (`git worktree add --detach`): apply the mutant or revert, run the test (red), restore, run it (green). Never `stash`, `reset`, `checkout` or `clean` in the live tree. |
+| `tq slice check N` | Red: in a scratch copy, `tq lint --since <base>` has no gating rows, each test fails on an assertion, and its notes are well formed. After green: every named mutant is killed, with one non-trivial flip per slice. Logs `gate` / `gate-ok`. |
+| `tq mutants check` | Replays inline `tq-mutant` blocks or sidecar pins against clean and mutated trees; classifies each `trivial` / `non-trivial`. |
+| `tq revert-check` | Applies a pin or revert in a detached scratch worktree, runs the restored test there, and compares the live tree before and after. Never `stash`, `reset`, `checkout` or `clean` in the live tree. |
+| vigil `log:` item | `vigil hold add <hold> --for 'log:<slice log>?event=gate-ok' --label <slice>` ends when the gate passes. Never orchestrator mode for red or green. |
 
 ## When it applies (owner, 2026-11-27)
 
@@ -62,8 +60,9 @@ slices edit the same file), split the module first or resolve the merge afterwar
 - `tq lint --since <slice base>` shows no gating rows on the slice's tests;
 - every new test fails on an assertion, never on an import, compile or collection error. The
   check runs in a scratch copy at red's commit, not in green's live tree;
-- each test has `# catches:` naming a pinned mutant id and `# reaches:` where it states
-  *when X, then Y*;
+- each test has `# catches:` naming a pinned mutant id, and a *when X, then Y* test has a
+  `# reaches:` note in one of the two forms in `phases.md` §4 (another test's name, or the
+  condition and effect in your own words);
 - every pinned mutant in the slice is killed by the test that names it. This is checked once
   green's code lands, because a mutant needs code to mutate.
 
