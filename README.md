@@ -20,16 +20,35 @@ People call agent work more art than science. I read that as science nobody has 
 
 The picture is a twist on the core model of Barry O'Reilly's [residuality theory](https://doi.org/10.1016/j.procs.2020.03.120) (my notes: [research 18](research/18-girba-wayne-oreilly.md)), where ordered software sits inside a complex business, which sits inside a disordered world. Here the middle ring is judgement, and the ordered core exists to show that judgement the state of things.
 
-Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. It is also a twist on Rich Sutton's [bitter lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html): more compute keeps improving the models, but anyone, human or model, who cannot see the state still guesses. So I look for guesses a program could replace:
+Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. It is also a twist on Rich Sutton's [bitter lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html): more compute keeps improving the models, but anyone, human or model, who cannot see the state still guesses. So I look for guesses a program could replace. Each core below started as something agents kept guessing at.
 
-| Agents kept guessing at | The core that replaced the guess |
-|---|---|
-| How long a wait takes, and when the prompt cache expires | [vigil](https://github.com/mikenrafter/vigil) (holds and keepalives) and [agentpace](https://github.com/mikenrafter/agentpace) (estimates from past runs) |
-| Whether a test proves anything | [tq](#testquest), a linter for hollow tests, scored on 30 public repos with a model judging samples of its findings |
-| Which test failures are real | a separate judge model; the model that wrote a rule was too generous grading its own output |
-| What a change will do next | [residual](https://github.com/mikenrafter/residual) |
-| How the code is shaped | [paneweft](https://github.com/mikenrafter/paneweft), views inside the code |
-| Whether a layout shifts | a layout-shift measure instead of judging by eye |
+#### How long a wait takes
+
+An agent waiting on a build used to sleep four and a half minutes, wake, learn nothing and sleep again, and when one link in that chain broke the session went quiet and its prompt cache expired. [vigil](https://github.com/mikenrafter/vigil) replaces the sleep with one call that blocks until something it watches changes: a process ends, a file appears, a log line matches, or a small judge model decides that a log shows a failed build. The agent wakes with the evidence instead of a bare "keepalive". Watching this way also exposed a harness that cut MCP calls off at 180 seconds, which no agent had noticed.
+
+#### When the work will be done
+
+[agentpace](https://github.com/mikenrafter/agentpace) answers "how long will this take?" from measured agent runs, as a P50, P80 and P90 range, with the human part (review, testing, decisions) on its own line. My fork adds plan state and reads vigil's ledger, so every finished wait becomes a timing. It is not accurate yet: this week all 8 of its estimates ran 4 to 25 times too long. The difference is that the error is now a number I can watch shrink.
+
+#### Whether a test proves anything
+
+Agents write tests that pass whatever the code does. [tq](#testquest) is a linter for those hollow tests. Each rule is scored on 30 public repos, with a model judging samples of its findings, and the [testquest section](#testquest) says how a score decides whether a rule blocks.
+
+#### Which findings are real
+
+When the model that wrote a rule also graded its findings, it was too generous with its own output. A model that wrote none of the rules now judges them, and its verdicts go into a cache keyed by the exact code it read. A rule change is then scored against the same answers, and no verdict is guessed twice.
+
+#### How the system fails
+
+[residual](https://github.com/mikenrafter/residual) is Barry O'Reilly's residuality theory as a command-line tool. The agent and I walk the codebase under stress, and residual records the recurring states it falls into (attractors) and the small changes that let it survive them (residues) as project data the agent can check, instead of a risk list rebuilt from memory each session.
+
+#### How the code is shaped
+
+[paneweft](https://github.com/mikenrafter/paneweft) brings views from Glamorous Toolkit's moldable development into any codebase. An agent fills a view with facts about the code, I read it in a browser, and the agent reads the same view back as bounded text. The views live inside the code they explain, so when the code changes, a view that no longer fits shows up instead of a hand-drawn diagram going quietly stale.
+
+#### Whether a layout shifts
+
+UI stability used to be judged by eye from screenshots. The browser's own layout-shift score (CLS) replaced that, and on a UI pilot it is one of the four scored concerns.
 
 When a guess is big enough to build a company on, the [legible-cores](skills/legible-cores/SKILL.md) skill has the agent raise it with me as one card.
 
