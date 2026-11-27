@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 700" width="100%" role="img" aria-labelledby="t d">
+  <title id="t">The build loop and what drives it</title>
+  <desc id="d">Seven phases run top to bottom: discuss, scope, red tests, spec gate, green code, review rounds, ship. The spec gate loops back to red at most twice, and review loops back to green for fix rounds at most five times. From the structural round on, red and green alternate in small slices. On the left, the owner's unpredictable inputs enter at different phases: a new idea, a decision or silence, "that's not what I meant", a change of plan, a bug found by a bot or another session, a usage limit, and "ship it".</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead" d="M0 0 L10 5 L0 10 Z"/></marker>
+    <marker id="al" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="loophead" d="M0 0 L10 5 L0 10 Z"/></marker>
+    <marker id="ai" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrowhead-in" d="M0 0 L10 5 L0 10 Z"/></marker>
+  </defs>
+  <style>
+    .state{fill:#1f6f43;stroke:#14512f} .on{fill:#fff}
+    .input{fill:#fdf1e7;stroke:#d97a2b} .ink{fill:#1f2328} .muted{fill:#4a525b}
+    .flow{stroke:#1f6f43;fill:none} .loop{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none}
+    .arrowhead{fill:#1f6f43} .arrowhead-in{fill:#d97a2b} .loopink{fill:#3a78c9}
+    .slice{fill:none;stroke:#3a78c9} .loophead{fill:#3a78c9}
+    text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+    @media (prefers-color-scheme: dark){
+      .state{fill:#2ea062;stroke:#7ee2a8} .on{fill:#04150c}
+      .input{fill:#2a1d12;stroke:#e08a3c} .ink{fill:#f0f6fc} .muted{fill:#b1b8c0}
+      .flow{stroke:#7ee2a8} .arrowhead{fill:#7ee2a8} .loop{stroke:#5b9be6} .loopink{fill:#7fb3f0}
+      .in{stroke:#e08a3c} .arrowhead-in{fill:#e08a3c} .slice{stroke:#5b9be6} .loophead{fill:#5b9be6}
+    }
+  </style>
+
+  <!-- phases -->
+  <g font-size="17" font-weight="700" text-anchor="middle">
+    <rect class="state" x="232" y="14"  width="150" height="50" rx="10"/><text class="on" x="307" y="45">Discuss</text>
+    <rect class="state" x="232" y="110" width="150" height="50" rx="10"/><text class="on" x="307" y="141">Scope</text>
+    <rect class="state" x="232" y="206" width="150" height="50" rx="10"/><text class="on" x="307" y="237">Red tests</text>
+    <rect class="state" x="232" y="302" width="150" height="50" rx="10"/><text class="on" x="307" y="333">Spec gate</text>
+    <rect class="state" x="232" y="398" width="150" height="50" rx="10"/><text class="on" x="307" y="429">Green code</text>
+    <rect class="state" x="232" y="494" width="150" height="50" rx="10"/><text class="on" x="307" y="525">Review rounds</text>
+    <rect class="state" x="232" y="590" width="150" height="50" rx="10"/><text class="on" x="307" y="621">Ship</text>
+  </g>
+  <g class="flow" stroke-width="2.5" marker-end="url(#a)">
+    <line x1="307" y1="64" x2="307" y2="106"/><line x1="307" y1="160" x2="307" y2="202"/>
+    <line x1="307" y1="256" x2="307" y2="298"/><line x1="307" y1="352" x2="307" y2="394"/>
+    <line x1="307" y1="448" x2="307" y2="490"/><line x1="307" y1="544" x2="307" y2="586"/>
+  </g>
+
+  <!-- loops back, right side -->
+  <path class="loop" stroke-width="2.5" marker-end="url(#al)" d="M382 327 C430 327 430 231 386 231"/>
+  <path class="loop" stroke-width="2.5" marker-end="url(#al)" d="M382 519 C430 519 430 423 386 423"/>
+  <g font-size="16" class="loopink">
+    <text x="436" y="272">fix tests</text><text x="436" y="292">(2 max)</text>
+    <text x="436" y="466">fix round</text><text x="436" y="484">(5 max)</text>
+  </g>
+  <!-- slices bracket -->
+  <rect class="slice" x="222" y="198" width="170" height="258" rx="14" stroke-width="2" stroke-dasharray="5 5"/>
+  <g class="loopink" font-size="15"><text x="436" y="360">dashed:</text><text x="436" y="379">slice by</text><text x="436" y="398">slice, from</text><text x="436" y="417">structural</text></g>
+
+  <!-- the owner's inputs, left side -->
+  <g font-size="16">
+    <rect class="input" x="8" y="20"  width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="45">"A new idea"</text>
+    <rect class="input" x="8" y="114" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="139">A decision or silence</text>
+    <rect class="input" x="8" y="306" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="331">"Not what I meant"</text>
+    <rect class="input" x="8" y="392" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="417">Change of plan</text>
+    <rect class="input" x="8" y="446" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="471">A usage limit</text>
+    <rect class="input" x="8" y="500" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="525">A bot finds a bug</text>
+    <rect class="input" x="8" y="594" width="178" height="40" rx="8" stroke-width="2" stroke-dasharray="6 4"/><text class="ink" x="20" y="619">"Ship it"</text>
+  </g>
+  <g class="in" stroke-width="2" marker-end="url(#ai)">
+    <path d="M186 40 L228 40"/><path d="M186 134 L228 134"/><path d="M186 326 L228 326"/>
+    <path d="M186 412 L228 420"/><path d="M186 466 C206 466 210 440 228 438"/>
+    <path d="M186 520 L228 520"/><path d="M186 614 L228 614"/>
+  </g>
+  <text class="muted" x="8" y="672" font-size="15">Orange: what I send, whenever I send it.</text><text class="muted" x="8" y="692" font-size="15">A decision I do not give becomes a logged default.</text>
+</svg>

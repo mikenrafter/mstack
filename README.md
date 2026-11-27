@@ -18,17 +18,17 @@ People call agent work more art than science. I read that as science nobody has 
 | Judgement: the agent, or me | Reads the core and decides. This is where inference earns its cost. |
 | Reality: users, hardware, other people | Surprises us, and each surprise feeds back into a better core. |
 
-The picture is a twist on the core model of Barry O'Reilly's residuality theory ([research 18](research/18-girba-wayne-oreilly.md)), where ordered software sits inside a complex business, which sits inside a disordered world. Here the middle ring is judgement, and the ordered core exists to show that judgement the state of things.
+The picture is a twist on the core model of Barry O'Reilly's [residuality theory](https://doi.org/10.1016/j.procs.2020.03.120) (my notes: [research 18](research/18-girba-wayne-oreilly.md)), where ordered software sits inside a complex business, which sits inside a disordered world. Here the middle ring is judgement, and the ordered core exists to show that judgement the state of things.
 
-Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. It is a twist on the bitter lesson: more compute keeps improving the models, but anyone, human or model, who cannot see the state still guesses. So I look for guesses a program could replace:
+Code alone is fast but cannot adapt. Inference alone adapts but is slow and imprecise. It is also a twist on Rich Sutton's [bitter lesson](http://www.incompleteideas.net/IncIdeas/BitterLesson.html): more compute keeps improving the models, but anyone, human or model, who cannot see the state still guesses. So I look for guesses a program could replace:
 
 | Agents kept guessing at | The core that replaced the guess |
 |---|---|
-| How long a wait takes, and when the prompt cache expires | vigil (holds and keepalives) and agentpace (estimates from past runs) |
-| Whether a test proves anything | tq, a linter for hollow tests, scored on 30 public repos with a model judging samples of its findings |
+| How long a wait takes, and when the prompt cache expires | [vigil](https://github.com/mikenrafter/vigil) (holds and keepalives) and [agentpace](https://github.com/mikenrafter/agentpace) (estimates from past runs) |
+| Whether a test proves anything | [tq](#testquest), a linter for hollow tests, scored on 30 public repos with a model judging samples of its findings |
 | Which test failures are real | a separate judge model; the model that wrote a rule was too generous grading its own output |
-| What a change will do next | residual |
-| How the code is shaped | paneweft, views inside the code |
+| What a change will do next | [residual](https://github.com/mikenrafter/residual) |
+| How the code is shaped | [paneweft](https://github.com/mikenrafter/paneweft), views inside the code |
 | Whether a layout shifts | a layout-shift measure instead of judging by eye |
 
 When a guess is big enough to build a company on, the [legible-cores](skills/legible-cores/SKILL.md) skill has the agent raise it with me as one card.
@@ -43,30 +43,82 @@ Agents write most of the code, and I still have to own it. These are the habits 
 | Journey file | Each feature keeps its mock-ups, my decisions and its dead ends, because the paths I dropped explain the one I took | In use ([build-loop](skills/build-loop/SKILL.md)) |
 | Question first | An interview on states, edges and precedence before any spec | In use ([question-everything](skills/question-everything/SKILL.md)) |
 | Sliced red and green | One model writes a few failing tests and the mutants they must kill; a different model writes the code. Each slice has one real flip, not just "delete the button" | In use since 2026-11-27 ([build-loop](skills/build-loop/references/slices.md)) |
-| Assumption review | Ten questions about what a module assumes about its inputs, each with the evidence that would settle it | Pilot on one module |
 | Views that teach | A benchmark for whether a view makes a fresh agent understand the code better than reading it | Proposed ([research 13](research/13-research-direction-views-that-teach.md)) |
 
-Views of the code should produce insight. A component earns its place by answering a question the reader would otherwise guess at, and decoration gets cut. I want views to make tests, invariants and their coverage visible, so that a wrong change looks wrong. paneweft is where I try this, starting from the moldable development ideas in Glamorous Toolkit. Short lessons at build-loop phase boundaries are still planned.
+Views of the code should produce insight. A component earns its place by answering a question the reader would otherwise guess at, and decoration gets cut. I want views to make tests, invariants and their coverage visible, so that a wrong change looks wrong. [paneweft](https://github.com/mikenrafter/paneweft) is where I try this, starting from the moldable development ideas in [Glamorous Toolkit](https://gtoolkit.com/). Short lessons at build-loop phase boundaries are still planned.
+
+### The build loop: a fixed path, unpredictable input
+
+<p align="center"><img src="docs/build-loop.svg" width="560" alt="The build loop: discuss, scope, red tests, spec gate, green code, review rounds, ship; the spec gate loops back to red, review loops back to green; the owner's inputs enter at any phase"></p>
+
+A feature moves through the same phases every time ([build-loop](skills/build-loop/SKILL.md)). One model writes the failing tests, usually Sol; a different model writes the code that makes them pass, so no model grades its own homework. Reviews run in scored rounds across model families, and each fix round goes to the model that did not write the last one. From the structural round on, red and green go slice by slice: a few tests and the mutants they must kill, then the code.
+
+My input is the chaotic part. A new idea, a change of plan or "not what I meant" can arrive at any phase, and the loop takes it where it lands instead of restarting. When I do not answer a question, the agent logs a default and keeps going, and I can overturn it later. Long waits sit on a [vigil](https://github.com/mikenrafter/vigil) hold, and when a usage window runs out the session resumes after the reset instead of losing its place.
+
+### Review bars follow the project
+
+<p align="center"><img src="docs/review-bars.svg" width="520" alt="Radar chart of review bars from 6 to 10 on eight concerns for an example feature, in three stages: pilot, structural and hardening"></p>
+
+A bar fixed for a project's whole life does damage: one of my tools spent eight review rounds on concurrency races that no real user would hit for a long time, while it was still a prototype. So each concern gets its own bar, set by the stage. The chart is an example feature that writes the user's data:
+
+| Concern | Pilot | Structural | Hardening |
+|---|---|---|---|
+| Legibility | 8 | 8 | 7 |
+| Architecture | 7 | 10 | 8 |
+| Testability | 6 | 8 | 8 |
+| Durability | 9 | 8 | 9 |
+| Error paths | 7 | 8 | 8 |
+| Concurrency | 6 | 8 | 9 |
+| Performance | 6 | 7 | 8 |
+| Security | 6 | 9 | 9 |
+
+A pilot is scored only on the few concerns I agree to up front; everything else waits in a hardening list. The structural round peaks on architecture, because it gets expensive to change after that. Hardening, before a release, raises concurrency, durability and performance. Maturity is judged per region of the code, and I can override what the tool computes. Security comes from a written threat model for each project (who can reach it, what strangers can feed it, what it holds), and findings are weighed against that model; two agents sending the same request in the same millisecond goes on the hardening list.
 
 ### Testing practices against what really happened
 
-I want to test practices against things that happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. The tq rounds are a first small step: each rule is measured on 30 public repos, with a separate model judging samples of what it finds.
-
-Review bars follow the project. A bar fixed for a project's whole life does damage: one of my tools spent eight review rounds on concurrency races that no real user would hit for a long time, while it was still a prototype. Early on the bars run high on fit, architecture that is expensive to change, security boundaries and test quality, and low on concurrency hardening, performance and polish. Once a project has users and stored data, the curve flips. Maturity is judged per region of the code, and I can override what the tool computes.
-
-Security gets a written threat model for each project: who can reach it, what strangers can feed it and what it holds. Findings are weighed against that model. Two agents sending the same request in the same millisecond goes on a list for the hardening phase.
+I want to test practices against things that happened. The plan is to take real bugs, reverts and decisions I later undid in my own repositories, hide how each one ended, and see whether a given prompt, skill or piece of advice from a well-known practitioner leads an agent to the good outcome. [testquest](#testquest) is the first small step.
 
 ### What changed my mind lately
 
 | Finding | Where it lives now |
 |---|---|
-| A broken run can come out as a good score: a failed build counts every mutant as killed, a dropped exit status reads as a pass | test-quality failure mode 14 |
+| A broken run can come out as a good score: a failed build counts every mutant as killed ([Robert C. Martin's mutator](https://github.com/unclebob/mutator/pull/39)), a dropped exit status reads as a pass ([Matt Pocock](https://github.com/mattpocock/skills/pull/1479)) | test-quality failure mode 14 |
 | A check that cannot run must fail, and every gate gets watched failing once before it is trusted | [ratchets](skills/ratchets/SKILL.md) |
-| A rule's precision differs a lot by language, so each rule blocks or only warns per language, decided by a vote of repos with enough judged findings | tq gates, being measured |
-| Reading a new rule back to three fresh agents finds wording they would misread | a pilot over ten skill edits |
+| A rule's precision differs a lot by language, so each rule blocks or only warns per language, decided by a vote of repos with enough judged findings | [testquest](#testquest) gates, being measured |
+| Reading a new rule back to three fresh agents finds wording they would misread ([Matt Pocock](https://github.com/mattpocock/skills/pull/1474)) | a pilot over ten skill edits |
 | A row of substring checks over one text hides drift; one golden of the whole text does not | test-quality failure mode 13 |
 
-I work under two limits, money and attention. Keepalive ticks alone drove about a quarter of my estimated Claude spend in the data I measured, so I run one working Claude agent at a time, push heavy builds to cloud sandboxes, and switch providers when a usage window runs low. Agents need my approval before they open issues, forks, pull requests or posts.
+### Cost against quality
+
+I work under two limits, money and my own attention, and I would rather measure the trade than argue it. Cost is tokens against each provider's usage windows (tracked by [usagewindow](https://github.com/mikenrafter/usagewindow)) and cloud sandbox hours. Quality is what judged samples and scored review rounds say.
+
+| Question | How I measure it | What it showed |
+|---|---|---|
+| Where do the tokens go? | 504 of my transcripts, 50,563 API calls ([research 06](research/06-usage-claude.md)) | Keepalive ticks drove about a quarter of estimated Claude cost, and subagents half. So vigil replaced the ticks, and one working Claude agent runs at a time. |
+| Does another review round pay? | 39 labeled later rounds across six projects ([review-budget report](research/elo-code-health/review-budget/REPORT.md)) | No rating model beat a simple baseline at predicting whether one more round finds something, so rounds stop on scores against the bars, not on a formula. |
+| Which model for which job? | Head-to-head runs on the same brief, logged per model | On one port, Hydrogen and Sonnet kept every real finding; Hydrogen was faster and wrote twice the code. Cheaper models implement, and Opus judges samples. |
+| How long will this take? | [agentpace](https://github.com/mikenrafter/agentpace) estimates against actual run times | This week only 8 of 373 runs had an estimate, and all 8 were 4 to 25 times too high. Still open. |
+| Is a finding real? | A separate model judges samples; precision per rule and language | See [testquest](#testquest). |
+
+When one provider's window runs low, work moves to another, and heavy builds go to cloud sandboxes instead of my 8 GB hosts. What I cannot yet do is put cost and quality on one axis: nothing here measures escaped defects. Agents need my approval before they open issues, forks, pull requests or posts.
+
+## testquest
+
+[testquest](https://github.com/mikenrafter/testquest) gives me `tq`, a linter for hollow tests: tests that pass even when the code they test is broken. Agents write a lot of those, because a green test looks like progress. tq reads the tests, not the code, on an [ast-grep](https://ast-grep.github.io/) engine for Python, Rust, TypeScript, Dart, Kotlin and Java.
+
+| Rule | Flags a test that |
+|---|---|
+| `no-assert` | runs code but never checks a result |
+| `guarded-assert` | only checks inside a branch the test can skip |
+| `absence-no-control` | checks that nothing was recorded, but never shows the recorder can record |
+| `self-compare` | compares a value with itself |
+| `const-truth` | checks values the test fixed itself, with no product code between |
+
+Those five can fail a build. Advisories only point things out: a row of substring checks over one text (`micro-snapshot`), a test whose only claim is not crashing (`no-crash`), an expected value read back from the code's own output (`self-derived-expected`), and a few more. For the sliced build loop, `tq slice check` and `tq mutants check` verify that each slice's tests fail on an assertion and kill their pinned mutants, and that at least one mutant changes real logic rather than deleting a button.
+
+A linter that cries wolf gets ignored, so every rule is measured. It runs over my own repos and over 30 public ones, five per language; a separate model judges samples of what it finds as real, intended or false; and the share that is real decides the rule's fate per language. A rule blocks unless repos where under 15% of its findings are real outnumber the rest two to one, counting only repos with at least eight judged findings. Below that it only warns. In the latest rounds, a second model cut the judged-false findings in a Java and Python sample from 61 to 5 without losing a real one.
+
+The ast-grep engine, the measurements and the gates are on a branch; testquest's main branch still has the older engine, and the release is pending.
 
 ## Skills
 
