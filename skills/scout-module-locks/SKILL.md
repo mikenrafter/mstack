@@ -35,10 +35,17 @@ After the user confirms:
    git add scout-modules/*/flake.lock
    ```
 
-4. Review the staged lockfile diff. Stage only the affected scout-module lock
-   files, verify that no unrelated files changed, and report the exact lockfiles
-   updated. Commit and push phoe-nix (after `publish-scan` if it is public) when
-   the owner asked to install or update; otherwise wait until they ask.
+4. Review the lockfile diff. Other `flake.lock` changes already in the phoe-nix
+   working tree go in too (owner, 2026-11-28): stage and push them with yours,
+   and list each one under an "Addenda:" heading in the commit body, one line
+   per input: file, input, old and new revs (first 8 characters). Do not leave
+   lock changes behind, and do not ask about them. The one exception is a
+   change that moves an input to a different owner, repository or branch: that
+   is a retarget, so stop and ask as in step 2. Files that are not tracked lock
+   files (an untracked module, even one holding a `flake.lock`, or an edited
+   `.nix`) stay out unless the owner says otherwise; name them in your report. Commit and push phoe-nix (after
+   `publish-scan` if it is public) when the owner asked to install or update;
+   otherwise wait until they ask.
 
 Do not update a lock from an unpublished local branch, silently retarget a flake
 input, or run a broad lock update when named inputs and modules are sufficient.
