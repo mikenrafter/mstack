@@ -6,7 +6,7 @@ mstack is the source for my agent skills and global instructions. The skills are
 
 ## How I work with agents
 
-People call agent work more art than science. I read that as science nobody has worked out yet, so I keep measuring. Two ideas run through everything here: make the state of things **legible**, and keep my own **mastery** of code I did not type.
+People call agent work more art than science. I read that as science nobody has worked out yet, so I keep measuring. Two ideas run through everything here: make the state of things **legible**, and keep my own **mastery** of code I did not type. The reading behind both is in [Influences](docs/influences.md).
 
 ### Legibility: a solid core, a soft edge
 
@@ -277,6 +277,12 @@ The research covers one person on one host. Nothing in it measures escaped defec
 Raw transcripts and private usage data are left out; citations to them are marked as private. [RELEASE.md](RELEASE.md) lists publication checks and open questions, [research/PLAN.md](research/PLAN.md) the dated plan, and [related.md](related.md) the neighboring tools. `research/site/index.html` is an optional reader for sections 00 to 09; it fetches the Markdown files and outside rendering libraries, so it needs HTTP hosting. The Markdown files are the main way to read it.
 
 </details>
+
+## Influences
+
+Much of how I build comes from what I read, and most of it carries no engineering label. [docs/influences.md](docs/influences.md) collects the sources from my Readwise library that shaped this work most, in three groups: systems that persist (residuality, deep modules, systems thinking, legibility), learning and mastery (deliberate practice, memory, flow, reading widely), and people and agents (interfaces, alarms, assistants, trust). Each section opens with diagrams of how the ideas fit; each source is one line that opens to why it matters, my notes on it and passages I highlighted. Every source is linked, and the originals are worth reading in full.
+
+<p align="center"><img src="docs/influences-layers.svg" alt="Three nested layers: the world, judgement by people and agents, and the ordered core, with the sources that act on each" width="640"></p>
 
 ## For agents and contributors
 

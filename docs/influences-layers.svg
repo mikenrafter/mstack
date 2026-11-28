@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 336" width="100%" role="img" aria-labelledby="t d">
+<title id="t">Where each source acts</title>
+<desc id="d">Three nested layers. The ordered core: Ousterhout on deep modules, Ottinger on names, Spolsky on leaks. Around it, judgement by people and agents: O&#x27;Reilly on stressing a design, Flyxion on exposed abstractions, Meadows on loops and delays. Outside, the world: Simon on floods of information, Zhang et al. on systems that are never closed, Ober and Perez on societies.</desc>
+<defs>
+<marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hin" d="M0 0 L10 5 L0 10 Z"/></marker>
+</defs>
+<style>
+.judge{fill:#eaf2fd;stroke:#3a78c9} .core{fill:#1f6f43;stroke:#14512f} .chaos{fill:#fdf1e7;stroke:#d97a2b}
+.ink{fill:#1f2328} .muted{fill:#4a525b} .on{fill:#ffffff} .git{fill:#8250df}
+.fw{stroke:#57606a;fill:none} .bk{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none} .encl{stroke:#8c959f;fill:none}
+.hfw{fill:#57606a} .hbk{fill:#3a78c9} .hin{fill:#d97a2b} .bkink{fill:#2f6db5} .grid{stroke:#d1d9e0}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){
+.judge{fill:#12233a;stroke:#5b9be6} .core{fill:#2ea062;stroke:#7ee2a8} .chaos{fill:#2a1d12;stroke:#e08a3c}
+.ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on{fill:#04150c} .git{fill:#c297ff}
+.fw{stroke:#8b949e} .bk{stroke:#5b9be6} .in{stroke:#e08a3c} .encl{stroke:#6e7681}
+.hfw{fill:#8b949e} .hbk{fill:#5b9be6} .hin{fill:#e08a3c} .bkink{fill:#7fb3f0} .grid{stroke:#30363d}
+}
+</style>
+<rect class="chaos" x="8" y="8" width="22" height="14" rx="4" stroke-width="2" stroke-dasharray="4 3"/>
+<text class="muted" x="36" y="20" font-size="12" text-anchor="start">me, or the world</text>
+<rect class="judge" x="160" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="188" y="20" font-size="12" text-anchor="start">a mind decides (person or agent)</text>
+<rect class="core" x="390" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="418" y="20" font-size="12" text-anchor="start">a program or structure holds it</text>
+<rect class="chaos" x="8" y="40" width="624" height="288" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="320.0" y="61" font-size="15" font-weight="700" text-anchor="middle">The world</text>
+<text class="muted" x="320.0" y="78" font-size="12.5" text-anchor="middle">Simon: information arrives faster than attention</text>
+<text class="muted" x="320.0" y="93" font-size="12.5" text-anchor="middle">Zhang et al.: nothing is closed  ·  Ober, Perez: societies drift</text>
+<rect class="judge" x="56" y="112" width="528" height="198" rx="10" stroke-width="2"/>
+<text class="ink" x="320.0" y="133" font-size="15" font-weight="700" text-anchor="middle">Judgement</text>
+<text class="muted" x="320.0" y="150" font-size="12.5" text-anchor="middle">O&#x27;Reilly: stress the design, keep the residues</text>
+<text class="muted" x="320.0" y="165" font-size="12.5" text-anchor="middle">Flyxion: reason where an abstraction is exposed  ·  Meadows: loops, delays</text>
+<rect class="core" x="140" y="190" width="360" height="100" rx="10" stroke-width="2"/>
+<text class="on" x="320.0" y="211" font-size="15" font-weight="700" text-anchor="middle">The ordered core</text>
+<text class="on" x="320.0" y="228" font-size="12.5" text-anchor="middle">Ousterhout: deep modules, small interfaces</text>
+<text class="on" x="320.0" y="243" font-size="12.5" text-anchor="middle">Ottinger: names that show the design</text>
+<text class="on" x="320.0" y="258" font-size="12.5" text-anchor="middle">Spolsky: every abstraction leaks</text>
+<text class="on" x="320.0" y="273" font-size="12.5" text-anchor="middle">Pennarun, OpenAI: review comments become checks</text>
+</svg>

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="100%" role="img" aria-labelledby="t d">
+<title id="t">When an alarm loses credibility</title>
+<desc id="d">An alarm that is often wrong trains people to calibrate to its reliability, so the real alarm is ignored. The fix is to raise an alarm only when it needs a response, as vigil notices and review-bot triage do.</desc>
+<defs>
+<marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hin" d="M0 0 L10 5 L0 10 Z"/></marker>
+</defs>
+<style>
+.judge{fill:#eaf2fd;stroke:#3a78c9} .core{fill:#1f6f43;stroke:#14512f} .chaos{fill:#fdf1e7;stroke:#d97a2b}
+.ink{fill:#1f2328} .muted{fill:#4a525b} .on{fill:#ffffff} .git{fill:#8250df}
+.fw{stroke:#57606a;fill:none} .bk{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none} .encl{stroke:#8c959f;fill:none}
+.hfw{fill:#57606a} .hbk{fill:#3a78c9} .hin{fill:#d97a2b} .bkink{fill:#2f6db5} .grid{stroke:#d1d9e0}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){
+.judge{fill:#12233a;stroke:#5b9be6} .core{fill:#2ea062;stroke:#7ee2a8} .chaos{fill:#2a1d12;stroke:#e08a3c}
+.ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on{fill:#04150c} .git{fill:#c297ff}
+.fw{stroke:#8b949e} .bk{stroke:#5b9be6} .in{stroke:#e08a3c} .encl{stroke:#6e7681}
+.hfw{fill:#8b949e} .hbk{fill:#5b9be6} .hin{fill:#e08a3c} .bkink{fill:#7fb3f0} .grid{stroke:#30363d}
+}
+</style>
+<rect class="chaos" x="8" y="8" width="22" height="14" rx="4" stroke-width="2" stroke-dasharray="4 3"/>
+<text class="muted" x="36" y="20" font-size="12" text-anchor="start">me, or the world</text>
+<rect class="judge" x="160" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="188" y="20" font-size="12" text-anchor="start">a mind decides (person or agent)</text>
+<rect class="core" x="390" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="418" y="20" font-size="12" text-anchor="start">a program or structure holds it</text>
+<rect class="core" x="8" y="60" width="190" height="76" rx="10" stroke-width="2"/>
+<text class="on" x="103.0" y="81" font-size="15" font-weight="700" text-anchor="middle">An alarm</text>
+<text class="on" x="103.0" y="98" font-size="12.5" text-anchor="middle">that is often wrong</text>
+<rect class="judge" x="225" y="60" width="190" height="76" rx="10" stroke-width="2"/>
+<text class="ink" x="320.0" y="81" font-size="15" font-weight="700" text-anchor="middle">People calibrate</text>
+<text class="muted" x="320.0" y="98" font-size="12.5" text-anchor="middle">to its reliability</text>
+<text class="muted" x="320.0" y="113" font-size="12.5" text-anchor="middle">Interface Studies</text>
+<rect class="chaos" x="442" y="60" width="190" height="76" rx="10" stroke-width="2" stroke-dasharray="6 4"/>
+<text class="ink" x="537.0" y="81" font-size="15" font-weight="700" text-anchor="middle">The real one</text>
+<text class="muted" x="537.0" y="98" font-size="12.5" text-anchor="middle">is ignored</text>
+<rect class="core" x="8" y="196" width="300" height="80" rx="10" stroke-width="2"/>
+<text class="on" x="158.0" y="217" font-size="15" font-weight="700" text-anchor="middle">Alert only when a response is needed</text>
+<text class="on" x="158.0" y="234" font-size="12.5" text-anchor="middle">&quot;does this need the operator to act?&quot;</text>
+<text class="on" x="158.0" y="249" font-size="12.5" text-anchor="middle">vigil notices, review-bot triage</text>
+<path class="fw" d="M198 98 L221 98" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M415 98 L438 98" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="bk" d="M537 136 C537 180 400 236 312 236" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="552" y="176" font-size="12.5" text-anchor="start">the fix</text>
+<path class="bk" d="M103 196 L103 140" stroke-width="2" marker-end="url(#hbk)"/>
+</svg>

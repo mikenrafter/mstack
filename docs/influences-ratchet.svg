@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" width="100%" role="img" aria-labelledby="t d">
+<title id="t">A review comment becomes a check</title>
+<desc id="d">A review comment is raised. If that kind of comment recurs, it is promoted into a lint or test whose error message tells the agent the fix, and that class of comment does not come back. If it does not recur, it stays a thick rule, kept with its spirit.</desc>
+<defs>
+<marker id="hfw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hfw" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hbk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hbk" d="M0 0 L10 5 L0 10 Z"/></marker>
+<marker id="hin" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hin" d="M0 0 L10 5 L0 10 Z"/></marker>
+</defs>
+<style>
+.judge{fill:#eaf2fd;stroke:#3a78c9} .core{fill:#1f6f43;stroke:#14512f} .chaos{fill:#fdf1e7;stroke:#d97a2b}
+.ink{fill:#1f2328} .muted{fill:#4a525b} .on{fill:#ffffff} .git{fill:#8250df}
+.fw{stroke:#57606a;fill:none} .bk{stroke:#3a78c9;fill:none} .in{stroke:#d97a2b;fill:none} .encl{stroke:#8c959f;fill:none}
+.hfw{fill:#57606a} .hbk{fill:#3a78c9} .hin{fill:#d97a2b} .bkink{fill:#2f6db5} .grid{stroke:#d1d9e0}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){
+.judge{fill:#12233a;stroke:#5b9be6} .core{fill:#2ea062;stroke:#7ee2a8} .chaos{fill:#2a1d12;stroke:#e08a3c}
+.ink{fill:#f0f6fc} .muted{fill:#b1b8c0} .on{fill:#04150c} .git{fill:#c297ff}
+.fw{stroke:#8b949e} .bk{stroke:#5b9be6} .in{stroke:#e08a3c} .encl{stroke:#6e7681}
+.hfw{fill:#8b949e} .hbk{fill:#5b9be6} .hin{fill:#e08a3c} .bkink{fill:#7fb3f0} .grid{stroke:#30363d}
+}
+</style>
+<rect class="chaos" x="8" y="8" width="22" height="14" rx="4" stroke-width="2" stroke-dasharray="4 3"/>
+<text class="muted" x="36" y="20" font-size="12" text-anchor="start">me, or the world</text>
+<rect class="judge" x="160" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="188" y="20" font-size="12" text-anchor="start">a mind decides (person or agent)</text>
+<rect class="core" x="390" y="8" width="22" height="14" rx="4" stroke-width="2"/>
+<text class="muted" x="418" y="20" font-size="12" text-anchor="start">a program or structure holds it</text>
+<rect class="judge" x="16" y="120" width="170" height="70" rx="10" stroke-width="2"/>
+<text class="ink" x="101.0" y="141" font-size="15" font-weight="700" text-anchor="middle">Review comment</text>
+<text class="muted" x="101.0" y="158" font-size="12.5" text-anchor="middle">a person or agent</text>
+<text class="muted" x="101.0" y="173" font-size="12.5" text-anchor="middle">flags a problem</text>
+<rect class="judge" x="232" y="120" width="150" height="70" rx="10" stroke-width="2"/>
+<text class="ink" x="307.0" y="141" font-size="15" font-weight="700" text-anchor="middle">Does it recur?</text>
+<text class="muted" x="307.0" y="158" font-size="12.5" text-anchor="middle">the same kind</text>
+<text class="muted" x="307.0" y="173" font-size="12.5" text-anchor="middle">of comment</text>
+<rect class="core" x="430" y="60" width="200" height="86" rx="10" stroke-width="2"/>
+<text class="on" x="530.0" y="81" font-size="15" font-weight="700" text-anchor="middle">Promote to a check</text>
+<text class="on" x="530.0" y="98" font-size="12.5" text-anchor="middle">a lint or test whose error</text>
+<text class="on" x="530.0" y="113" font-size="12.5" text-anchor="middle">tells the agent the fix</text>
+<text class="on" x="530.0" y="128" font-size="12.5" text-anchor="middle">OpenAI, Harness Engineering</text>
+<rect class="judge" x="430" y="190" width="200" height="86" rx="10" stroke-width="2"/>
+<text class="ink" x="530.0" y="211" font-size="15" font-weight="700" text-anchor="middle">Keep a thick rule</text>
+<text class="muted" x="530.0" y="228" font-size="12.5" text-anchor="middle">a rule with its spirit</text>
+<text class="muted" x="530.0" y="243" font-size="12.5" text-anchor="middle">and a bounded context</text>
+<text class="muted" x="530.0" y="258" font-size="12.5" text-anchor="middle">Miller</text>
+<path class="fw" d="M186 155 L228 155" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M382 145 L426 108" stroke-width="2" marker-end="url(#hfw)"/>
+<path class="fw" d="M382 165 L426 228" stroke-width="2" marker-end="url(#hfw)"/>
+<text class="muted" x="392" y="118" font-size="12" text-anchor="start">yes</text>
+<text class="muted" x="392" y="212" font-size="12" text-anchor="start">no</text>
+<path class="bk" d="M530 60 C530 46 101 46 101 116" stroke-width="2" marker-end="url(#hbk)"/>
+<text class="bkink" x="316" y="42" font-size="12.5" text-anchor="middle">Pennarun: that class of comment never comes back</text>
+</svg>
