@@ -65,3 +65,5 @@ decides what to do with what the bots say.
    bot passes to quiet, findings per class, and outcome (fixed, wrong,
    intentional, didn't matter). That log shows which bots and which labels
    earn attention.
+8. **Practice questions.** After the last bot pass on a PR marked ready, run
+   `vigil remind show practice-questions` and answer it if it is due.

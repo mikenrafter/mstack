@@ -7,10 +7,11 @@ The human overview is [README.md](README.md). This file is for an agent or a per
 | Path | Holds |
 |---|---|
 | `skills/<name>/SKILL.md` | One skill: frontmatter (`name`, `description`), the rules, and pointers to its `references/` |
-| `skills/build-loop/scripts/` | Helper scripts and the tests for the skill text: `review-ledger` (review state and briefs), `bot-triage` (review-bot findings), `ui-brief-check` (fails a UI brief that names no mock-up, original screen or prior pilot) |
+| `skills/build-loop/scripts/` | Helper scripts and the tests for the skill text: `review-ledger` (review state and briefs), `bot-triage` (review-bot findings), `ui-brief-check` (fails a UI brief that names no mock-up, original screen or prior pilot), `holdout` (seals and extracts holdout tests) |
 | `bin/` | Workflow helpers and hooks, including `publish-scan` |
 | `global-instructions.md` | The instructions installed into `~/.claude/CLAUDE.md` and Codex |
 | `research/` | Dated research; follow [research/BRIEF.md](research/BRIEF.md) |
+| `docs/lexicon.md` | What the project's terms mean (retro versus practice digest, holdout, concern bar, ...). Read it before acting on a term you have not seen defined |
 
 ## Editing and installing
 

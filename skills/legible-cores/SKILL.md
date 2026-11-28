@@ -3,7 +3,7 @@ name: legible-cores
 description: >-
   Use when an agent or the owner keeps guessing at something a program could
   measure (time, cost, cache state, layout, architecture, what happens next),
-  when a retro or Friday digest runs, and when a problem in the work looks big
+  when a retro or the Friday practice digest runs, and when a problem in the work looks big
   enough for one independent founder to build a company on.
 ---
 
@@ -102,7 +102,7 @@ of space under the last card so it clears T3's mobile navigation. Budgets and
 limits show when they reset. residual's
 static export is the reference (research/23).
 
-## Weekly, with the Friday breakdown
+## Cores part (retro and practice digest)
 
 `retro` and `practice-watch` each end with a **Cores** part:
 
@@ -112,7 +112,3 @@ static export is the reference (research/23).
 - outside work (from the digest) that builds a core we lack or shows one of
   ours is a crutch;
 - at most one new card, shown as above.
-
-On Friday, pick one widely repeated claim that could change the way we work.
-State the cheapest credible check that could change our mind. Record its
-result or the open question alongside the claim's source.

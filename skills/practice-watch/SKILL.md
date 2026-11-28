@@ -56,8 +56,15 @@ plain prose, a URL and date per claim, an evidence grade A to D, and
 - where it conflicts with an existing skill, say which rule and who has the
   better evidence.
 
-Add a **Cores** part (`legible-cores`, "Weekly"): what the week's items
-say about cores we have or lack. Then end with a ranked list of at most five proposed changes. Open nothing
+Add a **Cores** part (`legible-cores`, "Cores part"): what the week's items
+say about cores we have or lack.
+
+Add a **Claim to test** part. Pick one widely repeated claim from the week's
+items or earlier digests that could change how we work. State the cheapest
+credible check that could change our mind, and record its result, or the open
+question, beside the claim's source. Carry an open check into the next digest.
+
+Then end with a ranked list of at most five proposed changes. Open nothing
 upstream (`no-unsolicited-upstream`). The owner approves each change before
 anyone edits a skill.
 

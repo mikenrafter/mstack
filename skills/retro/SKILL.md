@@ -30,6 +30,8 @@ fresh context; never pull them into the main session whole.
 - The owner's PR review comments: `gh api repos/<o>/<r>/pulls/<n>/comments`
   and `.../reviews` for PRs merged in scope.
 - Teach-back misses from `pr-stacks` §4.
+- `<project>.research/retro/practice-notes.md`: answers to the practice
+  questions since the last retro.
 
 ## 3. Find causes
 
@@ -42,7 +44,9 @@ baseline, not a rule.
 
 ### Practice questions
 
-Ask these on a sampled run during the week and again in the retro:
+Ask these in every retro, and on the run just finished when the
+`practice-questions` reminder is due (it shows when going cold and after the
+last bot pass on a PR marked ready):
 
 - What did we expect? At which step did the run diverge, what did we do next,
   and what did the detour cost? Link the trace.
@@ -50,25 +54,30 @@ Ask these on a sampled run during the week and again in the retro:
   this same mistake show up in another project? What would detect or prevent
   the whole family?
 - For a rare, consequential failure seen more than once, what small drill
-  would let us practice on another project and check transfer?
+  would let us practice it on another project and check that the skill
+  transfers? Then propose the ratchet or check that removes the category from
+  every project (`ratchets`).
 - What do experienced practitioners and relevant papers offer that we can
   try? Use an LLM to find leads and challenge the account. Ask a practitioner
   directly when their feedback would settle an open question.
 
-Use eval and day-to-day command events to identify repeated failures and
-recoveries. For each candidate quirk, retain the model and tool version, the
-failure and recovery signals, count, and elapsed time when available. Link
-evidence from the retro to the existing build-loop quirks ledger using its
-entry criteria.
+### Repeated command failures
 
-For a Cargo or Boat operation under investigation, prefix each attempt with
-`run-event run --log <private.jsonl> --run-id <session-or-sample> --operation
-<label> --context work --model <model> --tool-version <version> -- <command>`.
-Use `--context eval` in evaluations. Find `run-event` beside this skill. Reuse the
-operation label and run ID for retries. `run-event report <private.jsonl>`
-groups failures, recoveries, and elapsed time with evidence line numbers.
-The wrapper records exit status and timing without command arguments or output.
-Treat matches as leads and verify them against the trace before adding a quirk.
+The session transcripts already record every command and its exit status. Mine
+them; do not ask agents to wrap commands. Look for a command that failed and a
+later variant that succeeded in the same session (Cargo and Boat first), group
+them by normalized command and error, and compare counts with the previous
+retro. Separate real failures that the agent fixed by editing code; they are
+not quirks.
+
+The pilot tool is Inspect Scout (`scout import claude_code`; Codex sessions
+need a small converter). Use text-pattern scanners for the counts and a
+model-based scanner only for what the patterns miss. Keep its database in the
+research sidecar. For each candidate quirk, keep the model and tool version,
+the count across distinct sessions, a short scrubbed example, the recovery and
+the time lost. Verify each against its transcript, then add it to
+`build-loop/references/quirks.md` only if it meets that ledger's entry
+criteria.
 
 ### Reviewer noise per model
 
@@ -102,7 +111,7 @@ A repo with no check covering a repeated family is itself a finding.
 Write `<project>.research/retro/<date>.md`: families ranked by cost (rounds,
 tokens, owner time), each with evidence (session ids, PR comment links,
 counts), cause, and the proposed fix. End with a **Cores** part
-(`legible-cores`, "Weekly"). Propose; do not apply. The owner picks
+(`legible-cores`, "Cores part"). Propose; do not apply. The owner picks
 what to do. Issues, PRs and upstream reports need approval
 (`no-unsolicited-upstream`). After the owner decides, record the outcome and
 run `vigil remind done <id>` if a reminder started the retro.

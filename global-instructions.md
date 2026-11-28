@@ -8,6 +8,9 @@ that file; a local edit here is overwritten on the next apply.
 - Never open issues, forks, PRs, posts or other upstream outreach without the owner's explicit approval; see the no-unsolicited-upstream skill for edge cases.
 - Before pushing to a public repo or fork, run `publish-scan` and scrub what it finds; the
   publishing-scrub skill says what to fix without asking and what still needs the owner.
+- Terms such as retro, practice digest (the Friday check-in), holdout and concern
+  bar mean specific things; look them up in `mstack/docs/lexicon.md` before acting
+  on one you have not seen defined. A retro and the practice digest are different runs.
 - Ethos: agents and people do best when a deterministic core (a measurement,
   ledger, index or check) shows them the state of things and inference
   handles only the edge. Watch for guesses a program could replace, and for

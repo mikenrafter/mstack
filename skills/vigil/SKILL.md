@@ -330,7 +330,8 @@ path is going from working or waiting to done. vigil never wakes or revives a
 session, so when the work is done (or you are told to end the session), call the
 MCP tool `cold` (or run `vigil cold ID...`) to cancel your watches and holds,
 queue ONE `/compact` that carries the BabelTele summary of the session, and end
-the turn. Then stop calling vigil.
+the turn. Then stop calling vigil. Before `cold`, run `vigil remind show
+practice-questions`; if it is due, answer it for this run first.
 Never start a long cold wait instead: no background command that only waits for
 something that may come much later, no sleeping until a result might arrive.
 
