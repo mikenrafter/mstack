@@ -112,3 +112,7 @@ static export is the reference (research/23).
 - outside work (from the digest) that builds a core we lack or shows one of
   ours is a crutch;
 - at most one new card, shown as above.
+
+On Friday, pick one widely repeated claim that could change the way we work.
+State the cheapest credible check that could change our mind. Record its
+result or the open question alongside the claim's source.

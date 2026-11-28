@@ -69,6 +69,8 @@ slices edit the same file), split the module first or resolve the merge afterwar
 Red sees the gate output directly. The orchestrator steps in only on a failure red cannot
 settle, or for the five-minute check.
 
+Read [holdouts.md](holdouts.md) before the red and green briefs.
+
 ## The slice log, and vigil hooks
 
 One append-only log per slice, `slices/<feature>/NN.jsonl`, with these events:

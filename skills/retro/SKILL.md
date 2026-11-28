@@ -40,6 +40,36 @@ wrong, or context loss at compaction. Count instances in the codebase as well
 as in the sessions; a pattern with thousands of existing instances needs a
 baseline, not a rule.
 
+### Practice questions
+
+Ask these on a sampled run during the week and again in the retro:
+
+- What did we expect? At which step did the run diverge, what did we do next,
+  and what did the detour cost? Link the trace.
+- What trigger, action, and consequence can someone else observe? Where would
+  this same mistake show up in another project? What would detect or prevent
+  the whole family?
+- For a rare, consequential failure seen more than once, what small drill
+  would let us practice on another project and check transfer?
+- What do experienced practitioners and relevant papers offer that we can
+  try? Use an LLM to find leads and challenge the account. Ask a practitioner
+  directly when their feedback would settle an open question.
+
+Use eval and day-to-day command events to identify repeated failures and
+recoveries. For each candidate quirk, retain the model and tool version, the
+failure and recovery signals, count, and elapsed time when available. Link
+evidence from the retro to the existing build-loop quirks ledger using its
+entry criteria.
+
+For a Cargo or Boat operation under investigation, prefix each attempt with
+`run-event run --log <private.jsonl> --run-id <session-or-sample> --operation
+<label> --context work --model <model> --tool-version <version> -- <command>`.
+Use `--context eval` in evaluations. Find `run-event` beside this skill. Reuse the
+operation label and run ID for retries. `run-event report <private.jsonl>`
+groups failures, recoveries, and elapsed time with evidence line numbers.
+The wrapper records exit status and timing without command arguments or output.
+Treat matches as leads and verify them against the trace before adding a quirk.
+
 ### Reviewer noise per model
 
 Sum `review-ledger status` across the period's ledgers. For each reviewer model, report the share
